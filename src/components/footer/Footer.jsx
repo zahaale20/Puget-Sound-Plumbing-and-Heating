@@ -35,7 +35,7 @@ export default function Footer() {
 				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
 					
 					{/* Logo */}
-					<button onClick={() => navigate("/")}  className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
+					<button onClick={() => navigate("/")}  className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
 						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
 					</button>
 
