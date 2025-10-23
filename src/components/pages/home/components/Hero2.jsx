@@ -47,7 +47,7 @@ export default function Hero() {
 					rel="noopener noreferrer"
 					aria-label="Facebook"
 				>
-					<FaFacebookF className="text-xl hover:text-[#B32020] transition-colors duration-200" />
+					<FaFacebookF className="text-xl" />
 				</a>
 				<a
 					href="https://www.instagram.com/pugetsoundplumbing"
@@ -55,7 +55,7 @@ export default function Hero() {
 					rel="noopener noreferrer"
 					aria-label="Instagram"
 				>
-					<FaInstagram className="text-xl hover:text-[#B32020] transition-colors duration-200" />
+					<FaInstagram className="text-xl" />
 				</a>
 				<a
 					href="https://www.youtube.com/@pugetsoundplumbing"
@@ -63,7 +63,7 @@ export default function Hero() {
 					rel="noopener noreferrer"
 					aria-label="YouTube"
 				>
-					<FaYoutube className="text-xl hover:text-[#B32020] transition-colors duration-200" />
+					<FaYoutube className="text-xl" />
 				</a>
 				<a
 					href="https://twitter.com/pugetsoundplumb"
@@ -71,7 +71,7 @@ export default function Hero() {
 					rel="noopener noreferrer"
 					aria-label="Twitter"
 				>
-					<FaXTwitter className="text-xl hover:text-[#B32020] transition-colors duration-200" />
+					<FaXTwitter className="text-xl" />
 				</a>
 			</div>
 		</section>

@@ -1,8 +1,8 @@
 import { FaRegCalendarAlt, FaUser, FaArrowRight } from "react-icons/fa";
 
-import waterHeaters from "../../../../assets/water-heaters.png";
-import faucets from "../../../../assets/faucet-repair.png";
-import toiletRepair from "../../../../assets/toilet-repair.png";
+import waterHeaters from "../../../../assets/blog1.jpg";
+import faucets from "../../../../assets/blog2.jpg";
+import toiletRepair from "../../../../assets/blog3.jpg";
 
 export default function RecentBlogPosts() {
 	const posts = [

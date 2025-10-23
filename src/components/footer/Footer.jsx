@@ -35,9 +35,9 @@ export default function Footer() {
 				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
 					
 					{/* Logo */}
-					<a href="/" className="hidden md:flex md:flex-none h-[50px]">
+					<button onClick={() => navigate("/")}  className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
 						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
-					</a>
+					</button>
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">

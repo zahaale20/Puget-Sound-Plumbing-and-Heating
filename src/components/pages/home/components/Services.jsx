@@ -109,9 +109,9 @@ export default function Services() {
 								</h5>
 
 								{/* Description */}
-								<span className="text-[#2B2B2B] text-sm leading-snug">
+								<p className="text-[#2B2B2B] leading-snug">
 									{service.description}
-								</span>
+								</p>
 							</button>
 						);
 					})}
