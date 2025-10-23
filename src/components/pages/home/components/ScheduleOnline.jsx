@@ -49,7 +49,7 @@ export default function ContactUs() {
 									First Name{" "}
 									<span className="text-[#B32020] font-normal italic">*</span>
 								</label>
-								<input className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 									type="text"
 									name="firstName"
 									required
@@ -65,7 +65,7 @@ export default function ContactUs() {
 									Last Name{" "}
 									<span className="text-[#B32020] font-normal italic">*</span>
 								</label>
-								<input className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 									type="text"
 									name="lastName"
 									required
@@ -82,7 +82,7 @@ export default function ContactUs() {
 								<label className="block font-bold">
 									Phone <span className="text-[#B32020] italic">*</span>
 								</label>
-								<input className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 									type="tel"
 									name="phone"
 									required
@@ -97,7 +97,7 @@ export default function ContactUs() {
 								<label className="block font-bold">
 									Email <span className="text-[#B32020] italic">*</span>
 								</label>
-								<input className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 									type="email"
 									name="email"
 									required
@@ -118,13 +118,13 @@ export default function ContactUs() {
 								rows="4"
 								value={formData.message}
 								onChange={handleChange}
-								className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 							/>
 						</div>
 
 						{/* Submit Button */}
 						<div className="flex justify-center mt-4">
-							<button type="submit" className="flex items-center justify-center px-6 py-3 text-base md:px-8 md:py-4 md:text-lg font-bold cursor-pointer transition-all duration-300 transform whitespace-nowrap h-[60px] w-full sm:w-auto text-white bg-[#B32020] hover:bg-[#7a1515] gap-2">
+							<button type="submit" className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
 								Submit Request
 							</button>
 						</div>

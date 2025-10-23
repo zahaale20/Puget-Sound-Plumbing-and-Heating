@@ -17,37 +17,37 @@ export default function Services() {
 		{ 
 			image: waterHeaters,
 			title: "Water Heaters", 
-			description: "Expert installation, maintenance, and repair for both tank and tankless water heaters. Our licensed plumbers ensure reliable, energy-efficient hot water tailored to your home’s needs.",
+			description: "Expert installation, maintenance, and repair for tank and tankless water heaters. We ensure reliable, energy-efficient hot water tailored to your home.",
 			path: "/services/water-heaters" 
 		},
 		{ 
 			image: faucetRepair,
 			title: "Faucets", 
-			description: "Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency with precision workmanship.",
+			description: "Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency.",
 			path: "/services/faucet-repair" 
 		},
 		{ 
 			image: toiletRepair,
 			title: "Toilets", 
-			description: "Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. Our certified plumbers restore efficiency and install water-saving models to reduce costs.",
+			description: "Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. We restore efficiency and install water-saving models.",
 			path: "/services/toilet-repair" 
 		},
 		{ 
 			image: garbageDisposal,
 			title: "Garbage Disposal", 
-			description: "From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation. Count on us for a cleaner kitchen and long-lasting plumbing performance.",
+			description: "From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation and long-lasting performance.",
 			path: "/services/garbage-disposal" 
 		},
 		{ 
 			image: waterFiltration,
 			title: "Water Filtration Systems", 
-			description: "Cleaner, safer water starts with expert filtration. We install and maintain systems that remove contaminants, improve taste, and protect your plumbing and appliances.",
+			description: "Expert filtration installation and maintenance that removes contaminants, improves taste, and protects your plumbing and appliances.",
 			path: "/services/water-filtration" 
 		},
 		{ 
 			image: plumbingRepair,
 			title: "Plumbing Repairs", 
-			description: "Comprehensive plumbing repair for leaks, burst pipes, and low water pressure. Our team delivers fast, affordable service to keep your home’s plumbing system running perfectly.",
+			description: "Comprehensive repair for leaks, burst pipes, and low water pressure. Fast, affordable service to keep your plumbing system running perfectly.",
 			path: "/services/plumbing-repairs" 
 		},
 	];

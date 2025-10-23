@@ -40,7 +40,7 @@ export default function CustomerReviews() {
 					{reviews.map((review, idx) => (
 						<div key={idx} className="bg-white p-6 shadow-lg flex flex-col gap-4 text-start">
 							{/* Rating */}
-							<div className="flex gap-1 text-[#ffbf00] text-lg">
+							<div className="flex gap-1 text-[#B32020] text-lg">
 								{Array.from({ length: review.rating }, (_, i) => (
 								<FaStar key={i} />
 								))}

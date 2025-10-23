@@ -94,14 +94,14 @@ export default function Footer() {
 							<ul className="flex flex-col space-y-2 justify-between text-base md:text-lg">
 								<li className="flex items-center gap-2">
 									<FaPhone />
-									<a href="tel:206-938-3219" className="hover:underline">(206) 938-3219</a>
+									<a href="tel:866-582-4730" className="hover:underline">(866) 582-4730</a>
 								</li>
 								<li className="flex gap-2">
 									<FaLocationDot className="mt-1" /> {/* optional small top margin */}
-									<div className="flex flex-col">
+									<a href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168" className="flex flex-col hover:underline">
 										<span>11803 Des Moines Memorial Dr S</span>
 										<span>Burien, WA 98168</span>
-									</div>
+									</a>
 								</li>
 							</ul>
 						</div>
@@ -113,28 +113,28 @@ export default function Footer() {
 									Connect With Us
 									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 								</h4>
-								<ul className="flex sm:flex-col items-center sm:items-start space-x-4 sm:space-x-0 sm:space-y-2 text-base md:text-lg">
+								<ul className="flex sm:flex-col items-center sm:items-start space-x-4 sm:space-x-0 sm:space-y-2 ">
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaFacebookF />
-										<a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
+										<FaFacebookF className="text-base md:text-lg"/>
+										<a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
 											Facebook
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaInstagram />
-										<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
+										<FaInstagram className="text-base md:text-lg"/>
+										<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
 											Instagram
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaYoutube />
-										<a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
+										<FaYoutube className="text-base md:text-lg"/>
+										<a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
 											YouTube
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaXTwitter />
-										<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
+										<FaXTwitter className="text-base md:text-lg"/>
+										<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
 											X
 										</a>
 									</li>

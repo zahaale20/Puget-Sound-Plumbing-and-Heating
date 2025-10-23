@@ -25,10 +25,13 @@ export default function CallNow() {
                         Whether it’s a burst pipe, a cold shower, or a strange noise from your furnace, help is just a call away. Our certified plumbers and heating specialists are available 24/7 to keep your home safe, comfortable, and running smoothly. Don’t wait — talk to a real expert today and get the reliable service you deserve.
                     </p>
 
-                    <button className="flex items-center justify-center h-[60px] **w-full lg:w-fit** px-6 py-3 text-base md:px-8 md:py-4 md:text-lg font-bold cursor-pointer transition-all duration-300 transform whitespace-nowrap text-white bg-[#B32020] hover:bg-[#7a1515] gap-2">
-                        <FaPhone />
-                        <span>(866) 582-4730</span>
-                    </button>
+					<a
+						href="tel:18665824730"
+						className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
+					>
+						<FaPhone />
+						(866) 582-4730
+					</a>
                 </div>
             </div>
         </section>

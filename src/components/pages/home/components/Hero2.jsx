@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
-import hero from "../../../../assets/hero2.png";
+import hero from "../../../../assets/home-page-hero2.png";
 
 export default function Hero() {
+	const navigate = useNavigate();
+	
 	return (
 		<section
 			className="relative flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-166px)] lg:mt-[166px] overflow-hidden text-white"
@@ -28,21 +32,24 @@ export default function Hero() {
 
 				{/* Buttons */}
 				<div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch w-full">
-					<button className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
+					<button onClick={() => navigate("/schedule-online")} className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
 						<FaRegCalendarAlt />
 						Schedule Online
 					</button>
-					<button className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]">
+					<a
+						href="tel:18665824730"
+						className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]"
+					>
 						<FaPhone />
 						(866) 582-4730
-					</button>
+					</a>
 				</div>
 			</div>
 
 			{/* Social Media Icons - Anchored Bottom Right */}
 			<div className="absolute bottom-6 flex flex-row gap-6 items-center z-10 justify-end">
 				<a
-					href="https://www.facebook.com/pugetsoundplumbing"
+					href="https://www.facebook.com/pugetsoundplumbing/"
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Facebook"
@@ -50,7 +57,7 @@ export default function Hero() {
 					<FaFacebookF className="text-xl" />
 				</a>
 				<a
-					href="https://www.instagram.com/pugetsoundplumbing"
+					href="https://www.instagram.com/puget_sound_plumbing_heating/"
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Instagram"
@@ -58,7 +65,7 @@ export default function Hero() {
 					<FaInstagram className="text-xl" />
 				</a>
 				<a
-					href="https://www.youtube.com/@pugetsoundplumbing"
+					href="https://www.youtube.com/user/pugetsoundplumbing"
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="YouTube"
@@ -66,7 +73,7 @@ export default function Hero() {
 					<FaYoutube className="text-xl" />
 				</a>
 				<a
-					href="https://twitter.com/pugetsoundplumb"
+					href="https://x.com/PugetPlumbing"
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Twitter"
