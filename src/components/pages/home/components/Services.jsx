@@ -22,13 +22,13 @@ export default function Services() {
 		},
 		{ 
 			image: faucetRepair,
-			title: "Faucet Repair", 
+			title: "Faucets", 
 			description: "Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency with precision workmanship.",
 			path: "/services/faucet-repair" 
 		},
 		{ 
 			image: toiletRepair,
-			title: "Toilet Repair", 
+			title: "Toilets", 
 			description: "Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. Our certified plumbers restore efficiency and install water-saving models to reduce costs.",
 			path: "/services/toilet-repair" 
 		},
@@ -40,7 +40,7 @@ export default function Services() {
 		},
 		{ 
 			image: waterFiltration,
-			title: "Water Filtration", 
+			title: "Water Filtration Systems", 
 			description: "Cleaner, safer water starts with expert filtration. We install and maintain systems that remove contaminants, improve taste, and protect your plumbing and appliances.",
 			path: "/services/water-filtration" 
 		},

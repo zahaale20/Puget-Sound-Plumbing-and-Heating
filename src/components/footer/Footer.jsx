@@ -162,7 +162,7 @@ export default function Footer() {
 			{/* Bottom Bar */}
 			<div className="w-full h-[80px] bg-[#0C2D70] border-t border-white text-sm text-white flex items-center">
 				<div className="flex flex-col sm:flex-row justify-center items-center max-w-7xl mx-auto px-6 w-full gap-2">
-					<span>© {new Date().getFullYear()} Puget Sound Plumbing and Heating. All rights reserved.</span>
+					<span>© {new Date().getFullYear()} Puget Sound Plumbing and Heating</span>
 				</div>
 			</div>
 		</footer>
