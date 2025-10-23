@@ -53,7 +53,7 @@ export default function RecentBlogPosts() {
 					{posts.map((post) => (
 						<div
 						key={post.id}
-						className="bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden"
+						className="bg-white shadow-lg flex flex-col overflow-hidden"
 						>
 							<img
 								src={post.image}

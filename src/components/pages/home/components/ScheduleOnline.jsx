@@ -132,7 +132,7 @@ export default function ContactUs() {
 				</div>
 
 				{/* Right Column — Map */}
-				<div className="w-full lg:w-1/2 rounded-xl overflow-hidden flex flex-col gap-6">
+				<div className="w-full lg:w-1/2 overflow-hidden flex flex-col gap-6">
 					<iframe
 						title="Puget Sound Plumbing Location"
 						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2689.5443320905326!2d-122.33776848438908!3d47.42335397916498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54906bf5ab7c2db5%3A0x9ad0c7a65a4d3c84!2s11803%20Des%20Moines%20Memorial%20Dr%20S%2C%20Seattle%2C%20WA%2098138!5e0!3m2!1sen!2sus!4v1700043600000!5m2!1sen!2sus"

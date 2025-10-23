@@ -40,7 +40,7 @@ export default function Discounts() {
 					{coupons.map((coupon, idx) => (
 						<div
 							key={idx}
-							className="flex-1 min-w-[220px] bg-white rounded-2xl p-6 text-center text-[#0C2D70] flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020]"
+							className="flex-1 min-w-[220px] bg-white p-6 text-center text-[#0C2D70] flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020]"
 						>
 							<div className="text-[#B32020] text-5xl">
 								<FaTag />

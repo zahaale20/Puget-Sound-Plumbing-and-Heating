@@ -38,7 +38,7 @@ export default function CustomerReviews() {
 				{/* Reviews */}
 				<div className="grid gap-6 lg:grid-cols-3 mb-6">
 					{reviews.map((review, idx) => (
-						<div key={idx} className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-4 text-start">
+						<div key={idx} className="bg-white p-6 shadow-lg flex flex-col gap-4 text-start">
 							{/* Rating */}
 							<div className="flex gap-1 text-[#ffbf00] text-lg">
 								{Array.from({ length: review.rating }, (_, i) => (
