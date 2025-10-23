@@ -66,7 +66,7 @@ export default function Careers() {
 					{/* Current Openings */}
 					<div className="flex flex-col items-center w-full">
 						<div className="w-full mb-6 text-left">
-							<h3 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
+							<h3 className="text-[#0C2D70] inline-block relative pb-2">
 								Current Openings
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h3>
@@ -152,11 +152,10 @@ export default function Careers() {
 					{/* Application Form */}
 					<div className="flex flex-col w-full">
 						<div className="w-full mb-6 text-left">
-							<h3 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
+							<h3 className="text-[#0C2D70] inline-block relative pb-2">
 								Apply Now
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h3>
-							<p>We’ll contact you if your experience matches our needs.</p>
 						</div>
 
 						<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left">
@@ -272,7 +271,7 @@ export default function Careers() {
 										required
 										accept=".pdf,.doc,.docx"
 										onChange={handleChange}
-										className="w-full border border-gray-300 pr-4 bg-white text-[#2B2B2B] focus:outline-none focus:ring-2 focus:ring-[#0C2D70] file:mr-4 file:py-2.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-[#0C2D70] file:text-white hover:file:bg-[#082050] file:cursor-pointer transition-all duration-150"
+										className="w-full border border-gray-300 pr-4 bg-white text-[#2B2B2B] focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-[#0C2D70] file:text-white hover:file:bg-[#082050] file:cursor-pointer transition-all duration-150"
 									/>
 								</div>
 							</div>
