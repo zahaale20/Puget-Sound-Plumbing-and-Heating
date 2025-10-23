@@ -8,7 +8,7 @@ import {
 	FaIdCard,
 } from "react-icons/fa6";
 
-import logo from "../../assets/pspah-logo-no-white.png";
+import logo from "../../assets/pspah-logo.png";
 import easyFinancingAvailable from "../../assets/easy-financing-available.png";
 import bbbAccreddited from "../../assets/bbb-accredited-business.png";
 import year20Anniversary from "../../assets/year-20-anniversary.png";
@@ -32,20 +32,19 @@ export default function Footer() {
 		<footer className="w-full items-center justify-center">
 			{/* Top Logo Row */}
 			<div className="w-full bg-white flex justify-center">
-				<div className="flex w-full max-w-7xl px-6 py-2 
-								flex-col lg:flex-row lg:justify-between lg:items-center items-center gap-4">
+				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
 					
 					{/* Logo */}
-					<div className="hidden lg:flex justify-center items-center">
-						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-[60px] object-contain" />
-					</div>
+					<a href="/" className="hidden md:flex md:flex-none h-[50px]">
+						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
+					</a>
 
 					{/* Right-side Badges */}
-					<div className="flex flex-row items-center gap-8 justify-center lg:justify-start w-full lg:w-auto">
-						<img src={easyFinancingAvailable} alt="Easy Financing Available" className="hidden lg:block h-[55px] object-contain" />
-						<img src={googleReviews} alt="Google Reviews" className="h-[55px] object-contain" />
-						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[55px] object-contain" />
-						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden lg:block h-[55px] object-contain rounded-lg" />
+					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
+						<img src={easyFinancingAvailable} alt="Easy Financing Available" className="hidden sm:block h-[50px] object-contain" />
+						<img src={googleReviews} alt="Google Reviews" className="h-[50px] object-contain" />
+						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[50px] object-contain" />
+						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden sm:block h-[50px] object-contain rounded-lg" />
 					</div>
 				</div>
 			</div>
@@ -92,7 +91,7 @@ export default function Footer() {
 								Contact Us
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h4>
-							<ul className="flex flex-row sm:flex-col space-y-2 justify-between text-base md:text-lg">
+							<ul className="flex flex-col space-y-2 justify-between text-base md:text-lg">
 								<li className="flex items-center gap-2">
 									<FaPhone />
 									<a href="tel:206-938-3219" className="hover:underline">(206) 938-3219</a>
@@ -161,8 +160,10 @@ export default function Footer() {
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="w-full bg-[#0C2D70] border-t border-white pt-4 pb-12 text-center text-white">
-				© {new Date().getFullYear()} Puget Sound Plumbing and Heating. All Rights Reserved.
+			<div className="w-full h-[80px] bg-[#0C2D70] border-t border-white text-sm text-white flex items-center">
+				<div className="flex flex-col sm:flex-row justify-center items-center max-w-7xl mx-auto px-6 w-full gap-2">
+					<span>© {new Date().getFullYear()} Puget Sound Plumbing and Heating. All rights reserved.</span>
+				</div>
 			</div>
 		</footer>
 	);

@@ -1,14 +1,14 @@
-import Hero from "./components/hero/Hero2";
-import EmergencyBar from "./components/alert-bars/EmergencyBar";
-import Services from "./components/services/Services";
-import WhyChooseUs from "./components/why-choose-us/WhyChooseUs";
-import FinancingBar from "./components/alert-bars/FinacingBar";
-import CustomerReviews from "./components/customer-reviews/CustomerReviews";
-import ScheduleOnline from "./components/schedule-online/ScheduleOnline"
-import Discounts from "./components/current-discounts/Discounts"
-import RecentBlogPosts from "./components/recent-blog-posts/RecentBlogPosts"
-import FAQs from "./components/faqs/FAQs";
-import CallNow from "./components/call-now/CallNow";
+import Hero from "./components/Hero2";
+import EmergencyBar from "./components/EmergencyBar";
+import Services from "./components/Services";
+import WhyChooseUs from "./components/WhyChooseUs";
+import FinancingBar from "./components/FinacingBar";
+import CustomerReviews from "./components/CustomerReviews";
+import ScheduleOnline from "./components/ScheduleOnline"
+import Discounts from "./components/Discounts"
+import RecentBlogPosts from "./components/RecentBlogPosts"
+import FAQs from "./components/FAQs";
+import CallNow from "./components/CallNow";
 
 export default function Home() {
 	return (

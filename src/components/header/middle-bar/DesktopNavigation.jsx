@@ -1,5 +1,5 @@
 import { FaChevronDown } from "react-icons/fa";
-import { topLinks, bottomLinks } from "./navigationLinks";
+import { topLinks, bottomLinks } from "../navLinks";
 
 export default function DesktopNavigation() {
 	return (

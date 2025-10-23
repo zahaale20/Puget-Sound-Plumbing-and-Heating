@@ -1,17 +1,20 @@
 import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import { FaChevronDown, FaBars, FaTimes, FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import logo from "../../assets/pspah-logo.png";
-import { navLinks } from "./middle-bar/navigationLinks";
+import { navLinks } from "./navLinks2";
 
 export default function Header() {
 	const [openMenu, setOpenMenu] = useState(null); // Desktop hover menu
 	const [mobileOpen, setMobileOpen] = useState(false); // Mobile menu open
 	const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState({}); // Track which submenu is open
 	const closeTimeoutRef = useRef(null);
+	const navigate = useNavigate();
 
 	// Default left shift for Services dropdown (adjust as needed)
 	const defaultDropdownShift = {
-		Services: "-200px", // example shift if it overflows
+		Services: "-200px",
 	};
 
 	// Desktop hover handlers
@@ -38,9 +41,9 @@ export default function Header() {
 			<div className="flex justify-between items-center w-full max-w-7xl h-full px-6 mx-auto">
 				<div className="flex items-center gap-6">
 					{/* Logo */}
-					<a href="/" className="flex-none h-[50px]">
+					<button onClick={() => navigate("/")}  className="flex-none h-[50px] cursor-pointer">
 						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
-					</a>
+					</button>
 
 					{/* Desktop Navigation */}
 					<div className="hidden lg:flex flex-row items-center gap-6 flex-1 justify-between">
@@ -106,14 +109,17 @@ export default function Header() {
 
 				{/* Buttons */}
 				<div className="hidden lg:flex flex-row gap-2 items-center">
-					<button className="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
+					<button onClick={() => navigate("/schedule-online")} className="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
 						<FaRegCalendarAlt />
 						Schedule Online
 					</button>
-					<button className="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]">
+					<a
+						href="tel:18665824730"
+						className="flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]"
+					>
 						<FaPhone />
 						(866) 582-4730
-					</button>
+					</a>
 				</div>
 
 				{/* Mobile Hamburger */}
@@ -170,7 +176,7 @@ export default function Header() {
 
 						{/* Mobile Buttons */}
 						<li className="flex flex-col gap-3 mt-4 w-full pb-4">
-							<button className="flex items-center justify-center gap-2 py-3 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 bg-[#B32020] hover:bg-[#7a1515]">
+							<button onClick={() => navigate("/schedule-online")} className="flex items-center justify-center gap-2 py-3 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 bg-[#B32020] hover:bg-[#7a1515]">
 								<FaRegCalendarAlt />
 								Schedule Online
 							</button>
