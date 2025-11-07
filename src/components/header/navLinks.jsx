@@ -1,5 +1,9 @@
 export const TopLinks = [
 	{
+		name: "Blog", 
+		href: "/blog"
+	},
+	{
 		name: "Careers", 
 		href: "/careers"
 	},

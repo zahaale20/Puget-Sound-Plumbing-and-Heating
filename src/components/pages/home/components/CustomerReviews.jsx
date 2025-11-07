@@ -22,14 +22,14 @@ export default function CustomerReviews() {
 	];
 
 	return (
-		<section className="flex justify-center w-full py-16 bg-cover bg-center" style={{ backgroundImage: `url(${skyline})` }}>
+		<section className="flex justify-center w-full py-16 bg-cover bg-bottom" style={{ backgroundImage: `url(${skyline})` }}>
 			<div className="flex flex-col text-center w-full max-w-7xl px-6">
 				{/* Header */}
 				<div className="mb-6">
-					<h3 className="text-[#0C2D70] inline-block relative pb-2">
+					<h4 className="text-[#0C2D70] inline-block relative pb-2">
 						Customer Reviews
 						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h3>
+					</h4>
 					<p className="text-[#2B2B2B] mt-6 mx-auto">
 						See what our customers are saying about our plumbing services. Your satisfaction is our top priority.
 					</p>
@@ -47,10 +47,14 @@ export default function CustomerReviews() {
 							</div>
 
 							{/* Review Text */}
-							<p className="flex-1 text-[#2B2B2B]">{review.text}</p>
+							<p className="flex-1 text-[#2B2B2B]">
+								{review.text}
+							</p>
 
 							{/* Reviewer */}
-							<h5 className="text-[#0C2D70] font-semibold mt-2">{review.name}</h5>
+							<h6 className="text-[#0C2D70] font-semibold mt-2">
+								{review.name}
+							</h6>
 						</div>
 					))}
 				</div>

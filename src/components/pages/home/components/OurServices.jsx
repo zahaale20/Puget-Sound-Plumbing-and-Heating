@@ -53,8 +53,7 @@ export default function Services() {
 	];
 
 	return (
-		<section
-			className="relative flex flex-col items-center w-full py-16 overflow-hidden"
+		<section className="relative flex flex-col items-center w-full py-16"
 			style={{
 				backgroundImage: `url(${pattern})`,
 				backgroundRepeat: "no-repeat",
@@ -67,10 +66,10 @@ export default function Services() {
 
 			{/* Header */}
 			<div className="relative z-10 w-full max-w-7xl px-6 mx-auto text-center text-white mb-8">
-				<h3 className="inline-block relative pb-2">
+				<h4 className="inline-block relative pb-2">
 					Our Services
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h3>
+				</h4>
 			</div>
 
 			{/* Services Grid */}
@@ -86,20 +85,14 @@ export default function Services() {
 								onClick={() => navigate(service.path)}
 								onMouseEnter={() => setHoveredIndex(idx)}
 								onMouseLeave={() => setHoveredIndex(null)}
-								className={`flex flex-col items-start text-left px-6 py-4 shadow-lg cursor-pointer transition-all border-b-4 ${
-									isHovered 
-										? "border-[#B32020] bg-white"
-										: shouldDim 
-										? "border-transparent !bg-[#E2E2E2]"
-										: "border-transparent bg-white"
-								}`}
+								className={`flex flex-col items-start text-left px-6 py-4 shadow-lg cursor-pointer transition-all bg-white hover:bg-[#F5F5F5] border-b-4 border-transparent hover:border-[#B32020]`}
 							>
 								{/* Image */}
 								<div className="flex items-center justify-start w-full mb-4">
 									<img
 										src={service.image}
 										alt={service.title}
-										className="w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-105"
+										className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-105"
 									/>
 								</div>
 

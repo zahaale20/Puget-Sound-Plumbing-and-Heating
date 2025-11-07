@@ -22,16 +22,16 @@ export default function ContactUs() {
 	};
 
 	return (
-		<section className="flex justify-center w-full py-16 bg-cover bg-center" style={{ backgroundImage: `url(${skyline})` }}>
+		<section className="flex justify-center w-full py-16 bg-cover bg-bottom" style={{ backgroundImage: `url(${skyline})` }}>
 			<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 gap-12">
 				{/* Left Column — Header + Form */}
 				<div className="flex flex-col w-full lg:w-1/2">
 					{/* Header */}
 					<div className="w-full mb-6 text-left">
-						<h3 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
+						<h4 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
 							Schedule Online
 							<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-						</h3>
+						</h4>
 						<p className="text-[#2B2B2B]">
 							We'll reach out to schedule your appointment.
 						</p>
@@ -45,7 +45,7 @@ export default function ContactUs() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{/* First Name */}
 							<div>
-								<label className="block font-bold">
+								<label className="text-[#2B2B2B]">
 									First Name{" "}
 									<span className="text-[#B32020] font-normal italic">*</span>
 								</label>
@@ -61,7 +61,7 @@ export default function ContactUs() {
 
 							{/* Last Name */}
 							<div>
-								<label className="block font-bold">
+								<label className="text-[#2B2B2B]">
 									Last Name{" "}
 									<span className="text-[#B32020] font-normal italic">*</span>
 								</label>
@@ -79,7 +79,7 @@ export default function ContactUs() {
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{/* Phone */}
 							<div>
-								<label className="block font-bold">
+								<label className="text-[#2B2B2B]">
 									Phone <span className="text-[#B32020] italic">*</span>
 								</label>
 								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
@@ -94,7 +94,7 @@ export default function ContactUs() {
 
 							{/* Email */}
 							<div>
-								<label className="block font-bold">
+								<label className="text-[#2B2B2B]">
 									Email <span className="text-[#B32020] italic">*</span>
 								</label>
 								<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
@@ -110,7 +110,7 @@ export default function ContactUs() {
 
 						{/* Message */}
 						<div>
-							<label className="block font-bold">
+							<label className="text-[#2B2B2B]">
 								Message
 							</label>
 							<textarea

@@ -2,7 +2,7 @@ import { FaTag, FaCut } from "react-icons/fa";
 
 import pattern from "../../../../assets/pattern1.png";
 
-export default function Discounts() {
+export default function CurrentCoupons() {
 	const coupons = [
 		{ discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
 		{ discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
@@ -26,10 +26,10 @@ export default function Discounts() {
 			<div className="relative flex flex-col w-full max-w-7xl px-6 z-10">
 				{/* Header */}
 				<div className="mb-6 text-center">
-					<h3 className="text-white relative inline-block pb-2 mb-6">
-						Current Discounts
+					<h4 className="text-white relative inline-block pb-2 mb-6">
+						Limited Time Offers
 						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h3>
+					</h4>
 					<p className="text-white mx-auto">
 						Must be mentioned when scheduling your appointment. 1 coupon per customer.
 					</p>
@@ -40,16 +40,16 @@ export default function Discounts() {
 					{coupons.map((coupon, idx) => (
 						<div
 							key={idx}
-							className="flex-1 min-w-[220px] bg-white p-6 text-center text-[#0C2D70] flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020]"
+							className="flex-1 min-w-[220px] bg-white p-6 text-center flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020]"
 						>
 							<div className="text-[#B32020] text-5xl">
 								<FaTag />
 							</div>
-							<h3 className="font-bold uppercase border-b-4 border-[#B32020] pb-1">
+							<h4 className="text-[#0C2D70] uppercase border-b-4 border-[#B32020] pb-1">
 								{coupon.discount}
-							</h3>
-							<p className="uppercase">{coupon.condition}</p>
-							<p className="mt-2">Cannot be combined with other offers.</p>
+							</h4>
+							<p className="text-[#2B2B2B] uppercase">{coupon.condition}</p>
+							<p className="text-[#2B2B2B] mt-2">Cannot be combined with other offers.</p>
 							<div className="absolute -right-[16px] bottom-1/4 text-[#B32020] text-3xl rotate-270">
 								<FaCut />
 							</div>

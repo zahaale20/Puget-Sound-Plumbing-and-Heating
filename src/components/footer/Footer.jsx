@@ -41,10 +41,10 @@ export default function Footer() {
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
-						<img src={easyFinancingAvailable} alt="Easy Financing Available" className="hidden sm:block h-[50px] object-contain" />
-						<img src={googleReviews} alt="Google Reviews" className="h-[50px] object-contain" />
-						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[50px] object-contain" />
-						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden sm:block h-[50px] object-contain rounded-lg" />
+						<img src={easyFinancingAvailable} alt="Easy Financing Available" className="hidden sm:block h-[55px] object-contain" />
+						<img src={googleReviews} alt="Google Reviews" className="h-[55px] object-contain" />
+						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[55px] object-contain" />
+						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" />
 					</div>
 				</div>
 			</div>
@@ -75,7 +75,7 @@ export default function Footer() {
 						</h4>
 						<div className="grid grid-cols-3 sm:grid-cols-4 gap-x-8 gap-y-2">
 							{serviceAreas.map((area) => (
-								<a key={area} href="#" className="hover:underline whitespace-nowrap text-base md:text-lg">
+								<a key={area} href="#" className="hover:underline whitespace-nowrap">
 									{area}
 								</a>
 							))}
@@ -91,10 +91,10 @@ export default function Footer() {
 								Contact Us
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h4>
-							<ul className="flex flex-col space-y-2 justify-between text-base md:text-lg">
+							<ul className="flex flex-col space-y-2 justify-between">
 								<li className="flex items-center gap-2">
 									<FaPhone />
-									<a href="tel:866-582-4730" className="hover:underline">(866) 582-4730</a>
+									<a href="tel:206-938-3219" className="hover:underline">(206) 938-3219</a>
 								</li>
 								<li className="flex gap-2">
 									<FaLocationDot className="mt-1" /> {/* optional small top margin */}
@@ -115,26 +115,26 @@ export default function Footer() {
 								</h4>
 								<ul className="flex sm:flex-col items-center sm:items-start space-x-4 sm:space-x-0 sm:space-y-2 ">
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaFacebookF className="text-base md:text-lg"/>
-										<a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
+										<FaFacebookF />
+										<a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
 											Facebook
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaInstagram className="text-base md:text-lg"/>
-										<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
+										<FaInstagram />
+										<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
 											Instagram
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaYoutube className="text-base md:text-lg"/>
-										<a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
+										<FaYoutube />
+										<a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
 											YouTube
 										</a>
 									</li>
 									<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-										<FaXTwitter className="text-base md:text-lg"/>
-										<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg hidden sm:inline hover:underline">
+										<FaXTwitter />
+										<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
 											X
 										</a>
 									</li>
@@ -147,7 +147,7 @@ export default function Footer() {
 									WA License
 									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 								</h4>
-								<ul className="space-y-2 text-base md:text-lg">
+								<ul className="space-y-2">
 									<li className="flex items-center gap-2">
 										<FaIdCard />
 										<p>#PUGETSP929CF</p>

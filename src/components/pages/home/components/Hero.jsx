@@ -1,61 +1,80 @@
-import { FaRegCalendarAlt, FaPhone } from "react-icons/fa";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import { useNavigate } from "react-router-dom";
 
-import hero from "../../../../../assets/hero.png";
+import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
+import hero from "../../../../assets/home-page-hero2.png";
 
 export default function Hero() {
-    return (
-		<section
-			className="relative flex flex-col items-center w-full h-[calc(100vh-100px)] sm:h-[calc(100vh-160px)] overflow-hidden mt-[100px] sm:mt-[160px]"
-			style={{
-				backgroundImage: `url(${hero})`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center right",
-				backgroundSize: "cover",
-			}}
-		>
+	const navigate = useNavigate();
+	
+	return (
+		<section className="flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]" style={{backgroundImage: `url(${hero})`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover"}}>
+			{/* Gradient Overlay */}
+			<div className="z-0 absolute inset-0 bg-[linear-gradient(0deg,_#00000088_15%,_#ffffff22_100%)]"></div>
 
-            {/* Overlay for contrast */}
-            <div className="absolute inset-0 bg-white/80 lg:bg-white/0 lg:bg-[linear-gradient(to_right,white_0%,white_40%,transparent_65%)]"></div>
+			{/* Content Wrapper (Centered) */}
+			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-12 gap-8">
+				{/* Title */}
+				<h1 className="uppercase leading-tight text-white">
+					Seattle's Trusted
+					<br />
+					Plumbing Experts
+				</h1>
 
-            {/* Foreground Content */}
-            <div className="relative z-10 flex flex-col justify-between w-full h-full max-w-7xl px-8 gap-12">
-                <div className="flex flex-col justify-center w-full h-full lg:w-3/5">
-                    <h6 className="text-[#0C2D70] uppercase mb-8">
-                        The sound solution to your plumbing problems
-                    </h6>
+				{/* Description */}
+				<p className="text-base lg:text-lg text-white">The sound solution to your plumbing problems.</p>
 
-                    <h1 className="text-[#0C2D70] mb-8">
-                        Seattle's Trusted Plumbing and Heating Professionals
-                    </h1>
+				{/* Buttons */}
+				<div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch w-full">
+					<button onClick={() => navigate("/schedule-online")} className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
+						<FaRegCalendarAlt />
+						Schedule Online
+					</button>
+					<a
+						href="tel:206-938-3219"
+						className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]"
+					>
+						<FaPhone />
+						(206) 938-3219
+					</a>
+				</div>
+			</div>
 
-                    <div className="space-y-3 mb-12">
-                        {[
-                            "Fully Insured & Licensed",
-                            "Dependable & Experienced",
-                            "100% Satisfaction Guarantee",
-                        ].map((text, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <i className="fa-solid fa-check text-xl text-[#B32020]"></i>
-                                <span className="text-lg text-[#2B2B2B]">{text}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="flex flex-wrap gap-4">
-                        <button className="flex items-center rounded-lg px-6 py-3 text-base md:px-8 md:py-4 md:text-lg font-bold cursor-pointer transition-all duration-300 transform whitespace-nowrap h-[60px] text-white bg-[#B32020] hover:bg-[#7a1515] gap-2">
-                            <FaRegCalendarAlt />
-                            <span>Schedule Online</span>
-                        </button>
-
-                        <button className="flex items-center rounded-lg px-6 py-3 text-base md:px-8 md:py-4 md:text-lg font-bold cursor-pointer transition-all duration-300 transform whitespace-nowrap h-[60px] text-white bg-[#0C2D70] hover:bg-[#081a46] gap-2">
-                            <FaPhone />
-                            <span>Call (866) 582-4730</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+			{/* Social Media Icons */}
+			<div className="absolute bottom-6 flex flex-row gap-6 items-center z-10 justify-end">
+				<a
+					href="https://www.facebook.com/pugetsoundplumbing/"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Facebook"
+				>
+					<FaFacebookF className="text-xl text-white" />
+				</a>
+				<a
+					href="https://www.instagram.com/puget_sound_plumbing_heating/"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Instagram"
+				>
+					<FaInstagram className="text-xl text-white" />
+				</a>
+				<a
+					href="https://www.youtube.com/user/pugetsoundplumbing"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="YouTube"
+				>
+					<FaYoutube className="text-xl text-white" />
+				</a>
+				<a
+					href="https://x.com/PugetPlumbing"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Twitter"
+				>
+					<FaXTwitter className="text-xl text-white" />
+				</a>
+			</div>
+		</section>
+	);
 }

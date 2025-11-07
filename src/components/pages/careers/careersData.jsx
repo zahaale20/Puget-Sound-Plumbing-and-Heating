@@ -1,9 +1,9 @@
-export const JobOpenings = [
+export const openings = [
 	{
 		name: "Licensed Residential Plumber", 
 		location: "Seattle, WA",
         type: "Full Time",
-        description: "Join our team of skilled plumbers at Puget Sound Plumbing and Heating. We're seeking a licensed plumber with a can-do attitude and high ambitions. We value family, teamwork, and fair treatment. Heating/AC experience is a plus.",
+        description: "Puget Sound Plumbing and Heating is looking to hire a Licensed Plumber. Heating/AC experience will help as well. The plumbers that work for our company are among the most skilled in Washington State. We are looking for someone who has a can do attitude and has high ambitions. At our company, we hold a high sense of family and team work among the employees. If you are looking to work at a place where you are treated fair, then this is the place for you.",
         qualifications: [
             "Licensed Plumber and/or 2nd or 3rd year plumber apprentice",
             "Valid Washington State driver's license with clean driving record",

@@ -12,7 +12,7 @@
 }
 
 h1 {
-  	@apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold;
+  	@apply text-4xl md:text-5xl lg:text-6xl font-extrabold;
 }
 
 h2 {
@@ -32,9 +32,9 @@ h5 {
 }
 
 h6 {
-  	@apply text-sm md:text-lg font-semibold;
+  	@apply text-base md:text-lg font-semibold;
 }
 
-p {
-  	@apply text-base md:text-lg;
+label {
+	@apply block mb-1 text-base font-semibold;
 }
