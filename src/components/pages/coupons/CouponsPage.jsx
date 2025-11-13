@@ -1,3 +1,5 @@
+import ScheduleOnline from "../home/components/ScheduleOnline";
+
 import { FaTag, FaCut } from "react-icons/fa";
 
 import skyline from "../../../assets/seattle-skyline.png";
@@ -8,10 +10,7 @@ export default function CouponsPage() {
 	return (
 		<>
 			{/* Limited Time Offers Section */}
-			<section
-				className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]"
-				style={{ backgroundImage: `url(${skyline})` }}
-			>
+			<section className="flex justify-center w-full py-16 bg-white text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]">
 	
 				<div className="relative flex flex-col w-full max-w-7xl px-6 z-10">
 					{/* Header */}
@@ -48,6 +47,8 @@ export default function CouponsPage() {
 					</div>
 				</div>
 			</section>
+
+			<ScheduleOnline />
 		</>
 	);
 }
