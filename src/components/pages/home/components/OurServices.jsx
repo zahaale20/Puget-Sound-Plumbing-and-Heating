@@ -11,6 +11,8 @@ import plumbingRepair from "../../../../assets/plumbing-repair.png";
 export default function Services() {
 	const navigate = useNavigate();
 
+	const [hoveredIndex, setHoveredIndex] = useState(null);
+
 	const services = [
 		{ 
 			image: waterHeaters,
