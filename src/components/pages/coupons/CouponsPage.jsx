@@ -4,6 +4,7 @@ import { FaTag, FaCut } from "react-icons/fa";
 import ScheduleOnline from "../home/components/ScheduleOnline";
 
 import pattern from "../../../assets/pattern1.png";
+import skyline from "../../../assets/seattle-skyline.png";
 
 import { coupons } from "./couponsData";
 
@@ -162,8 +163,12 @@ export default function CouponsPage() {
 				</div>
 			)}
 
-
-			<ScheduleOnline />
+			<section 
+				className="flex justify-center w-full py-16 bg-cover bg-bottom" 
+				style={{ backgroundImage: `url(${skyline})` }}
+			>
+				<ScheduleOnline />
+			</section>
 		</div>
 	);
 }

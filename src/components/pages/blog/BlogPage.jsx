@@ -1,6 +1,5 @@
 import {
 	FaRegCalendarAlt,
-	FaArrowLeft,
 	FaArrowRight,
 	FaSearch,
 	FaChevronDown,
