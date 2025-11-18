@@ -8,139 +8,151 @@ import snohomishCounty from "../../../assets/snohomish-county.png";
 export default function ServiceAreasPage() {
 	return (
 		<div className="flex flex-col max-w-7xl mx-auto px-6 py-16 gap-16 mt-[101px] md:mt-[106px] lg:mt-[167px]">
-
 			<div>
-				{/* Header */}
+				{/* Main Header */}
 				<h4 className="text-[#0C2D70] relative inline-block pb-2 mb-6">
 					Service Areas
 					<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
 				</h4>
 
-				<div className="text-[#2B2B2B] space-y-20">
+				<p className="text-[#2B2B2B] mb-6">
+					At Puget Sound Plumbing & Heating, we’ve been keeping homes and businesses comfortable across the Puget Sound region for decades. From Seattle high-rises to Snohomish County neighborhoods, our licensed plumbers are ready to handle everything from emergency repairs to complete system installations.
+				</p>
 
-					{/* Seattle */}
-					<div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-12 min-h-[140px]">
-						
-						{/* Text */}
-						<div className="lg:w-3/4">
-							<h5 className="text-[#2B2B2B] mb-2">Seattle Plumbing Services</h5>
-							<p className="mb-3">
-								Seattle is our home base, and we know the plumbing challenges that come
-								with older homes, new construction, and everything in between. Whether
-								it’s a burst pipe on Capitol Hill, a water heater replacement in
-								Ballard, or a sewer line issue in West Seattle, our team has you covered.
-							</p>
+				<p className="text-[#2B2B2B] mb-12">
+					We’re proud to serve customers throughout Seattle, King County, Pierce County, and Snohomish County. Select your area below to see the full list of cities we cover.
+				</p>
 
-							<div className="flex justify-end">
-								<a
-									href="/service-areas/seattle"
-									className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
-								>
-									See All Seattle Neighborhoods <FaArrowRight />
-								</a>
+				<div className="text-[#2B2B2B] space-y-12">
+					{/* Seattle Section */}
+					<div className="flex flex-col gap-2">
+						{/* Top Row: Image + Text */}
+						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
+							<div className="hidden lg:block flex-shrink-0">
+								<img
+									src={cityOfSeattle}
+									alt="City of Seattle"
+									className="h-[80px] object-contain"
+								/>
+							</div>
+							<div className="flex-1">
+								<h5 className="text-[#2B2B2B] mb-2">Seattle Plumbing Services</h5>
+								<p>
+									Seattle is our home base, and we know the plumbing challenges that come
+									with older homes, new construction, and everything in between. Whether
+									it’s a burst pipe on Capitol Hill, a water heater replacement in
+									Ballard, or a sewer line issue in West Seattle, our team has you covered.
+								</p>
 							</div>
 						</div>
 
-						{/* Image RIGHT but aligned LEFT */}
-						<div className="hidden lg:flex lg:w-1/4 items-center justify-start">
-							<img
-								src={cityOfSeattle}
-								alt="City of Seattle"
-								className="h-[50px] object-contain"
-							/>
+						{/* Bottom Row: Button */}
+						<div className="flex justify-end mt-1">
+							<a
+								href="/service-areas/seattle"
+								className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
+							>
+								See All Seattle Neighborhoods <FaArrowRight />
+							</a>
 						</div>
 					</div>
 
-					{/* King County */}
-					<div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-12 min-h-[140px]">
-
-						<div className="lg:w-3/4">
-							<h5 className="text-[#2B2B2B] mb-2">King County Plumbing Services</h5>
-							<p className="mb-3">
-								As one of the largest counties in Washington, King County has diverse
-								plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide
-								full-service plumbing, heating, and drain cleaning throughout the county,
-								ensuring fast, reliable solutions whenever you need them.
-							</p>
-
-							<div className="flex justify-end">
-								<a
-									href="/service-areas/king-county"
-									className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
-								>
-									See All King County Cities <FaArrowRight />
-								</a>
+					{/* King County Section */}
+					<div className="flex flex-col gap-2">
+						{/* Top Row: Image + Text */}
+						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
+							<div className="hidden lg:block flex-shrink-0">
+								<img
+									src={kingCounty}
+									alt="King County"
+									className="h-[80px] object-contain"
+								/>
+							</div>
+							<div className="flex-1">
+								<h5 className="text-[#2B2B2B] mb-2">King County Plumbing Services</h5>
+								<p>
+									As one of the largest counties in Washington, King County has diverse
+									plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide
+									full-service plumbing, heating, and drain cleaning throughout the county,
+									ensuring fast, reliable solutions whenever you need them.
+								</p>
 							</div>
 						</div>
 
-						<div className="hidden lg:flex lg:w-1/4 items-center justify-start">
-							<img
-								src={kingCounty}
-								alt="King County"
-								className="h-[50px] object-contain"
-							/>
+						{/* Bottom Row: Button */}
+						<div className="flex justify-end mt-1">
+							<a
+								href="/service-areas/king-county"
+								className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
+							>
+								See All King County Cities <FaArrowRight />
+							</a>
 						</div>
 					</div>
 
-					{/* Pierce County */}
-					<div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-12 min-h-[140px]">
-
-						<div className="lg:w-3/4">
-							<h5 className="text-[#2B2B2B] mb-2">Pierce County Plumbing Services</h5>
-							<p className="mb-3">
-								From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound
-								Plumbing for dependable service and honest pricing. Whether it’s routine
-								maintenance, fixture installation, or an urgent late-night emergency, our
-								plumbers are just a call away.
-							</p>
-
-							<div className="flex justify-end">
-								<a
-									href="/service-areas/pierce-county"
-									className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
-								>
-									See All Pierce County Cities <FaArrowRight />
-								</a>
+					{/* Pierce County Section */}
+					<div className="flex flex-col gap-2">
+						{/* Top Row: Image + Text */}
+						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
+							<div className="hidden lg:block flex-shrink-0">
+								<img
+									src={pierceCounty}
+									alt="Pierce County"
+									className="h-[80px] object-contain"
+								/>
+							</div>
+							<div className="flex-1">
+								<h5 className="text-[#2B2B2B] mb-2">Pierce County Plumbing Services</h5>
+								<p>
+									From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound
+									Plumbing for dependable service and honest pricing. Whether it’s routine
+									maintenance, fixture installation, or an urgent late-night emergency, our
+									plumbers are just a call away.
+								</p>
 							</div>
 						</div>
 
-						<div className="hidden lg:flex lg:w-1/4 items-center justify-start">
-							<img
-								src={pierceCounty}
-								alt="Pierce County"
-								className="h-[50px] object-contain"
-							/>
+						{/* Bottom Row: Button */}
+						<div className="flex justify-end mt-1">
+							<a
+								href="/service-areas/pierce-county"
+								className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
+							>
+								See All Pierce County Cities <FaArrowRight />
+							</a>
 						</div>
 					</div>
 
-					{/* Snohomish County */}
-					<div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-12 min-h-[140px]">
-
-						<div className="lg:w-3/4">
-							<h5 className="text-[#2B2B2B] mb-2">Snohomish County Plumbing Services</h5>
-							<p className="mb-3">
-								Serving growing communities like Everett, Lynnwood, and Marysville, our
-								team brings decades of plumbing expertise to Snohomish County. We
-								understand local building codes, water system requirements, and the
-								unique needs of homes in the area.
-							</p>
-
-							<div className="flex justify-end">
-								<a
-									href="/service-areas/snohomish-county"
-									className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
-								>
-									See All Snohomish County Cities <FaArrowRight />
-								</a>
+					{/* Snohomish County Section */}
+					<div className="flex flex-col gap-2">
+						{/* Top Row: Image + Text */}
+						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
+							<div className="hidden lg:block flex-shrink-0">
+								<img
+									src={snohomishCounty}
+									alt="Snohomish County"
+									className="h-[80px] object-contain"
+								/>
+							</div>
+							<div className="flex-1">
+								<h5 className="text-[#2B2B2B] mb-2">Snohomish County Plumbing Services</h5>
+								<p>
+									Serving growing communities like Everett, Lynnwood, and Marysville, our
+									team brings decades of plumbing expertise to Snohomish County. We
+									understand local building codes, water system requirements, and the
+									unique needs of homes in the area.
+								</p>
 							</div>
 						</div>
 
-						<div className="hidden lg:flex lg:w-1/4 items-center justify-start">
-							<img
-								src={snohomishCounty}
-								alt="Snohomish County"
-								className="h-[50px] object-contain"
-							/>
+						{/* Bottom Row: Button */}
+						<div className="flex justify-end mt-1">
+							<a
+								href="/service-areas/snohomish-county"
+								className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
+							>
+								See All Snohomish County Cities <FaArrowRight />
+							</a>
 						</div>
 					</div>
 

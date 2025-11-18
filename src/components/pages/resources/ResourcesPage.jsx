@@ -30,7 +30,7 @@ export default function ResourcesPage() {
 				<Financing />
 			</section>
 
-			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
+			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
 				<Warranties />
 			</section>
 
@@ -38,7 +38,7 @@ export default function ResourcesPage() {
 				<FAQs />
 			</section>
 
-			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
+			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
 				<DIYPlumbingPermit />
 			</section>
 		</div>

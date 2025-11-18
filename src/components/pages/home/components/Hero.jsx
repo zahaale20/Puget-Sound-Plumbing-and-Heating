@@ -8,7 +8,10 @@ export default function Hero() {
 	const navigate = useNavigate();
 	
 	return (
-		<section className="flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]" style={{backgroundImage: `url(${hero})`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover"}}>
+		<section 
+			className="flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]" 
+			style={{backgroundImage: `url(${hero})`, backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover"}}
+		>
 			{/* Gradient Overlay */}
 			<div className="z-0 absolute inset-0 bg-[linear-gradient(0deg,_#00000088_15%,_#ffffff22_100%)]"></div>
 

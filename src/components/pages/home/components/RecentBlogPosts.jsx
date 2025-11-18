@@ -42,52 +42,68 @@ export default function RecentBlogPosts() {
 		text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
 	return (
-		<section className="w-full py-16 bg-[#F5F5F5]">
-			<div className="max-w-7xl mx-auto px-6">
-				<h4 className="text-[#0C2D70] text-3xl font-semibold mb-8 relative inline-block pb-2">
+		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6">
+			{/* Header Container */}
+			<div className="space-y-6">
+				{/* Title */}
+				<h4 className="text-[#0C2D70] inline-block relative pb-2">
 					Recent Blog Posts
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 				</h4>
+				
+				{/* Description */}
+				<p className="text-[#2B2B2B]">
+					Read the latest tips, how-tos, and the insights in the plumbing world.
+				</p>
+			</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-					{posts.map((post) => (
-						<div
+			{/* Blog Posts Grid */}
+			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				{posts.map((post) => (
+					// Blog Post Container
+					<div
 						key={post.id}
 						className="bg-white shadow-lg flex flex-col overflow-hidden"
-						>
-							<img
-								src={post.image}
-								alt={post.title}
-								className="w-full h-48 object-cover"
-							/>
+					>
+						{/* Image */}
+						<img
+							src={post.image}
+							alt={post.title}
+							className="w-full h-48 object-cover"
+						/>
 
-							<div className="p-6 flex flex-col flex-1">
-								<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
-									<FaRegCalendarAlt /> <span>{post.date}</span>
-								</div>
-
-								<h5 className="text-xl font-semibold text-[#0C2D70] mb-1">
-									{post.title}
-								</h5>
-
-								<span className="text-[#2B2B2B] flex-1 mb-6">
-									{truncateText(post.description, 152)}
-								</span>
-
-								<a href="#" className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors">
-									Continue Reading <FaArrowRight/>
-								</a>
+						{/* Content Container */}
+						<div className="p-6 flex flex-col flex-1">
+							{/* Date Posted */}
+							<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
+								<FaRegCalendarAlt /> <span>{post.date}</span>
 							</div>
-						</div>
-					))}
-				</div>
 
-				<div className="flex justify-end">
-					<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
-						View All Posts <FaArrowRight/>
-					</a>
-				</div>
+							{/* Post Title */}
+							<h5 className="text-xl font-semibold text-[#0C2D70] mb-1">
+								{post.title}
+							</h5>
+
+							{/* Truncated Post Text */}
+							<span className="text-[#2B2B2B] flex-1 mb-6">
+								{truncateText(post.description, 152)}
+							</span>
+
+							{/* Continue Reading Link */}
+							<a href="#" className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors">
+								Continue Reading <FaArrowRight/>
+							</a>
+						</div>
+					</div>
+				))}
 			</div>
-		</section>
+
+			{/* View All Posts Link */}
+			<div className="flex justify-end">
+				<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
+					View All Posts <FaArrowRight/>
+				</a>
+			</div>
+		</div>
 	);
 }
