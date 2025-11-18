@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { FaMapMarkerAlt, FaCreditCard, FaChevronDown, FaBars, FaTimes, FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import logo from "../../assets/pspah-logo.png";
-import { TopLinks, BottomLinks } from "./navLinks";
+import { CompanyLinks, ServiceLinks } from "./navLinks";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -67,7 +67,7 @@ export default function Header() {
 						<div className="flex flex-col">
 							{/* Top Nav Links */}
 							<ul className="flex flex-nowrap w-full justify-end gap-6 pr-3">
-								{TopLinks.map((link) => (
+								{CompanyLinks.map((link) => (
 									<li key={link.name} className="relative group">
 										<button 
 											onClick={() => navigate(link.href)} 
@@ -81,7 +81,7 @@ export default function Header() {
 
 							{/* Bottom Nav Links */}
 							<ul className="flex items-center flex-1">
-								{BottomLinks.map((link) => (
+								{ServiceLinks.map((link) => (
 									<li key={link.name} className="relative" onMouseEnter={() => handleMouseEnter(link.name)} onMouseLeave={() => handleMouseLeave(link.name)}>
 										<a href={link.href} className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 ${openMenu === link.name ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"}`}>
 											{link.name}
@@ -168,7 +168,7 @@ export default function Header() {
 			{mobileOpen && (
 				<section className="absolute top-[101px] sm:top-[106px] left-0 w-full bg-white shadow-lg z-40 px-6 max-h-[calc(100vh-106px)] sm:max-h-[calc(100vh-116px)] overflow-y-auto">
 					<ul className="flex flex-col">
-						{BottomLinks.map((link) => (
+						{ServiceLinks.map((link) => (
 							<li key={link.name} className="w-full">
 								{link.submenu ? (
 								<>
@@ -213,7 +213,7 @@ export default function Header() {
 							</li>
 						))}
 
-						{TopLinks.map((link) => (
+						{CompanyLinks.map((link) => (
                             <li key={link.name} className="w-full">
                                 <button
                                     onClick={() => {

@@ -11,7 +11,7 @@ export default function ResourcesPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Page Header Section */}
 			<section
-				className="relative flex w-full py-12 bg-cover bg-bottom"
+				className="relative flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
 				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>

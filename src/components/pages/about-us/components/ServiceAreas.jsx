@@ -16,12 +16,19 @@ export default function ServiceAreas() {
                     <span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
                 </h4>
 
-                <div className="text-[#2B2B2B] space-y-20">
+                <p className="text-[#2B2B2B] mb-6">
+					At Puget Sound Plumbing & Heating, we’ve been keeping homes and businesses comfortable across the Puget Sound region for decades. From Seattle high-rises to Snohomish County neighborhoods, our licensed plumbers are ready to handle everything from emergency repairs to complete system installations.
+				</p>
 
+                <p className="text-[#2B2B2B] mb-12">
+                    We’re proud to serve customers throughout Seattle, King County, Pierce County, and Snohomish County. Select your area below to see the full list of cities we cover.
+                </p>
+
+                <div className="text-[#2B2B2B] space-y-12">
                     {/* Seattle Section */}
                     <div className="flex flex-col gap-2">
                         {/* Top Row: Image + Text */}
-                        <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                        <div className="flex flex-col lg:flex-row lg:items-start gap-12">
                             <div className="hidden lg:block flex-shrink-0">
                                 <img
                                     src={cityOfSeattle}
@@ -54,7 +61,7 @@ export default function ServiceAreas() {
                     {/* King County Section */}
                     <div className="flex flex-col gap-2">
                         {/* Top Row: Image + Text */}
-                        <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                        <div className="flex flex-col lg:flex-row lg:items-start gap-12">
                             <div className="hidden lg:block flex-shrink-0">
                                 <img
                                     src={kingCounty}
@@ -87,7 +94,7 @@ export default function ServiceAreas() {
                     {/* Pierce County Section */}
                     <div className="flex flex-col gap-2">
                         {/* Top Row: Image + Text */}
-                        <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                        <div className="flex flex-col lg:flex-row lg:items-start gap-12">
                             <div className="hidden lg:block flex-shrink-0">
                                 <img
                                     src={pierceCounty}
@@ -120,7 +127,7 @@ export default function ServiceAreas() {
                     {/* Snohomish County Section */}
                     <div className="flex flex-col gap-2">
                         {/* Top Row: Image + Text */}
-                        <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                        <div className="flex flex-col lg:flex-row lg:items-start gap-12">
                             <div className="hidden lg:block flex-shrink-0">
                                 <img
                                     src={snohomishCounty}

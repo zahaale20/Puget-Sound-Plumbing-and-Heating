@@ -11,7 +11,7 @@ export default function AboutUsPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Page Header Section */}
 			<section
-				className="relative flex w-full py-12 bg-cover bg-bottom"
+				className="relative flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
 				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>
@@ -22,7 +22,7 @@ export default function AboutUsPage() {
 					</h3>
 
 					<p className="relative inline-block">
-						Puget Sound Plumbing and Heating is a family-owned company with more than 20 years of experience serving the Seattle area. We’re committed to quality work, fair pricing, and unmatched customer care. From clogged drains to furnace issues, our expert team diagnoses and fixes problems efficiently and accurately.
+						Learn about our history, values, and commitment to delivering trusted, high-quality plumbing and heating services backed by over 20 years of local expertise.
 					</p>
 				</div>
 			</section>

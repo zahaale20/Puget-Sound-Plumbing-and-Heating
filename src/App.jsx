@@ -14,7 +14,7 @@ import ResourcesPage from "./components/pages/resources/ResourcesPage";
 import AboutUsPage from "./components/pages/about-us/AboutUsPage";
 
 import ServiceAreasPage from "./components/pages/service-areas/ServiceAreasPage";
-import SeattleServiceAreasPage from "./components/pages/service-areas/SeattleServiceAreasPage";
+import CommunitiesPage from "./components/pages/service-areas/CommunitiesPage";
 
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
 					<Route path="/about-us" element={<AboutUsPage />} />
 
 					<Route path="/service-areas" element={<ServiceAreasPage />} />
-					<Route path="/service-areas/seattle" element={<SeattleServiceAreasPage />} />
+					<Route path="/service-areas/:slug" element={<CommunitiesPage />} />
 				</Routes>
 				<Footer />
 			</div>

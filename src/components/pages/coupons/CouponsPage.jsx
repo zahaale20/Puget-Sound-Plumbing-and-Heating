@@ -1,9 +1,8 @@
 import { useState } from "react";
-import ScheduleOnline from "../home/components/ScheduleOnline";
-
 import { FaTag, FaCut } from "react-icons/fa";
 
-import skyline from "../../../assets/seattle-skyline.png";
+import ScheduleOnline from "../home/components/ScheduleOnline";
+
 import pattern from "../../../assets/pattern1.png";
 
 import { coupons } from "./couponsData";
@@ -27,7 +26,7 @@ export default function CouponsPage() {
 		<>
 			{/* Page Header Section */}
 			<section
-				className="relative flex w-full py-12 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
+				className="relative flex w-full py-16 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
 				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>

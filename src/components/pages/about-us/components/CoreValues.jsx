@@ -18,9 +18,7 @@ export default function CoreValues() {
 				</h4>
 
 				<p className="text-[#2B2B2B] mb-6">
-					Our core values, defined by the P.L.U.M.B. acronym, represent our commitment to a
-					higher standard of service. We operate with professionalism, expertise, and care to
-					ensure a "sound solution" for every customer.
+					Our core values, defined by the P.L.U.M.B. acronym, represent our commitment to a higher standard of service. We operate with professionalism, expertise, and care to ensure a "sound solution" for every customer.
 				</p>
 
 				<ul className="text-[#2B2B2B] list-disc pl-6 space-y-2">

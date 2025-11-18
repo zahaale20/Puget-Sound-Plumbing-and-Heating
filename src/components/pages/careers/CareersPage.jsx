@@ -38,7 +38,7 @@ export default function CareersPage() {
 		<>
 			{/* Page Header Section */}
 			<section
-				className="relative flex w-full py-12 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
+				className="relative flex w-full py-16 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
 				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>
