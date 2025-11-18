@@ -51,7 +51,7 @@ export default function BlogPostPage() {
 				</button>
 
 				{/* Blog Post Content */}
-				<article className="bg-white shadow-lg overflow-hidden">
+				<article className="bg-white overflow-hidden">
 					{/* Featured Image */}
 					<img
 						src={post.image}

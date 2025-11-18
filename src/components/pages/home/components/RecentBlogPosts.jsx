@@ -74,8 +74,8 @@ export default function RecentBlogPosts() {
 									{truncateText(post.description, 152)}
 								</span>
 
-								<a href="#" className="text-[#0C2D70] font-semibold text-sm flex items-center gap-1 hover:underline transition-colors">
-									Continue Reading <FaArrowRight className="ml-1"/>
+								<a href="#" className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors">
+									Continue Reading <FaArrowRight/>
 								</a>
 							</div>
 						</div>
@@ -83,8 +83,8 @@ export default function RecentBlogPosts() {
 				</div>
 
 				<div className="flex justify-end">
-					<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-1 hover:underline transition-colors">
-						View All Posts <FaArrowRight className="ml-1"/>
+					<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
+						View All Posts <FaArrowRight/>
 					</a>
 				</div>
 			</div>

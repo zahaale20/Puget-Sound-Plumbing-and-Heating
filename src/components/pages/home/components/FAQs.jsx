@@ -18,7 +18,7 @@ export default function FAQS() {
 
                     {/* Right-aligned button */}
                     <div className="flex justify-end">
-                        <a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-1 hover:underline transition-colors whitespace-nowrap">
+                        <a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap">
                             Read Our FAQs <FaArrowRight />
                         </a>
                     </div>

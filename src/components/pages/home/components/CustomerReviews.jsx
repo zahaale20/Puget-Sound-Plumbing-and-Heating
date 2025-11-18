@@ -61,8 +61,8 @@ export default function CustomerReviews() {
 
 				{/* See More Reviews Link */}
 				<div className="flex justify-end">
-					<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-1 hover:underline transition-colors">
-						See More Reviews <FaArrowRight className="ml-1"/>
+					<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
+						See More Reviews <FaArrowRight/>
 					</a>
 				</div>
 			</div>

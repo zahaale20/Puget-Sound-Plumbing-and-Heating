@@ -32,7 +32,7 @@ export default function Header() {
 
 	useEffect(() => {
 		const handleResize = () => {
-			if (window.innerWidth >= 1024 && mobileOpen) { // 1024px is Tailwind's 'lg' breakpoint
+			if (window.innerWidth >= 1024 && mobileOpen) {
 				setMobileOpen(false);
 				setMobileSubmenuOpen({});
 			}
