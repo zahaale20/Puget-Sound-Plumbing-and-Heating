@@ -1,45 +1,22 @@
+import { useNavigate } from "react-router-dom";
+
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
 
 import waterHeaters from "../../../../assets/blog1.jpg";
 import faucets from "../../../../assets/blog2.jpg";
 import toiletRepair from "../../../../assets/blog3.jpg";
 
+import { posts } from "../../blog/blogData";
+
 export default function RecentBlogPosts() {
-	const posts = [
-		{
-		id: 1,
-		title: "Water Heater Repair",
-		image: waterHeaters,
-		author: "John Doe",
-		date: "October 10, 2025",
-		link: "/projects/water-heater-installation",
-		description:
-			"Expert repair and maintenance for tank and tankless water heaters, ensuring reliable hot water for your home.water heaters, ensuring reliable hot water for your home.water heaters, ensuring reliable hot water for your home.",
-		},
-		{
-		id: 2,
-		title: "Faucet Replacement",
-		image: faucets,
-		author: "Jane Smith",
-		date: "October 3, 2025",
-		link: "/projects/faucet-replacement",
-		description:
-			"Professional faucet installation and replacement, improving functionality and aesthetics in kitchens and bathrooms.",
-		},
-		{
-		id: 3,
-		title: "Toilet Maintenance",
-		image: toiletRepair,
-		author: "Jim Bob",
-		date: "September 27, 2025",
-		link: "/projects/toilet-repair",
-		description:
-			"Comprehensive toilet repair and maintenance services to prevent leaks, clogs, and ensure long-lasting performance.",
-		},
-	];
+	const navigate = useNavigate();
 
 	const truncateText = (text, maxLength) =>
 		text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+
+	const handleReadPost = (postLink) => {
+		navigate(postLink);
+	};
 
 	return (
 		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6">
@@ -59,7 +36,7 @@ export default function RecentBlogPosts() {
 
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{posts.map((post) => (
+				{posts.slice(0, 3).map((post) => (
 					// Blog Post Container
 					<div
 						key={post.id}
@@ -84,15 +61,18 @@ export default function RecentBlogPosts() {
 								{post.title}
 							</h5>
 
-							{/* Truncated Post Text */}
+							{/* Truncated Text */}
 							<span className="text-[#2B2B2B] flex-1 mb-6">
 								{truncateText(post.description, 152)}
 							</span>
 
 							{/* Continue Reading Link */}
-							<a href="#" className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors">
+							<button
+								onClick={() => handleReadPost(post.link)}
+								className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors mt-6 cursor-pointer"
+							>
 								Continue Reading <FaArrowRight/>
-							</a>
+							</button>
 						</div>
 					</div>
 				))}
@@ -100,7 +80,7 @@ export default function RecentBlogPosts() {
 
 			{/* View All Posts Link */}
 			<div className="flex justify-end">
-				<a href="#" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
+				<a href="/blog" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
 					View All Posts <FaArrowRight/>
 				</a>
 			</div>

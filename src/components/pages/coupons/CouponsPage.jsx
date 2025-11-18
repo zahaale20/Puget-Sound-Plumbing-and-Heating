@@ -23,18 +23,21 @@ export default function CouponsPage() {
 	};
 
 	return (
-		<>
-			{/* Page Header Section */}
+		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			{/* Header Section */}
 			<section
-				className="relative flex w-full py-16 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
+				className="relative flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
-				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>
+				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
+					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
 						Coupons
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h3>
+
+					{/* Description */}
 					<p className="relative inline-block">
 						Save on essential plumbing services with our latest deals. Get quality work at a price that feels right.
 					</p>
@@ -161,6 +164,6 @@ export default function CouponsPage() {
 
 
 			<ScheduleOnline />
-		</>
+		</div>
 	);
 }

@@ -50,8 +50,6 @@ export default function Footer() {
 					backgroundSize: "cover",
 				}}
 			>
-				{/* Overlay */}
-				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none z-0"></div>
 
 				{/* Content */}
 				<div className="flex flex-col lg:flex-row justify-between z-10 w-full max-w-7xl px-6 gap-8 text-white">

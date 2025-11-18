@@ -47,7 +47,6 @@ export default function BlogPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
-	// Split posts into sections
 	const sections = [];
 	for (let i = 0; i < currentPage; i++) {
 		const start = i * POSTS_PER_PAGE;
@@ -64,28 +63,31 @@ export default function BlogPage() {
 	};
 
 	return (
-		<>
-			{/* Page Header Section */}
+		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			{/* Header Section */}
 			<section
-				className="relative flex w-full py-16 bg-cover bg-bottom mt-[101px] md:mt-[106px] lg:mt-[167px]"
+				className="flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
-				<div className="absolute inset-0 bg-[#0C2D70]/95 pointer-events-none"></div>
+				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
+					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
 						Blog
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h3>
+
+					{/* Description */}
 					<p className="relative inline-block">
 						Read the latest tips, how-tos, and the insights in the plumbing world.
 					</p>
 				</div>
 			</section>
 
-			{/* Search + Filter Section */}
+			{/* Navigation Section (Search + Filter + Sort) */}
 			<section className="w-full bg-white py-8 text-[#2B2B2B]">
 				<div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-					{/* Search Input */}
+					{/* Search Bar */}
 					<div className="relative w-full order-1 lg:order-none col-span-1 lg:justify-self-end">
 						<input
 							id="search"
@@ -96,7 +98,7 @@ export default function BlogPage() {
 						<FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
 					</div>
 
-					{/* Filter + Sort Dropdowns */}
+					{/* Filter + Sort */}
 					<div className="flex flex-wrap gap-1 w-full order-2 lg:order-none lg:col-span-2">
 						{/* Filter Dropdown */}
 						<div
@@ -179,7 +181,7 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* Blog Sections (Dynamic) */}
+			{/* Blog Post Sections */}
 			{sections.map((sectionPosts, index) => (
 				<section
 					key={index}
@@ -194,28 +196,41 @@ export default function BlogPage() {
 							: {}
 					}
 				>
+					{/* Blog Posts Content Container */}
 					<div className="max-w-7xl mx-auto px-6 w-full">
+						{/* Blog Posts Grid */}
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 auto-rows-fr">
 							{sectionPosts.map((post) => (
+								// Blog Post Container
 								<div
 									key={post.id}
 									className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]"
 								>
+									{/* Image */}
 									<img
 										src={post.image}
 										alt={post.title}
 										className="w-full h-48 object-cover"
 									/>
+
+									{/* Content Container */}
 									<div className="p-6 flex flex-col flex-1">
+										{/* Date Posted */}
 										<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
 											<FaRegCalendarAlt /> <span>{post.date}</span>
 										</div>
-										<h5 className="text-xl font-semibold text-[#0C2D70] mb-1">
+
+										{/* Post Title */}
+										<h5 className="text-[#0C2D70] mb-2">
 											{post.title}
 										</h5>
+
+										{/* Truncated Text */}
 										<span className="text-[#2B2B2B] flex-1">
 											{truncateText(post.description, 152)}
 										</span>
+
+										{/* Continue Reading Link */}
 										<button
 											onClick={() => handleReadPost(post.link)}
 											className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors mt-6 cursor-pointer"
@@ -243,6 +258,6 @@ export default function BlogPage() {
 					)}
 				</div>
 			</section>
-		</>
+		</div>
 	);
 }
