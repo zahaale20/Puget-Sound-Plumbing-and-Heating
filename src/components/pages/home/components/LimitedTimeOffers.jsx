@@ -61,7 +61,7 @@ export default function LimitedTimeOffers() {
 						// Coupon Card
 						<div
 							key={idx}
-							className="flex-1 min-w-[250px] bg-white p-6 text-center flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020] box-border"
+							className="flex-1 min-w-[250px] bg-white p-6 text-center flex flex-col items-center gap-4 relative border-4 border-dashed border-[#B32020] box-border shadow-lg"
 						>
 							{/* Tag Icon */}
 							<div className="text-[#B32020] text-5xl">

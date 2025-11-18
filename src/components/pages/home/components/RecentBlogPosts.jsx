@@ -63,7 +63,7 @@ export default function RecentBlogPosts() {
 					// Blog Post Container
 					<div
 						key={post.id}
-						className="bg-white shadow-lg flex flex-col overflow-hidden"
+						className="flex flex-col text-left bg-white shadow-lg"
 					>
 						{/* Image */}
 						<img
@@ -80,7 +80,7 @@ export default function RecentBlogPosts() {
 							</div>
 
 							{/* Post Title */}
-							<h5 className="text-xl font-semibold text-[#0C2D70] mb-1">
+							<h5 className="text-[#0C2D70] mb-2">
 								{post.title}
 							</h5>
 

@@ -76,7 +76,7 @@ export default function Services() {
 							onClick={() => navigate(service.path)}
 							onMouseEnter={() => setHoveredIndex(idx)}
 							onMouseLeave={() => setHoveredIndex(null)}
-							className={`flex flex-col text-left p-6 cursor-pointer bg-white hover:bg-[#F5F5F5] border-b-4 border-transparent hover:border-[#B32020]`}
+							className={`flex flex-col text-left p-6 cursor-pointer bg-white hover:bg-[#F5F5F5] border-b-4 border-transparent hover:border-[#B32020] shadow-lg`}
 						>
 							{/* Image */}
 							<div className="flex items-center justify-start w-full mb-6">
