@@ -10,6 +10,7 @@ import {
 
 import logo from "../../assets/pspah-logo.png";
 import easyFinancingAvailable from "../../assets/easy-financing-available.png";
+import lifetimeWarranty from "../../assets/warranty.png";
 import bbbAccreddited from "../../assets/bbb-accredited-business.png";
 import year20Anniversary from "../../assets/year-20-anniversary.png";
 import googleReviews from "../../assets/google-reviews.png";
@@ -32,7 +33,6 @@ export default function Footer() {
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
-						<img src={easyFinancingAvailable} alt="Easy Financing Available" className="hidden sm:block h-[55px] object-contain" />
 						<img src={googleReviews} alt="Google Reviews" className="h-[55px] object-contain" />
 						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[55px] object-contain" />
 						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" />

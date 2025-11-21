@@ -3,7 +3,6 @@ import pattern from "../../../assets/pattern1.png";
 
 import CoreValues from "./components/CoreValues";
 import History from "./components/History";
-import MissionStatement from "./components/MissionStatement";
 import ServiceAreas from "./components/ServiceAreas";
 
 export default function AboutUsPage() {
@@ -34,14 +33,10 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
-				<MissionStatement />
-			</section>
-
-			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
 				<CoreValues />
 			</section>
 
-			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
+			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
 				<ServiceAreas />
 			</section>
 		</div>

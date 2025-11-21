@@ -3,7 +3,7 @@ import pattern from "../../../assets/pattern1.png";
 
 import Financing from "./components/Financing";
 import DIYPlumbingPermit from "./components/DIYPlumbingPermit";
-import FAQs from "./components/FAQs.jsx";
+import FAQs from "../home/components/FAQs";
 import Warranties from "./components/Warranty.jsx";
 
 export default function ResourcesPage() {
@@ -33,12 +33,12 @@ export default function ResourcesPage() {
 				<Financing />
 			</section>
 
-			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
-				<Warranties />
+			<section className="flex justify-center w-full bg-[#F5F5F5]">
+				<FAQs />
 			</section>
 
 			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
-				<FAQs />
+				<Warranties />
 			</section>
 
 			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
