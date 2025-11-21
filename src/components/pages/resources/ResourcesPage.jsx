@@ -33,15 +33,11 @@ export default function ResourcesPage() {
 				<Financing />
 			</section>
 
-			<section className="flex justify-center w-full bg-[#F5F5F5]">
-				<FAQs />
-			</section>
-
-			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
+			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
 				<Warranties />
 			</section>
 
-			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
+			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
 				<DIYPlumbingPermit />
 			</section>
 		</div>
