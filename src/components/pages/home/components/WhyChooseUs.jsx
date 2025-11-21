@@ -1,4 +1,5 @@
 import { FaArrowRight } from "react-icons/fa";
+
 import plumberBro from "../../../../assets/plumbing-bros.png";
 
 export default function WhyChooseUs() {

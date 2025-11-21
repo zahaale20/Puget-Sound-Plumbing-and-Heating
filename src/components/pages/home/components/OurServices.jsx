@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 
 import waterHeaters from "../../../../assets/water-heaters.png";
 import faucetRepair from "../../../../assets/faucet-repair.png";
