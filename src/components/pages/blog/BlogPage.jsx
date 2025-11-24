@@ -16,7 +16,7 @@ import { categoryOptions, sortOptions, posts } from "./blogData";
 export default function BlogPage() {
 	const navigate = useNavigate();
 
-	// STATES -------------------------
+	// STATES
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("All");
 	const [selectedSort, setSelectedSort] = useState("dateDesc");
@@ -28,13 +28,13 @@ export default function BlogPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const POSTS_PER_PAGE = 6;
 
-	// UTILS -------------------------
+	// UTILS
 	const parseDate = (d) => new Date(d);
 	const normalize = (s) => (s || "").toString().toLowerCase();
 	const truncateText = (text, max) =>
 		text.length > max ? text.slice(0, max) + "..." : text;
 
-	// DROPDOWN HANDLERS -------------------------
+	// DROPDOWN HANDLERS
 	const handleOpen = (type) => {
 		clearTimeout(dropdownTimeout.current);
 		if (type === "filter") {
@@ -53,7 +53,7 @@ export default function BlogPage() {
 		}, 800);
 	};
 
-	// FILTERING -------------------------
+	// FILTERING
 	const matchesCategory = (post) => {
 		if (selectedCategory === "All") return true;
 		return post.keywords.includes(selectedCategory);
@@ -80,7 +80,7 @@ export default function BlogPage() {
 		(post) => matchesCategory(post) && matchesKeywords(post)
 	);
 
-	// SORTING -------------------------
+	// SORTING
 	let sorted = [...filtered].sort((a, b) => {
 		switch (selectedSort) {
 			case "dateDesc":
@@ -98,11 +98,11 @@ export default function BlogPage() {
 		}
 	});
 
-	// PAGINATION -------------------------
+	// PAGINATION
 	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
 	const slicedPosts = sorted.slice(0, currentPage * POSTS_PER_PAGE);
 
-	// ACTION HANDLERS -------------------------
+	// ACTION HANDLERS
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value);
 		setCurrentPage(1);
@@ -126,7 +126,7 @@ export default function BlogPage() {
 
 	const handleReadPost = (link) => navigate(link);
 
-	// UI -------------------------
+	// UI
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 
