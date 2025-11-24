@@ -280,8 +280,6 @@ export default function BlogPage() {
 									{truncateText(post.description, 150)}
 								</p>
 
-								<p className="mt-3 text-sm text-gray-500">Views: {post.views}</p>
-
 								<button
 									onClick={() => handleReadPost(post.link)}
 									className="text-[#0C2D70] font-semibold mt-4 flex items-center gap-2 hover:underline"
