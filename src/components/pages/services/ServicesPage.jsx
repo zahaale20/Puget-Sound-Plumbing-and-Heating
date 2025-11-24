@@ -17,7 +17,7 @@ export default function ServicesPage() {
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
-						Plumbing Services in the Puget Sound
+						Our Services
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h3>
 
@@ -29,10 +29,21 @@ export default function ServicesPage() {
 			</section>
 
 			{/* Plumbing Services Container */}
-			<section className="flex justify-center w-full py-16 bg-white text-[#2B2B2B]">
+			<section className="flex flex-col justify-center w-full py-16 bg-white text-[#2B2B2B]">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
+					{/* Title */}
+					<h3 className="relative inline-block pb-2 w-fit text-[#0C2D70]">
+						Plumbing Services in the Puget Sound
+						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
+					</h3>
+
+					{/* Description */}
+					<p>
+						We offer a complete range of plumbing and heating solutions in the Puget Sound, including:
+					</p>
+
 					{/* Services */}
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-[#2B2B2B]">
+					<div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-[#2B2B2B]">
 						{ServiceLinks.map((category) => (
 							<div key={category.name} className="flex flex-col gap-3">
 								<h6>{category.name}</h6>
