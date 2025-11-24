@@ -1,4 +1,4 @@
-import skyline from "../../../assets/seattle-skyline.png";
+
 import pattern from "../../../assets/pattern1.png";
 
 import CoreValues from "./components/CoreValues";
