@@ -4,6 +4,7 @@ import {
 	FaSearch,
 	FaChevronDown,
 } from "react-icons/fa";
+
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,122 +15,179 @@ import { categoryOptions, sortOptions, posts } from "./blogData";
 
 export default function BlogPage() {
 	const navigate = useNavigate();
+
+	// STATES -------------------------
+	const [searchTerm, setSearchTerm] = useState("");
+	const [selectedCategory, setSelectedCategory] = useState("All");
+	const [selectedSort, setSelectedSort] = useState("dateDesc");
+
 	const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
 	const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
-	const closeTimeoutRef = useRef(null);
+	const dropdownTimeout = useRef(null);
 
-	const truncateText = (text, maxLength) =>
-		text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+	const [currentPage, setCurrentPage] = useState(1);
+	const POSTS_PER_PAGE = 6;
 
-	const handleMouseEnter = (dropdownName) => {
-		clearTimeout(closeTimeoutRef.current);
-		if (dropdownName === "sort") {
-			setSortDropdownOpen(true);
-			setFilterDropdownOpen(false);
-		} else if (dropdownName === "filter") {
+	// UTILS -------------------------
+	const parseDate = (d) => new Date(d);
+	const normalize = (s) => (s || "").toString().toLowerCase();
+	const truncateText = (text, max) =>
+		text.length > max ? text.slice(0, max) + "..." : text;
+
+	// DROPDOWN HANDLERS -------------------------
+	const handleOpen = (type) => {
+		clearTimeout(dropdownTimeout.current);
+		if (type === "filter") {
 			setFilterDropdownOpen(true);
 			setSortDropdownOpen(false);
+		} else {
+			setSortDropdownOpen(true);
+			setFilterDropdownOpen(false);
 		}
 	};
 
-	const handleMouseLeave = (dropdownName) => {
-		closeTimeoutRef.current = setTimeout(() => {
-			if (dropdownName === "sort") {
-				setSortDropdownOpen(false);
-			} else if (dropdownName === "filter") {
-				setFilterDropdownOpen(false);
-			}
-		}, 1000);
+	const handleClose = (type) => {
+		dropdownTimeout.current = setTimeout(() => {
+			if (type === "filter") setFilterDropdownOpen(false);
+			else setSortDropdownOpen(false);
+		}, 800);
 	};
 
-	const POSTS_PER_PAGE = 6;
-	const [currentPage, setCurrentPage] = useState(1);
-	const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+	// FILTERING -------------------------
+	const matchesCategory = (post) => {
+		if (selectedCategory === "All") return true;
+		return post.keywords.includes(selectedCategory);
+	};
 
-	const sections = [];
-	for (let i = 0; i < currentPage; i++) {
-		const start = i * POSTS_PER_PAGE;
-		const end = start + POSTS_PER_PAGE;
-		sections.push(posts.slice(start, end));
-	}
+	const matchesKeywords = (post) => {
+		const tokens = normalize(searchTerm).split(/\s+/).filter(Boolean);
+		if (tokens.length === 0) return true;
+
+		const haystack = normalize(
+			post.title +
+				" " +
+				post.description +
+				" " +
+				post.author +
+				" " +
+				post.keywords.join(" ")
+		);
+
+		return tokens.every((token) => haystack.includes(token));
+	};
+
+	let filtered = posts.filter(
+		(post) => matchesCategory(post) && matchesKeywords(post)
+	);
+
+	// SORTING -------------------------
+	let sorted = [...filtered].sort((a, b) => {
+		switch (selectedSort) {
+			case "dateDesc":
+				return parseDate(b.date) - parseDate(a.date);
+			case "dateAsc":
+				return parseDate(a.date) - parseDate(b.date);
+			case "viewsDesc":
+				return b.views - a.views;
+			case "titleAsc":
+				return a.title.localeCompare(b.title);
+			case "titleDesc":
+				return b.title.localeCompare(a.title);
+			default:
+				return 0;
+		}
+	});
+
+	// PAGINATION -------------------------
+	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
+	const slicedPosts = sorted.slice(0, currentPage * POSTS_PER_PAGE);
+
+	// ACTION HANDLERS -------------------------
+	const handleSearchChange = (e) => {
+		setSearchTerm(e.target.value);
+		setCurrentPage(1);
+	};
+
+	const handleCategorySelect = (category) => {
+		setSelectedCategory(category);
+		setFilterDropdownOpen(false);
+		setCurrentPage(1);
+	};
+
+	const handleSortSelect = (value) => {
+		setSelectedSort(value);
+		setSortDropdownOpen(false);
+		setCurrentPage(1);
+	};
 
 	const handleNextPage = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
 	};
 
-	const handleReadPost = (postLink) => {
-		navigate(postLink);
-	};
+	const handleReadPost = (link) => navigate(link);
 
+	// UI -------------------------
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			{/* Header Section */}
+
+			{/* HEADER */}
 			<section
 				className="flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
 			>
-				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
 						Blog
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
+						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full rounded-full"></span>
 					</h3>
-
-					{/* Description */}
-					<p className="relative inline-block">
-						Read the latest tips, how-tos, and the insights in the plumbing world.
-					</p>
+					<p>Read the latest tips, how-tos, and insights in the plumbing world.</p>
 				</div>
 			</section>
 
-			{/* Navigation Section (Search + Filter + Sort) */}
+			{/* SEARCH + FILTER + SORT */}
 			<section className="w-full bg-white py-8 text-[#2B2B2B]">
-				<div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-					{/* Search Bar */}
-					<div className="relative w-full order-1 lg:order-none col-span-1 lg:justify-self-end">
+				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+					{/* SEARCH INPUT */}
+					<div className="relative w-full">
 						<input
-							id="search"
 							type="text"
 							placeholder="Search posts..."
-							className="w-full border border-gray-300 px-4 py-2 pr-10 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] text-[#2B2B2B] text-sm"
+							value={searchTerm}
+							onChange={handleSearchChange}
+							className="w-full border border-gray-300 px-4 py-2 pr-10 text-sm focus:ring-2 focus:ring-[#0C2D70]"
 						/>
-						<FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+						<FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
 					</div>
 
-					{/* Filter + Sort */}
-					<div className="flex flex-wrap gap-1 w-full order-2 lg:order-none lg:col-span-2">
-						{/* Filter Dropdown */}
+					{/* FILTER + SORT AREA */}
+					<div className="flex flex-wrap gap-2 lg:col-span-2">
+
+						{/* FILTER DROPDOWN */}
 						<div
-							className="relative inline-block text-left z-10"
-							onMouseEnter={() => handleMouseEnter("filter")}
-							onMouseLeave={() => handleMouseLeave("filter")}
+							className="relative"
+							onMouseEnter={() => handleOpen("filter")}
+							onMouseLeave={() => handleClose("filter")}
 						>
 							<button
-								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${
-									filterDropdownOpen
-										? "border-[#B32020] bg-[#F5F5F5]"
-										: "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"
+								className={`px-3 py-2 flex items-center gap-1 text-sm font-semibold uppercase border-b-4 ${
+									filterDropdownOpen ? "border-[#B32020]" : "border-transparent"
 								}`}
 							>
-								ALL
-								<FaChevronDown
-									className={`h-3 w-3 ml-1 transition-transform duration-300 ${
-										filterDropdownOpen ? "rotate-180" : ""
-									}`}
-								/>
+								{selectedCategory}
+								<FaChevronDown className={`transition-transform ${filterDropdownOpen ? "rotate-180" : ""}`} />
 							</button>
+
 							{filterDropdownOpen && (
-								<div
-									className="absolute left-0 top-[calc(100%+0px)] bg-white border border-gray-400 shadow-lg z-20 min-w-[250px]"
-									onMouseEnter={() => handleMouseEnter("filter")}
-									onMouseLeave={() => handleMouseLeave("filter")}
-								>
-									<ul className="py-2">
-										{categoryOptions.map((keyword) => (
-											<li key={keyword}>
-												<button className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap">
-													{keyword}
+								<div className="absolute bg-white border shadow-lg min-w-[180px] z-20">
+									<ul className="py-1">
+										{categoryOptions.map((cat) => (
+											<li key={cat}>
+												<button
+													onClick={() => handleCategorySelect(cat)}
+													className="block px-4 py-2 text-left text-sm w-full hover:bg-gray-100"
+												>
+													{cat}
 												</button>
 											</li>
 										))}
@@ -138,37 +196,31 @@ export default function BlogPage() {
 							)}
 						</div>
 
-						{/* Sort Dropdown */}
+						{/* SORT DROPDOWN */}
 						<div
-							className="relative inline-block text-left z-10"
-							onMouseEnter={() => handleMouseEnter("sort")}
-							onMouseLeave={() => handleMouseLeave("sort")}
+							className="relative"
+							onMouseEnter={() => handleOpen("sort")}
+							onMouseLeave={() => handleClose("sort")}
 						>
 							<button
-								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${
-									sortDropdownOpen
-										? "border-[#B32020] bg-[#F5F5F5]"
-										: "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"
+								className={`px-3 py-2 flex items-center gap-1 text-sm font-semibold uppercase border-b-4 ${
+									sortDropdownOpen ? "border-[#B32020]" : "border-transparent"
 								}`}
 							>
-								NEWEST FIRST
-								<FaChevronDown
-									className={`h-3 w-3 ml-1 transition-transform duration-300 ${
-										sortDropdownOpen ? "rotate-180" : ""
-									}`}
-								/>
+								{sortOptions.find((s) => s.value === selectedSort)?.name}
+								<FaChevronDown className={`transition-transform ${sortDropdownOpen ? "rotate-180" : ""}`} />
 							</button>
+
 							{sortDropdownOpen && (
-								<div
-									className="absolute left-0 top-[calc(100%+0px)] bg-white border border-gray-400 shadow-lg z-20 min-w-[250px]"
-									onMouseEnter={() => handleMouseEnter("sort")}
-									onMouseLeave={() => handleMouseLeave("sort")}
-								>
-									<ul className="py-2">
-										{sortOptions.map((option) => (
-											<li key={option.value}>
-												<button className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap">
-													{option.name}
+								<div className="absolute bg-white border shadow-lg min-w-[180px] z-20">
+									<ul className="py-1">
+										{sortOptions.map((opt) => (
+											<li key={opt.value}>
+												<button
+													onClick={() => handleSortSelect(opt.value)}
+													className="block px-4 py-2 text-left text-sm w-full hover:bg-gray-100"
+												>
+													{opt.name}
 												</button>
 											</li>
 										))}
@@ -176,87 +228,62 @@ export default function BlogPage() {
 								</div>
 							)}
 						</div>
+
 					</div>
 				</div>
 			</section>
 
-			{/* Blog Post Sections */}
-			{sections.map((sectionPosts, index) => (
-				<section
-					key={index}
-					className={`flex justify-center w-full text-[#2B2B2B] ${
-						index === sections.length - 1
-							? "bg-cover bg-bottom"
-							: "bg-white"
-					}`}
-					style={
-						index === sections.length - 1
-							? { backgroundImage: `url(${skyline})` }
-							: {}
-					}
-				>
-					{/* Blog Posts Content Container */}
-					<div className="max-w-7xl mx-auto px-6 w-full">
-						{/* Blog Posts Grid */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 auto-rows-fr">
-							{sectionPosts.map((post) => (
-								// Blog Post Container
-								<div
-									key={post.id}
-									className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]"
-								>
-									{/* Image */}
-									<img
-										src={post.image}
-										alt={post.title}
-										className="w-full h-48 object-cover"
-									/>
+			{/* BLOG CARDS */}
+			<section className="bg-white w-full">
+				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-									{/* Content Container */}
-									<div className="p-6 flex flex-col flex-1">
-										{/* Date Posted */}
-										<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
-											<FaRegCalendarAlt /> <span>{post.date}</span>
-										</div>
-
-										{/* Post Title */}
-										<h5 className="text-[#0C2D70] mb-2">
-											{post.title}
-										</h5>
-
-										{/* Truncated Text */}
-										<span className="text-[#2B2B2B] flex-1">
-											{truncateText(post.description, 152)}
-										</span>
-
-										{/* Continue Reading Link */}
-										<button
-											onClick={() => handleReadPost(post.link)}
-											className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors mt-6 cursor-pointer"
-										>
-											Continue Reading <FaArrowRight/>
-										</button>
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				</section>
-			))}
-
-			{/* Load More Section */}
-			<section className="w-full bg-[#F5F5F5] pt-8 pb-16 text-[#0C2D70]">
-				<div className="max-w-7xl mx-auto px-6 flex justify-center">
-					{currentPage < totalPages && (
-						<button
-							onClick={handleNextPage}
-							className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
+					{slicedPosts.map((post) => (
+						<div
+							key={post.id}
+							className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]"
 						>
-							Load More
-						</button>
-					)}
+							<img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+
+							<div className="p-6 flex flex-col flex-1">
+								<div className="flex items-center gap-2 text-sm text-[#949494] mb-2">
+									<FaRegCalendarAlt /> {post.date}
+								</div>
+
+								<h5 className="text-[#0C2D70] font-semibold mb-2">
+									{post.title}
+								</h5>
+
+								<p className="text-[#2B2B2B] flex-1">
+									{truncateText(post.description, 150)}
+								</p>
+
+								<p className="mt-3 text-sm text-gray-500">Views: {post.views}</p>
+
+								<button
+									onClick={() => handleReadPost(post.link)}
+									className="text-[#0C2D70] font-semibold mt-4 flex items-center gap-2 hover:underline"
+								>
+									Continue Reading <FaArrowRight />
+								</button>
+							</div>
+						</div>
+					))}
+
 				</div>
 			</section>
+
+			{/* LOAD MORE */}
+			<section className="bg-[#F5F5F5] py-12 flex justify-center">
+				{currentPage < totalPages && (
+					<button
+						onClick={handleNextPage}
+						className="px-6 py-3 bg-[#B32020] text-white font-semibold hover:bg-[#7a1515]"
+					>
+						Load More
+					</button>
+				)}
+			</section>
+
 		</div>
 	);
 }
