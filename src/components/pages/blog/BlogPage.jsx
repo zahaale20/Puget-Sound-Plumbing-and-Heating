@@ -16,25 +16,23 @@ import { categoryOptions, sortOptions, posts } from "./blogData";
 export default function BlogPage() {
 	const navigate = useNavigate();
 
-	// STATES
+	// State
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("All");
 	const [selectedSort, setSelectedSort] = useState("dateDesc");
-
 	const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
 	const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
 	const dropdownTimeout = useRef(null);
-
 	const [currentPage, setCurrentPage] = useState(1);
 	const POSTS_PER_PAGE = 6;
 
-	// UTILS
+	// Utils
 	const parseDate = (d) => new Date(d);
 	const normalize = (s) => (s || "").toString().toLowerCase();
 	const truncateText = (text, max) =>
 		text.length > max ? text.slice(0, max) + "..." : text;
 
-	// DROPDOWN HANDLERS
+	// Dropdown open
 	const handleOpen = (type) => {
 		clearTimeout(dropdownTimeout.current);
 		if (type === "filter") {
@@ -46,6 +44,7 @@ export default function BlogPage() {
 		}
 	};
 
+	// Dropdown close
 	const handleClose = (type) => {
 		dropdownTimeout.current = setTimeout(() => {
 			if (type === "filter") setFilterDropdownOpen(false);
@@ -53,12 +52,13 @@ export default function BlogPage() {
 		}, 800);
 	};
 
-	// FILTERING
+	// Category filter
 	const matchesCategory = (post) => {
 		if (selectedCategory === "All") return true;
 		return post.keywords.includes(selectedCategory);
 	};
 
+	// Keyword search
 	const matchesKeywords = (post) => {
 		const tokens = normalize(searchTerm).split(/\s+/).filter(Boolean);
 		if (tokens.length === 0) return true;
@@ -76,11 +76,12 @@ export default function BlogPage() {
 		return tokens.every((token) => haystack.includes(token));
 	};
 
+	// Filtered posts
 	let filtered = posts.filter(
 		(post) => matchesCategory(post) && matchesKeywords(post)
 	);
 
-	// SORTING
+	// Sorting
 	let sorted = [...filtered].sort((a, b) => {
 		switch (selectedSort) {
 			case "dateDesc":
@@ -98,39 +99,42 @@ export default function BlogPage() {
 		}
 	});
 
-	// PAGINATION
+	// Pagination
 	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
 	const slicedPosts = sorted.slice(0, currentPage * POSTS_PER_PAGE);
 
-	// ACTION HANDLERS
+	// Search input
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value);
 		setCurrentPage(1);
 	};
 
+	// Category select
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
 		setFilterDropdownOpen(false);
 		setCurrentPage(1);
 	};
 
+	// Sort select
 	const handleSortSelect = (value) => {
 		setSelectedSort(value);
 		setSortDropdownOpen(false);
 		setCurrentPage(1);
 	};
 
+	// Load more
 	const handleNextPage = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
 	};
 
+	// Open post
 	const handleReadPost = (link) => navigate(link);
 
-	// UI
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 
-			{/* HEADER */}
+			{/* Header */}
 			<section
 				className="flex w-full py-16 bg-cover bg-bottom"
 				style={{ backgroundImage: `url(${pattern})` }}
@@ -144,11 +148,11 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* SEARCH + FILTER + SORT */}
+			{/* Search + Filter + Sort */}
 			<section className="w-full bg-white py-8 text-[#2B2B2B]">
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-					{/* SEARCH INPUT */}
+					{/* Search Input */}
 					<div className="relative w-full">
 						<input
 							type="text"
@@ -160,32 +164,42 @@ export default function BlogPage() {
 						<FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
 					</div>
 
-					{/* FILTER + SORT AREA */}
+					{/* Filter + Sort */}
 					<div className="flex flex-wrap gap-2 lg:col-span-2">
 
-						{/* FILTER DROPDOWN */}
+						{/* Filter Dropdown */}
 						<div
-							className="relative"
+							className="relative inline-block text-left z-10"
 							onMouseEnter={() => handleOpen("filter")}
 							onMouseLeave={() => handleClose("filter")}
 						>
 							<button
-								className={`px-3 py-2 flex items-center gap-1 text-sm font-semibold uppercase border-b-4 ${
-									filterDropdownOpen ? "border-[#B32020]" : "border-transparent"
+								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${
+									filterDropdownOpen
+										? "border-[#B32020] bg-[#F5F5F5]"
+										: "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"
 								}`}
 							>
 								{selectedCategory}
-								<FaChevronDown className={`transition-transform ${filterDropdownOpen ? "rotate-180" : ""}`} />
+								<FaChevronDown
+									className={`h-3 w-3 ml-1 transition-transform duration-300 ${
+										filterDropdownOpen ? "rotate-180" : ""
+									}`}
+								/>
 							</button>
 
 							{filterDropdownOpen && (
-								<div className="absolute bg-white border shadow-lg min-w-[180px] z-20">
-									<ul className="py-1">
+								<div
+									className="absolute left-0 top-[calc(100%+0px)] bg-white border border-gray-400 shadow-lg z-20 min-w-[250px]"
+									onMouseEnter={() => handleOpen("filter")}
+									onMouseLeave={() => handleClose("filter")}
+								>
+									<ul className="py-2">
 										{categoryOptions.map((cat) => (
 											<li key={cat}>
 												<button
 													onClick={() => handleCategorySelect(cat)}
-													className="block px-4 py-2 text-left text-sm w-full hover:bg-gray-100"
+													className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap"
 												>
 													{cat}
 												</button>
@@ -196,29 +210,39 @@ export default function BlogPage() {
 							)}
 						</div>
 
-						{/* SORT DROPDOWN */}
+						{/* Sort Dropdown */}
 						<div
-							className="relative"
+							className="relative inline-block text-left z-10"
 							onMouseEnter={() => handleOpen("sort")}
 							onMouseLeave={() => handleClose("sort")}
 						>
 							<button
-								className={`px-3 py-2 flex items-center gap-1 text-sm font-semibold uppercase border-b-4 ${
-									sortDropdownOpen ? "border-[#B32020]" : "border-transparent"
+								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${
+									sortDropdownOpen
+										? "border-[#B32020] bg-[#F5F5F5]"
+										: "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"
 								}`}
 							>
 								{sortOptions.find((s) => s.value === selectedSort)?.name}
-								<FaChevronDown className={`transition-transform ${sortDropdownOpen ? "rotate-180" : ""}`} />
+								<FaChevronDown
+									className={`h-3 w-3 ml-1 transition-transform duration-300 ${
+										sortDropdownOpen ? "rotate-180" : ""
+									}`}
+								/>
 							</button>
 
 							{sortDropdownOpen && (
-								<div className="absolute bg-white border shadow-lg min-w-[180px] z-20">
-									<ul className="py-1">
+								<div
+									className="absolute left-0 top-[calc(100%+0px)] bg-white border border-gray-400 shadow-lg z-20 min-w-[250px]"
+									onMouseEnter={() => handleOpen("sort")}
+									onMouseLeave={() => handleClose("sort")}
+								>
+									<ul className="py-2">
 										{sortOptions.map((opt) => (
 											<li key={opt.value}>
 												<button
 													onClick={() => handleSortSelect(opt.value)}
-													className="block px-4 py-2 text-left text-sm w-full hover:bg-gray-100"
+													className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap"
 												>
 													{opt.name}
 												</button>
@@ -233,10 +257,9 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* BLOG CARDS */}
+			{/* Blog Cards */}
 			<section className="bg-white w-full">
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
 					{slicedPosts.map((post) => (
 						<div
 							key={post.id}
@@ -268,11 +291,10 @@ export default function BlogPage() {
 							</div>
 						</div>
 					))}
-
 				</div>
 			</section>
 
-			{/* LOAD MORE */}
+			{/* Load More */}
 			<section className="bg-[#F5F5F5] py-12 flex justify-center">
 				{currentPage < totalPages && (
 					<button
