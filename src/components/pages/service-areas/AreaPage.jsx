@@ -112,7 +112,7 @@ export default function AreaPage() {
 						</li>
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
-							<strong>Proven Local Expertise</strong> – Serving Seattle, Bellevue, Redmond, and King County for 20+ years.
+							<strong>Proven Local Expertise</strong> – Serving Seattle, King County, Pierce County, and Snohomish County for 20+ years.
 						</li>
 					</ul>
 
