@@ -297,7 +297,7 @@ export default function BlogPage() {
 				{currentPage < totalPages && (
 					<button
 						onClick={handleNextPage}
-						className="px-6 py-3 bg-[#B32020] text-white font-semibold hover:bg-[#7a1515]"
+						className="px-6 py-3 bg-[#B32020] text-white font-semibold cursor-pointer hover:bg-[#7a1515]"
 					>
 						Load More
 					</button>

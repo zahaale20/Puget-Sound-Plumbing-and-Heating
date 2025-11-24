@@ -23,7 +23,7 @@ export default function ServicesPage() {
 
 					{/* Description */}
 					<p>
-						We offer a complete range of plumbing and heating solutions in the Puget Sound, including:
+						Your home deserves work done right. We deliver professional plumbing and heating services across the Puget Sound, backed by skilled technicians and decades of expertise.
 					</p>
 				</div>
 			</section>
