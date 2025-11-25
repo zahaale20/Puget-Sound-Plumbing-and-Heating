@@ -49,7 +49,7 @@ export default function ScheduleOnline() {
 								First Name{" "}
 								<span className="text-[#B32020] font-normal italic">*</span>
 							</label>
-							<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="firstName"
 								required
@@ -65,7 +65,7 @@ export default function ScheduleOnline() {
 								Last Name{" "}
 								<span className="text-[#B32020] font-normal italic">*</span>
 							</label>
-							<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="lastName"
 								required
@@ -82,7 +82,7 @@ export default function ScheduleOnline() {
 							<label className="text-[#2B2B2B]">
 								Phone <span className="text-[#B32020] italic">*</span>
 							</label>
-							<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="tel"
 								name="phone"
 								required
@@ -97,7 +97,7 @@ export default function ScheduleOnline() {
 							<label className="text-[#2B2B2B]">
 								Email <span className="text-[#B32020] italic">*</span>
 							</label>
-							<input className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="email"
 								name="email"
 								required

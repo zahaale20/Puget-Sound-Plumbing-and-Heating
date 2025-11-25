@@ -28,8 +28,8 @@ export default function ServiceAreas() {
 					{/* Seattle Section */}
 					<div className="flex flex-col gap-2">
 						{/* Top Row: Image + Text */}
-						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-							<div className="hidden lg:block flex-shrink-0">
+						<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+							<div className="hidden sm:block flex-shrink-0">
 								<img
 									src={cityOfSeattle}
 									alt="City of Seattle"
@@ -61,8 +61,8 @@ export default function ServiceAreas() {
 					{/* King County Section */}
 					<div className="flex flex-col gap-2">
 						{/* Top Row: Image + Text */}
-						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-							<div className="hidden lg:block flex-shrink-0">
+						<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+							<div className="hidden sm:block flex-shrink-0">
 								<img
 									src={kingCounty}
 									alt="King County"
@@ -94,8 +94,8 @@ export default function ServiceAreas() {
 					{/* Pierce County Section */}
 					<div className="flex flex-col gap-2">
 						{/* Top Row: Image + Text */}
-						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-							<div className="hidden lg:block flex-shrink-0">
+						<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+							<div className="hidden sm:block flex-shrink-0">
 								<img
 									src={pierceCounty}
 									alt="Pierce County"
@@ -127,8 +127,8 @@ export default function ServiceAreas() {
 					{/* Snohomish County Section */}
 					<div className="flex flex-col gap-2">
 						{/* Top Row: Image + Text */}
-						<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-							<div className="hidden lg:block flex-shrink-0">
+						<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+							<div className="hidden sm:block flex-shrink-0">
 								<img
 									src={snohomishCounty}
 									alt="Snohomish County"

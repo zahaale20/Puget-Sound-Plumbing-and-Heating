@@ -40,7 +40,7 @@ export default function RecentBlogPosts() {
 					// Blog Post Container
 					<div
 						key={post.id}
-						className="flex flex-col text-left bg-white shadow-lg"
+						className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]"
 					>
 						{/* Image */}
 						<img
