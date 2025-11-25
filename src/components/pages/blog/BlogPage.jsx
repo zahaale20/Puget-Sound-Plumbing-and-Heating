@@ -149,7 +149,7 @@ export default function BlogPage() {
 			</section>
 
 			{/* Search + Filter + Sort */}
-			<section className="w-full bg-white py-8 text-[#2B2B2B]">
+			<section className="w-full bg-white pt-16 mb-6 text-[#2B2B2B]">
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
 					{/* Search Input */}
@@ -165,7 +165,7 @@ export default function BlogPage() {
 					</div>
 
 					{/* Filter + Sort */}
-					<div className="flex flex-wrap gap-2 lg:col-span-2">
+					<div className="flex flex-wrap lg:col-span-2">
 
 						{/* Filter Dropdown */}
 						<div
@@ -258,7 +258,7 @@ export default function BlogPage() {
 			</section>
 
 			{/* Blog Cards */}
-			<section className="bg-white w-full">
+			<section className="bg-white w-full pb-16">
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 					{slicedPosts.map((post) => (
 						<div

@@ -3,7 +3,6 @@ import pattern from "../../../assets/pattern1.png";
 
 import Financing from "./components/Financing";
 import DIYPlumbingPermit from "./components/DIYPlumbingPermit";
-import FAQs from "../home/components/FAQs";
 import Warranties from "./components/Warranty.jsx";
 
 export default function ResourcesPage() {
