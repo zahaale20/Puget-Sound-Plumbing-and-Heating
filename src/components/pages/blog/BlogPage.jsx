@@ -103,6 +103,14 @@ export default function BlogPage() {
 	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
 	const slicedPosts = sorted.slice(0, currentPage * POSTS_PER_PAGE);
 
+	// Split for backgrounds
+	const topPosts =
+		slicedPosts.length > 6
+			? slicedPosts.slice(0, slicedPosts.length - 6)
+			: [];
+
+	const bottomPosts = slicedPosts.slice(-6);
+
 	// Search input
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value);
@@ -257,10 +265,50 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* Blog Cards */}
-			<section className="bg-white w-full pb-16">
+			{/* Blog Cards (Top - White) */}
+			{topPosts.length > 0 && (
+				<section className="bg-white w-full pb-6">
+					<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+						{topPosts.map((post) => (
+							<div
+								key={post.id}
+								className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]"
+							>
+								<img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+
+								<div className="p-6 flex flex-col flex-1">
+									<div className="flex items-center gap-2 text-sm text-[#949494] mb-2">
+										<FaRegCalendarAlt /> {post.date}
+									</div>
+
+									<h5 className="text-[#0C2D70] font-semibold mb-2">
+										{post.title}
+									</h5>
+
+									<p className="text-[#2B2B2B] flex-1">
+										{truncateText(post.description, 150)}
+									</p>
+
+									<button
+										onClick={() => handleReadPost(post.link)}
+										className="text-[#0C2D70] font-semibold mt-4 flex items-center gap-2 hover:underline"
+									>
+										Continue Reading <FaArrowRight />
+									</button>
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+			)}
+
+			{/* Blog Cards (Bottom - Skyline) */}
+			<section
+				className="w-full pb-16 bg-cover bg-bottom space-y-6"
+				style={{ backgroundImage: `url(${skyline})` }}
+			>
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-					{slicedPosts.map((post) => (
+					{bottomPosts.map((post) => (
 						<div
 							key={post.id}
 							className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]"
@@ -290,18 +338,18 @@ export default function BlogPage() {
 						</div>
 					))}
 				</div>
-			</section>
 
-			{/* Load More */}
-			<section className="bg-[#F5F5F5] py-12 flex justify-center">
-				{currentPage < totalPages && (
-					<button
-						onClick={handleNextPage}
-						className="px-6 py-3 bg-[#B32020] text-white font-semibold cursor-pointer hover:bg-[#7a1515]"
-					>
-						Load More
-					</button>
-				)}
+				{/* Load More — MOVED HERE */}
+				<div className="flex justify-center">
+					{currentPage < totalPages && (
+						<button
+							onClick={handleNextPage}
+							className="px-6 py-3 bg-[#B32020] text-white font-semibold cursor-pointer hover:bg-[#7a1515]"
+						>
+							Load More
+						</button>
+					)}
+				</div>
 			</section>
 
 		</div>
