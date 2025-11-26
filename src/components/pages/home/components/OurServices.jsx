@@ -15,7 +15,7 @@ import garbageDisposalColor from "../../../../assets/garbage-disposal-color.png"
 import waterFiltrationColor from "../../../../assets/water-filtration-color.png";
 import plumbingRepairColor from "../../../../assets/plumbing-repair-color.png";
 
-export default function Services() {
+export default function OurServices() {
 	const navigate = useNavigate();
 	const [hoveredIndex, setHoveredIndex] = useState(null);
 

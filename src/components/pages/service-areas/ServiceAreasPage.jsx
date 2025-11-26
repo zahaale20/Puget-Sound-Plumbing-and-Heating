@@ -1,5 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
+import skyline from "../../../assets/seattle-skyline.png";
 import pattern from "../../../assets/pattern1.png";
 
 import cityOfSeattle from "../../../assets/city-of-seattle.png";
@@ -35,20 +36,24 @@ export default function ServiceAreasPage() {
 			</section>
 
 			{/* Main Content Section */}
-			<section className="flex flex-col max-w-7xl mx-auto px-6 py-16 w-full gap-6 text-[#2B2B2B]">
+			<section className="flex flex-col py-16 bg-cover bg-bottom text-[#2B2B2B] space-y-16" style={{ backgroundImage: `url(${skyline})` }}>
 				{/* Seattle Section */}
-				<div className="flex flex-col gap-2">
+				<div className="w-full max-w-7xl mx-auto px-6 text-[#2B2B2B] space-y-2">
 					{/* Top Row: Image + Text */}
-					<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-						<div className="hidden lg:block flex-shrink-0">
+					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+						<div className="hidden sm:block flex-shrink-0">
 							<img
 								src={cityOfSeattle}
 								alt="City of Seattle"
-								className="h-[80px] object-contain"
+								className="h-[90px] object-contain"
 							/>
 						</div>
-						<div className="flex-1">
-							<h5 className="text-[#2B2B2B] mb-2">Seattle Plumbing Services</h5>
+
+						<div className="flex-1 space-y-2">
+							<h5 className="text-[#2B2B2B]">
+								Seattle, WA
+							</h5>
+
 							<p>
 								Seattle is our home base, and we know the plumbing challenges that come
 								with older homes, new construction, and everything in between. Whether
@@ -59,7 +64,7 @@ export default function ServiceAreasPage() {
 					</div>
 
 					{/* Bottom Row: Button */}
-					<div className="flex justify-end mt-1">
+					<div className="flex justify-end">
 						<a
 							href="/service-areas/seattle"
 							className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
@@ -70,18 +75,18 @@ export default function ServiceAreasPage() {
 				</div>
 
 				{/* King County Section */}
-				<div className="flex flex-col gap-2">
+				<div className="w-full max-w-7xl mx-auto px-6 text-[#2B2B2B] space-y-2">
 					{/* Top Row: Image + Text */}
-					<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-						<div className="hidden lg:block flex-shrink-0">
+					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+						<div className="hidden sm:block flex-shrink-0">
 							<img
 								src={kingCounty}
 								alt="King County"
-								className="h-[80px] object-contain"
+								className="h-[90px] object-contain"
 							/>
 						</div>
-						<div className="flex-1">
-							<h5 className="text-[#2B2B2B] mb-2">King County Plumbing Services</h5>
+						<div className="flex-1 space-y-2">
+							<h5 className="text-[#2B2B2B]">King County, WA</h5>
 							<p>
 								As one of the largest counties in Washington, King County has diverse
 								plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide
@@ -92,7 +97,7 @@ export default function ServiceAreasPage() {
 					</div>
 
 					{/* Bottom Row: Button */}
-					<div className="flex justify-end mt-1">
+					<div className="flex justify-end">
 						<a
 							href="/service-areas/king-county"
 							className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
@@ -103,18 +108,18 @@ export default function ServiceAreasPage() {
 				</div>
 
 				{/* Pierce County Section */}
-				<div className="flex flex-col gap-2">
+				<div className="w-full max-w-7xl mx-auto px-6 text-[#2B2B2B] space-y-2">
 					{/* Top Row: Image + Text */}
-					<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-						<div className="hidden lg:block flex-shrink-0">
+					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+						<div className="hidden sm:block flex-shrink-0">
 							<img
 								src={pierceCounty}
 								alt="Pierce County"
-								className="h-[80px] object-contain"
+								className="h-[90px] object-contain"
 							/>
 						</div>
-						<div className="flex-1">
-							<h5 className="text-[#2B2B2B] mb-2">Pierce County Plumbing Services</h5>
+						<div className="flex-1 space-y-2">
+							<h5 className="text-[#2B2B2B]">Pierce County, WA</h5>
 							<p>
 								From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound
 								Plumbing for dependable service and honest pricing. Whether it’s routine
@@ -125,7 +130,7 @@ export default function ServiceAreasPage() {
 					</div>
 
 					{/* Bottom Row: Button */}
-					<div className="flex justify-end mt-1">
+					<div className="flex justify-end">
 						<a
 							href="/service-areas/pierce-county"
 							className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"
@@ -136,18 +141,18 @@ export default function ServiceAreasPage() {
 				</div>
 
 				{/* Snohomish County Section */}
-				<div className="flex flex-col gap-2">
+				<div className="w-full max-w-7xl mx-auto px-6 text-[#2B2B2B] space-y-2">
 					{/* Top Row: Image + Text */}
-					<div className="flex flex-col lg:flex-row lg:items-start gap-12">
-						<div className="hidden lg:block flex-shrink-0">
+					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
+						<div className="hidden sm:block flex-shrink-0">
 							<img
 								src={snohomishCounty}
 								alt="Snohomish County"
-								className="h-[80px] object-contain"
+								className="h-[90px] object-contain"
 							/>
 						</div>
-						<div className="flex-1">
-							<h5 className="text-[#2B2B2B] mb-2">Snohomish County Plumbing Services</h5>
+						<div className="flex-1 space-y-2">
+							<h5 className="text-[#2B2B2B]">Snohomish County, WA</h5>
 							<p>
 								Serving growing communities like Everett, Lynnwood, and Marysville, our
 								team brings decades of plumbing expertise to Snohomish County. We
@@ -158,7 +163,7 @@ export default function ServiceAreasPage() {
 					</div>
 
 					{/* Bottom Row: Button */}
-					<div className="flex justify-end mt-1">
+					<div className="flex justify-end">
 						<a
 							href="/service-areas/snohomish-county"
 							className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors whitespace-nowrap cursor-pointer"

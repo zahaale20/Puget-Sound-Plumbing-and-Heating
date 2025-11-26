@@ -11,8 +11,19 @@ import { posts } from "../../blog/blogData";
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
 
-	const truncateText = (text, maxLength) =>
-		text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+	const truncateText = (text, maxLength) => {
+		if (text.length <= maxLength) return text;
+
+		const sliced = text.slice(0, maxLength);
+
+		// If it ends with a period, add only two
+		if (sliced.endsWith(".")) {
+			return sliced + "..";
+		}
+
+		// Otherwise add the full three dots
+		return sliced + "...";
+	};
 
 	const handleReadPost = (postLink) => {
 		navigate(postLink);
@@ -63,13 +74,13 @@ export default function RecentBlogPosts() {
 
 							{/* Truncated Text */}
 							<span className="text-[#2B2B2B] flex-1 mb-6">
-								{truncateText(post.description, 152)}
+								{truncateText(post.description, 152)}..
 							</span>
 
 							{/* Continue Reading Link */}
 							<button
 								onClick={() => handleReadPost(post.link)}
-								className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors mt-6 cursor-pointer"
+								className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors cursor-pointer"
 							>
 								Continue Reading <FaArrowRight/>
 							</button>
