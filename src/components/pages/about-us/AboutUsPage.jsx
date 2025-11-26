@@ -35,14 +35,10 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
-				<CoreValues />
-			</section>
-
-			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
 				<Services />
 			</section>
 
-			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
+			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: `url(${skyline})` }}>
 				<ServiceAreas />
 			</section>
 		</div>

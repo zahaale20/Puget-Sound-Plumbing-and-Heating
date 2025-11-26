@@ -17,7 +17,7 @@ export default function Services() {
                 {/* Title */}
                 <h4 className="text-[#0C2D70] pb-2">
                     <span className="relative inline-block">
-                        Our Services
+                        Services
                         <span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
                     </span>
                 </h4>
