@@ -2,17 +2,7 @@ import team from "../../../../assets/team.png";
 
 export default function History() {
 	return (
-		<div className="flex flex-col max-w-7xl mx-auto px-6 gap-12">
-
-			{/* Image */}
-			<div className="flex justify-center w-full">
-				<img
-					src={team}
-					alt="Our history team"
-					className="w-full w-full h-auto object-cover"
-				/>
-			</div>
-
+		<div className="flex flex-col max-w-7xl mx-auto px-6 gap-12 items-center">
 			<div>
 				{/* Header */}
 				<h4 className="text-[#0C2D70] relative inline-block pb-2 mb-6">

@@ -2,8 +2,9 @@
 import skyline from "../../../assets/seattle-skyline.png";
 import pattern from "../../../assets/pattern1.png";
 
-import CoreValues from "./components/CoreValues";
-import History from "./components/History";
+import OurMission from "./components/OurMission";
+import OurHistory from "./components/OurHistory";
+import OurTeam from "./components/OurTeam";
 import Services from "./components/Services";
 import ServiceAreas from "./components/ServiceAreas";
 
@@ -31,7 +32,15 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="flex justify-center w-full bg-white py-16">
-				<History />
+				<OurMission />
+			</section>
+
+			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
+				<OurHistory />
+			</section>
+
+			<section className="flex justify-center w-full bg-white py-16">
+				<OurTeam />
 			</section>
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
