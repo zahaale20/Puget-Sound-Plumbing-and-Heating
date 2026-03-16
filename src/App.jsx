@@ -22,6 +22,8 @@ import RegionPage from "./components/pages/service-areas/RegionPage";
 import AreaPage from "./components/pages/service-areas/AreaPage";
 
 import ServicesPage from "./components/pages/services/ServicesPage";
+import CategoryPage from "./components/pages/services/CategoryPage";
+import ServicePage from "./components/pages/services/ServicePage";
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
@@ -58,6 +60,8 @@ function App() {
 					<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
 
 					<Route path="/services" element={<ServicesPage />} />
+					<Route path="/services/:categorySlug" element={<CategoryPage />} />
+					<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
 				</Routes>
 				<Footer />
 			</div>
