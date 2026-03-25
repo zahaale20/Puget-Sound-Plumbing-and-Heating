@@ -1,6 +1,7 @@
 import {
 	FaPhone,
 	FaLocationDot,
+	FaIdCard,
 	FaFacebookF,
 	FaInstagram,
 	FaYoutube,
@@ -52,14 +53,21 @@ export default function Footer() {
 					
 					{/* LEFT COLUMN: Brand + Contact (1/4 space) */}
 					<div className="flex flex-col lg:basis-2/5 gap-8">
-						<div className="flex flex-col">
-							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+						<div className="flex flex-col gap-4">
+							<h5 className="relative inline-block py-1 w-fit">
 								Puget Sound Plumbing and Heating
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
-							<p className="leading-relaxed opacity-90">
+							<p className="relative inline-block w-fit italic">
+								"The sound solution to your plumbing problems."
+							</p>
+							<p className="leading-relaxed">
 								Trusted plumbing solutions for homes and businesses in the Puget Sound. Fully licensed, insured, and satisfaction guaranteed.
 							</p>
+							<li className="flex items-center gap-2">
+								<FaIdCard />
+								<p>#PUGETSP929CF</p>
+							</li>
 						</div>
 
 						<div className="min-w-[180px]">
