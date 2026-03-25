@@ -30,7 +30,7 @@ export default function ServicePage() {
     return (
         <div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 
-            {/* 1. Header (Hero - Pattern remains static) */}
+            {/* 1. Header */}
             <section
                 className="relative flex w-full py-16 bg-cover bg-bottom"
                 style={{ backgroundImage: `url(${pattern})` }}
@@ -74,12 +74,12 @@ export default function ServicePage() {
 						long-term code compliance.
                     </p>
 
-                    <ul className="space-y-4 text-[#2B2B2B]">
+                    <ul className="space-y-6 text-[#2B2B2B]">
                         {problems.length > 0 ? (
                             problems.map((problem, index) => (
                                 <li key={index} className="flex items-start gap-3">
                                     <FaExclamationTriangle className="text-[#B32020] mt-1 flex-shrink-0" />
-                                    <span>{problem}</span>
+                                    <p>{problem}</p>
                                 </li>
                             ))
                         ) : (
@@ -89,7 +89,7 @@ export default function ServicePage() {
                 </div>
             </section>
 
-            {/* 3. What to Expect */}
+            {/* 3. What to Expect From Our Service */}
             <section className="w-full py-16 bg-[#F5F5F5]">
                 <div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
                     <div className="inline-block mx-auto">
@@ -131,7 +131,7 @@ export default function ServicePage() {
                 </div>
             </section>
 
-            {/* 4. DIY vs Pro Table */}
+            {/* 4. Should You DIY or Call a Pro? */}
 			<section className="w-full py-16 bg-white">
 				<div className="relative max-w-7xl mx-auto px-6 z-10 space-y-6">
 					<div className="inline-block mx-auto w-full text-center">
@@ -202,7 +202,7 @@ export default function ServicePage() {
                 style={{ backgroundImage: `url(${skyline})` }}
             >
                 <div className="relative max-w-7xl mx-auto px-6 z-10 w-full">
-                    <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-6">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit uppercase tracking-tight inline-block">
 							Prevention Tips for {serviceName}
 							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
@@ -217,7 +217,7 @@ export default function ServicePage() {
                                 "Keep the area around your main units clear for easy access and ventilation."
                             ].map((tip, i) => (
                                 <li key={i} className="flex items-start gap-4">
-                                    <div className="bg-[#B32020]/10 p-2 rounded-full">
+                                    <div>
                                         <FaCheck className="text-[#B32020]" />
                                     </div>
                                     <span className="text-[#2B2B2B]">{tip}</span>
