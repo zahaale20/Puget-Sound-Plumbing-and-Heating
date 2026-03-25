@@ -23,6 +23,10 @@ import airConditioning from "../assets/heating-and-cooling-air-conditioning.png"
 import boilerInstallAndRepair from "../assets/heating-and-cooling-boiler-install-and-repair.png";
 import furnaceInstallAndRepair from "../assets/heating-and-cooling-furnace-install-and-repair.png";
 
+import waterHeaters from "../assets/blog1.jpg";
+import faucetsBlog from "../assets/blog2.jpg";
+import toiletRepair from "../assets/blog3.jpg";
+
 export const CompanyLinks = [
 	{
 		name: "Blog", 
@@ -644,10 +648,6 @@ export const ServiceAreaLinks = [
 		]
 	}
 ];
-
-import waterHeaters from "../assets/blog1.jpg";
-import faucetsBlog from "../assets/blog2.jpg";
-import toiletRepair from "../assets/blog3.jpg";
 
 export const categoryOptions = [
     "All",

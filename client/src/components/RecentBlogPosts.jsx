@@ -2,10 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
 
-import waterHeaters from "../assets/blog1.jpg";
-import faucets from "../assets/blog2.jpg";
-import toiletRepair from "../assets/blog3.jpg";
-
 import { posts } from "../data/data";
 
 export default function RecentBlogPosts() {
