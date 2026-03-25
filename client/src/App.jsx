@@ -2,33 +2,32 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-import HomePage from "./components/pages/home/HomePage";
-import ScheduleOnlinePage from "./components/pages/schedule-online/ScheduleOnlinePage";
+import HomePage from "./pages/HomePage";
+import ScheduleOnlinePage from "./pages/ScheduleOnlinePage";
 
-import BlogPage from "./components/pages/blog/BlogPage";
-import BlogPostPage from "./components/pages/blog/BlogPostPage";
-import CareersPage from "./components/pages/careers/CareersPage";
-import LimitedTimeOffersPage from "./components/pages/coupons/LimitedTimeOffersPage";
-import ResourcesPage from "./components/pages/resources/ResourcesPage";
-import AboutUsPage from "./components/pages/about-us/AboutUsPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
+import CareersPage from "./pages/CareersPage";
+import LimitedTimeOffersPage from "./pages/LimitedTimeOffersPage";
+import ResourcesPage from "./pages/ResourcesPage";
+import AboutUsPage from "./pages/AboutUsPage";
 
-import FAQsPage from "./components/pages/faqs/FAQsPage"
+import FAQsPage from "./pages/FAQsPage"
 
-import ServiceAreasPage from "./components/pages/service-areas/ServiceAreasPage";
-import RegionPage from "./components/pages/service-areas/RegionPage";
-import AreaPage from "./components/pages/service-areas/AreaPage";
+import ServiceAreasPage from "./pages/ServiceAreasPage";
+import RegionPage from "./pages/RegionPage";
+import AreaPage from "./pages/AreaPage";
 
-import ServicesPage from "./components/pages/services/ServicesPage";
-import CategoryPage from "./components/pages/services/CategoryPage";
-import ServicePage from "./components/pages/services/ServicePage";
+import ServicesPage from "./pages/ServicesPage";
+import CategoryPage from "./pages/CategoryPage";
+import ServicePage from "./pages/ServicePage";
 
-import FinancingPage from "./components/pages/financing/FinancingPage"
-import WarrantyPage from "./components/pages/warranty/WarrantyPage"
-import CustomerReviewsPage from "./components/pages/reviews/CustomerReviewsPage"
-import LimitedTimeOffers from "./components/pages/home/components/LimitedTimeOffers";
+import FinancingPage from "./pages/FinancingPage"
+import WarrantyPage from "./pages/WarrantyPage"
+import CustomerReviewsPage from "./pages/CustomerReviewsPage"
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
