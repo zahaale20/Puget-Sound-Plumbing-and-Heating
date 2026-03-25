@@ -1,0 +1,80 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+
+import HomePage from "./components/pages/home/HomePage";
+import ScheduleOnlinePage from "./components/pages/schedule-online/ScheduleOnlinePage";
+
+import BlogPage from "./components/pages/blog/BlogPage";
+import BlogPostPage from "./components/pages/blog/BlogPostPage";
+import CareersPage from "./components/pages/careers/CareersPage";
+import LimitedTimeOffersPage from "./components/pages/coupons/LimitedTimeOffersPage";
+import ResourcesPage from "./components/pages/resources/ResourcesPage";
+import AboutUsPage from "./components/pages/about-us/AboutUsPage";
+
+import FAQsPage from "./components/pages/faqs/FAQsPage"
+
+import ServiceAreasPage from "./components/pages/service-areas/ServiceAreasPage";
+import RegionPage from "./components/pages/service-areas/RegionPage";
+import AreaPage from "./components/pages/service-areas/AreaPage";
+
+import ServicesPage from "./components/pages/services/ServicesPage";
+import CategoryPage from "./components/pages/services/CategoryPage";
+import ServicePage from "./components/pages/services/ServicePage";
+
+import FinancingPage from "./components/pages/financing/FinancingPage"
+import WarrantyPage from "./components/pages/warranty/WarrantyPage"
+import CustomerReviewsPage from "./components/pages/reviews/CustomerReviewsPage"
+import LimitedTimeOffers from "./components/pages/home/components/LimitedTimeOffers";
+
+function ScrollToTop() {
+	const { pathname } = useLocation();
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
+
+	return null;
+}
+
+function App() {
+	return (
+		<BrowserRouter>
+			<ScrollToTop />
+			<div className="flex flex-col min-h-screen mx-auto">
+				<Header />
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+
+					<Route path="/schedule-online" element={<ScheduleOnlinePage />} />
+
+					<Route path="/blog" element={<BlogPage />} />
+					<Route path="/blog/:slug" element={<BlogPostPage />} />
+					<Route path="/careers" element={<CareersPage />} />
+					<Route path="/coupons" element={<LimitedTimeOffersPage />} />
+					<Route path="/resources" element={<ResourcesPage />} />
+					<Route path="/about-us" element={<AboutUsPage />} />
+					<Route path="/financing" element={<FinancingPage />} />
+					<Route path="/warranty" element={<WarrantyPage />} />
+					<Route path="/reviews" element={<CustomerReviewsPage />} />
+
+					<Route path="/faqs" element={<FAQsPage />} />
+
+					<Route path="/service-areas" element={<ServiceAreasPage />} />
+					<Route path="/service-areas/:regionSlug" element={<RegionPage />} />
+					<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
+
+					<Route path="/services" element={<ServicesPage />} />
+					<Route path="/services/:categorySlug" element={<CategoryPage />} />
+					<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
+				</Routes>
+				<Footer />
+			</div>
+		</BrowserRouter>
+	);
+}
+
+export default App;
