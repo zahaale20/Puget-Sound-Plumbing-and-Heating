@@ -50,69 +50,23 @@ export default function Footer() {
 					backgroundSize: "cover",
 				}}
 			>
-
 				{/* Content */}
-				<div className="flex flex-col lg:flex-row justify-between z-10 w-full max-w-7xl px-6 gap-8 text-white">
-					{/* Left: Navigation Columns */}
-					<div className="flex-1 min-w-[250px]">
-						<div className="flex flex-row gap-24">
-							{/* Services Column */}
-							<div>
-								<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold">
-									Services
-									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-								</h5>
-
-								<ul className="space-y-2">
-									<li><a href="/plumbing" className="hover:underline">Plumbing</a></li>
-									<li><a href="/drain-sewer" className="hover:underline">Drain & Sewer</a></li>
-									<li><a href="/water-heaters" className="hover:underline">Water Heaters</a></li>
-									<li><a href="/heating-cooling" className="hover:underline">Heating & Cooling</a></li>
-								</ul>
-							</div>
-
-							{/* Resources Column */}
-							<div>
-								<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold">
-									Resources
-									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-								</h5>
-
-								<ul className="space-y-2">
-									<li><a href="/blog" className="hover:underline">Blog</a></li>
-									<li><a href="/coupons" className="hover:underline">Coupons</a></li>
-									<li><a href="/faqs" className="hover:underline">FAQs</a></li>
-									<li><a href="/financing" className="hover:underline">Financing</a></li>
-									<li><a href="/warranty" className="hover:underline">Warranty</a></li>
-								</ul>
-							</div>
-
-							{/* Company Column */}
-							<div>
-								<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold">
-									Company
-									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-								</h5>
-
-								<ul className="space-y-2">
-									<li><a href="/about" className="hover:underline">About</a></li>
-									<li><a href="/careers" className="hover:underline">Careers</a></li>
-									<li><a href="/reviews" className="hover:underline">Reviews</a></li>
-									<li><a href="/service-areas" className="hover:underline">Service Areas</a></li>
-								</ul>
-							</div>
-
+				<div className="flex flex-col lg:flex-row justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
+					
+					{/* LEFT COLUMN: Brand + Contact (1/4 space) */}
+					<div className="flex flex-col lg:basis-2/5 gap-8">
+						<div className="flex flex-col">
+							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+								Puget Sound Plumbing and Heating
+								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+							</h5>
+							<p className="leading-relaxed opacity-90">
+								Trusted plumbing solutions for homes and businesses in the Puget Sound. Fully licensed, insured, and satisfaction guaranteed.
+							</p>
 						</div>
 
-					</div>
-
-
-					{/* Right: Contact + Social Media + License */}
-					<div className="flex flex-col flex-wrap justify-start gap-8 flex-shrink-0">
-						
-						{/* Contact Info */}
 						<div className="min-w-[180px]">
-							<h5 className="relative inline-block py-2 mb-4 text-lg font-semibold">
+							<h5 className="relative inline-block py-2 mb-4 text-lg font-semibold w-fit">
 								Contact Us
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
@@ -123,68 +77,83 @@ export default function Footer() {
 								</li>
 								<li className="flex gap-2">
 									<FaLocationDot className="mt-1" />
-									<a
-										href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168"
-										className="flex flex-col hover:underline"
-									>
+									<a href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168" className="flex flex-col hover:underline">
 										<span>11803 Des Moines Memorial Dr S</span>
 										<span>Burien, WA 98168</span>
 									</a>
 								</li>
 							</ul>
 						</div>
+					</div>
 
-						{/* Social Media */}
-						<div className="min-w-[180px]">
-							<h5 className="relative inline-block py-2 mb-4 text-lg font-semibold">
-								Connect With Us
-								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-							</h5>
-							<ul className="flex sm:flex-col items-center sm:items-start space-x-4 sm:space-x-0 sm:space-y-2 ">
-								<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-									<FaFacebookF />
-									<a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
-										Facebook
-									</a>
-								</li>
-								<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-									<FaInstagram />
-									<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
-										Instagram
-									</a>
-								</li>
-								<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-									<FaYoutube />
-									<a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
-										YouTube
-									</a>
-								</li>
-								<li className="flex flex-col sm:flex-row items-center gap-0 sm:gap-2 text-2xl sm:text-base">
-									<FaXTwitter />
-									<a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hidden sm:inline hover:underline">
-										X
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						{/* License */}
-						<div className="min-w-[180px]">
-							<h5 className="relative inline-block py-2 mb-4 text-lg font-semibold">
-								WA License
+					{/* RIGHT COLUMN: Nav Links + Socials (3/4 space) */}
+					<div className="lg:basis-3/5 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 gap-8 lg:gap-12">
+						{/* Services */}
+						<div>
+							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+								Services
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li className="flex items-center gap-2">
-									<FaIdCard />
-									<p>#PUGETSP929CF</p>
-								</li>
+								<li><a href="/plumbing" className="hover:underline">Plumbing</a></li>
+								<li><a href="/drain-sewer" className="hover:underline">Drain & Sewer</a></li>
+								<li><a href="/water-heaters" className="hover:underline">Water Heaters</a></li>
+								<li><a href="/heating-cooling" className="hover:underline">Heating & Cooling</a></li>
 							</ul>
 						</div>
 
+						{/* Resources */}
+						<div>
+							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+								Resources
+								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+							</h5>
+							<ul className="space-y-2">
+								<li><a href="/blog" className="hover:underline">Blog</a></li>
+								<li><a href="/coupons" className="hover:underline">Coupons</a></li>
+								<li><a href="/faqs" className="hover:underline">FAQs</a></li>
+								<li><a href="/financing" className="hover:underline">Financing</a></li>
+								<li><a href="/warranty" className="hover:underline">Warranty</a></li>
+							</ul>
+						</div>
+
+						{/* Company */}
+						<div>
+							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+								Company
+								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+							</h5>
+							<ul className="space-y-2">
+								<li><a href="/about" className="hover:underline">About</a></li>
+								<li><a href="/careers" className="hover:underline">Careers</a></li>
+								<li><a href="/reviews" className="hover:underline">Reviews</a></li>
+								<li><a href="/service-areas" className="hover:underline">Service Areas</a></li>
+							</ul>
+						</div>
+
+						{/* Socials */}
+						<div>
+							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+								Connect
+								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+							</h5>
+							<ul className="flex flex-col space-y-2">
+								<li className="flex items-center gap-2">
+									<FaFacebookF /> <a href="#" className="hover:underline">Facebook</a>
+								</li>
+								<li className="flex items-center gap-2">
+									<FaInstagram /> <a href="#" className="hover:underline">Instagram</a>
+								</li>
+								<li className="flex items-center gap-2">
+									<FaYoutube /> <a href="#" className="hover:underline">YouTube</a>
+								</li>
+								<li className="flex items-center gap-2">
+									<FaXTwitter /> <a href="#" className="hover:underline">X</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
-
 			</div>
 
 			{/* Bottom Bar */}
