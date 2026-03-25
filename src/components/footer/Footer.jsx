@@ -113,7 +113,7 @@ export default function Footer() {
 								<li><a href="/coupons" className="hover:underline">Coupons</a></li>
 								<li><a href="/faqs" className="hover:underline">FAQs</a></li>
 								<li><a href="/financing" className="hover:underline">Financing</a></li>
-								<li><a href="/warranty" className="hover:underline">Warranty</a></li>
+								<li><a href="/warranties" className="hover:underline">Warranties</a></li>
 							</ul>
 						</div>
 
