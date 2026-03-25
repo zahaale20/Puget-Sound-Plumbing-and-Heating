@@ -57,10 +57,13 @@ export const ServiceLinks = [
         image: emergencyPlumbing,
         description: "When plumbing emergencies strike, our Seattle-based emergency plumbing services provide fast, reliable solutions. From burst pipes and overflowing toilets to major leaks, our experienced technicians respond quickly to prevent water damage and restore your home’s plumbing system. We combine advanced tools with expert knowledge to ensure every emergency is handled safely and efficiently, giving homeowners peace of mind when they need it most.",
         problems: [
-          "A burst pipe suddenly flooding your home",
-          "A toilet overflowing and causing water damage",
-          "A major plumbing leak that will not stop",
-          "A water line or gas line issue that requires immediate repair"
+          "A burst pipe is flooding your home",
+          "Your toilet is overflowing uncontrollably",
+          "A major pipe leak has started and won't stop",
+          "You smell gas or 'rotten eggs' near an appliance",
+          "Sewage is backing up into your bathtub or drains",
+          "Your basement is flooding from a sump pump failure",
+          "A critical water line requires immediate shut-off"
         ],
         guarantees: [
           "Fast emergency plumbing response in the Seattle area",
@@ -75,10 +78,13 @@ export const ServiceLinks = [
         image: plumbingRepairs,
         description: "Our professional plumbing repair services in Seattle ensure your pipes and fixtures work efficiently and reliably. We handle leaky pipes, low water pressure, noisy plumbing, and hidden water damage, providing accurate diagnostics and long-lasting solutions. Our team prioritizes transparent pricing and quality workmanship to deliver dependable repairs that maintain your home’s plumbing integrity and protect your investment.",
         problems: [
-          "A leaking pipe under the sink or behind the wall",
-          "Low water pressure in showers or faucets",
-          "Strange noises coming from pipes when water runs",
-          "Water spots on ceilings or walls caused by hidden leaks"
+          "A pipe is leaking under the sink or behind a wall",
+          "Water pressure in the shower is suddenly low",
+          "Pipes are making loud banging or rattling noises",
+          "Mystery water spots are appearing on ceilings or walls",
+          "Old pipes are showing signs of rust or corrosion",
+          "A shut-off valve is stuck or leaking",
+          "Tap water looks brown, rusty, or discolored"
         ],
         guarantees: [
           "Accurate troubleshooting of plumbing problems",
@@ -93,10 +99,13 @@ export const ServiceLinks = [
         image: faucets,
         description: "Enhance your home’s water efficiency with our faucet repair and installation services. Our Seattle plumbing team fixes dripping faucets, low-pressure fixtures, and outdated designs while offering high-quality replacements. Each installation is performed with attention to detail, ensuring optimal water flow, durability, and aesthetic appeal for your kitchen and bathroom faucets.",
         problems: [
-          "A dripping faucet that will not stop running",
-          "A faucet leaking at the base or underneath the sink",
-          "Low water pressure coming from kitchen or bathroom faucets",
-          "Outdated or damaged fixtures that need replacement"
+          "A dripping faucet is wasting water and won't stop",
+          "Water is leaking from the handle or under the sink",
+          "The pull-out spray head has low flow or is broken",
+          "You need a professional to install a new fixture",
+          "The faucet handle is loose, stiff, or hard to turn",
+          "Your bathtub faucet is leaking or spraying erratically",
+          "A clogged aerator is causing poor water flow"
         ],
         guarantees: [
           "Professional faucet repair and installation",
@@ -109,12 +118,15 @@ export const ServiceLinks = [
         name: "Toilets",
         href: "/services/plumbing/toilets",
         image: toilets,
-        description: "Keep your toilets functioning properly with expert repair and replacement services. Our Seattle plumbers fix running, clogged, or leaking toilets, restoring reliable flushing performance. We provide careful installations, preventative maintenance, and durable solutions to prevent future leaks, ensuring your bathroom plumbing works efficiently and reliably.",
+        description: "Keep your toilets functioning properly with expert repair and replacement services. We specialize in troubleshooting running toilets, clearing stubborn clogs, and installing modern, high-efficiency models. Our technicians ensure every unit is securely mounted and leak-free, providing reliable performance and helping you reduce unnecessary water waste in your home.",
         problems: [
-          "A toilet that keeps running long after flushing",
-          "A toilet that keeps clogging over and over",
-          "Water leaking around the base of the toilet",
-          "A toilet that will not flush properly"
+          "Your toilet keeps running long after flushing",
+          "The toilet is constantly clogging or backing up",
+          "Water is pooling around the base of the toilet",
+          "The flush is weak or the tank isn't filling",
+          "A crack in the porcelain tank or bowl is leaking",
+          "The toilet is wobbly and needs a new wax ring",
+          "You hear 'ghost flushes' or hissing from the tank"
         ],
         guarantees: [
           "Complete toilet repair and troubleshooting",
@@ -127,12 +139,15 @@ export const ServiceLinks = [
         name: "Garbage Disposal",
         href: "/services/plumbing/disposal",
         image: garbageDisposal,
-        description: "Maintain a smooth-running kitchen with our garbage disposal repair and installation services. From humming or jammed units to leaks and clogs, our Seattle plumbers ensure your disposal operates safely and efficiently. We install modern, reliable units and provide solutions that prevent future jams, keeping your kitchen drains clear and your home functioning seamlessly.",
+        description: "Maintain a smooth-running kitchen with our professional garbage disposal repair and installation services. Whether your unit is jammed, leaking, or making unusual noises, our team can quickly diagnose the issue and restore function. We provide high-quality replacement units that offer quiet operation and powerful grinding capabilities, ensuring your kitchen cleanup remains hassle-free.",
         problems: [
-          "A garbage disposal that is humming but not spinning",
-          "A disposal unit leaking under the sink",
-          "A disposal clogged with food waste",
-          "A broken disposal causing kitchen drain backups"
+          "The disposal is humming but the blades won't spin",
+          "Water is leaking from the bottom of the unit",
+          "The kitchen sink is backed up from a disposal jam",
+          "A foul, rotting smell is coming from the drain",
+          "The unit won't turn on or keeps tripping the reset",
+          "You hear loud metal grinding during operation",
+          "You need to upgrade to a quiet, high-power unit"
         ],
         guarantees: [
           "Safe garbage disposal repair and replacement",
@@ -145,12 +160,15 @@ export const ServiceLinks = [
         name: "Water Filtration Systems",
         href: "/services/plumbing/filtration",
         image: waterFiltrationSystems,
-        description: "Improve your home’s water quality with professional water filtration system installation. Our Seattle team designs, installs, and maintains filtration systems that remove contaminants, reduce hard water buildup, and enhance taste. With our solutions, homeowners enjoy cleaner, healthier water and appliances protected from mineral damage while supporting overall home plumbing health.",
+        description: "Improve your home’s water quality with professional water filtration system installation tailored for Seattle's specific water conditions. We offer whole-home solutions that remove chlorine, sediment, and heavy metals, protecting your family’s health and extending the life of your appliances. Our team helps you select and maintain the perfect system to ensure clean, great-tasting water from every tap.",
         problems: [
-          "Tap water that tastes strange or smells unpleasant",
-          "Hard water leaving mineral buildup on fixtures",
-          "Concerns about drinking water quality at home",
-          "Scale buildup damaging plumbing and appliances"
+          "Tap water tastes strange or smells like chlorine",
+          "Hard water is leaving white scale on your faucets",
+          "You're concerned about lead or contaminants",
+          "Mineral buildup is damaging your appliances",
+          "Your laundry is stained or your skin feels dry",
+          "A clogged filter is reducing your water pressure",
+          "You need a filtration plan tailored for Seattle water"
         ],
         guarantees: [
           "Professional whole home water filtration installation",
@@ -163,12 +181,15 @@ export const ServiceLinks = [
         name: "Gas Line Services",
         href: "/services/plumbing/gas",
         image: gasLineServices,
-        description: "Ensure your home’s gas lines are safe and fully compliant with our professional gas line services. We handle installation, repair, and leak detection for appliances, stoves, dryers, and heating systems. Our Seattle-based team prioritizes safety and precision, providing secure connections and peace of mind for homeowners.",
+        description: "Ensure your home’s gas lines are safe and fully compliant with our professional gas line services. We specialize in leak detection, line repairs, and new installations for stoves, dryers, and outdoor appliances. Our licensed technicians prioritize safety above all else, providing secure connections and emergency shut-off solutions to protect your property and family from potential hazards.",
         problems: [
-          "Suspected gas leaks around appliances or gas lines",
-          "Installing a gas stove, dryer, or outdoor grill",
-          "Old gas piping that needs to be replaced",
-          "Gas line issues affecting home heating systems"
+          "You smell gas near your stove, furnace, or dryer",
+          "You need a gas line for a new range, BBQ, or fire pit",
+          "Old gas pipes are corroded and need replacement",
+          "Your gas water heater or furnace won't ignite",
+          "You need to relocate gas lines for a home remodel",
+          "You want to install a safety earthquake shut-off valve",
+          "Low gas pressure is affecting appliance performance"
         ],
         guarantees: [
           "Safe and code compliant gas line installation",
@@ -181,12 +202,15 @@ export const ServiceLinks = [
         name: "Leak Detection",
         href: "/services/plumbing/leak",
         image: leakDetection,
-        description: "Protect your home with professional leak detection services. Our Seattle plumbers use advanced tools to locate hidden water leaks behind walls, under foundations, and in other inaccessible areas. Prompt detection and accurate diagnosis allow us to provide effective repairs, minimizing damage and ensuring your plumbing system remains reliable and secure.",
+        description: "Protect your home from the devastating effects of water damage with our professional leak detection services. Using advanced thermal imaging and acoustic tools, we locate hidden leaks behind walls, under foundations, and within your main water lines. Our non-invasive techniques allow us to find the source of the problem quickly, saving you money on repairs and preventing long-term structural issues.",
         problems: [
-          "A sudden spike in your water bill with no explanation",
-          "Damp spots appearing on walls, floors, or ceilings",
-          "The sound of running water when no fixtures are on",
-          "Hidden plumbing leaks behind walls or under foundations"
+          "Your water bill has spiked for no obvious reason",
+          "You hear running water but no faucets are on",
+          "Damp spots or soft areas are appearing on floors",
+          "You suspect a slab leak under your foundation",
+          "A musty odor won't go away in the bathroom",
+          "Paint is bubbling or wallpaper is peeling from leaks",
+          "You need thermal imaging to find a hidden leak"
         ],
         guarantees: [
           "Advanced leak detection tools and techniques",
@@ -199,12 +223,15 @@ export const ServiceLinks = [
         name: "Water Services Repair and Install",
         href: "/services/plumbing/water-services",
         image: waterServicesRepairAndInstall,
-        description: "Maintain steady water pressure and a consistent supply with our water service repair and installation solutions. Our Seattle team handles main line repairs, pipe replacements, and upgrades to ensure long-term functionality. We provide durable, high-quality underground solutions that restore reliable water flow for homeowners and protect the integrity of your plumbing system.",
+        description: "Maintain steady water pressure and a consistent supply with our comprehensive water service solutions. We handle everything from main line repairs in your yard to replacing outdated lead and galvanized service pipes. Our team ensures your home’s connection to the municipal supply is robust, code-compliant, and optimized for maximum flow and long-term reliability.",
         problems: [
-          "Low water pressure throughout the entire home",
-          "A damaged main water line supplying the house",
-          "Old water service pipes that need replacement",
-          "Frequent water supply interruptions"
+          "The house has low water pressure that won't go away",
+          "The main water line in your yard is broken or leaking",
+          "Old lead or galvanized service pipes need replacement",
+          "Water is pooling in your yard near the street or meter",
+          "Your main shut-off valve is stuck or leaking",
+          "You have frequent supply interruptions or sediment",
+          "You need to upgrade underground lines for better flow"
         ],
         guarantees: [
           "Professional water line repair and replacement",
@@ -223,12 +250,15 @@ export const ServiceLinks = [
         name: "Drain Cleaning",
         href: "/services/drain-and-sewer/cleaning",
         image: drainCleaning,
-        description: "Keep your home flowing smoothly with our professional drain cleaning services. We remove blockages, hair, grease, and debris from sinks, tubs, and main lines to prevent backups and maintain optimal water flow. Our Seattle team ensures every drain is cleared efficiently, minimizing inconvenience and protecting your plumbing system from future clogs.",
+        description: "Keep your home flowing smoothly with our professional drain cleaning services. We use safe and effective methods to clear clogs in sinks, tubs, and showers, removing buildup that causes slow drainage and foul odors. Our technicians provide deep cleaning that goes beyond a simple plunge, restoring full flow to your plumbing system and helping to prevent future blockages before they start.",
         problems: [
-          "Slow draining sinks, tubs, or showers",
-          "Backed-up kitchen or bathroom drains",
-          "Foul odors coming from drains",
-          "Recurring drain clogs despite DIY attempts"
+          "Sinks, tubs, or showers are draining painfully slow",
+          "The kitchen sink is backed up and won't clear",
+          "Foul or 'rotten egg' odors are coming from drains",
+          "Recurring clogs keep coming back every few weeks",
+          "Pipes gurgle loudly when you flush the toilet",
+          "Drain flies are appearing around your fixtures",
+          "Multiple drains are backing up at the same time"
         ],
         guarantees: [
           "Thorough drain cleaning for all household drains",
@@ -241,12 +271,15 @@ export const ServiceLinks = [
         name: "Sewer Inspection",
         href: "/services/drain-and-sewer/inspection",
         image: sewerInspection,
-        description: "Identify and resolve sewer issues before they become major problems with our advanced sewer inspection services. Using cameras and diagnostic tools, our Seattle experts pinpoint blockages, cracks, or tree root intrusions. Accurate inspections allow us to recommend precise solutions, protecting your home from costly damage and ensuring your sewer system functions reliably.",
+        description: "Identify and resolve sewer issues before they become major disasters with our advanced camera inspections. We provide high-definition video scopes that allow us to see exactly what is happening inside your underground pipes, from tree root intrusion to structural cracks. This detailed reporting is essential for home buyers and homeowners looking for an accurate diagnosis without the need for initial digging.",
         problems: [
-          "Frequent backups in sinks, tubs, or toilets",
-          "Unexplained foul odors in plumbing",
-          "Potential tree root intrusion or pipe damage",
-          "Suspected blockages in main sewer lines"
+          "You're buying a home and need a sewer scope",
+          "The main line is backing up from tree root intrusion",
+          "You have persistent sewage backups and don't know why",
+          "You smell sewer gas inside your home or basement",
+          "The lawn above your sewer line is soggy or sinking",
+          "You need to check the condition of old clay pipes",
+          "Floor drains are gurgling or overflowing with waste"
         ],
         guarantees: [
           "Advanced camera inspection for accurate diagnosis",
@@ -259,12 +292,15 @@ export const ServiceLinks = [
         name: "Sewer Repair and Install",
         href: "/services/drain-and-sewer/repair",
         image: sewerRepairAndInstall,
-        description: "Maintain a reliable sewer system with our professional repair and installation services. From broken pipes to full line replacements, our Seattle team provides durable, code-compliant solutions. We minimize disruption and restore proper sewer function, protecting your home from water damage and ensuring efficient wastewater management.",
+        description: "Maintain a reliable waste management system with our professional sewer repair and installation services. Whether you are dealing with a collapsed line, root damage, or the need for a new installation for a home addition, our team provides durable, code-compliant solutions. We utilize both traditional and modern techniques to ensure your sewer system is restored to peak performance with as little disruption as possible.",
         problems: [
-          "Collapsed or broken sewer lines",
-          "Persistent backups or flooding",
-          "Old or deteriorating pipes needing replacement",
-          "Sewer line damage caused by roots or shifting soil"
+          "A collapsed sewer line is causing a total blockage",
+          "A broken sewer pipe under your driveway needs repair",
+          "Tree roots have crushed your underground pipes",
+          "You need a sewer line for an ADU or home addition",
+          "Old pipes are deteriorating and need an upgrade",
+          "Basement flooding is linked to a sewer failure",
+          "A bellied pipe is collecting debris and clogging"
         ],
         guarantees: [
           "Durable, code-compliant sewer repairs",
@@ -277,12 +313,15 @@ export const ServiceLinks = [
         name: "Hydro Jetting",
         href: "/services/drain-and-sewer/hydrojetting",
         image: hydroJetting,
-        description: "Clear tough blockages and buildup with our hydro jetting services. Using high-pressure water jets, our Seattle plumbers remove grease, scale, and debris from sewer and drain lines, restoring optimal flow. Hydro jetting is safe, efficient, and prevents future clogs, ensuring your plumbing system operates smoothly and reliably.",
+        description: "Clear the toughest blockages and heavy buildup with our high-pressure hydro jetting services. This advanced technique uses concentrated water streams to scour the inside of your pipes, removing grease, scale, and stubborn tree roots that traditional snaking can't touch. It is the ultimate solution for restoring your sewer and drain lines to like-new condition, ensuring long-term flow and preventing future backups.",
         problems: [
-          "Severe grease or sludge buildup in pipes",
-          "Recurring clogs resistant to traditional snaking",
-          "Slow draining sinks or tubs",
-          "Potential damage from accumulated debris in main lines"
+          "Severe grease or sludge is choking your kitchen lines",
+          "Traditional snaking isn't clearing recurring clogs",
+          "Hard mineral scale has built up inside cast iron pipes",
+          "You need to clear stubborn roots without digging",
+          "Storm drains or perimeter drains are full of debris",
+          "You want to restore pipes to 'like-new' flow capacity",
+          "The sewer line is sluggish due to years of buildup"
         ],
         guarantees: [
           "High-pressure cleaning to remove tough blockages",
@@ -295,12 +334,15 @@ export const ServiceLinks = [
         name: "No Dig and Trenchless",
         href: "/services/drain-and-sewer/trenchless",
         image: noDigAndTrenchless,
-        description: "Repair or replace sewer and drain lines without costly digging using our trenchless technology. Our Seattle team installs durable pipe liners and performs precise repairs underground, preserving landscaping and reducing disruption. Trenchless methods are fast, effective, and extend the lifespan of your plumbing system while minimizing inconvenience.",
+        description: "Repair or replace your sewer lines without the need for costly and destructive digging. Our trenchless technology allows us to reline or burst old pipes from small access points, preserving your landscaping, driveway, and mature trees. These modern 'no-dig' solutions offer the same durability as traditional methods but with significantly less mess and faster completion times for Seattle homeowners.",
         problems: [
-          "A broken sewer line needing replacement",
-          "Damaged or leaking underground pipes",
-          "Avoiding damage to landscaping or hardscapes",
-          "High cost of traditional excavation methods"
+          "You need a sewer fix without ruining landscaping",
+          "A pipe is broken under your driveway or patio",
+          "You want to avoid the mess of yard excavation",
+          "Underground pipes are leaking but hard to reach",
+          "You need to fix a sewer line under mature trees",
+          "You're looking for a fast, non-invasive repair",
+          "You need to reline failing cast iron sewer pipes"
         ],
         guarantees: [
           "Non-invasive trenchless repair solutions",
@@ -313,12 +355,15 @@ export const ServiceLinks = [
         name: "Sewer and Drain Pump",
         href: "/services/drain-and-sewer/pump",
         image: sewerAndDrainPump,
-        description: "Ensure proper wastewater management with our sewer and drain pump services. Our Seattle experts install, repair, and maintain pumps for basements, low-lying areas, and commercial properties. We provide reliable pumping solutions to prevent flooding, backups, and water damage, keeping your property safe and functional.",
+        description: "Ensure proper wastewater management and protect your basement from flooding with our pump installation and repair services. We specialize in sump pumps and sewage ejector systems that keep your home dry and functional, especially in low-lying areas. Our team provides reliable repairs, battery backup installations, and regular maintenance to ensure your pumps are always ready for Seattle’s wettest seasons.",
         problems: [
-          "Basement flooding due to insufficient drainage",
-          "Malfunctioning sump or sewage pumps",
-          "Low-lying areas prone to water accumulation",
-          "Potential property damage from backed-up water"
+          "The sump pump won't turn on and the basement is at risk",
+          "The sewage pump for your basement bathroom is failing",
+          "The pump is making a loud humming or grinding noise",
+          "You need a battery backup for power outages",
+          "Floor drains are flooding during heavy Seattle rain",
+          "The float switch is stuck or the unit is short-cycling",
+          "You want to replace an old pump before it fails"
         ],
         guarantees: [
           "Professional installation and repair of pumps",
@@ -337,12 +382,15 @@ export const ServiceLinks = [
         name: "Tankless Water Heaters",
         href: "/services/water-heaters/tankless",
         image: tanklessWaterHeaters,
-        description: "Upgrade to efficient, on-demand hot water with our tankless water heater installation and repair services. Our Seattle experts provide energy-efficient solutions that deliver continuous hot water, save space, and reduce utility costs. We ensure precise installation and maintenance for long-lasting, reliable performance.",
+        description: "Enjoy endless hot water and improved energy efficiency with a professionally installed tankless water heater. These on-demand systems eliminate the need for a large storage tank, providing hot water only when you need it and saving valuable space in your home. Our team handles everything from new installations and gas line upgrades to annual descaling maintenance, ensuring your system runs perfectly for years to come.",
         problems: [
-          "Inconsistent hot water supply",
-          "High energy bills from traditional water heaters",
-          "Limited space for bulky tank units",
-          "Old water heater needing replacement"
+          "You run out of hot water during back-to-back showers",
+          "The tankless unit has an error code and won't ignite",
+          "You notice 'cold water sandwiches' or odd temperatures",
+          "Energy bills are too high from heating a 50-gallon tank",
+          "You need an annual flush to remove mineral scale",
+          "The unit is making a loud fan or clicking noise",
+          "You want to save space by switching to tankless"
         ],
         guarantees: [
           "Professional tankless water heater installation",
@@ -355,12 +403,15 @@ export const ServiceLinks = [
         name: "Gas Water Heaters",
         href: "/services/water-heaters/gas",
         image: gasWaterHeaters,
-        description: "Our gas water heater services provide fast, reliable hot water for your home. We install, repair, and maintain gas water heaters to ensure safe operation, consistent performance, and energy efficiency. Our Seattle team prioritizes safety and compliance with local codes, delivering long-lasting solutions for your household water needs.",
+        description: "Our gas water heater services provide fast recovery times and dependable hot water for your entire household. We specialize in the repair and installation of both standard and high-efficiency gas units, addressing common issues like pilot light failure, leaking tanks, and sediment buildup. Our licensed technicians prioritize safe venting and gas connection standards to ensure your home remains comfortable and hazard-free.",
         problems: [
-          "Insufficient hot water",
-          "Gas leaks or unsafe operation",
-          "Old, inefficient water heaters",
-          "Frequent breakdowns requiring repair"
+          "The pilot light won't stay lit or won't ignite",
+          "The tank is leaking water and flooding the floor",
+          "You hear popping or rumbling from sediment buildup",
+          "Hot water takes way too long to reach the faucet",
+          "You smell gas or suspect a thermocouple failure",
+          "Hot water looks rusty or has a metallic smell",
+          "The relief valve is constantly dripping or spraying"
         ],
         guarantees: [
           "Safe gas water heater installation and repair",
@@ -373,12 +424,15 @@ export const ServiceLinks = [
         name: "Electric Water Heaters",
         href: "/services/water-heaters/electric",
         image: electricWaterHeaters,
-        description: "Enjoy dependable hot water with our electric water heater installation and repair services. Our Seattle team ensures efficient, safe, and long-lasting electric water heaters, providing energy savings and reliable performance. We handle everything from diagnostics and repair to complete installations, ensuring your water heating needs are met.",
+        description: "Enjoy quiet, dependable hot water with our professional electric water heater services. We handle heating element replacements, thermostat repairs, and complete system upgrades, including modern heat pump hybrid models. Our team ensures your electric water heater is optimized for performance and safety, providing a consistent supply of hot water while helping you manage your home’s energy consumption effectively.",
         problems: [
-          "Inconsistent or insufficient hot water",
-          "Old electric water heater needing replacement",
-          "Frequent breakdowns or leaks",
-          "High electricity usage from inefficient units"
+          "Water is lukewarm or cold even with the power on",
+          "The heater keeps tripping the circuit breaker",
+          "You need to replace a burnt-out heating element",
+          "The tank is old and leaking from the base",
+          "You hear a loud hissing or sizzling from the tank",
+          "You want to upgrade to a high-efficiency heat pump",
+          "Hot water runs out much faster than it used to"
         ],
         guarantees: [
           "Professional electric water heater installation and repair",
@@ -397,12 +451,15 @@ export const ServiceLinks = [
         name: "Furnace Install and Repair",
         href: "/services/heating-and-cooling/furnace",
         image: furnaceInstallAndRepair,
-        description: "Stay warm during Seattle winters with our professional furnace installation and repair services. We service all types of furnaces, ensuring safe, efficient, and reliable heating. Our team provides diagnostics, repairs, and installations with long-lasting performance to keep your home comfortable year-round.",
+        description: "Stay warm and comfortable during Seattle's coldest months with our expert furnace installation and repair services. We work with gas and electric furnaces, providing thorough diagnostics to fix issues like cold airflow, short-cycling, and unusual noises. Our team also specializes in installing high-efficiency heating systems that provide consistent warmth throughout your home while reducing your monthly utility costs.",
         problems: [
-          "Furnace not heating properly",
-          "Frequent breakdowns or inefficiency",
-          "Old or outdated furnace needing replacement",
-          "Strange noises or odors from furnace"
+          "The furnace is blowing cold air or won't turn on",
+          "The system is turning on and off too frequently",
+          "You hear loud screeching, banging, or rattling",
+          "Heating bills have spiked despite normal usage",
+          "The ignitor is clicking but the burners won't light",
+          "The air feels incredibly dry or full of dust",
+          "The thermostat isn't communicating with the unit"
         ],
         guarantees: [
           "Professional furnace installation and repair",
@@ -415,12 +472,15 @@ export const ServiceLinks = [
         name: "Boiler Install and Repair",
         href: "/services/heating-and-cooling/boiler",
         image: boilerInstallAndRepair,
-        description: "Ensure consistent, efficient heating with our boiler installation and repair services. Our Seattle team provides maintenance, repair, and new installations for all boiler systems, ensuring safe operation and optimal performance. We deliver durable solutions that keep your home or business warm and energy-efficient.",
+        description: "Ensure your home’s radiant or hydronic heating system is operating at peak efficiency with our professional boiler services. We specialize in troubleshooting uneven heating, pressure loss, and noisy operation for all types of boiler systems. Whether you need a simple repair or a complete upgrade to a modern, high-efficiency combi-boiler, our technicians deliver precise workmanship for long-lasting comfort and reliability.",
         problems: [
-          "Boiler not heating water effectively",
-          "Leaks or corrosion in boiler system",
-          "Inefficient or outdated boilers",
-          "Frequent maintenance or repair needs"
+          "Radiators are hot in some rooms but cold in others",
+          "The boiler is leaking or losing pressure constantly",
+          "You hear loud whistling or 'kettling' noises",
+          "The boiler is running but the house isn't warming",
+          "You need service for radiant floor heating",
+          "The boiler keeps locking out and needs resetting",
+          "You want to upgrade to a high-efficiency combi-boiler"
         ],
         guarantees: [
           "Expert boiler installation and repair",
@@ -433,12 +493,15 @@ export const ServiceLinks = [
         name: "Air Conditioning",
         href: "/services/heating-and-cooling/ac",
         image: airConditioning,
-        description: "Beat Seattle summers with professional air conditioning installation, repair, and maintenance. Our team ensures efficient cooling, improved air quality, and reliable operation for homes and businesses. We provide expert diagnostics, installations, and repairs to maintain comfort and optimize energy efficiency throughout the year.",
+        description: "Beat the heat during Seattle’s warmer summers with professional air conditioning installation and repair services. We offer central AC solutions, ductless mini-split systems, and detailed diagnostics for units that aren't cooling effectively. Our team focuses on improving your home’s air quality and temperature control, providing energy-efficient systems and expert maintenance to keep your family cool and comfortable all season long.",
         problems: [
-          "AC not cooling effectively",
-          "Frequent breakdowns or leaks",
-          "Old or inefficient air conditioning units",
-          "Poor indoor air quality or inconsistent temperature"
+          "The AC is running but the air isn't cold",
+          "The unit is leaking water inside your home",
+          "The outside condenser unit is covered in ice",
+          "You want to install a ductless mini-split system",
+          "The AC makes a loud buzzing or squealing noise",
+          "Your home has hot and cold spots the AC can't fix",
+          "The system needs a refrigerant recharge or leak fix"
         ],
         guarantees: [
           "Professional AC installation and repair",
