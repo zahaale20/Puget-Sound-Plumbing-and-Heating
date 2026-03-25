@@ -5,12 +5,9 @@ import {
 	FaInstagram,
 	FaYoutube,
 	FaXTwitter,
-	FaIdCard,
 } from "react-icons/fa6";
 
 import logo from "../../assets/pspah-logo.png";
-import easyFinancingAvailable from "../../assets/easy-financing-available.png";
-import lifetimeWarranty from "../../assets/warranty.png";
 import bbbAccreddited from "../../assets/bbb-accredited-business.png";
 import year20Anniversary from "../../assets/year-20-anniversary.png";
 import googleReviews from "../../assets/google-reviews.png";
@@ -95,10 +92,10 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li><a href="/plumbing" className="hover:underline">Plumbing</a></li>
-								<li><a href="/drain-sewer" className="hover:underline">Drain & Sewer</a></li>
-								<li><a href="/water-heaters" className="hover:underline">Water Heaters</a></li>
-								<li><a href="/heating-cooling" className="hover:underline">Heating & Cooling</a></li>
+								<li><a href="/services/plumbing" className="hover:underline">Plumbing</a></li>
+								<li><a href="/services/drain-and-sewer" className="hover:underline">Drain & Sewer</a></li>
+								<li><a href="/services/water-heaters" className="hover:underline">Water Heaters</a></li>
+								<li><a href="/services/heating-and-cooling" className="hover:underline">Heating & Cooling</a></li>
 							</ul>
 						</div>
 
@@ -124,7 +121,7 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li><a href="/about" className="hover:underline">About</a></li>
+								<li><a href="/about-us" className="hover:underline">About Us</a></li>
 								<li><a href="/careers" className="hover:underline">Careers</a></li>
 								<li><a href="/reviews" className="hover:underline">Reviews</a></li>
 								<li><a href="/service-areas" className="hover:underline">Service Areas</a></li>
@@ -139,16 +136,16 @@ export default function Footer() {
 							</h5>
 							<ul className="flex flex-col space-y-2">
 								<li className="flex items-center gap-2">
-									<FaFacebookF /> <a href="#" className="hover:underline">Facebook</a>
+									<FaFacebookF /> <a href="https://www.facebook.com/pugetsoundplumbing/" className="hover:underline">Facebook</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaInstagram /> <a href="#" className="hover:underline">Instagram</a>
+									<FaInstagram /> <a href="https://www.instagram.com/puget_sound_plumbing_heating/" className="hover:underline">Instagram</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaYoutube /> <a href="#" className="hover:underline">YouTube</a>
+									<FaYoutube /> <a href="https://www.youtube.com/user/pugetsoundplumbing" className="hover:underline">YouTube</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaXTwitter /> <a href="#" className="hover:underline">X</a>
+									<FaXTwitter /> <a href="https://x.com/PugetPlumbing" className="hover:underline">X</a>
 								</li>
 							</ul>
 						</div>

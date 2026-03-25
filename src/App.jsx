@@ -27,6 +27,7 @@ import ServicePage from "./components/pages/services/ServicePage";
 
 import FinancingPage from "./components/pages/financing/FinancingPage"
 import WarrantiesPage from "./components/pages/warranties/WarrantiesPage"
+import ReviewsPage from "./components/pages/reviews/ReviewsPage"
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
@@ -57,6 +58,7 @@ function App() {
 					<Route path="/about-us" element={<AboutUsPage />} />
 					<Route path="/financing" element={<FinancingPage />} />
 					<Route path="/warranties" element={<WarrantiesPage />} />
+					<Route path="/reviews" element={<ReviewsPage />} />
 
 					<Route path="/faqs" element={<FAQsPage />} />
 
