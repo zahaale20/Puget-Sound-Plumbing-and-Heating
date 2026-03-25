@@ -49,32 +49,18 @@ export default function Footer() {
 				}}
 			>
 				{/* Content */}
-				<div className="flex flex-col lg:flex-row justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
+				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
 					
 					{/* LEFT COLUMN: Brand + Contact (1/4 space) */}
-					<div className="flex flex-col lg:basis-2/5 gap-8">
+					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
 							<h5 className="relative inline-block py-1 w-fit">
 								Puget Sound Plumbing and Heating
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
-							<p className="relative inline-block w-fit italic">
+							<p className="relative inline-block w-fit">
 								"The sound solution to your plumbing problems."
 							</p>
-							<p className="leading-relaxed">
-								Trusted plumbing solutions for homes and businesses in the Puget Sound. Fully licensed, insured, and satisfaction guaranteed.
-							</p>
-							<li className="flex items-center gap-2">
-								<FaIdCard />
-								<p>#PUGETSP929CF</p>
-							</li>
-						</div>
-
-						<div className="min-w-[180px]">
-							<h5 className="relative inline-block py-2 mb-4 text-lg font-semibold w-fit">
-								Contact Us
-								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-							</h5>
 							<ul className="flex flex-col space-y-2">
 								<li className="flex items-center gap-2">
 									<FaPhone />
@@ -87,16 +73,48 @@ export default function Footer() {
 										<span>Burien, WA 98168</span>
 									</a>
 								</li>
+								<li className="flex items-center gap-2">
+									<FaIdCard />
+									<p>#PUGETSP929CF</p>
+								</li>
 							</ul>
+						</div>
+						<div className="flex flex-col gap-6 justify-center">
+							<div className="space-y-2">
+								<h5 className="relative inline-block py-1 text-xl font-bold uppercase tracking-tight w-fit">
+									Stay Updated
+									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+								</h5>
+								<p className="text-white/90 leading-relaxed">
+									Join our mailing list for seasonal maintenance tips, exclusive promotions, and Puget Sound news.
+								</p>
+							</div>
+
+							<form className="relative flex w-full max-w-md shadow-lg overflow-hidden">
+								<input
+									type="email"
+									placeholder="Email Address"
+									className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
+								/>
+								<button 
+									onClick={() => navigate("/schedule-online")} 
+									className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300"
+								>
+									Join Now
+								</button>
+							</form>
+							<p className="text-[10px] text-white/70 uppercase tracking-widest">
+								* We respect your privacy and never spam.
+							</p>
 						</div>
 					</div>
 
-					{/* RIGHT COLUMN: Nav Links + Socials (3/4 space) */}
-					<div className="lg:basis-3/5 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 gap-8 lg:gap-12">
+					{/* RIGHT COLUMN */}
+					<div className=" grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
 						{/* Services */}
 						<div>
 							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
-								Services
+								Our Services
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
@@ -110,7 +128,7 @@ export default function Footer() {
 						{/* Resources */}
 						<div>
 							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
-								Resources
+								Resources For You
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
@@ -125,7 +143,7 @@ export default function Footer() {
 						{/* Company */}
 						<div>
 							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
-								Company
+								Our Company
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
@@ -139,7 +157,7 @@ export default function Footer() {
 						{/* Socials */}
 						<div>
 							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
-								Connect
+								Connect With Us
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="flex flex-col space-y-2">
