@@ -415,8 +415,8 @@ async def submit_job_application(
                     cur.execute(
                         """
                         INSERT INTO "Job Applications"
-                            (first_name, last_name, email, phone, position, experience, message, additional_info)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            (first_name, last_name, email, phone, position)
+                        VALUES (%s, %s, %s, %s, %s)
                         """,
                         (
                             normalized_first_name,
@@ -424,9 +424,6 @@ async def submit_job_application(
                             normalized_email,
                             normalized_phone,
                             normalized_position,
-                            normalized_experience,
-                            normalized_message,
-                            normalized_additional_info,
                         ),
                     )
                 except Exception as insert_error:
@@ -453,6 +450,7 @@ async def submit_job_application(
             _send_job_application_email(
                 normalized_email,
                 normalized_first_name,
+                normalized_last_name,
                 normalized_position,
                 resume_bytes,
                 resume_filename,
@@ -1186,6 +1184,7 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
 def _send_job_application_email(
     email: str,
     firstName: str,
+    lastName: str,
     position: str,
     resume_bytes: bytes | None = None,
     resume_filename: str | None = None,
@@ -1322,7 +1321,7 @@ def _send_job_application_email(
         company_email_payload = {
             "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
             "to": COMPANY_EMAIL,
-            "subject": f"New Job Application: {position} — {firstName}",
+            "subject": f"New Job Application: {position} — {firstName} {lastName}",
             "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1359,7 +1358,7 @@ def _send_job_application_email(
                                 <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
                                     <table cellpadding="0" cellspacing="0" width="100%"><tr>
                                     <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Name:</td>
-                                    <td style="font-size:14px;color:#2B2B2B;">{firstName}</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{firstName} {lastName}</td>
                                     </tr></table>
                                 </td>
                                 </tr>
