@@ -3,7 +3,7 @@ import base64
 import logging
 import hashlib
 import hmac
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response
 from typing import Optional
 from urllib.parse import quote
 from pydantic import BaseModel
@@ -189,7 +189,7 @@ async def subscribe_newsletter(request: NewsletterRequest):
 
 @router.get("/newsletter/unsubscribe")
 async def unsubscribe_newsletter(email: str, token: str):
-    """One-click unsubscribe endpoint that removes user from mailing list"""
+    """One-click unsubscribe endpoint that removes user from mailing list."""
     normalized_email = _normalize_email(email)
     expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
 
@@ -207,9 +207,15 @@ async def unsubscribe_newsletter(email: str, token: str):
             conn.commit()
 
         if deleted > 0:
-            return {"success": True, "message": "You have been unsubscribed."}
+            try:
+                _send_newsletter_unsubscribe_confirmation_email(normalized_email)
+            except HTTPException as email_error:
+                logger.exception(
+                    "Unsubscribed from newsletter but confirmation email failed: %s",
+                    email_error.detail,
+                )
 
-        return {"success": True, "message": "You are already unsubscribed."}
+        return Response(status_code=204)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -432,7 +438,7 @@ def _send_followup_email(email: str, firstName: str):
                         <tr>
                             <td style="padding:0 40px 44px;text-align:center;">
                             <a
-                                href="tel:206-938-3219"
+                                href="tel:+12069383219"
                                 style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>
@@ -553,7 +559,7 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
                         <tr>
                             <td style="padding:0 40px 16px;text-align:center;">
                             <a
-                                href="tel:206-938-3219"
+                                href="tel:+12069383219"
                                 style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>
@@ -591,6 +597,92 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
         raise HTTPException(
             status_code=500,
             detail=f"Newsletter confirmation email failed for sender '{EMAIL_FROM}': {str(e)}",
+        )
+
+
+def _send_newsletter_unsubscribe_confirmation_email(email: str):
+    """Internal helper – send confirmation after newsletter unsubscribe."""
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": email,
+                "subject": "You've Been Unsubscribed — Puget Sound Plumbing and Heating",
+                "html": """<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <tr>
+                            <td style="padding:36px 40px 20px;">
+                            <h1 style="margin:0 0 12px;font-size:21px;font-weight:700;color:#0C2D70;">You're Unsubscribed</h1>
+                            <p style="margin:0;font-size:15px;line-height:1.75;color:#555555;">
+                                Your email address has been removed from our mailing list and you will no longer receive newsletter messages.
+                            </p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:0 40px 32px;">
+                            <p style="margin:0;font-size:14px;line-height:1.75;color:#555555;">
+                                Need immediate plumbing help? We're available
+                                <strong style="color:#2B2B2B;">24 hours a day, 7 days a week</strong>.<br/>
+                                <span style="font-size:13px;color:#888888;">11803 Des Moines Memorial Dr S, Burien, WA 98168</span>
+                            </p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:0 40px 44px;text-align:center;">
+                            <a
+                                href="tel:+12069383219"
+                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
+                            >CALL (206) 938-3219</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0 0 10px;font-size:11px;color:#aaaaaa;">Licensed &amp; Insured &nbsp;&middot;&nbsp; Serving Greater Seattle Since 1984</p>
+                            <p style="margin:0;font-size:11px;color:#bbbbbb;line-height:1.6;">
+                                This automated email confirms your newsletter unsubscribe request.
+                            </p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
+            }
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Newsletter unsubscribe confirmation email failed for sender '{EMAIL_FROM}': {str(e)}",
         )
 
 
@@ -673,7 +765,7 @@ def _send_coupon_email(email: str, firstName: str, couponDiscount: str, couponCo
                                 <strong style="color:#2B2B2B;">24 hours a day, 7 days a week</strong>.
                             </p>
                             <a
-                                href="tel:206-938-3219"
+                                href="tel:+12069383219"
                                 style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>
@@ -802,7 +894,7 @@ def _send_diy_permit_email(email: str, firstName: str, address: str):
                         <tr>
                             <td style="padding:0 40px 44px;text-align:center;">
                             <a
-                                href="tel:206-938-3219"
+                                href="tel:+12069383219"
                                 style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>
@@ -937,7 +1029,7 @@ def _send_job_application_email(
                         <tr>
                             <td style="padding:0 40px 44px;text-align:center;">
                             <a
-                                href="tel:206-938-3219"
+                                href="tel:+12069383219"
                                 style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>

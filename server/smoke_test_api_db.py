@@ -146,7 +146,7 @@ def main():
                 "token": unsubscribe_token,
             },
         )
-        assert r.status_code == 200, f"/api/newsletter/unsubscribe failed: {r.status_code} {r.text}"
+        assert r.status_code == 204, f"/api/newsletter/unsubscribe failed: {r.status_code} {r.text}"
 
         with conn.cursor() as cur:
             cur.execute('SELECT COUNT(*) FROM "Newsletter" WHERE email=%s', (newsletter_email,))
