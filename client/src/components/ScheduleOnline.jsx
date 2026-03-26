@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { submitSchedule } from "../api/emailService";
+import FormResponseMessage from "./FormResponseMessage";
 
 export default function ScheduleOnline() {
 	const [formData, setFormData] = useState({
@@ -148,18 +149,13 @@ export default function ScheduleOnline() {
 					</div>
 
 					{/* Error Message */}
-					{error && (
-						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-							{error}
-						</div>
-					)}
+					<FormResponseMessage type="error" message={error} />
 
 					{/* Success Message */}
-					{success && (
-						<div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-							Thank you! We'll be in touch soon.
-						</div>
-					)}
+					<FormResponseMessage
+						type="success"
+						message={success ? "Thank you! We'll be in touch soon." : null}
+					/>
 
 					{/* Submit Button */}
 					<div className="flex justify-center mt-4">

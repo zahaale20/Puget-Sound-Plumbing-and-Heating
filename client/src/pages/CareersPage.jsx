@@ -3,6 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
 import { submitJobApplication } from "../api/emailService";
+import FormResponseMessage from "../components/FormResponseMessage";
 
 export default function CareersPage() {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,10 +34,11 @@ export default function CareersPage() {
 		try {
 			await submitJobApplication(formData, resumeFile);
 			setSubmitSuccess(true);
+			setTimeout(() => setSubmitSuccess(false), 5000);
 			setFormData({ firstName: "", lastName: "", phone: "", email: "", position: "", experience: "", message: "", additionalInfo: "" });
 			setResumeFile(null);
 		} catch (err) {
-			setSubmitError(err.message || "Something went wrong. Please try again.");
+			setSubmitError(err.message || "An error occurred. Please try again.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -274,14 +276,18 @@ export default function CareersPage() {
 
 						<div className="flex justify-center mt-4">
 							{submitSuccess ? (
-								<div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-center">
-									Application submitted! We'll review it and be in touch.
-								</div>
+								<FormResponseMessage
+									type="success"
+									message="Thank you! We'll be in touch soon."
+									className="w-full text-center"
+								/>
 							) : (
 								<>
-									{submitError && (
-										<p className="text-[#B32020] text-sm mb-2 w-full text-center">{submitError}</p>
-									)}
+									<FormResponseMessage
+										type="error"
+										message={submitError}
+										className="w-full text-center mb-2"
+									/>
 									<button
 										type="submit"
 										disabled={isSubmitting}

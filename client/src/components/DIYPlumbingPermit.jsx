@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { submitDiyPermit } from "../api/emailService";
+import FormResponseMessage from "./FormResponseMessage";
 
 export default function DIYPlumbingPermit() {
 	const [formData, setFormData] = useState({
@@ -27,6 +28,7 @@ export default function DIYPlumbingPermit() {
 		try {
 			await submitDiyPermit(formData);
 			setSubmitSuccess(true);
+			setTimeout(() => setSubmitSuccess(false), 5000);
 			setFormData({
 				firstName: "",
 				lastName: "",
@@ -38,7 +40,7 @@ export default function DIYPlumbingPermit() {
 				inspection: "unsure",
 			});
 		} catch (err) {
-			setSubmitError(err.message || "Something went wrong. Please try again.");
+			setSubmitError(err.message || "An error occurred. Please try again.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -155,14 +157,18 @@ export default function DIYPlumbingPermit() {
 				{/* Submit */}
 				<div className="flex justify-center mt-4">
 					{submitSuccess ? (
-						<div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-center">
-							Your permit request has been submitted! We'll be in touch shortly.
-						</div>
+						<FormResponseMessage
+							type="success"
+							message="Thank you! We'll be in touch soon."
+							className="w-full text-center"
+						/>
 					) : (
 						<>
-							{submitError && (
-								<p className="text-[#B32020] text-sm mb-2 w-full text-center">{submitError}</p>
-							)}
+							<FormResponseMessage
+								type="error"
+								message={submitError}
+								className="w-full text-center mb-2"
+							/>
 							<button
 								type="submit"
 								disabled={isSubmitting}

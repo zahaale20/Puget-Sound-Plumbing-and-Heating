@@ -1,8 +1,11 @@
 import os
 import base64
 import logging
+import hashlib
+import hmac
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from typing import Optional
+from urllib.parse import quote
 from pydantic import BaseModel
 import resend
 from database import get_db_connection
@@ -11,6 +14,12 @@ router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
 logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
+NEWSLETTER_UNSUBSCRIBE_SECRET = (
+    os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
+    or os.getenv("RESEND_API_KEY")
+    or os.getenv("SUPABASE_PASSWORD")
+    or "pspah-newsletter-unsubscribe-secret"
+)
 
 
 class EmailRequest(BaseModel):
@@ -48,6 +57,45 @@ class DiyPermitRequest(BaseModel):
     city: str = ""
     projectDescription: str = ""
     inspection: str = "unsure"
+
+
+def _normalize_email(email: str) -> str:
+    return email.strip().lower()
+
+
+def _generate_newsletter_unsubscribe_token(email: str) -> str:
+    normalized_email = _normalize_email(email)
+    return hmac.new(
+        NEWSLETTER_UNSUBSCRIBE_SECRET.encode("utf-8"),
+        normalized_email.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
+
+
+def _build_newsletter_unsubscribe_url(email: str) -> str:
+    base_url = (
+        os.getenv("NEWSLETTER_UNSUBSCRIBE_BASE_URL")
+        or os.getenv("PUBLIC_API_BASE_URL")
+        or os.getenv("BACKEND_BASE_URL")
+    )
+
+    if base_url:
+        normalized_base = base_url.rstrip("/")
+    else:
+        vercel_url = os.getenv("VERCEL_URL")
+        if vercel_url:
+            normalized_base = (
+                vercel_url.rstrip("/") if vercel_url.startswith("http") else f"https://{vercel_url.rstrip('/')}"
+            )
+        else:
+            normalized_base = "http://localhost:8001"
+
+    normalized_email = _normalize_email(email)
+    token = _generate_newsletter_unsubscribe_token(normalized_email)
+    return (
+        f"{normalized_base}/api/newsletter/unsubscribe"
+        f"?email={quote(normalized_email)}&token={quote(token)}"
+    )
 
 
 @router.post("/send-email")
@@ -99,19 +147,70 @@ async def schedule_online(request: ScheduleRequest):
 
 @router.post("/newsletter")
 async def subscribe_newsletter(request: NewsletterRequest):
-    """Save newsletter subscription email to DB"""
+    """Save newsletter subscription email to DB and send confirmation email"""
+    email = _normalize_email(request.email)
+    duplicate = False
+
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                try:
+                    cur.execute(
+                        'INSERT INTO "Newsletter" (email) VALUES (%s)',
+                        (email,),
+                    )
+                except Exception as insert_error:
+                    if "unique" in str(insert_error).lower() or "duplicate" in str(insert_error).lower():
+                        duplicate = True
+                        conn.rollback()
+                    else:
+                        raise
+
+            conn.commit()
+
+        unsubscribe_url = _build_newsletter_unsubscribe_url(email)
+        try:
+            _send_newsletter_confirmation_email(email, unsubscribe_url)
+            return {
+                "success": True,
+                "emailStatus": "sent",
+                **({"message": "Already subscribed"} if duplicate else {}),
+            }
+        except HTTPException as email_error:
+            logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
+            return {
+                "success": True,
+                "emailStatus": "failed",
+                "message": "Already subscribed" if duplicate else "Subscription saved, but confirmation email could not be sent.",
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/newsletter/unsubscribe")
+async def unsubscribe_newsletter(email: str, token: str):
+    """One-click unsubscribe endpoint that removes user from mailing list"""
+    normalized_email = _normalize_email(email)
+    expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
+
+    if not hmac.compare_digest(token.strip(), expected_token):
+        raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
+
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
-                    'INSERT INTO "Newsletter" (email) VALUES (%s)',
-                    (request.email,),
+                    'DELETE FROM "Newsletter" WHERE lower(email)=lower(%s)',
+                    (normalized_email,),
                 )
+                deleted = cur.rowcount
             conn.commit()
-        return {"success": True}
+
+        if deleted > 0:
+            return {"success": True, "message": "You have been unsubscribed."}
+
+        return {"success": True, "message": "You are already unsubscribed."}
     except Exception as e:
-        if "unique" in str(e).lower() or "duplicate" in str(e).lower():
-            return {"success": True, "message": "Already subscribed"}
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -363,6 +462,135 @@ def _send_followup_email(email: str, firstName: str):
         raise HTTPException(
             status_code=500,
             detail=f"Email send failed for sender '{EMAIL_FROM}': {str(e)}",
+        )
+
+
+def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
+    """Internal helper – send the newsletter confirmation email with unsubscribe button."""
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": email,
+                "subject": "You're Subscribed — Puget Sound Plumbing and Heating",
+                "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <tr>
+                            <td style="padding:36px 40px 20px;">
+                            <h1 style="margin:0 0 12px;font-size:21px;font-weight:700;color:#0C2D70;">Thank You for Subscribing!</h1>
+                            <p style="margin:0;font-size:15px;line-height:1.75;color:#555555;">
+                                You're officially on the Puget Sound Plumbing and Heating mailing list.
+                                We'll send seasonal maintenance tips, occasional promotions, and company updates.
+                            </p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:4px 40px 28px;">
+                            <p style="margin:0 0 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#999999;">What Happens Next</p>
+                            <table cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">1.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">You'll receive useful plumbing and heating tips for the Puget Sound area.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">2.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">You'll get access to occasional limited-time promotions and offers.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">3.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">You can unsubscribe anytime using the button below.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:0 40px 32px;">
+                            <p style="margin:0;font-size:14px;line-height:1.75;color:#555555;">
+                                Need immediate plumbing help? We're available
+                                <strong style="color:#2B2B2B;">24 hours a day, 7 days a week</strong>.<br/>
+                                <span style="font-size:13px;color:#888888;">11803 Des Moines Memorial Dr S, Burien, WA 98168</span>
+                            </p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:0 40px 16px;text-align:center;">
+                            <a
+                                href="tel:206-938-3219"
+                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
+                            >CALL (206) 938-3219</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding:0 40px 44px;text-align:center;">
+                            <a
+                                href="{unsubscribe_url}"
+                                style="display:inline-block;background-color:#ffffff;color:#0C2D70;font-size:12px;font-weight:700;text-decoration:none;padding:10px 24px;border-radius:3px;border:1px solid #0C2D70;letter-spacing:0.05em;"
+                            >UNSUBSCRIBE</a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0 0 10px;font-size:11px;color:#aaaaaa;">Licensed &amp; Insured &nbsp;&middot;&nbsp; Serving Greater Seattle Since 1984</p>
+                            <p style="margin:0;font-size:11px;color:#bbbbbb;line-height:1.6;">
+                                This automated email was sent because you joined our mailing list on our website.<br/>
+                                Please do not reply — call us at (206) 938-3219 for immediate help.
+                            </p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
+            }
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Newsletter confirmation email failed for sender '{EMAIL_FROM}': {str(e)}",
         )
 
 

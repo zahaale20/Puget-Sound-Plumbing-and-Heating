@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { getCloudFrontUrl } from "../api/imageService";
 import { ImageWithLoader } from "./LoadingComponents";
 import { subscribeNewsletter } from "../api/emailService";
+import FormResponseMessage from "./FormResponseMessage";
 
 export default function Footer() {
 	const navigate = useNavigate();
@@ -69,19 +70,24 @@ export default function Footer() {
 			</div>
 
 			{/* Main Footer */}
+						setTimeout(() => setNewsletterSuccess(false), 5000);
 			<div
-				className="relative flex flex-col items-center w-full py-16"
+						setNewsletterError(err.message || "An error occurred. Please try again.");
 				style={{
 					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
 					backgroundColor: "#0C2D70",
 					backgroundRepeat: "no-repeat",
 					backgroundPosition: "center",
-					backgroundSize: "cover",
+						<div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+							Thank you! We'll be in touch soon.
+						</div>
 				}}
 			>
 				{/* Content */}
 				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
-					{/* LEFT COLUMN: Brand + Contact (1/4 space) */}
+						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-3">
+							{newsletterError}
+						</div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
 							<h5 className="relative inline-block py-1 w-fit">
@@ -127,7 +133,11 @@ export default function Footer() {
 							</div>
 
 							{newsletterSuccess ? (
-								<p className="text-white font-semibold text-sm mb-4">✓ You&apos;re subscribed! Welcome aboard.</p>
+								<FormResponseMessage
+									type="success"
+									message="Thank you! We'll be in touch soon."
+									className="mb-4"
+								/>
 							) : (
 								<>
 									<form
@@ -139,8 +149,9 @@ export default function Footer() {
 												await subscribeNewsletter(newsletterEmail);
 												setNewsletterSuccess(true);
 												setNewsletterEmail("");
+												setTimeout(() => setNewsletterSuccess(false), 5000);
 											} catch (err) {
-												setNewsletterError(err.message || "Something went wrong.");
+												setNewsletterError(err.message || "An error occurred. Please try again.");
 											} finally {
 												setNewsletterSubmitting(false);
 											}
@@ -163,9 +174,7 @@ export default function Footer() {
 											{newsletterSubmitting ? "..." : "Join Now"}
 										</button>
 									</form>
-									{newsletterError && (
-										<p className="text-red-300 text-xs mb-3">{newsletterError}</p>
-									)}
+									<FormResponseMessage type="error" message={newsletterError} className="mb-3" />
 								</>
 							)}
 							<p className="text-[10px] text-white/70 uppercase tracking-widest">

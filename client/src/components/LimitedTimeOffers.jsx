@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 import { redeemOffer } from "../api/emailService";
+import FormResponseMessage from "./FormResponseMessage";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [
@@ -143,33 +144,35 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 							</div>
 
 							{/* Form */}
-							{submitSuccess ? (
-								<div className="text-center py-8">
-									<p className="text-[#0C2D70] font-semibold text-lg">Coupon sent to your email!</p>
-									<p className="text-[#2B2B2B] mt-2 text-sm">Check your inbox for your coupon details.</p>
-								</div>
-							) : (
-								<form
-									onSubmit={async (e) => {
-										e.preventDefault();
-										setIsSubmitting(true);
-										setSubmitError(null);
-										try {
-											await redeemOffer({
-												...formData,
-												couponDiscount: selectedCoupon.discount,
-												couponCondition: selectedCoupon.condition,
-											});
-											setSubmitSuccess(true);
-											setIsSubmitting(false);
-											setTimeout(() => closeModal(), 2500);
-										} catch (err) {
-											setSubmitError(err.message || "Something went wrong. Please try again.");
-											setIsSubmitting(false);
-										}
-									}}
-									className="flex flex-col gap-4 text-left"
-								>
+							<form
+								onSubmit={async (e) => {
+									e.preventDefault();
+									setIsSubmitting(true);
+									setSubmitError(null);
+									setSubmitSuccess(false);
+									try {
+										await redeemOffer({
+											...formData,
+											couponDiscount: selectedCoupon.discount,
+											couponCondition: selectedCoupon.condition,
+										});
+										setSubmitSuccess(true);
+										setTimeout(() => setSubmitSuccess(false), 5000);
+									} catch (err) {
+										setSubmitError(err.message || "An error occurred. Please try again.");
+									} finally {
+										setIsSubmitting(false);
+									}
+								}}
+								className="flex flex-col gap-4 text-left"
+							>
+								<FormResponseMessage type="error" message={submitError} />
+
+								<FormResponseMessage
+									type="success"
+									message={submitSuccess ? "Thank you! We'll be in touch soon." : null}
+								/>
+
 									{/* First + Last Name */}
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 										<div>
@@ -226,20 +229,15 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 										/>
 									</div>
 
-									{submitError && (
-										<p className="text-[#B32020] text-sm">{submitError}</p>
-									)}
-
 									{/* Submit */}
 									<button
 										type="submit"
-										disabled={isSubmitting}
+										disabled={isSubmitting || submitSuccess}
 										className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
 									>
-										{isSubmitting ? "Sending..." : "Email Offer"}
+										{isSubmitting ? "Submitting..." : "Submit Request"}
 									</button>
 								</form>
-							)}
 						</div>
 					</div>,
 					document.body

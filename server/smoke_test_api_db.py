@@ -1,5 +1,7 @@
 import os
 import time
+import hashlib
+import hmac
 import psycopg2
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
@@ -14,6 +16,25 @@ def get_conn():
         port=os.getenv("SUPABASE_PORT"),
         dbname=os.getenv("SUPABASE_DBNAME"),
     )
+
+
+def normalize_email(email: str) -> str:
+    return email.strip().lower()
+
+
+def build_unsubscribe_token(email: str) -> str:
+    secret = (
+        os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
+        or os.getenv("RESEND_API_KEY")
+        or os.getenv("SUPABASE_PASSWORD")
+        or "pspah-newsletter-unsubscribe-secret"
+    )
+    normalized_email = normalize_email(email)
+    return hmac.new(
+        secret.encode("utf-8"),
+        normalized_email.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
 
 
 def main():
@@ -45,6 +66,11 @@ def main():
 
         r = client.post("/api/newsletter", json={"email": newsletter_email})
         assert r.status_code == 200, f"/api/newsletter failed: {r.status_code} {r.text}"
+        assert r.json().get("success") is True, f"/api/newsletter unexpected payload: {r.text}"
+
+        r = client.post("/api/newsletter", json={"email": newsletter_email})
+        assert r.status_code == 200, f"/api/newsletter duplicate failed: {r.status_code} {r.text}"
+        assert r.json().get("success") is True, f"/api/newsletter duplicate payload unexpected: {r.text}"
 
         r = client.post(
             "/api/redeem-offer",
@@ -112,10 +138,28 @@ def main():
         assert diy_count == 1, f"Expected 1 DIY row, got {diy_count}"
         assert job_count == 1, f"Expected 1 job row, got {job_count}"
 
+        unsubscribe_token = build_unsubscribe_token(newsletter_email)
+        r = client.get(
+            "/api/newsletter/unsubscribe",
+            params={
+                "email": newsletter_email,
+                "token": unsubscribe_token,
+            },
+        )
+        assert r.status_code == 200, f"/api/newsletter/unsubscribe failed: {r.status_code} {r.text}"
+
+        with conn.cursor() as cur:
+            cur.execute('SELECT COUNT(*) FROM "Newsletter" WHERE email=%s', (newsletter_email,))
+            newsletter_count_after_unsubscribe = cur.fetchone()[0]
+        assert newsletter_count_after_unsubscribe == 0, (
+            f"Expected 0 newsletter rows after unsubscribe, got {newsletter_count_after_unsubscribe}"
+        )
+
         print("API smoke tests: PASS")
         print("DB verification: PASS", {
             "schedule": schedule_count,
             "newsletter": newsletter_count,
+            "newsletter_after_unsubscribe": newsletter_count_after_unsubscribe,
             "redeemed": redeemed_count,
             "diy": diy_count,
             "job": job_count,
