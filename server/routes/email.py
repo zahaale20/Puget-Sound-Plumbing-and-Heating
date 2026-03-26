@@ -93,7 +93,7 @@ def _send_followup_email(email: str, firstName: str):
 
                         <!-- Header / Logo -->
                         <tr>
-                            <td style="background-color:#0C2D70;padding:28px 40px;text-align:center;">
+                            <td style="background-color:#ffffff;padding:28px 40px;text-align:center;border-bottom:1px solid #e8e8e8;">
                             <img
                                 src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
@@ -103,8 +103,9 @@ def _send_followup_email(email: str, firstName: str):
                             </td>
                         </tr>
 
-                        <!-- Red accent bar -->
-                        <tr><td style="background-color:#B32020;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
+                        <!-- Navy + red accent bar -->
+                        <tr><td style="background-color:#0C2D70;height:6px;font-size:0;line-height:0;">&nbsp;</td></tr>
+                        <tr><td style="background-color:#B32020;height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
                         <!-- Greeting -->
                         <tr>
@@ -155,12 +156,6 @@ def _send_followup_email(email: str, firstName: str):
                             <table cellpadding="0" cellspacing="0">
                                 <tr>
                                 <td style="padding:7px 0;font-size:14px;color:#444444;">
-                                    <strong style="color:#0C2D70;">Phone:</strong>&nbsp;
-                                    <a href="tel:206-938-3219" style="color:#B32020;text-decoration:none;font-weight:bold;">(206) 938-3219</a>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td style="padding:7px 0;font-size:14px;color:#444444;">
                                     <strong style="color:#0C2D70;">Address:</strong>&nbsp;11803 Des Moines Memorial Dr S, Burien, WA 98168
                                 </td>
                                 </tr>
@@ -177,9 +172,9 @@ def _send_followup_email(email: str, firstName: str):
                         <tr>
                             <td style="padding:0 40px 40px;text-align:center;">
                             <a
-                                href="https://pugetsoundplumbing.com/schedule-online"
-                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:2px;letter-spacing:0.04em;"
-                            >VIEW YOUR REQUEST</a>
+                                href="tel:206-938-3219"
+                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:2px;letter-spacing:0.04em;"
+                            >CALL (206) 938-3219</a>
                             </td>
                         </tr>
 
