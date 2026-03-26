@@ -243,7 +243,16 @@ export default function ServicePage() {
 
 			{/* 6. Schedule Online (Skyline Background) */}
 			<section className="relative overflow-hidden flex justify-center w-full py-24">
-				<ScheduleOnline />
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					loading="lazy"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
+				<div className="relative z-10 w-full flex justify-center">
+					<ScheduleOnline />
+				</div>
 			</section>
 		</div>
 	);
