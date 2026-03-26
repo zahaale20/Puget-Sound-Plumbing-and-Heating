@@ -1,14 +1,19 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
-
 import ScheduleOnline from "../components/ScheduleOnline";
-
-import pattern from "../assets/pattern1.png";
-import skyline from "../assets/seattle-skyline.png";
-
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
+import { getSignedUrl } from "../api/imageService";
 
 export default function AreaPage() {
+	const [patternUrl, setPatternUrl] = useState(null);
+	const [skylineUrl, setSkylineUrl] = useState(null);
+
+	useEffect(() => {
+		getSignedUrl("private/pattern1.png").then(setPatternUrl);
+		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+	}, []);
+
 	const { regionSlug, areaSlug } = useParams();
 
 	const region = ServiceAreaLinks.find(
@@ -31,7 +36,7 @@ export default function AreaPage() {
 			{/* Header Section*/}
 			<section
 				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: `url(${pattern})` }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
 			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
@@ -84,7 +89,10 @@ export default function AreaPage() {
 			</section>
 
 			{/* Why Choose Us Section*/}
-			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
+			<section
+				className="flex justify-center w-full py-16 bg-cover bg-bottom"
+				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{/* Title */}
 					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
@@ -120,10 +128,7 @@ export default function AreaPage() {
 			</section>
 
 			{/* Schedule Online Section */}
-			<section
-				className="flex justify-center w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: `url(${skyline})` }}
-			>
+			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
 				<ScheduleOnline />
 			</section>
 

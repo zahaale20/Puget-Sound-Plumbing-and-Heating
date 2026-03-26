@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FaTag, FaCut } from "react-icons/fa";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
@@ -12,14 +12,14 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 	const [selectedCoupon, setSelectedCoupon] = useState(null);
 
-	let scrollY = 0;
+	const scrollY = useRef(0);
 
 	const openModal = (coupon) => {
 		setSelectedCoupon(coupon);
-		scrollY = window.scrollY || window.pageYOffset;
+		scrollY.current = window.scrollY || window.pageYOffset;
 		document.documentElement.style.scrollBehavior = "auto";
 		document.body.style.position = "fixed";
-		document.body.style.top = `-${scrollY}px`;
+		document.body.style.top = `-${scrollY.current}px`;
 		document.body.style.left = "0";
 		document.body.style.right = "0";
 		document.body.style.overflow = "hidden";
@@ -32,7 +32,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 		document.body.style.left = "";
 		document.body.style.right = "";
 		document.body.style.overflow = "";
-		window.scrollTo(0, scrollY || 0);
+		window.scrollTo(0, scrollY.current || 0);
 
 		setIsPopUpOpen(false);
 		setSelectedCoupon(null);

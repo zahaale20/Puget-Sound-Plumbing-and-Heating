@@ -1,41 +1,40 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
-
 import { posts } from "../data/data";
+import { getSignedUrl } from "../api/imageService";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
+	const [imageUrls, setImageUrls] = useState({});
+
+	const recentPosts = posts.slice(0, 3);
+
+	useEffect(() => {
+		const uniqueKeys = [...new Set(recentPosts.map((p) => p.imageKey))];
+		const loadImages = async () => {
+			const entries = await Promise.all(
+				uniqueKeys.map((key) => getSignedUrl(key).then((url) => [key, url]))
+			);
+			setImageUrls(Object.fromEntries(entries));
+		};
+		loadImages();
+	}, []);
 
 	const truncateText = (text, maxLength) => {
 		if (text.length <= maxLength) return text;
-
 		const sliced = text.slice(0, maxLength);
-
-		// If it ends with a period, add only two
-		if (sliced.endsWith(".")) {
-			return sliced + "..";
-		}
-
-		// Otherwise add the full three dots
-		return sliced + "...";
-	};
-
-	const handleReadPost = (postLink) => {
-		navigate(postLink);
+		return sliced.endsWith(".") ? sliced + ".." : sliced + "...";
 	};
 
 	return (
 		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6">
 			{/* Header Container */}
 			<div className="space-y-6">
-				{/* Title */}
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
 					Recent Blog Posts
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 				</h4>
-				
-				{/* Description */}
 				<p className="text-[#2B2B2B]">
 					Read the latest tips, how-tos, and the insights in the plumbing world.
 				</p>
@@ -43,42 +42,33 @@ export default function RecentBlogPosts() {
 
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{posts.slice(0, 3).map((post) => (
-					// Blog Post Container
-					<div
-						key={post.id}
-						className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]"
-					>
+				{recentPosts.map((post) => (
+					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 						{/* Image */}
-						<img
-							src={post.image}
-							alt={post.title}
-							className="w-full h-48 object-cover"
-						/>
+						{imageUrls[post.imageKey] ? (
+							<img
+								src={imageUrls[post.imageKey]}
+								alt={post.title}
+								className="w-full h-48 object-cover"
+							/>
+						) : (
+							<div className="w-full h-48 bg-gray-200 animate-pulse" />
+						)}
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
-							{/* Date Posted */}
 							<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
 								<FaRegCalendarAlt /> <span>{post.date}</span>
 							</div>
-
-							{/* Post Title */}
-							<h5 className="text-[#0C2D70] mb-2">
-								{post.title}
-							</h5>
-
-							{/* Truncated Text */}
+							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 							<span className="text-[#2B2B2B] flex-1 mb-6">
 								{truncateText(post.description, 152)}..
 							</span>
-
-							{/* Continue Reading Link */}
 							<button
-								onClick={() => handleReadPost(post.link)}
+								onClick={() => navigate(post.link)}
 								className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors cursor-pointer"
 							>
-								Continue Reading <FaArrowRight/>
+								Continue Reading <FaArrowRight />
 							</button>
 						</div>
 					</div>
@@ -88,7 +78,7 @@ export default function RecentBlogPosts() {
 			{/* View All Posts Link */}
 			<div className="flex justify-end">
 				<a href="/blog" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
-					View All Posts <FaArrowRight/>
+					View All Posts <FaArrowRight />
 				</a>
 			</div>
 		</div>

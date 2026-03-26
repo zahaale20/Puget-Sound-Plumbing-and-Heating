@@ -1,7 +1,5 @@
 import { FaStar, FaArrowRight } from "react-icons/fa";
 
-import skyline from "../assets/seattle-skyline.png";
-
 export default function CustomerReviews() {
 	const reviews = [
 		{

@@ -8,32 +8,35 @@ import {
 	FaXTwitter,
 } from "react-icons/fa6";
 
-import logo from "../assets/pspah-logo.png";
-import bbbAccreddited from "../assets/bbb-accredited-business.png";
-import year20Anniversary from "../assets/year-20-anniversary.png";
-import googleReviews from "../assets/google-reviews.png";
-import pattern from "../assets/pattern1.png";
-
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+import { getSignedUrl } from "../api/imageService";
+
+import S3Image from "./S3Image";
 
 export default function Footer() {
 	const navigate = useNavigate();
+    const [patternUrl, setPatternUrl] = useState(null);
+
+	useEffect(() => {
+        getSignedUrl("private/pattern1.png").then(setPatternUrl);
+    }, []);
 
 	return (
 		<footer className="w-full items-center justify-center">
 			<div className="w-full bg-white flex justify-center">
 				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
-					
 					{/* Logo */}
 					<button onClick={() => navigate("/")} className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
-						<img src={logo} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
+						<img src="https://pspah-bucket.s3.us-west-2.amazonaws.com/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
 					</button>
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
-						<img src={googleReviews} alt="Google Reviews" className="h-[55px] object-contain" />
-						<img src={bbbAccreddited} alt="BBB Accredited Business" className="h-[55px] object-contain" />
-						<img src={year20Anniversary} alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" />
+						<S3Image imageKey="private/google-reviews.png" alt="Google Reviews" className="h-[55px] object-contain" />
+						<S3Image imageKey="private/bbb-accredited-business.png" alt="BBB Accredited Business" className="h-[55px] object-contain" />
+						<S3Image imageKey="private/year-20-anniversary.png" alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" />
 					</div>
 				</div>
 			</div>
@@ -42,7 +45,7 @@ export default function Footer() {
 			<div
 				className="relative flex flex-col items-center w-full py-16"
 				style={{
-					backgroundImage: `url(${pattern})`,
+					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
 					backgroundRepeat: "no-repeat",
 					backgroundPosition: "center",
 					backgroundSize: "cover",
@@ -79,9 +82,9 @@ export default function Footer() {
 								</li>
 							</ul>
 						</div>
-						<div className="flex flex-col gap-6 justify-center">
-							<div className="space-y-2">
-								<h5 className="relative inline-block py-1 text-xl font-bold uppercase tracking-tight w-fit">
+						<div className="flex flex-col justify-center">
+							<div className="space-y-2 mb-6">
+								<h5 className="relative inline-block py-1 uppercase tracking-tight w-fit">
 									Stay Updated
 									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 								</h5>
@@ -90,7 +93,7 @@ export default function Footer() {
 								</p>
 							</div>
 
-							<form className="relative flex w-full max-w-md shadow-lg overflow-hidden">
+							<form className="relative flex w-full max-w-md shadow-lg overflow-hidden mb-4">
 								<input
 									type="email"
 									placeholder="Email Address"
@@ -110,7 +113,7 @@ export default function Footer() {
 					</div>
 
 					{/* RIGHT COLUMN */}
-					<div className=" grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+					<div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
 						{/* Services */}
 						<div>
 							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">

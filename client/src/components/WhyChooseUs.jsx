@@ -1,14 +1,14 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import plumberBro from "../assets/plumbing-bros.png";
+import S3Image from "./S3Image";
 
 export default function WhyChooseUs() {
 	return (
 		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
 			{/* Image */}
 			<div className="block self-center lg:self-end shrink-0">
-				<img
-					src={plumberBro}
+				<S3Image
+					imageKey="private/plumbing-bros.png"
 					alt="Plumber Bros"
 					className="w-auto h-84 object-cover"
 				/>

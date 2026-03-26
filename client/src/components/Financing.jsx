@@ -1,6 +1,8 @@
-import financing from "../assets/easy-financing-available.png";
+import S3Image from "./S3Image";
 
 export default function Financing() {
+	const HEARTH_URL = "https://app.gethearth.com/financing/29435/47842/prequalify?utm_campaign=29435&utm_content=darkblue&utm_medium=contractor-website&utm_source=contractor&utm_term=47842";
+
 	return (
 		<div className="flex flex-row w-full max-w-7xl px-6 mx-auto gap-16 items-center">
 			<div className="flex flex-col">
@@ -30,14 +32,19 @@ export default function Financing() {
 					<span>Wells Fargo</span>.
 				</p>
 
-				<button onClick={() => navigate("/schedule-online")} className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
-					Apply Now
-				</button>
+				<a 
+                    href={HEARTH_URL}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-full sm:w-[200px] h-[50px] text-base font-semibold text-white transition-all duration-300 transform bg-[#B32020] hover:bg-[#7a1515] no-underline"
+                >
+                    Apply Now
+                </a>
 			</div>
 
 			<div className="hidden lg:block">
-				<img
-					src={financing}
+				<S3Image
+					imageKey="private/easy-financing-available.png"
 					alt="Easy Financing Available"
 					className="mt-4 w-150 h-auto object-cover"
 				/>

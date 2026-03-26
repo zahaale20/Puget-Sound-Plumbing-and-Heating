@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram: PSPAH Backend (FastAPI Architecture)
+
+' External context carried down
+Container(ui, "User Interface", "React", "Multi-page application.")
+ContainerDb(db, "Database", "Supabase [PostgreSQL]", "Stores customer information.")
+
+Container_Boundary(backend_boundary, "Backend (FastAPI)") {
+    Component(api_router, "API Router", "FastAPI Routes", "Defines endpoints for leads, services, and blog content.")
+    Component(schemas, "Pydantic Schemas", "Pydantic Models", "Validates incoming JSON data from the Frontend.")
+    Component(lead_handler, "Lead Controller", "Python Logic", "Processes contact form submissions and business rules.")
+    Component(email_service, "Email Dispatcher", "SMTP / Service", "Sends notification emails to PSPAH staff for new leads.")
+    Component(db_client, "Database Client", "SQLAlchemy / Supabase", "Manages connections and executes queries against PostgreSQL.")
+}
+
+Rel(ui, api_router, "Sends lead data / requests content", "JSON/HTTPS")
+Rel(api_router, schemas, "Validates request body")
+Rel(api_router, lead_handler, "Triggers processing")
+Rel(lead_handler, db_client, "Persists lead information")
+Rel(lead_handler, email_service, "Initiates staff notification")
+Rel(db_client, db, "Reads/Writes data", "SQL/HTTPS")
+
+@enduml

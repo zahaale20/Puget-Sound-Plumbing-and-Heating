@@ -18,11 +18,11 @@ import AboutUsPage from "./pages/AboutUsPage";
 import FAQsPage from "./pages/FAQsPage"
 
 import ServiceAreasPage from "./pages/ServiceAreasPage";
-import RegionPage from "./pages/RegionPage";
+import RegionsPage from "./pages/RegionsPage";
 import AreaPage from "./pages/AreaPage";
 
-import ServicesPage from "./pages/ServicesPage";
-import CategoryPage from "./pages/CategoryPage";
+import ServiceCategoriesPage from "./pages/ServiceCategoriesPage";
+import ServiceCategoryPage from "./pages/ServiceCategoryPage";
 import ServicePage from "./pages/ServicePage";
 
 import FinancingPage from "./pages/FinancingPage"
@@ -63,11 +63,11 @@ function App() {
 					<Route path="/faqs" element={<FAQsPage />} />
 
 					<Route path="/service-areas" element={<ServiceAreasPage />} />
-					<Route path="/service-areas/:regionSlug" element={<RegionPage />} />
+					<Route path="/service-areas/:regionSlug" element={<RegionsPage />} />
 					<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
 
-					<Route path="/services" element={<ServicesPage />} />
-					<Route path="/services/:categorySlug" element={<CategoryPage />} />
+					<Route path="/services" element={<ServiceCategoriesPage />} />
+					<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
 					<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
 				</Routes>
 				<Footer />

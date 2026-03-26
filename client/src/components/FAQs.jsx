@@ -1,5 +1,5 @@
 import { FaArrowRight } from "react-icons/fa";
-import plumbingTruck from "../assets/plumbing-truck.png";
+import S3Image from "./S3Image";
 
 export default function FAQS() {
 	return (
@@ -27,8 +27,8 @@ export default function FAQS() {
 			
 			{/* Image */}
 			<div className="block self-center shrink-0 pb-16 lg:pb-0">
-				<img
-					src={plumbingTruck}
+				<S3Image
+					imageKey="private/plumbing-truck.png"
 					alt="Plumbing Truck"
 					className="w-full lg:w-auto h-auto lg:h-60 object-cover"
 				/>

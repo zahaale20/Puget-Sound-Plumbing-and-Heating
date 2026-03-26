@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram: PSPAH Frontend (Functional Architecture)
+
+' External context carried down
+Person(customers, "Customers", "Home or business owner in the Puget Sound area.")
+Container(backend, "Backend", "Python, FastAPI", "Provides plumbing-related functionality.")
+
+Container_Boundary(web_app_boundary, "Web Application (React)") {
+    Component(entry, "Entry Point", "main.jsx", "Initializes the React environment.")
+    Component(app, "App Controller", "App.js", "Handles top-level layout and the routing switchboard.")
+    Component(components, "Common Components", "Header, Footer, Icons", "Global UI elements used throughout the application.")
+    Component(pages, "Page Controllers", "Home, Service, Blog, etc.", "View-level components mapped to specific URL paths.")
+    Component(data, "Content Provider", "data.jsx", "Aggregates descriptive text and images into structured objects.")
+    Component(assets, "Static Assets", "PNG, JPG, SVG", "Physical media store for logos and service photos.")
+}
+
+Rel(customers, entry, "Accesses", "HTTPS")
+Rel(entry, app, "Mounts")
+Rel(app, components, "Wraps views with persistent UI")
+Rel(app, pages, "Mounts view-specific content based on URL")
+
+' Asset/Data Flow
+Rel(data, assets, "Bundles and exports as objects", "Imports")
+Rel(pages, data, "Consumes content for rendering", "Props/Imports")
+Rel(components, data, "Retrieves nav and company links", "Props/Imports")
+Rel(components, assets, "Displays branding/backgrounds", "CSS/Img")
+
+' Backend Interaction
+Rel(pages, backend, "Submits forms / fetches dynamic data", "JSON/HTTPS")
+
+@enduml

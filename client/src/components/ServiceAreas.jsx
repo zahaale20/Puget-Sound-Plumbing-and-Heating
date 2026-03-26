@@ -1,37 +1,17 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import cityOfSeattle from "../assets/city-of-seattle.png";
-import kingCounty from "../assets/king-county.png";
-import pierceCounty from "../assets/pierce-county.png";
-import snohomishCounty from "../assets/snohomish-county.png";
+import S3Image from "./S3Image";
 
 export default function ServiceAreas() {
 	return (
 		<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6">
-
-			{/* Header Content Container */}
-			<div className="flex flex-col gap-6 mb-12">
-				{/* Title */}
-				<h4 className="text-[#0C2D70] pb-2">
-					<span className="relative inline-block">
-						Service Areas
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-					</span>
-				</h4>
-
-				{/* Description */}
-				<p className="text-[#2B2B2B]">
-					At Puget Sound Plumbing & Heating, we’ve been keeping homes and businesses comfortable across the Puget Sound region for decades. From Seattle high-rises to Snohomish County neighborhoods, our licensed plumbers are ready to handle everything from emergency repairs to complete system installations. We’re proud to serve customers throughout Seattle, King County, Pierce County, and Snohomish County. Select your area below to see the full list of cities we cover.
-				</p>
-			</div>
-
 			<div className="text-[#2B2B2B] space-y-16">
 				{/* Seattle Section */}
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<img
-								src={cityOfSeattle}
+							<S3Image
+								imageKey="private/city-of-seattle.png"
 								alt="City of Seattle"
 								className="h-[90px] object-contain"
 							/>
@@ -61,8 +41,8 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<img
-								src={kingCounty}
+							<S3Image
+								imageKey="private/king-county.png"
 								alt="King County"
 								className="h-[90px] object-contain"
 							/>
@@ -92,8 +72,8 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<img
-								src={pierceCounty}
+							<S3Image
+								imageKey="private/pierce-county.png"
 								alt="Pierce County"
 								className="h-[90px] object-contain"
 							/>
@@ -123,8 +103,8 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<img
-								src={snohomishCounty}
+							<S3Image
+								imageKey="private/snohomish-county.png"
 								alt="Snohomish County"
 								className="h-[90px] object-contain"
 							/>

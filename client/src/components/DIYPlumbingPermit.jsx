@@ -1,5 +1,4 @@
 import { useState } from "react";
-import skyline from "../assets/seattle-skyline.png";
 
 export default function DIYPlumbingPermit() {
 	const [formData, setFormData] = useState({

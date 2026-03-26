@@ -1,16 +1,16 @@
 import { FaPhone } from "react-icons/fa";
-import womanCalling from "../assets/woman-calling.png";
+import S3Image from "./S3Image";
 
 export default function CallNow() {
 	return (
 		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
 			{/* Image */}
 			<div className="block self-center lg:self-end shrink-0">
-				<img
-					src={womanCalling}
-					alt="Woman Calling Plumbers"
-					className="w-auto h-80 object-cover"
-				/>
+				<S3Image
+                    imageKey="private/woman-calling.png"
+                    alt="Woman Calling Plumbers"
+                    className="w-auto h-80 object-cover"
+                />
 			</div>
 
 			{/* Header Container */}

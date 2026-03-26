@@ -1,0 +1,32 @@
+# --- Python / Backend ---
+server/venv/
+server/.venv/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.python-version
+server/.env
+
+# --- React / Frontend ---
+pspah-website/client/node_modules/
+pspah-website/client/dist/
+pspah-website/client/.env
+pspah-website/client/.env.local
+.eslintcache
+
+# --- Editors & System ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# --- Optional: Large Design Files ---
+# Un-comment these if you prefer to keep PSD/AI files only on your local machine
+# design-files/*.psd
+# design-files/*.ai

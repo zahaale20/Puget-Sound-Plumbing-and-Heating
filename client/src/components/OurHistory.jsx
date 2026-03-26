@@ -1,5 +1,3 @@
-import team from "../assets/team.png";
-
 export default function History() {
 	return (
 		<div className="flex flex-col max-w-7xl mx-auto px-6 gap-12 items-center">

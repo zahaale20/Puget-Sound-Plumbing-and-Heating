@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react";
 import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import skyline from "../assets/seattle-skyline.png";
 import { posts } from "../data/data";
+import { getSignedUrl } from "../api/imageService";
 
 export default function BlogPostPage() {
 	const { slug } = useParams();
@@ -9,11 +10,19 @@ export default function BlogPostPage() {
 	const fullLink = `/blog/${slug}`;
 	const post = posts.find((p) => p.link === fullLink);
 
+	const [skylineUrl, setSkylineUrl] = useState(null);
+	const [postImageUrl, setPostImageUrl] = useState(null);
+
+	useEffect(() => {
+		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		if (post) getSignedUrl(post.imageKey).then(setPostImageUrl);
+	}, [post]);
+
 	if (!post) {
 		return (
 			<section
 				className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]"
-				style={{ backgroundImage: `url(${skyline})` }}
+				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
 			>
 				<div className="max-w-7xl mx-auto px-6 w-full">
 					<h3 className="text-[#0C2D70] mb-4">Post Not Found</h3>
@@ -31,7 +40,6 @@ export default function BlogPostPage() {
 		);
 	}
 
-	// Find index of current post
 	const currentIndex = posts.findIndex((p) => p.link === fullLink);
 	const prevPost = posts[currentIndex - 1];
 	const nextPost = posts[currentIndex + 1];
@@ -39,7 +47,7 @@ export default function BlogPostPage() {
 	return (
 		<section
 			className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]"
-			style={{ backgroundImage: `url(${skyline})` }}
+			style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
 		>
 			<div className="max-w-7xl mx-auto px-6 w-full">
 				{/* Back Button */}
@@ -53,26 +61,25 @@ export default function BlogPostPage() {
 				{/* Blog Post Content */}
 				<article className="bg-white overflow-hidden">
 					{/* Featured Image */}
-					<img
-						src={post.image}
-						alt={post.title}
-						className="w-full h-64 md:h-96 object-cover"
-					/>
+					{postImageUrl ? (
+						<img
+							src={postImageUrl}
+							alt={post.title}
+							className="w-full h-64 md:h-96 object-cover"
+						/>
+					) : (
+						<div className="w-full h-64 md:h-96 bg-gray-200 animate-pulse" />
+					)}
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						{/* Date */}
 						<div className="flex items-center gap-2 text-[#949494] text-sm mb-4">
 							<FaRegCalendarAlt />
 							<span>{post.date}</span>
 						</div>
-
-						{/* Title */}
 						<h3 className="text-[#0C2D70] text-3xl md:text-4xl font-bold mb-6">
 							{post.title}
 						</h3>
-
-						{/* Post Content */}
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 						</div>
@@ -81,7 +88,6 @@ export default function BlogPostPage() {
 
 				{/* Navigation Between Posts */}
 				<div className="flex justify-between items-center mt-10">
-					{/* Previous Post */}
 					{prevPost ? (
 						<button
 							onClick={() => navigate(prevPost.link)}
@@ -92,8 +98,6 @@ export default function BlogPostPage() {
 					) : (
 						<div></div>
 					)}
-
-					{/* Next Post */}
 					{nextPost ? (
 						<button
 							onClick={() => navigate(nextPost.link)}

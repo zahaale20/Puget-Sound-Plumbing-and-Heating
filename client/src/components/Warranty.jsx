@@ -1,11 +1,11 @@
-import warranty from "../assets/warranty.png";
+import S3Image from "./S3Image";
 
 export default function Warranty() {
 	return (
 		<div className="flex flex-row w-full max-w-7xl px-6 text-left text-[#2B2B2B] gap-16">
 			<div className="hidden lg:block">
-				<img
-					src={warranty}
+				<S3Image
+					imageKey="private/warranty.png"
 					alt="Lifetime Warranty"
 					className="mt-4 w-280 h-auto object-cover"
 				/>
