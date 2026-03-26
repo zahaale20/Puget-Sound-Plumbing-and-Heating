@@ -28,6 +28,7 @@ import ServicePage from "./pages/ServicePage";
 import FinancingPage from "./pages/FinancingPage";
 import WarrantyPage from "./pages/WarrantyPage";
 import CustomerReviewsPage from "./pages/CustomerReviewsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
@@ -69,6 +70,8 @@ function App() {
 					<Route path="/services" element={<ServiceCategoriesPage />} />
 					<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
 					<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
+
+					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 				<Footer />
 			</div>
