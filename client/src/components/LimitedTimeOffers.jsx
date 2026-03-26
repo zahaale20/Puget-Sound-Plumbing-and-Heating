@@ -161,6 +161,8 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 										});
 										if (result?.duplicate) {
 											setSubmitSuccessMessage(result.message || "This request already exists.");
+										} else if (result?.emailStatus === "failed") {
+											setSubmitSuccessMessage("Your request was saved, but we couldn't send your coupon email. Please call us at (206) 938-3219.");
 										}
 										setSubmitSuccess(true);
 										setTimeout(() => setSubmitSuccess(false), 5000);

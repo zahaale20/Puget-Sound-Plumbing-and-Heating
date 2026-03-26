@@ -310,7 +310,14 @@ async def redeem_offer(request: RedeemOfferRequest):
             conn.commit()
 
         try:
-            _send_coupon_email(email, first_name, request.couponDiscount, request.couponCondition)
+            _send_coupon_email(
+                email,
+                first_name,
+                last_name,
+                request.phone,
+                request.couponDiscount,
+                request.couponCondition,
+            )
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("Offer saved but coupon email failed: %s", email_error.detail)
@@ -798,8 +805,16 @@ def _send_newsletter_unsubscribe_confirmation_email(email: str):
         )
 
 
-def _send_coupon_email(email: str, firstName: str, couponDiscount: str, couponCondition: str):
-    """Internal helper – send the coupon confirmation email."""
+def _send_coupon_email(
+    email: str,
+    firstName: str,
+    lastName: str,
+    phone: str,
+    couponDiscount: str,
+    couponCondition: str,
+):
+    """Internal helper – send coupon confirmation to customer and notify the company."""
+    # 1. Coupon confirmation to customer
     try:
         resend.Emails.send(
             {
@@ -908,6 +923,27 @@ def _send_coupon_email(email: str, firstName: str, couponDiscount: str, couponCo
             status_code=500,
             detail=f"Coupon email send failed for sender '{EMAIL_FROM}': {str(e)}",
         )
+
+    # 2. Notification to company
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": EMAIL_FROM,
+                "subject": f"New Coupon Redemption: {couponDiscount} — {firstName} {lastName}",
+                "html": f"""<p>A new coupon redemption has been submitted.</p>
+                    <ul>
+                        <li><strong>Name:</strong> {firstName} {lastName}</li>
+                        <li><strong>Email:</strong> {email}</li>
+                        <li><strong>Phone:</strong> {phone}</li>
+                        <li><strong>Coupon:</strong> {couponDiscount}</li>
+                        <li><strong>Condition:</strong> {couponCondition}</li>
+                    </ul>""",
+            }
+        )
+    except Exception:
+        # Company notification failure is non-critical; customer already confirmed
+        logger.exception("Company coupon redemption notification email failed")
 
 
 def _send_diy_permit_email(email: str, firstName: str, address: str):
