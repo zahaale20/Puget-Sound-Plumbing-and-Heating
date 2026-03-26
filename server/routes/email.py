@@ -862,22 +862,28 @@ def _send_coupon_email(
                         <!-- Coupon Card -->
                         <tr>
                             <td style="padding:4px 40px 36px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="border:4px dashed #B32020;background-color:#ffffff;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="border:4px dashed #B32020;background-color:#ffffff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
                                 <tr>
-                                <td style="padding:28px 16px;text-align:center;">
-                                    <p style="margin:0 0 14px;font-size:40px;line-height:1;">🏷</p>
-                                    <table cellpadding="0" cellspacing="0" style="margin:0 auto 14px;">
+                                <!-- Main content -->
+                                <td style="padding:32px 24px 28px;text-align:center;vertical-align:middle;">
+                                    <!-- Tag icon -->
+                                    <p style="margin:0 0 16px;font-size:48px;line-height:1;color:#B32020;">🏷️</p>
+                                    <!-- Discount amount with red underline -->
+                                    <table cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
                                     <tr>
-                                        <td style="font-size:24px;font-weight:700;color:#0C2D70;text-transform:uppercase;border-bottom:4px solid #B32020;padding-bottom:6px;text-align:center;white-space:nowrap;">
+                                        <td style="font-size:28px;font-weight:700;color:#0C2D70;text-transform:uppercase;border-bottom:4px solid #B32020;padding-bottom:6px;text-align:center;white-space:nowrap;letter-spacing:0.04em;">
                                         {couponDiscount}
                                         </td>
                                     </tr>
                                     </table>
-                                    <p style="font-size:14px;font-weight:600;color:#2B2B2B;text-transform:uppercase;margin:0 0 8px;">{couponCondition}</p>
+                                    <!-- Condition -->
+                                    <p style="font-size:15px;font-weight:600;color:#2B2B2B;text-transform:uppercase;margin:0 0 10px;letter-spacing:0.03em;">{couponCondition}</p>
+                                    <!-- Fine print -->
                                     <p style="font-size:12px;color:#555555;margin:0;">Cannot be combined with other offers.</p>
                                 </td>
-                                <td style="width:36px;border-left:2px dashed #B32020;text-align:center;vertical-align:middle;">
-                                    <span style="font-size:20px;color:#B32020;">&#9986;</span>
+                                <!-- Scissors strip -->
+                                <td style="width:40px;border-left:2px dashed #B32020;text-align:center;vertical-align:middle;padding:0 10px;">
+                                    <span style="font-size:22px;color:#B32020;">&#9986;</span>
                                 </td>
                                 </tr>
                             </table>
