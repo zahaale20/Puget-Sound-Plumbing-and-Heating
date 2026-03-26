@@ -866,8 +866,10 @@ def _send_coupon_email(
                                 <tr>
                                 <!-- Main content -->
                                 <td style="padding:32px 24px 28px;text-align:center;vertical-align:middle;">
-                                    <!-- Tag icon -->
-                                    <p style="margin:0 0 16px;font-size:48px;line-height:1;color:#B32020;">🏷️</p>
+                                    <!-- FaTag icon (exact FA5 SVG) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="48" height="48" fill="#B32020" style="display:block;margin:0 auto 16px;">
+                                    <path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/>
+                                    </svg>
                                     <!-- Discount amount with red underline -->
                                     <table cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
                                     <tr>
@@ -881,9 +883,11 @@ def _send_coupon_email(
                                     <!-- Fine print -->
                                     <p style="font-size:12px;color:#555555;margin:0;">Cannot be combined with other offers.</p>
                                 </td>
-                                <!-- Scissors strip -->
-                                <td style="width:40px;border-left:2px dashed #B32020;text-align:center;vertical-align:middle;padding:0 10px;">
-                                    <span style="font-size:22px;color:#B32020;">&#9986;</span>
+                                <!-- FaCut scissors strip (exact FA5 SVG, rotated 270deg) -->
+                                <td style="width:44px;border-left:2px dashed #B32020;text-align:center;vertical-align:middle;padding:0 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="24" height="24" fill="#B32020" style="transform:rotate(270deg);display:inline-block;">
+                                    <path d="M278.06 256L444.48 89.57c4.69-4.69 4.69-12.29 0-16.97-32.8-32.8-85.99-32.8-118.79 0L210.18 188.12l-24.86-24.86c4.31-10.92 6.68-22.81 6.68-35.26 0-53.02-42.98-96-96-96S0 74.98 0 128s42.98 96 96 96c4.54 0 8.99-.32 13.36-.93L142.29 256l-32.93 32.93c-4.37-.61-8.83-.93-13.36-.93-53.02 0-96 42.98-96 96s42.98 96 96 96 96-42.98 96-96c0-12.45-2.37-24.34-6.68-35.26l24.86-24.86L325.69 439.4c32.8 32.8 85.99 32.8 118.79 0 4.69-4.68 4.69-12.28 0-16.97L278.06 256zM96 160c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32zm0 256c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z"/>
+                                    </svg>
                                 </td>
                                 </tr>
                             </table>
