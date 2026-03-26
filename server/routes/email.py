@@ -61,7 +61,7 @@ async def schedule_online(request: ScheduleRequest):
             _send_followup_email(request.email, request.firstName)
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
-            logger.exception("Schedule saved but follow-up email failed: %s", email_error.detail)
+            logger.exception("Message saved to Supabase but follow-up email failed: %s", email_error.detail)
             return {
                 "success": True,
                 "emailStatus": "failed",
