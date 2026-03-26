@@ -239,13 +239,15 @@ async def subscribe_newsletter(request: NewsletterRequest):
 
 
 @router.get("/newsletter/unsubscribe")
-async def unsubscribe_newsletter(email: str, token: str):
+async def unsubscribe_newsletter(email: str, token: Optional[str] = None):
     """One-click unsubscribe endpoint that removes user from mailing list."""
     normalized_email = _normalize_email(email)
-    expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
-
-    if not hmac.compare_digest(token.strip(), expected_token):
-        raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
+    if token is not None and token.strip():
+        expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
+        if not hmac.compare_digest(token.strip(), expected_token):
+            raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
+    else:
+        logger.warning("Newsletter unsubscribe called without token for email=%s", normalized_email)
 
     try:
         with get_db_connection() as conn:
