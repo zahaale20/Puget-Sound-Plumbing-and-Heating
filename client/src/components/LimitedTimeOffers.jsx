@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
+import { redeemOffer } from "../api/emailService";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [
@@ -12,6 +13,10 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 
 	const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 	const [selectedCoupon, setSelectedCoupon] = useState(null);
+	const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", phone: "" });
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState(null);
+	const [submitSuccess, setSubmitSuccess] = useState(false);
 
 	const scrollY = useRef(0);
 
@@ -37,6 +42,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 
 		setIsPopUpOpen(false);
 		setSelectedCoupon(null);
+		setFormData({ firstName: "", lastName: "", email: "", phone: "" });
+		setSubmitError(null);
+		setSubmitSuccess(false);
 	};
 
 	return (
@@ -135,74 +143,103 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 							</div>
 
 							{/* Form */}
-							<form
-								onSubmit={(e) => {
-									e.preventDefault();
-									alert("Offer sent to your email!");
-									closeModal();
-								}}
-								className="flex flex-col gap-4 text-left"
-							>
-								{/* First + Last Name */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-									<div>
-										<label className="text-[#2B2B2B]">
-											First Name <span className="text-[#B32020] italic">*</span>
-										</label>
-										<input
-											required
-											type="text"
-											name="firstName"
-											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
-										/>
-									</div>
-
-									<div>
-										<label className="text-[#2B2B2B]">
-											Last Name <span className="text-[#B32020] italic">*</span>
-										</label>
-										<input
-											required
-											type="text"
-											name="lastName"
-											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
-										/>
-									</div>
+							{submitSuccess ? (
+								<div className="text-center py-8">
+									<p className="text-[#0C2D70] font-semibold text-lg">Coupon sent to your email!</p>
+									<p className="text-[#2B2B2B] mt-2 text-sm">Check your inbox for your coupon details.</p>
 								</div>
-
-								{/* Email + Phone */}
-								<div>
-									<label className="text-[#2B2B2B]">
-										Email <span className="text-[#B32020] italic">*</span>
-									</label>
-									<input
-										required
-										type="email"
-										name="email"
-										className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
-									/>
-								</div>
-
-								<div>
-									<label className="text-[#2B2B2B]">
-										Phone <span className="text-[#B32020] italic">*</span>
-									</label>
-									<input
-										required
-										type="tel"
-										name="phone"
-										className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
-									/>
-								</div>
-
-								{/* Submit */}
-								<button
-									type="submit"
-									className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition"
+							) : (
+								<form
+									onSubmit={async (e) => {
+										e.preventDefault();
+										setIsSubmitting(true);
+										setSubmitError(null);
+										try {
+											await redeemOffer({
+												...formData,
+												couponDiscount: selectedCoupon.discount,
+												couponCondition: selectedCoupon.condition,
+											});
+											setSubmitSuccess(true);
+											setIsSubmitting(false);
+											setTimeout(() => closeModal(), 2500);
+										} catch (err) {
+											setSubmitError(err.message || "Something went wrong. Please try again.");
+											setIsSubmitting(false);
+										}
+									}}
+									className="flex flex-col gap-4 text-left"
 								>
-									Email Offer
-								</button>
-							</form>
+									{/* First + Last Name */}
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+										<div>
+											<label className="text-[#2B2B2B]">
+												First Name <span className="text-[#B32020] italic">*</span>
+											</label>
+											<input
+												required
+												type="text"
+												value={formData.firstName}
+												onChange={(e) => setFormData((p) => ({ ...p, firstName: e.target.value }))}
+												className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+											/>
+										</div>
+
+										<div>
+											<label className="text-[#2B2B2B]">
+												Last Name <span className="text-[#B32020] italic">*</span>
+											</label>
+											<input
+												required
+												type="text"
+												value={formData.lastName}
+												onChange={(e) => setFormData((p) => ({ ...p, lastName: e.target.value }))}
+												className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+											/>
+										</div>
+									</div>
+
+									{/* Email + Phone */}
+									<div>
+										<label className="text-[#2B2B2B]">
+											Email <span className="text-[#B32020] italic">*</span>
+										</label>
+										<input
+											required
+											type="email"
+											value={formData.email}
+											onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+										/>
+									</div>
+
+									<div>
+										<label className="text-[#2B2B2B]">
+											Phone <span className="text-[#B32020] italic">*</span>
+										</label>
+										<input
+											required
+											type="tel"
+											value={formData.phone}
+											onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+										/>
+									</div>
+
+									{submitError && (
+										<p className="text-[#B32020] text-sm">{submitError}</p>
+									)}
+
+									{/* Submit */}
+									<button
+										type="submit"
+										disabled={isSubmitting}
+										className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
+									>
+										{isSubmitting ? "Sending..." : "Email Offer"}
+									</button>
+								</form>
+							)}
 						</div>
 					</div>,
 					document.body

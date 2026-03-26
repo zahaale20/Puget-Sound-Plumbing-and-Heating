@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
+import { submitJobApplication } from "../api/emailService";
 
 export default function CareersPage() {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -15,16 +16,30 @@ export default function CareersPage() {
 		message: "",
 		additionalInfo: "",
 	});
+	const [resumeFile, setResumeFile] = useState(null);
 	const [expandedJob, setExpandedJob] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState(null);
+	const [submitSuccess, setSubmitSuccess] = useState(false);
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Application submitted:", formData);
-		alert("Your application has been submitted! We'll be in touch soon.");
+		setIsSubmitting(true);
+		setSubmitError(null);
+		try {
+			await submitJobApplication(formData, resumeFile);
+			setSubmitSuccess(true);
+			setFormData({ firstName: "", lastName: "", phone: "", email: "", position: "", experience: "", message: "", additionalInfo: "" });
+			setResumeFile(null);
+		} catch (err) {
+			setSubmitError(err.message || "Something went wrong. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	const toggleJob = (index) => {
@@ -251,19 +266,31 @@ export default function CareersPage() {
 									name="resume"
 									required
 									accept=".pdf,.doc,.docx"
-									onChange={handleChange}
+									onChange={(e) => setResumeFile(e.target.files[0] || null)}
 									className="w-full border border-gray-300 pr-4 bg-white text-[#2B2B2B] focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-[#0C2D70] file:text-white hover:file:bg-[#082050] file:cursor-pointer cursor-pointer transition-all duration-150"
 								/>
 							</div>
 						</div>
 
 						<div className="flex justify-center mt-4">
-							<button
-								type="submit"
-								className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
-							>
-								Apply Now
-							</button>
+							{submitSuccess ? (
+								<div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-center">
+									Application submitted! We'll review it and be in touch.
+								</div>
+							) : (
+								<>
+									{submitError && (
+										<p className="text-[#B32020] text-sm mb-2 w-full text-center">{submitError}</p>
+									)}
+									<button
+										type="submit"
+										disabled={isSubmitting}
+										className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:opacity-60 disabled:cursor-not-allowed"
+									>
+										{isSubmitting ? "Submitting..." : "Apply Now"}
+									</button>
+								</>
+							)}
 						</div>
 					</form>
 				</div>

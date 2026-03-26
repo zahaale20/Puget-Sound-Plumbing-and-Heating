@@ -13,10 +13,15 @@ import { useState, useEffect } from "react";
 
 import { getCloudFrontUrl } from "../api/imageService";
 import { ImageWithLoader } from "./LoadingComponents";
+import { subscribeNewsletter } from "../api/emailService";
 
 export default function Footer() {
 	const navigate = useNavigate();
 	const [patternUrl, setPatternUrl] = useState(null);
+	const [newsletterEmail, setNewsletterEmail] = useState("");
+	const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+	const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+	const [newsletterError, setNewsletterError] = useState(null);
 
 	useEffect(() => {
 		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
@@ -121,19 +126,48 @@ export default function Footer() {
 								</p>
 							</div>
 
-							<form className="relative flex w-full max-w-md shadow-lg overflow-hidden mb-4">
-								<input
-									type="email"
-									placeholder="Email Address"
-									className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
-								/>
-								<button
-									onClick={() => navigate("/schedule-online")}
-									className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300"
-								>
-									Join Now
-								</button>
-							</form>
+							{newsletterSuccess ? (
+								<p className="text-white font-semibold text-sm mb-4">✓ You&apos;re subscribed! Welcome aboard.</p>
+							) : (
+								<>
+									<form
+										onSubmit={async (e) => {
+											e.preventDefault();
+											setNewsletterSubmitting(true);
+											setNewsletterError(null);
+											try {
+												await subscribeNewsletter(newsletterEmail);
+												setNewsletterSuccess(true);
+												setNewsletterEmail("");
+											} catch (err) {
+												setNewsletterError(err.message || "Something went wrong.");
+											} finally {
+												setNewsletterSubmitting(false);
+											}
+										}}
+										className="relative flex w-full max-w-md shadow-lg overflow-hidden mb-4"
+									>
+										<input
+											required
+											type="email"
+											placeholder="Email Address"
+											value={newsletterEmail}
+											onChange={(e) => setNewsletterEmail(e.target.value)}
+											className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
+										/>
+										<button
+											type="submit"
+											disabled={newsletterSubmitting}
+											className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
+										>
+											{newsletterSubmitting ? "..." : "Join Now"}
+										</button>
+									</form>
+									{newsletterError && (
+										<p className="text-red-300 text-xs mb-3">{newsletterError}</p>
+									)}
+								</>
+							)}
 							<p className="text-[10px] text-white/70 uppercase tracking-widest">
 								* We respect your privacy and never spam.
 							</p>

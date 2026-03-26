@@ -55,3 +55,99 @@ export const submitSchedule = async (formData) => {
 
 	return await response.json();
 };
+
+export const subscribeNewsletter = async (email) => {
+	const response = await fetch(buildApiUrl("/api/newsletter"), {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ email }),
+	});
+
+	if (!response.ok) {
+		let errorMessage = "Failed to subscribe. Please try again.";
+		try {
+			const errorData = await response.json();
+			errorMessage = errorData?.detail || errorData?.message || errorMessage;
+		} catch {
+			// ignore JSON parse errors
+		}
+		throw new Error(errorMessage);
+	}
+
+	return await response.json();
+};
+
+export const submitDiyPermit = async (formData) => {
+	const response = await fetch(buildApiUrl("/api/diy-permit"), {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(formData),
+	});
+
+	if (!response.ok) {
+		let errorMessage = "Failed to submit request. Please try again.";
+		try {
+			const errorData = await response.json();
+			errorMessage = errorData?.detail || errorData?.message || errorMessage;
+		} catch {
+			// ignore JSON parse errors
+		}
+		throw new Error(errorMessage);
+	}
+
+	return await response.json();
+};
+
+export const submitJobApplication = async (formData, resumeFile) => {
+	const data = new FormData();
+	data.append("firstName", formData.firstName);
+	data.append("lastName", formData.lastName);
+	data.append("phone", formData.phone);
+	data.append("email", formData.email);
+	data.append("position", formData.position);
+	data.append("experience", formData.experience || "");
+	data.append("message", formData.message || "");
+	data.append("additionalInfo", formData.additionalInfo || "");
+	if (resumeFile) {
+		data.append("resume", resumeFile);
+	}
+
+	const response = await fetch(buildApiUrl("/api/job-application"), {
+		method: "POST",
+		body: data,
+	});
+
+	if (!response.ok) {
+		let errorMessage = "Failed to submit application. Please try again.";
+		try {
+			const errorData = await response.json();
+			errorMessage = errorData?.detail || errorData?.message || errorMessage;
+		} catch {
+			// ignore JSON parse errors
+		}
+		throw new Error(errorMessage);
+	}
+
+	return await response.json();
+};
+
+export const redeemOffer = async (formData) => {
+	const response = await fetch(buildApiUrl("/api/redeem-offer"), {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(formData),
+	});
+
+	if (!response.ok) {
+		let errorMessage = "Failed to redeem offer. Please try again.";
+		try {
+			const errorData = await response.json();
+			errorMessage = errorData?.detail || errorData?.message || errorMessage;
+		} catch {
+			// ignore JSON parse errors
+		}
+		throw new Error(errorMessage);
+	}
+
+	return await response.json();
+};

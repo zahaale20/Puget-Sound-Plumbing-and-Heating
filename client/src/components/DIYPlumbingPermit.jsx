@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { submitDiyPermit } from "../api/emailService";
 
 export default function DIYPlumbingPermit() {
 	const [formData, setFormData] = useState({
@@ -11,15 +12,36 @@ export default function DIYPlumbingPermit() {
 		projectDescription: "",
 		inspection: "unsure",
 	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState(null);
+	const [submitSuccess, setSubmitSuccess] = useState(false);
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Form submitted:", formData);
-		alert("Your plumbing permit request has been submitted!");
+		setIsSubmitting(true);
+		setSubmitError(null);
+		try {
+			await submitDiyPermit(formData);
+			setSubmitSuccess(true);
+			setFormData({
+				firstName: "",
+				lastName: "",
+				email: "",
+				phone: "",
+				address: "",
+				city: "",
+				projectDescription: "",
+				inspection: "unsure",
+			});
+		} catch (err) {
+			setSubmitError(err.message || "Something went wrong. Please try again.");
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -132,12 +154,24 @@ export default function DIYPlumbingPermit() {
 
 				{/* Submit */}
 				<div className="flex justify-center mt-4">
-					<button
-						type="submit"
-						className="flex items-center justify-center w-full sm:w-[220px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
-					>
-						Submit Request
-					</button>
+					{submitSuccess ? (
+						<div className="w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-center">
+							Your permit request has been submitted! We'll be in touch shortly.
+						</div>
+					) : (
+						<>
+							{submitError && (
+								<p className="text-[#B32020] text-sm mb-2 w-full text-center">{submitError}</p>
+							)}
+							<button
+								type="submit"
+								disabled={isSubmitting}
+								className="flex items-center justify-center w-full sm:w-[220px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:opacity-60 disabled:cursor-not-allowed"
+							>
+								{isSubmitting ? "Submitting..." : "Submit Request"}
+							</button>
+						</>
+					)}
 				</div>
 			</form>
 		</div>
