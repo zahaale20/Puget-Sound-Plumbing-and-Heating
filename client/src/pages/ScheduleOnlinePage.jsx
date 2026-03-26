@@ -1,16 +1,16 @@
 import ScheduleOnline from "../components/ScheduleOnline";
 import { getCloudFrontUrl } from "../api/imageService";
-import { useEffect, useState } from "react";
 
 export default function ScheduleOnlinePage() {
-	const [skylineUrl, setSkylineUrl] = useState(null);
 
-	useEffect(() => {
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-	}, []);
 
 	return (
-		<section className="flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[166px] bg-cover bg-bottom" style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}>
+		<section className="relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]">
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 			<ScheduleOnline />
 		</section>
 	);

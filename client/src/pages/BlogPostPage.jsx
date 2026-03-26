@@ -10,20 +10,23 @@ export default function BlogPostPage() {
 	const fullLink = `/blog/${slug}`;
 	const post = posts.find((p) => p.link === fullLink);
 
-	const [skylineUrl, setSkylineUrl] = useState(null);
 	const [postImageUrl, setPostImageUrl] = useState(null);
 
 	useEffect(() => {
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 		if (post) setPostImageUrl(getCloudFrontUrl(post.imageKey));
 	}, [post]);
 
 	if (!post) {
 		return (
 			<section
-				className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]"
-				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+				className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]"
+
 			>
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 				<div className="max-w-7xl mx-auto px-6 w-full">
 					<h3 className="text-[#0C2D70] mb-4">Post Not Found</h3>
 					<p className="text-[#2B2B2B] mb-6">
@@ -46,9 +49,15 @@ export default function BlogPostPage() {
 
 	return (
 		<section
-			className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]"
-			style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+			className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]"
+
 		>
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
+			
 			<div className="max-w-7xl mx-auto px-6 w-full">
 				{/* Back Button */}
 				<button

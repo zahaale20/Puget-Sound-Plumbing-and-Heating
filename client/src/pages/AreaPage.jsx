@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/ScheduleOnline";
@@ -6,13 +5,7 @@ import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function AreaPage() {
-	const [patternUrl, setPatternUrl] = useState(null);
-	const [skylineUrl, setSkylineUrl] = useState(null);
 
-	useEffect(() => {
-		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-	}, []);
 
 	const { regionSlug, areaSlug } = useParams();
 
@@ -35,9 +28,14 @@ export default function AreaPage() {
 			
 			{/* Header Section*/}
 			<section
-				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
+				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
+			
+			
+			
+			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
@@ -90,9 +88,14 @@ export default function AreaPage() {
 
 			{/* Why Choose Us Section*/}
 			<section
-				className="flex justify-center w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+				className="relative overflow-hidden flex justify-center w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{/* Title */}
 					<h4 className="text-[#0C2D70] relative pb-2 w-fit">

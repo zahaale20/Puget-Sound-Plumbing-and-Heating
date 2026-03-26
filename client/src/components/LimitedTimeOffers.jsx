@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
@@ -95,9 +96,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 			</div>
 
 			{/* Redeem Offer Pop Up */}
-			{isPopUpOpen && (
-				<div className="fixed inset-0 bg-[#2b2b2b]/50 flex justify-center items-center z-50">
-					<div className="bg-white p-8 sm:p-12 md:p-16 md:max-w-2xl w-full h-full md:h-auto relative box-border max-h-[100vh] overflow-auto">
+			{isPopUpOpen && createPortal(
+				<div className="fixed inset-0 bg-[#2b2b2b]/50 flex justify-center items-center z-[999999]">
+					<div className="bg-white p-8 sm:p-12 md:p-16 md:max-w-2xl w-full h-full md:h-auto relative box-border max-h-[100vh] overflow-auto z-[1000000]">
 						{/* Close Pop Up Button */}
 						<button
 							onClick={closeModal}
@@ -204,7 +205,8 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 							</button>
 						</form>
 					</div>
-				</div>
+				</div>,
+				document.body
 			)}
 		</>
 	);

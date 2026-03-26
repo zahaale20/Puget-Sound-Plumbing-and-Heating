@@ -5,6 +5,26 @@
 		font-family: "Open Sans", sans-serif;
 	}
 
+	img.absolute.inset-0.w-full.h-full.object-cover.z-0,
+	img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0 {
+		pointer-events: none;
+	}
+
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0),
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0) {
+		isolation: isolate;
+	}
+
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0) > :not(img),
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0) > :not(img),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0) > :not(img),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0) > :not(img) {
+		position: relative;
+		z-index: 1;
+	}
+
 	h1, h2, h3, h4, h5, h6, nav {
 		font-family: "Montserrat", sans-serif;
 	}

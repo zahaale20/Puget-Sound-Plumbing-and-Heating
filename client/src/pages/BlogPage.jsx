@@ -14,14 +14,9 @@ import { ImageWithLoader } from "../components/LoadingComponents";
 
 export default function BlogPage() {
 	const navigate = useNavigate();
-	const [patternUrl, setPatternUrl] = useState(null);
-	const [skylineUrl, setSkylineUrl] = useState(null);
 	const [imageUrls, setImageUrls] = useState({});
 
 	useEffect(() => {
-		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-
 		const uniqueKeys = [...new Set(posts.map((p) => p.imageKey))];
 		const loadImages = async () => {
 			const entries = await Promise.all(
@@ -133,9 +128,14 @@ export default function BlogPage() {
 
 			{/* Header */}
 			<section
-				className="flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
+				className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
+			
+			
+			
+			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">
 						Blog
@@ -232,9 +232,14 @@ export default function BlogPage() {
 
 			{/* Blog Cards (Bottom - Skyline) */}
 			<section
-				className="w-full pb-16 bg-cover bg-bottom space-y-6"
-				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+				className="relative overflow-hidden w-full pb-16 space-y-6"
+
 			>
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 					{bottomPosts.map((post) => <PostCard key={post.id} post={post} />)}
 				</div>

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
@@ -6,13 +5,7 @@ import { getCloudFrontUrl } from "../api/imageService";
 
 export default function RegionsPage() {
 	const { regionSlug } = useParams();
-	const [patternUrl, setPatternUrl] = useState(null);
-	const [skylineUrl, setSkylineUrl] = useState(null);
 
-	useEffect(() => {
-		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-	}, []);
 
 	const region = ServiceAreaLinks.find(
 		(item) => item.name.replace(/\s+/g, "-").toLowerCase() === regionSlug
@@ -24,9 +17,14 @@ export default function RegionsPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section
-				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
+				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
+			
+			
+			
+			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">
 						Professional Plumbers in {regionName}
@@ -84,9 +82,14 @@ export default function RegionsPage() {
 			</section>
 
 			<section
-				className="flex justify-center w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+				className="relative overflow-hidden flex justify-center w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 				<ScheduleOnline />
 			</section>
 		</div>

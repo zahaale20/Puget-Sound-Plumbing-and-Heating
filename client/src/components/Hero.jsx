@@ -1,41 +1,30 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Hero() {
 	const navigate = useNavigate();
-	const [heroURL, setHeroURL] = useState(null);
-	const [imageLoaded, setImageLoaded] = useState(false);
-
-	useEffect(() => {
-		const url = getCloudFrontUrl("private/home-page-hero2.png");
-		setHeroURL(url);
-
-		// Preload the image
-		const img = new Image();
-		img.onload = () => setImageLoaded(true);
-		img.src = url;
-	}, []);
 
 	return (
 		<section
-			className="flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]"
-			style={{
-				backgroundImage: imageLoaded && heroURL ? `url(${heroURL})` : "none",
-				backgroundColor: imageLoaded ? "transparent" : "#f5f5f5",
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: "cover",
-				transition: "background-color 0.3s ease-in-out"
-			}}
+			className="relative flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]"
+			style={{ backgroundColor: "#0C2D70" }}
 		>
+			{/* Hero image — real <img> so fetchPriority="high" is respected */}
+			<img
+				src={getCloudFrontUrl("private/home-page-hero2.png")}
+				alt=""
+				aria-hidden="true"
+				fetchPriority="high"
+				className="absolute inset-0 w-full h-full object-cover"
+			/>
+
 			{/* Gradient Overlay */}
 			<div className="z-0 absolute inset-0 bg-[linear-gradient(0deg,_#00000088_15%,_#ffffff22_100%)]"></div>
 
 			{/* Content Wrapper (Centered) */}
-			<div className={`z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-16 gap-8 ${imageLoaded ? 'fade-in' : ''}`}>
+			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-16 gap-8">
 				{/* Title */}
 				<h1 className="uppercase leading-tight text-white">
 					Seattle's Trusted

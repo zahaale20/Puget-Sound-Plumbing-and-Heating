@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from "react";
 import OurMission from "../components/OurMission";
 import OurHistory from "../components/OurHistory";
 import OurTeam from "../components/OurTeam";
@@ -8,21 +7,20 @@ import ServiceAreas from "../components/ServiceAreas";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function AboutUsPage() {
-	const [patternUrl, setPatternUrl] = useState(null);
-	const [skylineUrl, setSkylineUrl] = useState(null);
 
-	useEffect(() => {
-		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-	}, []);
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
 			<section
-				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
+				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+
 			>
+			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
+			
+			
+			
+			
 				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
@@ -42,7 +40,12 @@ export default function AboutUsPage() {
 				<OurMission />
 			</section>
 
-			<section className="flex justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}>
+			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
 				<OurHistory />
 			</section>
 
@@ -50,7 +53,12 @@ export default function AboutUsPage() {
 				<OurTeam />
 			</section>
 
-			<section className="flex flex-col justify-center w-full py-16 bg-cover bg-bottom text-[#2B2B2B]" style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}>
+			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
+			
+			
+			
+			
+			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					<h4 className="text-[#0C2D70] pb-2">
 						<span className="relative inline-block">

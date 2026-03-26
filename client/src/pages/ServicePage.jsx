@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/ScheduleOnline";
@@ -8,8 +7,6 @@ import { ServiceLinks } from "../data/data";
 
 export default function ServicePage() {
     const { categorySlug, serviceSlug } = useParams();
-    const [patternUrl, setPatternUrl] = useState(null);
-    const [skylineUrl, setSkylineUrl] = useState(null);
 
     const category = ServiceLinks.find(
         (item) => item.href.split("/")[2] === categorySlug
@@ -21,10 +18,6 @@ export default function ServicePage() {
         )
         : null;
 
-    useEffect(() => {
-        setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-        setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
-    }, []);
 
     const serviceName = service ? service.name : "Service Not Found";
     const serviceDescription = service?.description || "";
@@ -43,9 +36,14 @@ export default function ServicePage() {
 
             {/* 1. Header (Pattern Background) */}
             <section
-                className="relative flex w-full py-16 bg-cover bg-bottom"
-                style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
+                className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+
             >
+			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
+			
+			
+			
+			
                 <div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
                     <h3 className="relative inline-block pb-2 w-fit tracking-tight">
                         {serviceName}
@@ -97,9 +95,14 @@ export default function ServicePage() {
 
             {/* 3. What to Expect (Skyline Background) */}
             <section 
-                className="w-full py-16 bg-cover bg-bottom"
-                style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+                className="relative overflow-hidden w-full py-16"
+
             >
+			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
+			
+			
+			
+			
                 <div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
                     <div className="inline-block mx-auto">
                         <h4 className="text-[#0C2D70] relative pb-2 tracking-tight">
@@ -211,9 +214,14 @@ export default function ServicePage() {
 
             {/* 6. Schedule Online (Skyline Background) */}
             <section 
-                className="flex justify-center w-full py-24 bg-cover bg-bottom"
-                style={{ backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" }}
+                className="relative overflow-hidden flex justify-center w-full py-24"
+
             >
+			
+			
+			
+			
+			
                 <ScheduleOnline />
             </section>
         </div>
