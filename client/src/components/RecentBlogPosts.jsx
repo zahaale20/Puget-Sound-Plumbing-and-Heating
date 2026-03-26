@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
 import { posts } from "../data/data";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function RecentBlogPosts() {
 		const uniqueKeys = [...new Set(recentPosts.map((p) => p.imageKey))];
 		const loadImages = async () => {
 			const entries = await Promise.all(
-				uniqueKeys.map((key) => getSignedUrl(key).then((url) => [key, url]))
+				uniqueKeys.map((key) => [key, getCloudFrontUrl(key)])
 			);
 			setImageUrls(Object.fromEntries(entries));
 		};
@@ -28,7 +29,7 @@ export default function RecentBlogPosts() {
 	};
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6">
+		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
 			{/* Header Container */}
 			<div className="space-y-6">
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
@@ -45,15 +46,12 @@ export default function RecentBlogPosts() {
 				{recentPosts.map((post) => (
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 						{/* Image */}
-						{imageUrls[post.imageKey] ? (
-							<img
-								src={imageUrls[post.imageKey]}
-								alt={post.title}
-								className="w-full h-48 object-cover"
-							/>
-						) : (
-							<div className="w-full h-48 bg-gray-200 animate-pulse" />
-						)}
+						<ImageWithLoader
+							src={imageUrls[post.imageKey]}
+							alt={post.title}
+							className="w-full h-48 object-cover"
+							loading="lazy"
+						/>
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">

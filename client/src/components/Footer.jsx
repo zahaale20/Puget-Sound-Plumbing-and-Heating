@@ -11,16 +11,17 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
-import S3Image from "./S3Image";
+
 
 export default function Footer() {
 	const navigate = useNavigate();
     const [patternUrl, setPatternUrl] = useState(null);
 
 	useEffect(() => {
-        getSignedUrl("private/pattern1.png").then(setPatternUrl);
+        setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
     }, []);
 
 	return (
@@ -29,14 +30,14 @@ export default function Footer() {
 				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
 					{/* Logo */}
 					<button onClick={() => navigate("/")} className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
-						<img src="https://pspah-bucket.s3.us-west-2.amazonaws.com/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" />
+						<ImageWithLoader src={getCloudFrontUrl("public/pspah-logo.png")} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" fetchPriority="high" />
 					</button>
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
-						<S3Image imageKey="private/google-reviews.png" alt="Google Reviews" className="h-[55px] object-contain" />
-						<S3Image imageKey="private/bbb-accredited-business.png" alt="BBB Accredited Business" className="h-[55px] object-contain" />
-						<S3Image imageKey="private/year-20-anniversary.png" alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" />
+						<ImageWithLoader src={getCloudFrontUrl("private/google-reviews.png")} alt="Google Reviews" className="h-[55px] object-contain" loading="lazy" />
+						<ImageWithLoader src={getCloudFrontUrl("private/bbb-accredited-business.png")} alt="BBB Accredited Business" className="h-[55px] object-contain" loading="lazy" />
+						<ImageWithLoader src={getCloudFrontUrl("private/year-20-anniversary.png")} alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" loading="lazy" />
 					</div>
 				</div>
 			</div>
@@ -46,6 +47,7 @@ export default function Footer() {
 				className="relative flex flex-col items-center w-full py-16"
 				style={{
 					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
+					backgroundColor: "#0C2D70",
 					backgroundRepeat: "no-repeat",
 					backgroundPosition: "center",
 					backgroundSize: "cover",

@@ -1,4 +1,6 @@
-import S3Image from "./S3Image";
+
+
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function OurMission() {
 	return (
@@ -19,10 +21,11 @@ export default function OurMission() {
 
 			{/* Image Section */}
 			<div className="flex justify-center w-full">
-				<S3Image
-					imageKey="private/team2.jpeg"
+				<img
+					src={getCloudFrontUrl("private/team2.jpeg")}
 					alt="Our team"
 					className="w-full h-auto object-cover"
+					loading="lazy"
 				/>
 			</div>
 			

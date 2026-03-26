@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { posts } from "../data/data";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function BlogPostPage() {
 	const { slug } = useParams();
@@ -14,8 +14,8 @@ export default function BlogPostPage() {
 	const [postImageUrl, setPostImageUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
-		if (post) getSignedUrl(post.imageKey).then(setPostImageUrl);
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
+		if (post) setPostImageUrl(getCloudFrontUrl(post.imageKey));
 	}, [post]);
 
 	if (!post) {
@@ -66,6 +66,7 @@ export default function BlogPostPage() {
 							src={postImageUrl}
 							alt={post.title}
 							className="w-full h-64 md:h-96 object-cover"
+							decoding="async"
 						/>
 					) : (
 						<div className="w-full h-64 md:h-96 bg-gray-200 animate-pulse" />

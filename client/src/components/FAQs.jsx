@@ -1,5 +1,7 @@
 import { FaArrowRight } from "react-icons/fa";
-import S3Image from "./S3Image";
+
+import { getCloudFrontUrl } from "../api/imageService";
+
 
 export default function FAQS() {
 	return (
@@ -27,10 +29,11 @@ export default function FAQS() {
 			
 			{/* Image */}
 			<div className="block self-center shrink-0 pb-16 lg:pb-0">
-				<S3Image
-					imageKey="private/plumbing-truck.png"
+				<img
+					src={getCloudFrontUrl("private/plumbing-truck.png")}
 					alt="Plumbing Truck"
 					className="w-full lg:w-auto h-auto lg:h-60 object-cover"
+					loading="lazy"
 				/>
 			</div>
 		</div>

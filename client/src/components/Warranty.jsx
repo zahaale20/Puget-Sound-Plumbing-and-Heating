@@ -1,13 +1,16 @@
-import S3Image from "./S3Image";
+
+
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Warranty() {
 	return (
 		<div className="flex flex-row w-full max-w-7xl px-6 text-left text-[#2B2B2B] gap-16">
 			<div className="hidden lg:block">
-				<S3Image
-					imageKey="private/warranty.png"
+				<img
+					src={getCloudFrontUrl("private/warranty.png")}
 					alt="Lifetime Warranty"
 					className="mt-4 w-280 h-auto object-cover"
+					loading="lazy"
 				/>
 			</div>
 

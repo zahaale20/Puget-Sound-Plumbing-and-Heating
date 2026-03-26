@@ -1,4 +1,6 @@
-import S3Image from "./S3Image";
+
+
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Financing() {
 	const HEARTH_URL = "https://app.gethearth.com/financing/29435/47842/prequalify?utm_campaign=29435&utm_content=darkblue&utm_medium=contractor-website&utm_source=contractor&utm_term=47842";
@@ -43,10 +45,11 @@ export default function Financing() {
 			</div>
 
 			<div className="hidden lg:block">
-				<S3Image
-					imageKey="private/easy-financing-available.png"
+				<img
+					src={getCloudFrontUrl("private/easy-financing-available.png")}
 					alt="Easy Financing Available"
 					className="mt-4 w-150 h-auto object-cover"
+					loading="lazy"
 				/>
 			</div>
 		</div>

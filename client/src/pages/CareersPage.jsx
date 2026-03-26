@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function CareersPage() {
 	const [patternUrl, setPatternUrl] = useState(null);
@@ -20,8 +20,8 @@ export default function CareersPage() {
 	const [expandedJob, setExpandedJob] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	const handleChange = (e) => {
@@ -43,7 +43,7 @@ export default function CareersPage() {
 			{/* Header Section */}
 			<section
 				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
 			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">

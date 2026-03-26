@@ -1,4 +1,4 @@
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 import { useState, useEffect } from "react";
 
 import ServiceAreas from "../components/ServiceAreas";
@@ -8,8 +8,8 @@ export default function ServiceAreasPage() {
 	const [skylineUrl, setSkylineUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	return (
@@ -17,7 +17,7 @@ export default function ServiceAreasPage() {
 			{/* Header Section */}
 			<section
 				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
 			>
 				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">

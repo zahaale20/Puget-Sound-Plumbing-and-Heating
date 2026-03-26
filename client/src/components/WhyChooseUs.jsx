@@ -1,16 +1,17 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import S3Image from "./S3Image";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function WhyChooseUs() {
 	return (
 		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
 			{/* Image */}
 			<div className="block self-center lg:self-end shrink-0">
-				<S3Image
-					imageKey="private/plumbing-bros.png"
+				<img
+					src={getCloudFrontUrl("private/plumbing-bros.png")}
 					alt="Plumber Bros"
 					className="w-auto h-84 object-cover"
+					loading="lazy"
 				/>
 			</div>
 

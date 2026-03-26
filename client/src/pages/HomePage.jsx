@@ -10,15 +10,15 @@ import LimitedTimeOffers from "../components/LimitedTimeOffers";
 import RecentBlogPosts from "../components/RecentBlogPosts";
 import FAQs from "../components/FAQs";
 import CallNow from "../components/CallNow";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Home() {
 	const [patternUrl, setPatternUrl] = useState(null);
 	const [skylineUrl, setSkylineUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	return (
@@ -28,7 +28,7 @@ export default function Home() {
 
 			<section
 				className="flex justify-center w-full py-16"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70", backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover" }}
 			>
 				<OurServices />
 			</section>
@@ -52,7 +52,7 @@ export default function Home() {
 
 			<section
 				className="flex justify-center w-full py-16"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70", backgroundRepeat: "no-repeat", backgroundPosition: "center", backgroundSize: "cover" }}
 			>
 				<LimitedTimeOffers />
 			</section>

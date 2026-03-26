@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import ScheduleOnline from "../components/ScheduleOnline";
-import S3Image from "../components/S3Image";
 
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 import { useEffect, useState } from "react";
 
 import { ServiceLinks } from "../data/data";
@@ -13,8 +12,8 @@ export default function ServiceCategoryPage() {
     const [skylineUrl, setSkylineUrl] = useState(null);
 
     useEffect(() => {
-        getSignedUrl("private/pattern1.png").then(setPatternUrl);
-        getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+        setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+        setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
     }, []);
 
     const { categorySlug } = useParams();
@@ -30,7 +29,7 @@ export default function ServiceCategoryPage() {
 
         <section
             className="relative flex w-full py-16 bg-cover bg-bottom"
-            style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+            style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
         >
             <div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
             <h3 className="relative inline-block pb-2 w-fit">
@@ -65,10 +64,11 @@ export default function ServiceCategoryPage() {
                 <div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-6 w-full gap-16 items-center">
 
                 <div className={`flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
-                    <S3Image 
-						imageKey={"private/" + service.image} 
+                    <img 
+						src={getCloudFrontUrl("private/" + service.image)} 
 						alt={service.name} 
 						className="w-[600px] h-72 object-cover" 
+						loading="lazy"
 					/>
                 </div>
 

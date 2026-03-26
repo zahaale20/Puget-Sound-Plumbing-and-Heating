@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaCreditCard, FaChevronDown, FaBars, FaTimes, FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { CompanyLinks, ServiceLinks } from "../data/data";
 
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
+
 export default function Header() {
 	const navigate = useNavigate();
 	const [openMenu, setOpenMenu] = useState(null);
@@ -58,10 +61,11 @@ export default function Header() {
 				<div className="flex flex-row w-full max-w-7xl px-6 py-2 lg:py-0 mx-auto justify-between items-center">
 					{/* Logo */}
 					<button onClick={() => navigate("/")} className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
-						<img 
-							src="https://pspah-bucket.s3.us-west-2.amazonaws.com/public/pspah-logo.png" 
-							alt="Puget Sound Plumbing and Heating Logo" 
-							className="h-full w-auto object-contain" 
+						<ImageWithLoader
+							src={getCloudFrontUrl("public/pspah-logo.png")}
+							alt="Puget Sound Plumbing and Heating Logo"
+							className="h-full w-auto object-contain"
+							fetchPriority="high"
 						/>
 					</button>
 

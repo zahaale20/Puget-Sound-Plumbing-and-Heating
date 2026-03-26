@@ -1,13 +1,36 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
+const CLOUDFRONT_BASE = "https://d1fyhmg0o2pfye.cloudfront.net";
 
+export const getCloudFrontUrl = (imageKey) => {
+    if (!imageKey) return "";
+    const cleanKey = imageKey.startsWith('/') ? imageKey.slice(1) : imageKey;
+    return `${CLOUDFRONT_BASE}/${cleanKey}`;
+};
+
+// Generate responsive image sources for different sizes
+export const getResponsiveImageUrls = (imageKey, sizes = [400, 800, 1200]) => {
+    if (!imageKey) return [];
+    const cleanKey = imageKey.startsWith('/') ? imageKey.slice(1) : imageKey;
+    return sizes.map(size => ({
+        src: `${CLOUDFRONT_BASE}/${cleanKey}`,
+        width: size
+    }));
+};
+
+// Generate WebP and fallback URLs
+export const getOptimizedImageUrls = (imageKey) => {
+    if (!imageKey) return { webp: "", fallback: "" };
+    const cleanKey = imageKey.startsWith('/') ? imageKey.slice(1) : imageKey;
+    const baseUrl = `${CLOUDFRONT_BASE}/${cleanKey}`;
+
+    // For now, return the same URL - CloudFront can be configured to serve WebP
+    // when client accepts it via Accept header
+    return {
+        webp: baseUrl,
+        fallback: baseUrl
+    };
+};
+
+// Keep this alias for compatibility, but it now resolves through CloudFront.
 export const getSignedUrl = async (imageKey) => {
-    try {
-        const response = await fetch(`${API_URL}/api/images/${imageKey}`);
-        if (!response.ok) throw new Error("Image fetch failed");
-        const data = await response.json();
-        return data.url;
-    } catch (error) {
-        console.error("S3 Error:", error);
-        return null;
-    }
+    return getCloudFrontUrl(imageKey);
 };

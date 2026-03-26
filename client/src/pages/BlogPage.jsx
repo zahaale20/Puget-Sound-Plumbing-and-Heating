@@ -7,9 +7,10 @@ import {
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 import { categoryOptions, sortOptions, posts } from "../data/data";
+import { ImageWithLoader } from "../components/LoadingComponents";
 
 export default function BlogPage() {
 	const navigate = useNavigate();
@@ -18,13 +19,13 @@ export default function BlogPage() {
 	const [imageUrls, setImageUrls] = useState({});
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 
 		const uniqueKeys = [...new Set(posts.map((p) => p.imageKey))];
 		const loadImages = async () => {
 			const entries = await Promise.all(
-				uniqueKeys.map((key) => getSignedUrl(key).then((url) => [key, url]))
+				uniqueKeys.map((key) => [key, getCloudFrontUrl(key)])
 			);
 			setImageUrls(Object.fromEntries(entries));
 		};
@@ -105,11 +106,12 @@ export default function BlogPage() {
 
 	const PostCard = ({ post }) => (
 		<div className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]">
-			{imageUrls[post.imageKey] ? (
-				<img src={imageUrls[post.imageKey]} alt={post.title} className="w-full h-48 object-cover" />
-			) : (
-				<div className="w-full h-48 bg-gray-200 animate-pulse" />
-			)}
+			<ImageWithLoader
+				src={imageUrls[post.imageKey]}
+				alt={post.title}
+				className="w-full h-48 object-cover"
+				loading="lazy"
+			/>
 			<div className="p-6 flex flex-col flex-1">
 				<div className="flex items-center gap-2 text-sm text-[#949494] mb-2">
 					<FaRegCalendarAlt /> {post.date}
@@ -132,7 +134,7 @@ export default function BlogPage() {
 			{/* Header */}
 			<section
 				className="flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
 			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">

@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/ScheduleOnline";
-import S3Image from "../components/S3Image"; 
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 import { ServiceLinks } from "../data/data";
 
 export default function ServicePage() {
@@ -23,8 +22,8 @@ export default function ServicePage() {
         : null;
 
     useEffect(() => {
-        getSignedUrl("private/pattern1.png").then(setPatternUrl);
-        getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+        setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+        setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
     }, []);
 
     const serviceName = service ? service.name : "Service Not Found";
@@ -45,7 +44,7 @@ export default function ServicePage() {
             {/* 1. Header (Pattern Background) */}
             <section
                 className="relative flex w-full py-16 bg-cover bg-bottom"
-                style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+                style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
             >
                 <div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
                     <h3 className="relative inline-block pb-2 w-fit tracking-tight">
@@ -85,10 +84,11 @@ export default function ServicePage() {
 
                     <div className="relative h-[400px] w-full xl:w-1/2 overflow-hidden">
                         {serviceImageKey && (
-                            <S3Image
-                                imageKey={serviceImageKey}
+                            <img
+                                src={getCloudFrontUrl(serviceImageKey)}
                                 alt={serviceName}
                                 className="w-full h-full object-cover"
+                                loading="lazy"
                             />
                         )}
                     </div>

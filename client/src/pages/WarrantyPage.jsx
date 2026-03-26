@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import Warranty from "../components/Warranty";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function WarrantyPage() {
     const [skylineUrl, setSkylineUrl] = useState(null);
 
     useEffect(() => {
-        getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+        setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
     }, []);
 
     return (

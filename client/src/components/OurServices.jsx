@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
 export default function OurServices() {
 	const navigate = useNavigate();
@@ -56,8 +57,8 @@ export default function OurServices() {
 		const loadImages = async () => {
 			const entries = await Promise.all(
 				services.flatMap((s) => [
-					getSignedUrl(s.imageKey).then((url) => [s.imageKey, url]),
-					getSignedUrl(s.imageColorKey).then((url) => [s.imageColorKey, url]),
+					[s.imageKey, getCloudFrontUrl(s.imageKey)],
+					[s.imageColorKey, getCloudFrontUrl(s.imageColorKey)],
 				])
 			);
 			setImageUrls(Object.fromEntries(entries));
@@ -66,7 +67,7 @@ export default function OurServices() {
 	}, []);
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6">
+		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
 			
 			{/* Header Container */}
 			<div className="space-y-6 text-center text-white">
@@ -97,15 +98,12 @@ export default function OurServices() {
 						>
 							{/* Image */}
 							<div className="flex items-center justify-start w-full mb-6">
-								{src ? (
-									<img
-										src={src}
-										alt={service.title}
-										className="w-12 h-12 object-contain transition-all duration-300"
-									/>
-								) : (
-									<div className="w-12 h-12 bg-gray-200 animate-pulse" />
-								)}
+								<ImageWithLoader
+									src={src}
+									alt={service.title}
+									className="w-12 h-12 object-contain transition-all duration-300"
+									loading="lazy"
+								/>
 							</div>
 
 							{/* Title */}

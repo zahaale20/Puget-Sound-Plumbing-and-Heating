@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 @layer base {
 	body {
 		font-family: "Open Sans", sans-serif;
@@ -9,6 +8,30 @@
 	h1, h2, h3, h4, h5, h6, nav {
 		font-family: "Montserrat", sans-serif;
 	}
+}
+
+/* Minimal loading animations */
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.fade-in {
+	animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Smooth transitions for content loading */
+.content-loading {
+	transition: opacity 0.2s ease-in-out;
+}
+
+.content-loaded {
+	opacity: 1;
+}
+
+/* Subtle loading state for sections */
+.section-loading {
+	background-color: #f9f9f9;
 }
 
 h1 {

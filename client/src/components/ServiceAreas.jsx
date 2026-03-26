@@ -1,6 +1,9 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import S3Image from "./S3Image";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
+
+
 
 export default function ServiceAreas() {
 	return (
@@ -10,10 +13,11 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<S3Image
-								imageKey="private/city-of-seattle.png"
+							<ImageWithLoader
+								src={getCloudFrontUrl("private/city-of-seattle.png")}
 								alt="City of Seattle"
 								className="h-[90px] object-contain"
+								loading="lazy"
 							/>
 						</div>
 						<div className="flex-1">
@@ -41,10 +45,11 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<S3Image
-								imageKey="private/king-county.png"
+							<ImageWithLoader
+								src={getCloudFrontUrl("private/king-county.png")}
 								alt="King County"
 								className="h-[90px] object-contain"
+								loading="lazy"
 							/>
 						</div>
 						<div className="flex-1">
@@ -72,10 +77,11 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<S3Image
-								imageKey="private/pierce-county.png"
+							<ImageWithLoader
+								src={getCloudFrontUrl("private/pierce-county.png")}
 								alt="Pierce County"
 								className="h-[90px] object-contain"
+								loading="lazy"
 							/>
 						</div>
 						<div className="flex-1">
@@ -103,10 +109,11 @@ export default function ServiceAreas() {
 				<div className="flex flex-col gap-2">
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
-							<S3Image
-								imageKey="private/snohomish-county.png"
+							<ImageWithLoader
+								src={getCloudFrontUrl("private/snohomish-county.png")}
 								alt="Snohomish County"
 								className="h-[90px] object-contain"
+								loading="lazy"
 							/>
 						</div>
 						<div className="flex-1">

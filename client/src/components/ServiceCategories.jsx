@@ -1,6 +1,7 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import S3Image from "./S3Image";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
 import { ServiceLinks } from "../data/data";
 
@@ -13,10 +14,11 @@ export default function ServiceCategories() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col sm:flex-row sm:items-start gap-12">
                         <div className="hidden sm:block flex-shrink-0">
-                            <S3Image
-                                imageKey="private/plumbing-repair-color.png"
+                            <ImageWithLoader
+                                src={getCloudFrontUrl("private/plumbing-repair-color.png")}
                                 alt="Plumbing Services"
                                 className="h-[90px] object-contain"
+                                loading="lazy"
                             />
                         </div>
                         <div className="flex-1">
@@ -41,10 +43,11 @@ export default function ServiceCategories() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col sm:flex-row sm:items-start gap-12">
                         <div className="hidden sm:block flex-shrink-0">
-                            <S3Image
-                                imageKey="private/drain-and-sewer-color.png"
+                            <ImageWithLoader
+                                src={getCloudFrontUrl("private/drain-and-sewer-color.png")}
                                 alt="Drain and Sewer Services"
                                 className="h-[90px] object-contain"
+                                loading="lazy"
                             />
                         </div>
                         <div className="flex-1">
@@ -69,10 +72,11 @@ export default function ServiceCategories() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col sm:flex-row sm:items-start gap-12">
                         <div className="hidden sm:block flex-shrink-0">
-                            <S3Image
-                                imageKey="private/water-heaters-color.png"
+                            <ImageWithLoader
+                                src={getCloudFrontUrl("private/water-heaters-color.png")}
                                 alt="Water Heater Services"
                                 className="h-[90px] object-contain"
+                                loading="lazy"
                             />
                         </div>
                         <div className="flex-1">
@@ -97,10 +101,11 @@ export default function ServiceCategories() {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col sm:flex-row sm:items-start gap-12">
                         <div className="hidden sm:block flex-shrink-0">
-                            <S3Image
-                                imageKey="private/heating-and-cooling-color.png"
+                            <ImageWithLoader
+                                src={getCloudFrontUrl("private/heating-and-cooling-color.png")}
                                 alt="Heating and Cooling Services"
                                 className="h-[90px] object-contain"
+                                loading="lazy"
                             />
                         </div>
                         <div className="flex-1">

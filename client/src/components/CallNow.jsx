@@ -1,15 +1,17 @@
 import { FaPhone } from "react-icons/fa";
-import S3Image from "./S3Image";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
 export default function CallNow() {
 	return (
 		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
 			{/* Image */}
 			<div className="block self-center lg:self-end shrink-0">
-				<S3Image
-                    imageKey="private/woman-calling.png"
+				<ImageWithLoader
+                    src={getCloudFrontUrl("private/woman-calling.png")}
                     alt="Woman Calling Plumbers"
-                    className="w-auto h-80 object-cover"
+                    className="w-auto h-80 object-cover rounded-lg"
+                    loading="lazy"
                 />
 			</div>
 

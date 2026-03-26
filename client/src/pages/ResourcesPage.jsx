@@ -2,22 +2,22 @@ import { useState, useEffect } from "react";
 import Financing from "../components/Financing.jsx";
 import DIYPlumbingPermit from "../components/DIYPlumbingPermit.jsx";
 import Warranty from "../components/Warranty.jsx";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function ResourcesPage() {
 	const [patternUrl, setPatternUrl] = useState(null);
 	const [skylineUrl, setSkylineUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section
 				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
 			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">

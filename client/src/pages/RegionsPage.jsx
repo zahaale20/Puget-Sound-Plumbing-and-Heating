@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 
 export default function RegionsPage() {
 	const { regionSlug } = useParams();
@@ -10,8 +10,8 @@ export default function RegionsPage() {
 	const [skylineUrl, setSkylineUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/pattern1.png").then(setPatternUrl);
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	const region = ServiceAreaLinks.find(
@@ -25,7 +25,7 @@ export default function RegionsPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section
 				className="relative flex w-full py-16 bg-cover bg-bottom"
-				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none" }}
+				style={{ backgroundImage: patternUrl ? `url(${patternUrl})` : "none", backgroundColor: "#0C2D70" }}
 			>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">

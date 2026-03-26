@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
+import { ImageWithLoader } from "./LoadingComponents";
 
 export default function TeamMembers() {
 	const [defaultProfilePic, setDefaultProfilePic] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/default-profile-pic.png").then(setDefaultProfilePic);
+		setDefaultProfilePic(getCloudFrontUrl("private/default-profile-pic.png"));
 	}, []);
 
 	const team = [
@@ -53,15 +54,12 @@ export default function TeamMembers() {
 						className="flex flex-col gap-6 text-start bg-white p-6 border-1 border-[#DEDEDE]"
 					>
 						{/* Profile Image */}
-						{defaultProfilePic ? (
-							<img
-								src={defaultProfilePic}
-								alt={member.name}
-								className="w-full h-60 object-cover"
-							/>
-						) : (
-							<div className="w-full h-60 bg-gray-200 animate-pulse" />
-						)}
+						<ImageWithLoader
+							src={defaultProfilePic}
+							alt={member.name}
+							className="w-full h-60 object-cover rounded"
+							loading="lazy"
+						/>
 
 						{/* Name & Position */}
 						<div className="flex flex-col gap-1">

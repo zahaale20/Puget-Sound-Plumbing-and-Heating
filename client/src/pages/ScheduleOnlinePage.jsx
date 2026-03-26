@@ -1,12 +1,12 @@
 import ScheduleOnline from "../components/ScheduleOnline";
-import { getSignedUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../api/imageService";
 import { useEffect, useState } from "react";
 
 export default function ScheduleOnlinePage() {
 	const [skylineUrl, setSkylineUrl] = useState(null);
 
 	useEffect(() => {
-		getSignedUrl("private/seattle-skyline.png").then(setSkylineUrl);
+		setSkylineUrl(getCloudFrontUrl("private/seattle-skyline.png"));
 	}, []);
 
 	return (
