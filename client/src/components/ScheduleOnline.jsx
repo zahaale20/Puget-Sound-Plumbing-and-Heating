@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { submitSchedule } from "../api/emailService";
+import { getRecaptchaToken } from "../api/recaptchaService";
 import FormResponseMessage from "./FormResponseMessage";
 
 export default function ScheduleOnline() {
@@ -28,7 +29,15 @@ export default function ScheduleOnline() {
 		setSuccessMessage("Thank you! We'll be in touch soon.");
 
 		try {
-			const result = await submitSchedule(formData);
+			// Get reCAPTCHA token
+			const recaptchaToken = await getRecaptchaToken("schedule");
+			if (!recaptchaToken) {
+				setError("Security verification failed. Please refresh and try again.");
+				setLoading(false);
+				return;
+			}
+
+			const result = await submitSchedule(formData, recaptchaToken);
 			if (result?.duplicate) {
 				setSuccessMessage(result.message || "A request for this contact already exists.");
 			}

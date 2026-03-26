@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { getCloudFrontUrl } from "../api/imageService";
+import { getRecaptchaToken } from "../api/recaptchaService";
 import { ImageWithLoader } from "./LoadingComponents";
 import { subscribeNewsletter } from "../api/emailService";
 import FormResponseMessage from "./FormResponseMessage";
@@ -142,12 +143,29 @@ export default function Footer() {
 											setNewsletterError(null);
 											setNewsletterSuccessMessage("Thank you! We'll be in touch soon.");
 											try {
-												const result = await subscribeNewsletter(newsletterEmail);
+												// Get reCAPTCHA token
+												const recaptchaToken = await getRecaptchaToken("newsletter");
+												if (!recaptchaToken) {
+													setNewsletterError("Security verification failed. Please refresh and try again.");
+													setNewsletterSubmitting(false);
+													return;
+												}
+
+												const result = await subscribeNewsletter(newsletterEmail, recaptchaToken);
 												if (result?.duplicate) {
 													setNewsletterSuccessMessage(
 														"This email is already subscribed to our mailing list."
 													);
 												}
+												setNewsletterSuccess(true);
+												setNewsletterEmail("");
+												setTimeout(() => setNewsletterSuccess(false), 5000);
+											} catch (err) {
+												setNewsletterError(err.message || "An error occurred. Please try again.");
+											} finally {
+												setNewsletterSubmitting(false);
+											}
+										}}
 												setNewsletterSuccess(true);
 												setNewsletterEmail("");
 												setTimeout(() => setNewsletterSuccess(false), 5000);

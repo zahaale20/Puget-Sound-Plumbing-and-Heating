@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { submitDiyPermit } from "../api/emailService";
+import { getRecaptchaToken } from "../api/recaptchaService";
 import FormResponseMessage from "./FormResponseMessage";
 
 export default function DIYPlumbingPermit() {
@@ -28,7 +29,15 @@ export default function DIYPlumbingPermit() {
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 		try {
-			const result = await submitDiyPermit(formData);
+			// Get reCAPTCHA token
+			const recaptchaToken = await getRecaptchaToken("diy_permit");
+			if (!recaptchaToken) {
+				setSubmitError("Security verification failed. Please refresh and try again.");
+				setIsSubmitting(false);
+				return;
+			}
+
+			const result = await submitDiyPermit(formData, recaptchaToken);
 			if (result?.duplicate) {
 				setSubmitSuccessMessage(result.message || "This request already exists.");
 			}

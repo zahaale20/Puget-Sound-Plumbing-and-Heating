@@ -3,13 +3,15 @@ import base64
 import logging
 import hashlib
 import hmac
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response
+import requests
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response, Request
 from typing import Optional
 from urllib.parse import quote
 from pydantic import BaseModel
 import resend
 from database import get_db_connection
 from services.s3_service import S3Service
+from services.rate_limiter import check_rate_limit
 
 router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
@@ -17,12 +19,25 @@ logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = "alexthebestest@gmail.com"
 s3_service = S3Service()
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
+RECAPTCHA_SCORE_THRESHOLD = float(os.getenv("RECAPTCHA_SCORE_THRESHOLD", "0.5"))
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
     or os.getenv("RESEND_API_KEY")
     or os.getenv("SUPABASE_PASSWORD")
     or "pspah-newsletter-unsubscribe-secret"
 )
+
+
+def _get_client_ip(request: Request) -> str:
+    """Extract client IP from request, accounting for proxies"""
+    if request.client:
+        return request.client.host
+    # Fallback to X-Forwarded-For header if behind proxy
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return "0.0.0.0"
 
 
 class EmailRequest(BaseModel):
@@ -36,10 +51,12 @@ class ScheduleRequest(BaseModel):
     phone: str
     email: str
     message: str = ""
+    recaptchaToken: Optional[str] = None
 
 
 class NewsletterRequest(BaseModel):
     email: str
+    recaptchaToken: Optional[str] = None
 
 
 class RedeemOfferRequest(BaseModel):
@@ -49,6 +66,7 @@ class RedeemOfferRequest(BaseModel):
     email: str
     couponDiscount: str
     couponCondition: str
+    recaptchaToken: Optional[str] = None
 
 
 class DiyPermitRequest(BaseModel):
@@ -60,6 +78,7 @@ class DiyPermitRequest(BaseModel):
     city: str = ""
     projectDescription: str = ""
     inspection: str = "unsure"
+    recaptchaToken: Optional[str] = None
 
 
 def _normalize_email(email: str) -> str:
@@ -78,6 +97,32 @@ def _is_duplicate_error(error: Exception) -> bool:
 def _raise_internal_api_error(context: str, error: Exception):
     logger.exception("%s: %s", context, str(error))
     raise HTTPException(status_code=500, detail="An unexpected error occurred. Please try again.")
+
+
+def _verify_recaptcha(token: Optional[str]) -> bool:
+    """Verify reCAPTCHA token (returns True if valid, False otherwise)"""
+    if not RECAPTCHA_SECRET_KEY:
+        return True  # Allow if reCAPTCHA not configured
+    if not token:
+        return False  # Reject missing token when reCAPTCHA is configured
+
+    try:
+        response = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={"secret": RECAPTCHA_SECRET_KEY, "response": token},
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        success = data.get("success", False)
+        score = data.get("score", 0)
+
+        logger.info(f"reCAPTCHA: success={success}, score={score}")
+        return success and score >= RECAPTCHA_SCORE_THRESHOLD
+    except Exception as e:
+        logger.warning(f"reCAPTCHA verification error: {str(e)}")
+        return False  # Fail securely
 
 
 def _duplicate_response(message: str):
@@ -124,6 +169,46 @@ def _build_newsletter_unsubscribe_url(email: str) -> str:
     )
 
 
+@router.post("/verify-recaptcha")
+async def verify_recaptcha(request: dict):
+    """Verify reCAPTCHA v3 token from frontend"""
+    token = request.get("token")
+    if not token:
+        raise HTTPException(status_code=400, detail="Token is required")
+
+    if not RECAPTCHA_SECRET_KEY:
+        logger.warning("RECAPTCHA_SECRET_KEY not configured, allowing request")
+        return {"success": True, "score": 1.0, "message": "reCAPTCHA not configured"}
+
+    try:
+        response = requests.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={"secret": RECAPTCHA_SECRET_KEY, "response": token},
+            timeout=5,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        success = data.get("success", False)
+        score = data.get("score", 0)
+
+        # Log the result for monitoring
+        logger.info(f"reCAPTCHA verification: success={success}, score={score}")
+
+        # Block if score is too low (indicates likely bot)
+        if success and score >= RECAPTCHA_SCORE_THRESHOLD:
+            return {"success": True, "score": score}
+        else:
+            logger.warning(f"reCAPTCHA validation failed: success={success}, score={score}")
+            raise HTTPException(
+                status_code=403,
+                detail=f"Failed reCAPTCHA verification (score: {score}). Please try again.",
+            )
+    except requests.RequestException as e:
+        logger.exception(f"reCAPTCHA API error: {str(e)}")
+        raise HTTPException(status_code=500, detail="reCAPTCHA verification failed")
+
+
 @router.post("/send-email")
 async def send_email(request: EmailRequest):
     """Send a professional follow-up email to schedule online requests"""
@@ -137,8 +222,21 @@ async def send_email(request: EmailRequest):
 
 
 @router.post("/schedule")
-async def schedule_online(request: ScheduleRequest):
+async def schedule_online(request: ScheduleRequest, req: Request):
     """Insert schedule request into DB and send follow-up email"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "schedule")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+    
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(request.recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     first_name = _normalize_text(request.firstName)
     last_name = _normalize_text(request.lastName)
     email = _normalize_email(request.email)
@@ -188,8 +286,21 @@ async def schedule_online(request: ScheduleRequest):
 
 
 @router.post("/newsletter")
-async def subscribe_newsletter(request: NewsletterRequest):
+async def subscribe_newsletter(request: NewsletterRequest, req: Request):
     """Save newsletter subscription email to DB and send confirmation email"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "newsletter")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+    
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(request.recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     email = _normalize_email(request.email)
     duplicate = False
 
@@ -277,8 +388,21 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None):
 
 
 @router.post("/redeem-offer")
-async def redeem_offer(request: RedeemOfferRequest):
+async def redeem_offer(request: RedeemOfferRequest, req: Request):
     """Insert coupon redemption into DB and send coupon email"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "redeem-offer")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+    
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(request.recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     first_name = _normalize_text(request.firstName)
     last_name = _normalize_text(request.lastName)
     email = _normalize_email(request.email)
@@ -334,8 +458,21 @@ async def redeem_offer(request: RedeemOfferRequest):
 
 
 @router.post("/diy-permit")
-async def submit_diy_permit(request: DiyPermitRequest):
+async def submit_diy_permit(request: DiyPermitRequest, req: Request):
     """Insert DIY permit request into DB and send confirmation email"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "diy-permit")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+    
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(request.recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     first_name = _normalize_text(request.firstName)
     last_name = _normalize_text(request.lastName)
     email = _normalize_email(request.email)
@@ -396,9 +533,25 @@ async def submit_job_application(
     experience: str = Form(""),
     message: str = Form(""),
     additionalInfo: str = Form(""),
+    recaptchaToken: Optional[str] = Form(None),
     resume: Optional[UploadFile] = File(None),
+    req: Request = None,
 ):
     """Insert job application into DB, email resume to company, send confirmation to applicant"""
+    # Check rate limit
+    if req:
+        client_ip = _get_client_ip(req)
+        is_allowed, rate_limit_msg = check_rate_limit(client_ip, "job-application")
+        if not is_allowed:
+            raise HTTPException(status_code=429, detail=rate_limit_msg)
+    
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     normalized_first_name = _normalize_text(firstName)
     normalized_last_name = _normalize_text(lastName)
     normalized_phone = _normalize_text(phone)

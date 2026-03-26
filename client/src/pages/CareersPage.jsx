@@ -3,6 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
 import { submitJobApplication } from "../api/emailService";
+import { getRecaptchaToken } from "../api/recaptchaService";
 import FormResponseMessage from "../components/FormResponseMessage";
 
 export default function CareersPage() {
@@ -34,7 +35,15 @@ export default function CareersPage() {
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 		try {
-			const result = await submitJobApplication(formData, resumeFile);
+			// Get reCAPTCHA token
+			const recaptchaToken = await getRecaptchaToken("job_apply");
+			if (!recaptchaToken) {
+				setSubmitError("Security verification failed. Please refresh and try again.");
+				setIsSubmitting(false);
+				return;
+			}
+
+			const result = await submitJobApplication(formData, resumeFile, recaptchaToken);
 			if (result?.duplicate) {
 				setSubmitSuccessMessage(result.message || "This application already exists.");
 			}
