@@ -1,4 +1,5 @@
 import os
+import logging
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import resend
@@ -6,6 +7,8 @@ from database import get_db_connection
 
 router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
+logger = logging.getLogger(__name__)
+EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 
 
 class EmailRequest(BaseModel):
@@ -54,8 +57,16 @@ async def schedule_online(request: ScheduleRequest):
                 )
             conn.commit()
 
-        _send_followup_email(request.email, request.firstName)
-        return {"success": True}
+        try:
+            _send_followup_email(request.email, request.firstName)
+            return {"success": True, "emailStatus": "sent"}
+        except HTTPException as email_error:
+            logger.exception("Schedule saved but follow-up email failed: %s", email_error.detail)
+            return {
+                "success": True,
+                "emailStatus": "failed",
+                "message": "Schedule request saved, but follow-up email could not be sent.",
+            }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -65,7 +76,7 @@ def _send_followup_email(email: str, firstName: str):
     try:
         resend.Emails.send(
             {
-                "from": "noreply@cavostudio.com",
+                "from": EMAIL_FROM,
                 "to": email,
                 "subject": "We'll Be In Touch Soon",
                 "html": f"""
@@ -98,4 +109,7 @@ def _send_followup_email(email: str, firstName: str):
             }
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Email send failed for sender '{EMAIL_FROM}': {str(e)}",
+        )
