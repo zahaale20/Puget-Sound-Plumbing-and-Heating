@@ -1,9 +1,10 @@
 // Basic service worker for caching static assets
 const CACHE_NAME = "pspah-v1";
+const CLOUDFRONT_URL = "https://d1fyhmg0o2pfye.cloudfront.net";
 const STATIC_CACHE_URLS = [
 	"/",
 	"/assets/",
-	"https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png",
+	`${CLOUDFRONT_URL}/public/pspah-logo.png`,
 ];
 
 // Install event - cache static assets

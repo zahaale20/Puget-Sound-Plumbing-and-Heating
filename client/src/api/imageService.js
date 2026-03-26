@@ -1,4 +1,10 @@
-const CLOUDFRONT_BASE = "https://d1fyhmg0o2pfye.cloudfront.net";
+const CLOUDFRONT_BASE = import.meta.env.VITE_CLOUDFRONT_URL || "https://d1fyhmg0o2pfye.cloudfront.net";
+
+if (!CLOUDFRONT_BASE) {
+	throw new Error(
+		"Missing VITE_CLOUDFRONT_URL environment variable. Set VITE_CLOUDFRONT_URL in client/.env"
+	);
+}
 
 export const getCloudFrontUrl = (imageKey) => {
 	if (!imageKey) return "";

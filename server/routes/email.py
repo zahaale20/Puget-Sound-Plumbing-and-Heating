@@ -9,11 +9,14 @@ from urllib.parse import quote
 from pydantic import BaseModel
 import resend
 from database import get_db_connection
+from services.s3_service import S3Service
 
 router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
 logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
+COMPANY_EMAIL = "alexthebestest@gmail.com"
+s3_service = S3Service()
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
     or os.getenv("RESEND_API_KEY")
@@ -437,9 +440,14 @@ async def submit_job_application(
 
         resume_bytes = None
         resume_filename = None
+        resume_s3_key = None
         if resume:
             resume_bytes = await resume.read()
             resume_filename = resume.filename
+            # Upload resume to separate S3 bucket
+            resume_s3_key = s3_service.upload_resume(resume_bytes, resume_filename)
+            if not resume_s3_key:
+                logger.warning(f"Failed to upload resume {resume_filename} to S3, will attach to email anyway")
 
         try:
             _send_job_application_email(
@@ -1216,15 +1224,85 @@ def _send_job_application_email(
     try:
         company_email_payload = {
             "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
-            "to": EMAIL_FROM,
+            "to": COMPANY_EMAIL,
             "subject": f"New Job Application: {position} — {firstName}",
-            "html": f"""<p>A new job application has been submitted.</p>
-                <ul>
-                    <li><strong>Name:</strong> {firstName}</li>
-                    <li><strong>Position:</strong> {position}</li>
-                    <li><strong>Email:</strong> {email}</li>
-                </ul>
-                <p>{"Resume attached." if resume_bytes else "No resume uploaded."}</p>""",
+            "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <!-- Logo -->
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:36px 40px 28px;">
+                            <h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">New Job Application Received</h2>
+                            <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 20px;">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Name:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{firstName}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Position:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{position}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Email:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{email}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            <p style="margin:0;font-size:14px;color:#555555;line-height:1.6;">
+                                {"Resume attached to this email." if resume_bytes else "No resume was uploaded with this application."}
+                            </p>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0;font-size:11px;color:#aaaaaa;">Job Application Alert</p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
         }
         if resume_bytes and resume_filename:
             company_email_payload["attachments"] = [
