@@ -17,6 +17,10 @@ origins = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://pugetsoundplumbing.com",
+    "https://pugetsoundplumbing.com",
+    "https://www.pugetsoundplumbing.com",
+    "https://cavostudio.com",
+    "https://www.cavostudio.com",
 ]
 
 app.add_middleware(

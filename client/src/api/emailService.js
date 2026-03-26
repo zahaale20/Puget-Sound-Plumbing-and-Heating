@@ -1,6 +1,10 @@
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
+const buildApiUrl = (path) => `${API_BASE_URL}${path}`;
+
 export const sendFollowUpEmail = async (email, firstName) => {
 	try {
-		const response = await fetch("/api/send-email", {
+		const response = await fetch(buildApiUrl("/api/send-email"), {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -30,7 +34,7 @@ export const sendFollowUpEmail = async (email, firstName) => {
 };
 
 export const submitSchedule = async (formData) => {
-	const response = await fetch("/api/schedule", {
+	const response = await fetch(buildApiUrl("/api/schedule"), {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
