@@ -106,12 +106,10 @@ export default function ServicePage() {
 				/>
 
 				<div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
-					<div className="inline-block mx-auto">
-						<h4 className="text-[#0C2D70] relative pb-2 tracking-tight">
-							What To Expect From Our {serviceName} Service
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-						</h4>
-					</div>
+					<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
+						What To Expect From Our {serviceName} Service
+						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
+					</h4>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 						{[
 							{
@@ -135,11 +133,12 @@ export default function ServicePage() {
 								desc: "The technician will perform the repairs and clean up the work area.",
 							},
 						].map((item, i) => (
-							<div key={i} className="flex flex-col gap-3 p-4 text-[#2B2B2B]">
-								<h5 className="font-bold">
-									{item.step}. {item.title}
-								</h5>
-								<p className="text-sm">{item.desc}</p>
+							<div key={i} className="flex flex-col gap-6 p-8 bg-white">
+								<div className="flex items-center gap-3">
+									<span className="text-2xl font-bold text-[#0C2D70]">{item.step}.</span>
+									<h5 className="font-bold text-[#0C2D70]">{item.title}</h5>
+								</div>
+								<p className="text-sm text-[#2B2B2B]">{item.desc}</p>
 							</div>
 						))}
 					</div>
