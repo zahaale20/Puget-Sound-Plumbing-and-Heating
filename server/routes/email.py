@@ -65,7 +65,7 @@ def _send_followup_email(email: str, firstName: str):
     try:
         resend.Emails.send(
             {
-                "from": "noreply.pspah@gmail.com",
+                "from": "noreply@cavostudio.com",
                 "to": email,
                 "subject": "We'll Be In Touch Soon",
                 "html": f"""
