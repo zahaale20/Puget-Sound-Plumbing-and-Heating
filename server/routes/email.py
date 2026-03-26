@@ -76,7 +76,7 @@ def _send_followup_email(email: str, firstName: str):
     try:
         resend.Emails.send(
             {
-                "from": EMAIL_FROM,
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": email,
                 "subject": "We Received Your Request — Puget Sound Plumbing and Heating",
                 "html": f"""<!DOCTYPE html>
@@ -85,113 +85,102 @@ def _send_followup_email(email: str, firstName: str):
                 <meta charset="UTF-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 </head>
-                <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
-                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:40px 0;">
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
                     <tr>
                     <td align="center">
-                        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
 
-                        <!-- Header / Logo -->
+                        <!-- Logo -->
                         <tr>
-                            <td style="background-color:#ffffff;padding:28px 40px;text-align:center;border-bottom:1px solid #e8e8e8;">
+                            <td style="padding:40px 40px 32px;text-align:center;">
                             <img
                                 src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
-                                width="200"
+                                width="300"
                                 style="display:block;margin:0 auto;"
                             />
                             </td>
                         </tr>
 
-                        <!-- Navy + red accent bar -->
-                        <tr><td style="background-color:#0C2D70;height:6px;font-size:0;line-height:0;">&nbsp;</td></tr>
-                        <tr><td style="background-color:#B32020;height:3px;font-size:0;line-height:0;">&nbsp;</td></tr>
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
 
                         <!-- Greeting -->
                         <tr>
-                            <td style="padding:40px 40px 24px;">
-                            <h1 style="margin:0 0 12px;font-size:22px;color:#0C2D70;">Thank You, {firstName}!</h1>
-                            <p style="margin:0;font-size:15px;line-height:1.7;color:#444444;">
+                            <td style="padding:36px 40px 20px;">
+                            <h1 style="margin:0 0 12px;font-size:21px;font-weight:700;color:#0C2D70;">Thank You, {firstName}!</h1>
+                            <p style="margin:0;font-size:15px;line-height:1.75;color:#555555;">
                                 We've received your service request and appreciate you reaching out to
-                                <strong>Puget Sound Plumbing and Heating</strong>. A member of our team will
-                                reach out to you by phone to get your appointment scheduled at a time that works best for you.
+                                <strong style="color:#2B2B2B;">Puget Sound Plumbing and Heating</strong>.
+                                A member of our team will reach out to you by phone to get your
+                                appointment scheduled at a time that works best for you.
                             </p>
                             </td>
                         </tr>
 
-                        <!-- What happens next -->
+                        <!-- What Happens Next -->
+                        <tr>
+                            <td style="padding:4px 40px 28px;">
+                            <p style="margin:0 0 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#999999;">What Happens Next</p>
+                            <table cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">1.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">Our team reviews your request and prepares for your call.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">2.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">A representative calls you to discuss your needs and schedule a convenient visit.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0"><tr>
+                                    <td style="width:28px;font-size:13px;font-weight:700;color:#B32020;vertical-align:top;padding-top:1px;">3.</td>
+                                    <td style="font-size:14px;color:#555555;line-height:1.6;">A licensed technician arrives at your home, fully equipped and ready to help.</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Contact blurb -->
                         <tr>
                             <td style="padding:0 40px 32px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8f8f8;border-left:4px solid #B32020;">
-                                <tr>
-                                <td style="padding:24px;">
-                                    <p style="margin:0 0 14px;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:0.06em;color:#0C2D70;">What Happens Next</p>
-                                    <table cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td style="padding:6px 14px 6px 0;vertical-align:top;font-size:18px;color:#B32020;font-weight:bold;line-height:1.4;">1.</td>
-                                        <td style="padding:6px 0;font-size:14px;color:#444444;line-height:1.6;">Our team reviews your request and prepares for your call.</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:6px 14px 6px 0;vertical-align:top;font-size:18px;color:#B32020;font-weight:bold;line-height:1.4;">2.</td>
-                                        <td style="padding:6px 0;font-size:14px;color:#444444;line-height:1.6;">A representative calls you to discuss your needs and schedule a convenient visit.</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:6px 14px 6px 0;vertical-align:top;font-size:18px;color:#B32020;font-weight:bold;line-height:1.4;">3.</td>
-                                        <td style="padding:6px 0;font-size:14px;color:#444444;line-height:1.6;">A licensed technician arrives at your home, fully equipped and ready to help.</td>
-                                    </tr>
-                                    </table>
-                                </td>
-                                </tr>
-                            </table>
-                            </td>
-                        </tr>
-
-                        <!-- Contact Info -->
-                        <tr>
-                            <td style="padding:0 40px 40px;">
-                            <p style="margin:0 0 16px;font-size:14px;color:#444444;line-height:1.7;">
-                                Need immediate assistance? Don't wait — give us a call any time, day or night.
-                                We're available <strong>24 hours a day, 7 days a week</strong>.
+                            <p style="margin:0;font-size:14px;line-height:1.75;color:#555555;">
+                                Need immediate help? We're available
+                                <strong style="color:#2B2B2B;">24 hours a day, 7 days a week</strong>.<br/>
+                                <span style="font-size:13px;color:#888888;">11803 Des Moines Memorial Dr S, Burien, WA 98168</span>
                             </p>
-                            <table cellpadding="0" cellspacing="0">
-                                <tr>
-                                <td style="padding:7px 0;font-size:14px;color:#444444;">
-                                    <strong style="color:#0C2D70;">Address:</strong>&nbsp;11803 Des Moines Memorial Dr S, Burien, WA 98168
-                                </td>
-                                </tr>
-                                <tr>
-                                <td style="padding:7px 0;font-size:14px;color:#444444;">
-                                    <strong style="color:#0C2D70;">Hours:</strong>&nbsp;24 / 7 &mdash; Emergency &amp; Scheduled Service
-                                </td>
-                                </tr>
-                            </table>
                             </td>
                         </tr>
 
                         <!-- CTA -->
                         <tr>
-                            <td style="padding:0 40px 40px;text-align:center;">
+                            <td style="padding:0 40px 44px;text-align:center;">
                             <a
                                 href="tel:206-938-3219"
-                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:2px;letter-spacing:0.04em;"
+                                style="display:inline-block;background-color:#B32020;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:3px;letter-spacing:0.05em;"
                             >CALL (206) 938-3219</a>
                             </td>
                         </tr>
 
                         <!-- Footer -->
                         <tr>
-                            <td style="background-color:#0C2D70;padding:24px 40px;text-align:center;">
-                            <p style="margin:0 0 6px;font-size:13px;color:#ffffff;font-weight:bold;">Puget Sound Plumbing and Heating</p>
-                            <p style="margin:0;font-size:12px;color:#aac0e8;">Licensed &amp; Insured &nbsp;|&nbsp; Serving Greater Seattle Since 1984</p>
-                            </td>
-                        </tr>
-
-                        <!-- Legal -->
-                        <tr>
-                            <td style="padding:16px 40px;text-align:center;">
-                            <p style="margin:0;font-size:11px;color:#999999;line-height:1.6;">
-                                This is an automated confirmation email sent because you submitted a service request on our website.<br/>
-                                Please do not reply directly to this message — call us at (206) 938-3219 for immediate help.
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0 0 10px;font-size:11px;color:#aaaaaa;">Licensed &amp; Insured &nbsp;&middot;&nbsp; Serving Greater Seattle Since 1984</p>
+                            <p style="margin:0;font-size:11px;color:#bbbbbb;line-height:1.6;">
+                                This automated email was sent because you submitted a service request on our website.<br/>
+                                Please do not reply — call us at (206) 938-3219 for immediate help.
                             </p>
                             </td>
                         </tr>
