@@ -16,6 +16,7 @@ export default function DIYPlumbingPermit() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
+	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,8 +26,12 @@ export default function DIYPlumbingPermit() {
 		e.preventDefault();
 		setIsSubmitting(true);
 		setSubmitError(null);
+		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 		try {
-			await submitDiyPermit(formData);
+			const result = await submitDiyPermit(formData);
+			if (result?.duplicate) {
+				setSubmitSuccessMessage(result.message || "This request already exists.");
+			}
 			setSubmitSuccess(true);
 			setTimeout(() => setSubmitSuccess(false), 5000);
 			setFormData({
@@ -159,7 +164,7 @@ export default function DIYPlumbingPermit() {
 					{submitSuccess ? (
 						<FormResponseMessage
 							type="success"
-							message="Thank you! We'll be in touch soon."
+							message={submitSuccessMessage}
 							className="w-full text-center"
 						/>
 					) : (

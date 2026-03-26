@@ -14,6 +14,7 @@ export default function ScheduleOnline() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(false);
+	const [successMessage, setSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,9 +25,13 @@ export default function ScheduleOnline() {
 		setLoading(true);
 		setError(null);
 		setSuccess(false);
+		setSuccessMessage("Thank you! We'll be in touch soon.");
 
 		try {
-			await submitSchedule(formData);
+			const result = await submitSchedule(formData);
+			if (result?.duplicate) {
+				setSuccessMessage(result.message || "A request for this contact already exists.");
+			}
 
 			// Reset form on success
 			setFormData({
@@ -154,7 +159,7 @@ export default function ScheduleOnline() {
 					{/* Success Message */}
 					<FormResponseMessage
 						type="success"
-						message={success ? "Thank you! We'll be in touch soon." : null}
+						message={success ? successMessage : null}
 					/>
 
 					{/* Submit Button */}

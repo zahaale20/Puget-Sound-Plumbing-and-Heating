@@ -63,6 +63,29 @@ def _normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
+def _normalize_text(value: str) -> str:
+    return value.strip()
+
+
+def _is_duplicate_error(error: Exception) -> bool:
+    error_text = str(error).lower()
+    return "unique" in error_text or "duplicate" in error_text
+
+
+def _raise_internal_api_error(context: str, error: Exception):
+    logger.exception("%s: %s", context, str(error))
+    raise HTTPException(status_code=500, detail="An unexpected error occurred. Please try again.")
+
+
+def _duplicate_response(message: str):
+    return {
+        "success": True,
+        "duplicate": True,
+        "emailStatus": "skipped",
+        "message": message,
+    }
+
+
 def _generate_newsletter_unsubscribe_token(email: str) -> str:
     normalized_email = _normalize_email(email)
     return hmac.new(
@@ -102,37 +125,53 @@ def _build_newsletter_unsubscribe_url(email: str) -> str:
 async def send_email(request: EmailRequest):
     """Send a professional follow-up email to schedule online requests"""
     try:
-        _send_followup_email(request.email, request.firstName)
-        return {"success": True, "message": "Email sent successfully"}
+        email = _normalize_email(request.email)
+        first_name = _normalize_text(request.firstName)
+        _send_followup_email(email, first_name)
+        return {"success": True, "emailStatus": "sent", "message": "Email sent successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("send_email failed", e)
 
 
 @router.post("/schedule")
 async def schedule_online(request: ScheduleRequest):
     """Insert schedule request into DB and send follow-up email"""
+    first_name = _normalize_text(request.firstName)
+    last_name = _normalize_text(request.lastName)
+    email = _normalize_email(request.email)
+    phone = _normalize_text(request.phone)
+    message = request.message.strip()
+
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO "Schedule Online"
-                        (first_name, last_name, email, phone, message, "hasBeenContacted")
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        request.firstName,
-                        request.lastName,
-                        request.email,
-                        request.phone,
-                        request.message,
-                        False,
-                    ),
-                )
+                try:
+                    cur.execute(
+                        """
+                        INSERT INTO "Schedule Online"
+                            (first_name, last_name, email, phone, message, "hasBeenContacted")
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            first_name,
+                            last_name,
+                            email,
+                            phone,
+                            message,
+                            False,
+                        ),
+                    )
+                except Exception as insert_error:
+                    if _is_duplicate_error(insert_error):
+                        conn.rollback()
+                        return _duplicate_response(
+                            "A schedule request already exists for this contact. Our team will reach out soon."
+                        )
+                    raise
             conn.commit()
 
         try:
-            _send_followup_email(request.email, request.firstName)
+            _send_followup_email(email, first_name)
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("Message saved to Supabase but follow-up email failed: %s", email_error.detail)
@@ -142,7 +181,7 @@ async def schedule_online(request: ScheduleRequest):
                 "message": "Schedule request saved, but follow-up email could not be sent.",
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("schedule_online failed", e)
 
 
 @router.post("/newsletter")
@@ -160,7 +199,7 @@ async def subscribe_newsletter(request: NewsletterRequest):
                         (email,),
                     )
                 except Exception as insert_error:
-                    if "unique" in str(insert_error).lower() or "duplicate" in str(insert_error).lower():
+                    if _is_duplicate_error(insert_error):
                         duplicate = True
                         conn.rollback()
                     else:
@@ -174,17 +213,29 @@ async def subscribe_newsletter(request: NewsletterRequest):
             return {
                 "success": True,
                 "emailStatus": "sent",
-                **({"message": "Already subscribed"} if duplicate else {}),
+                **(
+                    {
+                        "duplicate": True,
+                        "message": "This email is already subscribed to the mailing list.",
+                    }
+                    if duplicate
+                    else {}
+                ),
             }
         except HTTPException as email_error:
             logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
             return {
                 "success": True,
                 "emailStatus": "failed",
-                "message": "Already subscribed" if duplicate else "Subscription saved, but confirmation email could not be sent.",
+                **({"duplicate": True} if duplicate else {}),
+                "message": (
+                    "This email is already subscribed to the mailing list. We could not resend confirmation email right now."
+                    if duplicate
+                    else "Subscription saved, but confirmation email could not be sent."
+                ),
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("subscribe_newsletter failed", e)
 
 
 @router.get("/newsletter/unsubscribe")
@@ -217,34 +268,47 @@ async def unsubscribe_newsletter(email: str, token: str):
 
         return Response(status_code=204)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("unsubscribe_newsletter failed", e)
 
 
 @router.post("/redeem-offer")
 async def redeem_offer(request: RedeemOfferRequest):
     """Insert coupon redemption into DB and send coupon email"""
+    first_name = _normalize_text(request.firstName)
+    last_name = _normalize_text(request.lastName)
+    email = _normalize_email(request.email)
+    phone = _normalize_text(request.phone)
+
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO "Redeemed Offers"
-                        (first_name, last_name, email, phone, coupon_discount, coupon_condition)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        request.firstName,
-                        request.lastName,
-                        request.email,
-                        request.phone,
-                        request.couponDiscount,
-                        request.couponCondition,
-                    ),
-                )
+                try:
+                    cur.execute(
+                        """
+                        INSERT INTO "Redeemed Offers"
+                            (first_name, last_name, email, phone, coupon_discount, coupon_condition)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            first_name,
+                            last_name,
+                            email,
+                            phone,
+                            request.couponDiscount,
+                            request.couponCondition,
+                        ),
+                    )
+                except Exception as insert_error:
+                    if _is_duplicate_error(insert_error):
+                        conn.rollback()
+                        return _duplicate_response(
+                            "This coupon request already exists for this contact. Please check your email for your coupon."
+                        )
+                    raise
             conn.commit()
 
         try:
-            _send_coupon_email(request.email, request.firstName, request.couponDiscount, request.couponCondition)
+            _send_coupon_email(email, first_name, request.couponDiscount, request.couponCondition)
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("Offer saved but coupon email failed: %s", email_error.detail)
@@ -254,36 +318,50 @@ async def redeem_offer(request: RedeemOfferRequest):
                 "message": "Offer saved, but coupon email could not be sent.",
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("redeem_offer failed", e)
 
 
 @router.post("/diy-permit")
 async def submit_diy_permit(request: DiyPermitRequest):
     """Insert DIY permit request into DB and send confirmation email"""
+    first_name = _normalize_text(request.firstName)
+    last_name = _normalize_text(request.lastName)
+    email = _normalize_email(request.email)
+    phone = _normalize_text(request.phone)
+    address = _normalize_text(request.address)
+
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO "DIY Permit Requests"
-                        (first_name, last_name, email, phone, address, city, project_description, inspection)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        request.firstName,
-                        request.lastName,
-                        request.email,
-                        request.phone,
-                        request.address,
-                        request.city,
-                        request.projectDescription,
-                        request.inspection,
-                    ),
-                )
+                try:
+                    cur.execute(
+                        """
+                        INSERT INTO "DIY Permit Requests"
+                            (first_name, last_name, email, phone, address, city, project_description, inspection)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            first_name,
+                            last_name,
+                            email,
+                            phone,
+                            address,
+                            request.city.strip(),
+                            request.projectDescription.strip(),
+                            request.inspection,
+                        ),
+                    )
+                except Exception as insert_error:
+                    if _is_duplicate_error(insert_error):
+                        conn.rollback()
+                        return _duplicate_response(
+                            "A DIY permit request already exists for this contact and address. We will be in touch soon."
+                        )
+                    raise
             conn.commit()
 
         try:
-            _send_diy_permit_email(request.email, request.firstName, request.address)
+            _send_diy_permit_email(email, first_name, address)
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("DIY permit saved but email failed: %s", email_error.detail)
@@ -293,7 +371,7 @@ async def submit_diy_permit(request: DiyPermitRequest):
                 "message": "Request saved, but confirmation email could not be sent.",
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("submit_diy_permit failed", e)
 
 
 @router.post("/job-application")
@@ -309,17 +387,43 @@ async def submit_job_application(
     resume: Optional[UploadFile] = File(None),
 ):
     """Insert job application into DB, email resume to company, send confirmation to applicant"""
+    normalized_first_name = _normalize_text(firstName)
+    normalized_last_name = _normalize_text(lastName)
+    normalized_phone = _normalize_text(phone)
+    normalized_email = _normalize_email(email)
+    normalized_position = _normalize_text(position)
+    normalized_experience = experience.strip()
+    normalized_message = message.strip()
+    normalized_additional_info = additionalInfo.strip()
+
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO "Job Applications"
-                        (first_name, last_name, email, phone, position, experience, message, additional_info)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    """,
-                    (firstName, lastName, email, phone, position, experience, message, additionalInfo),
-                )
+                try:
+                    cur.execute(
+                        """
+                        INSERT INTO "Job Applications"
+                            (first_name, last_name, email, phone, position, experience, message, additional_info)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """,
+                        (
+                            normalized_first_name,
+                            normalized_last_name,
+                            normalized_email,
+                            normalized_phone,
+                            normalized_position,
+                            normalized_experience,
+                            normalized_message,
+                            normalized_additional_info,
+                        ),
+                    )
+                except Exception as insert_error:
+                    if _is_duplicate_error(insert_error):
+                        conn.rollback()
+                        return _duplicate_response(
+                            "A job application already exists for this email and position. Our team will follow up if needed."
+                        )
+                    raise
             conn.commit()
 
         resume_bytes = None
@@ -329,7 +433,13 @@ async def submit_job_application(
             resume_filename = resume.filename
 
         try:
-            _send_job_application_email(email, firstName, position, resume_bytes, resume_filename)
+            _send_job_application_email(
+                normalized_email,
+                normalized_first_name,
+                normalized_position,
+                resume_bytes,
+                resume_filename,
+            )
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("Application saved but email notification failed: %s", email_error.detail)
@@ -339,7 +449,7 @@ async def submit_job_application(
                 "message": "Application saved, but email notification could not be sent.",
             }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        _raise_internal_api_error("submit_job_application failed", e)
 
 
 def _send_followup_email(email: str, firstName: str):

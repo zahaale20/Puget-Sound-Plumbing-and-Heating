@@ -22,6 +22,7 @@ export default function Footer() {
 	const [newsletterEmail, setNewsletterEmail] = useState("");
 	const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
 	const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+	const [newsletterSuccessMessage, setNewsletterSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 	const [newsletterError, setNewsletterError] = useState(null);
 
 	useEffect(() => {
@@ -129,7 +130,7 @@ export default function Footer() {
 							{newsletterSuccess ? (
 								<FormResponseMessage
 									type="success"
-									message="Thank you! We'll be in touch soon."
+									message={newsletterSuccessMessage}
 									className="mb-4"
 								/>
 							) : (
@@ -139,8 +140,14 @@ export default function Footer() {
 											e.preventDefault();
 											setNewsletterSubmitting(true);
 											setNewsletterError(null);
+											setNewsletterSuccessMessage("Thank you! We'll be in touch soon.");
 											try {
-												await subscribeNewsletter(newsletterEmail);
+												const result = await subscribeNewsletter(newsletterEmail);
+												if (result?.duplicate) {
+													setNewsletterSuccessMessage(
+														"This email is already subscribed to our mailing list."
+													);
+												}
 												setNewsletterSuccess(true);
 												setNewsletterEmail("");
 												setTimeout(() => setNewsletterSuccess(false), 5000);

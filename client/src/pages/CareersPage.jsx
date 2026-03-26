@@ -22,6 +22,7 @@ export default function CareersPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
+	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,8 +32,12 @@ export default function CareersPage() {
 		e.preventDefault();
 		setIsSubmitting(true);
 		setSubmitError(null);
+		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 		try {
-			await submitJobApplication(formData, resumeFile);
+			const result = await submitJobApplication(formData, resumeFile);
+			if (result?.duplicate) {
+				setSubmitSuccessMessage(result.message || "This application already exists.");
+			}
 			setSubmitSuccess(true);
 			setTimeout(() => setSubmitSuccess(false), 5000);
 			setFormData({ firstName: "", lastName: "", phone: "", email: "", position: "", experience: "", message: "", additionalInfo: "" });
@@ -278,7 +283,7 @@ export default function CareersPage() {
 							{submitSuccess ? (
 								<FormResponseMessage
 									type="success"
-									message="Thank you! We'll be in touch soon."
+									message={submitSuccessMessage}
 									className="w-full text-center"
 								/>
 							) : (

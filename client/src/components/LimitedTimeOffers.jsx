@@ -18,6 +18,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
+	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const scrollY = useRef(0);
 
@@ -46,6 +47,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 		setFormData({ firstName: "", lastName: "", email: "", phone: "" });
 		setSubmitError(null);
 		setSubmitSuccess(false);
+		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 	};
 
 	return (
@@ -150,12 +152,16 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									setIsSubmitting(true);
 									setSubmitError(null);
 									setSubmitSuccess(false);
+									setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 									try {
-										await redeemOffer({
+										const result = await redeemOffer({
 											...formData,
 											couponDiscount: selectedCoupon.discount,
 											couponCondition: selectedCoupon.condition,
 										});
+										if (result?.duplicate) {
+											setSubmitSuccessMessage(result.message || "This request already exists.");
+										}
 										setSubmitSuccess(true);
 										setTimeout(() => setSubmitSuccess(false), 5000);
 									} catch (err) {
@@ -170,7 +176,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 
 								<FormResponseMessage
 									type="success"
-									message={submitSuccess ? "Thank you! We'll be in touch soon." : null}
+									message={submitSuccess ? submitSuccessMessage : null}
 								/>
 
 									{/* First + Last Name */}
