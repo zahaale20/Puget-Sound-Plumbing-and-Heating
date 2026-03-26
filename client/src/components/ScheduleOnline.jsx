@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { submitSchedule } from "../api/emailService";
 
 export default function ScheduleOnline() {
 	const [formData, setFormData] = useState({
@@ -9,14 +10,47 @@ export default function ScheduleOnline() {
 		message: "",
 	});
 
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const [success, setSuccess] = useState(false);
+
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Form submitted:", formData);
-		alert("Your message has been submitted!");
+		setLoading(true);
+		setError(null);
+		setSuccess(false);
+
+		try {
+			await submitSchedule(formData);
+
+			// Reset form on success
+			setFormData({
+				firstName: "",
+				lastName: "",
+				phone: "",
+				email: "",
+				message: "",
+			});
+			setSuccess(true);
+
+			// Clear success message after 5 seconds
+			setTimeout(() => setSuccess(false), 5000);
+		} catch (err) {
+			console.error("Error:", err);
+			if (err?.code === "PGRST205" || err?.status === 404) {
+				setError(
+					"Scheduling service is temporarily unavailable (missing database table). Please contact us at (206) 938-3219."
+				);
+			} else {
+				setError(err.message || "An error occurred. Please try again.");
+			}
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -32,46 +66,39 @@ export default function ScheduleOnline() {
 					</h4>
 
 					{/* Description */}
-					<p className="text-[#2B2B2B]">
-						We'll reach out to schedule your appointment.
-					</p>
+					<p className="text-[#2B2B2B]">We'll reach out to schedule your appointment.</p>
 				</div>
 
 				{/* Contact Form */}
-				<form
-					onSubmit={handleSubmit}
-					className="grid grid-cols-1 gap-4 text-left"
-				>
+				<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{/* First Name */}
 						<div>
 							<label className="text-[#2B2B2B]">
-								First Name{" "}
-								<span className="text-[#B32020] font-normal italic">*</span>
+								First Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
-							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input
+								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="firstName"
 								required
 								value={formData.firstName}
 								onChange={handleChange}
-								
 							/>
 						</div>
 
 						{/* Last Name */}
 						<div>
 							<label className="text-[#2B2B2B]">
-								Last Name{" "}
-								<span className="text-[#B32020] font-normal italic">*</span>
+								Last Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
-							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input
+								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="lastName"
 								required
 								value={formData.lastName}
 								onChange={handleChange}
-								
 							/>
 						</div>
 					</div>
@@ -82,13 +109,13 @@ export default function ScheduleOnline() {
 							<label className="text-[#2B2B2B]">
 								Phone <span className="text-[#B32020] italic">*</span>
 							</label>
-							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input
+								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="tel"
 								name="phone"
 								required
 								value={formData.phone}
 								onChange={handleChange}
-								
 							/>
 						</div>
 
@@ -97,22 +124,20 @@ export default function ScheduleOnline() {
 							<label className="text-[#2B2B2B]">
 								Email <span className="text-[#B32020] italic">*</span>
 							</label>
-							<input className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+							<input
+								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="email"
 								name="email"
 								required
 								value={formData.email}
 								onChange={handleChange}
-								
 							/>
 						</div>
 					</div>
 
 					{/* Message */}
 					<div>
-						<label className="text-[#2B2B2B]">
-							Message
-						</label>
+						<label className="text-[#2B2B2B]">Message</label>
 						<textarea
 							name="message"
 							rows="4"
@@ -122,10 +147,28 @@ export default function ScheduleOnline() {
 						/>
 					</div>
 
+					{/* Error Message */}
+					{error && (
+						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+							{error}
+						</div>
+					)}
+
+					{/* Success Message */}
+					{success && (
+						<div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+							Thank you! We'll be in touch soon.
+						</div>
+					)}
+
 					{/* Submit Button */}
 					<div className="flex justify-center mt-4">
-						<button type="submit" className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
-							Submit Request
+						<button
+							type="submit"
+							disabled={loading}
+							className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
+						>
+							{loading ? "Submitting..." : "Submit Request"}
 						</button>
 					</div>
 				</form>

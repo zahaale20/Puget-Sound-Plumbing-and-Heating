@@ -3,8 +3,6 @@ import { FaArrowRight } from "react-icons/fa";
 import { getCloudFrontUrl } from "../api/imageService";
 import { ImageWithLoader } from "./LoadingComponents";
 
-
-
 export default function ServiceAreas() {
 	return (
 		<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6">
@@ -23,10 +21,10 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Seattle, WA</h5>
 							<p>
-								Seattle is our home base, and we know the plumbing challenges that come
-								with older homes, new construction, and everything in between. Whether
-								it’s a burst pipe on Capitol Hill, a water heater replacement in
-								Ballard, or a sewer line issue in West Seattle, our team has you covered.
+								Seattle is our home base, and we know the plumbing challenges that come with older
+								homes, new construction, and everything in between. Whether it’s a burst pipe on
+								Capitol Hill, a water heater replacement in Ballard, or a sewer line issue in West
+								Seattle, our team has you covered.
 							</p>
 						</div>
 					</div>
@@ -55,10 +53,10 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">King County, WA</h5>
 							<p>
-								As one of the largest counties in Washington, King County has diverse
-								plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide
-								full-service plumbing, heating, and drain cleaning throughout the county,
-								ensuring fast, reliable solutions whenever you need them.
+								As one of the largest counties in Washington, King County has diverse plumbing
+								needs—from Redmond and Bellevue to Kent and Renton. We provide full-service
+								plumbing, heating, and drain cleaning throughout the county, ensuring fast, reliable
+								solutions whenever you need them.
 							</p>
 						</div>
 					</div>
@@ -87,10 +85,9 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Pierce County, WA</h5>
 							<p>
-								From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound
-								Plumbing for dependable service and honest pricing. Whether it’s routine
-								maintenance, fixture installation, or an urgent late-night emergency, our
-								plumbers are just a call away.
+								From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound Plumbing for
+								dependable service and honest pricing. Whether it’s routine maintenance, fixture
+								installation, or an urgent late-night emergency, our plumbers are just a call away.
 							</p>
 						</div>
 					</div>
@@ -119,10 +116,9 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Snohomish County, WA</h5>
 							<p>
-								Serving growing communities like Everett, Lynnwood, and Marysville, our
-								team brings decades of plumbing expertise to Snohomish County. We
-								understand local building codes, water system requirements, and the
-								unique needs of homes in the area.
+								Serving growing communities like Everett, Lynnwood, and Marysville, our team brings
+								decades of plumbing expertise to Snohomish County. We understand local building
+								codes, water system requirements, and the unique needs of homes in the area.
 							</p>
 						</div>
 					</div>
@@ -136,7 +132,6 @@ export default function ServiceAreas() {
 						</a>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	);

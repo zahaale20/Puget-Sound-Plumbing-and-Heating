@@ -18,20 +18,18 @@ export default function BlogPostPage() {
 
 	if (!post) {
 		return (
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]"
+			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<div className="max-w-7xl mx-auto px-6 w-full">
 					<h3 className="text-[#0C2D70] mb-4">Post Not Found</h3>
-					<p className="text-[#2B2B2B] mb-6">
-						The blog post you're looking for doesn't exist.
-					</p>
+					<p className="text-[#2B2B2B] mb-6">The blog post you're looking for doesn't exist.</p>
 					<button
 						onClick={() => navigate("/blog")}
 						className="flex items-center gap-4 text-[#0C2D70] font-semibold hover:underline"
@@ -48,16 +46,15 @@ export default function BlogPostPage() {
 	const nextPost = posts[currentIndex + 1];
 
 	return (
-		<section
-			className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]"
+		<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<img
+				src={getCloudFrontUrl("private/seattle-skyline.png")}
+				alt=""
+				aria-hidden="true"
+				fetchPriority="high"
+				className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+			/>
 
-		>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
-			
 			<div className="max-w-7xl mx-auto px-6 w-full">
 				{/* Back Button */}
 				<button
@@ -87,9 +84,7 @@ export default function BlogPostPage() {
 							<FaRegCalendarAlt />
 							<span>{post.date}</span>
 						</div>
-						<h3 className="text-[#0C2D70] text-3xl md:text-4xl font-bold mb-6">
-							{post.title}
-						</h3>
+						<h3 className="text-[#0C2D70] text-3xl md:text-4xl font-bold mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 						</div>

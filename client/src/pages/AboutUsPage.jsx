@@ -1,4 +1,3 @@
-
 import OurMission from "../components/OurMission";
 import OurHistory from "../components/OurHistory";
 import OurTeam from "../components/OurTeam";
@@ -7,20 +6,18 @@ import ServiceAreas from "../components/ServiceAreas";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function AboutUsPage() {
-
-
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
@@ -31,7 +28,8 @@ export default function AboutUsPage() {
 
 					{/* Description */}
 					<p className="relative inline-block">
-						Learn about our history, values, and commitment to delivering trusted, high-quality plumbing and heating services backed by over 20 years of local expertise.
+						Learn about our history, values, and commitment to delivering trusted, high-quality
+						plumbing and heating services backed by over 20 years of local expertise.
 					</p>
 				</div>
 			</section>
@@ -41,11 +39,14 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
+
 				<OurHistory />
 			</section>
 
@@ -54,11 +55,6 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
-			
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					<h4 className="text-[#0C2D70] pb-2">
 						<span className="relative inline-block">
@@ -68,7 +64,10 @@ export default function AboutUsPage() {
 					</h4>
 
 					<p className="text-[#2B2B2B]">
-						Your home deserves work done right. We deliver professional plumbing and heating services across the Puget Sound, backed by skilled technicians and decades of expertise. From small repairs to full system replacements, our team focuses on long-term reliability, safety, and comfort in every job we complete.
+						Your home deserves work done right. We deliver professional plumbing and heating
+						services across the Puget Sound, backed by skilled technicians and decades of expertise.
+						From small repairs to full system replacements, our team focuses on long-term
+						reliability, safety, and comfort in every job we complete.
 					</p>
 				</div>
 
@@ -87,7 +86,12 @@ export default function AboutUsPage() {
 
 					{/* Description */}
 					<p className="text-[#2B2B2B]">
-						At Puget Sound Plumbing & Heating, we’ve been keeping homes and businesses comfortable across the Puget Sound region for decades. From Seattle high-rises to Snohomish County neighborhoods, our licensed plumbers are ready to handle everything from emergency repairs to complete system installations. We’re proud to serve customers throughout Seattle, King County, Pierce County, and Snohomish County. Select your area below to see the full list of cities we cover.
+						At Puget Sound Plumbing & Heating, we’ve been keeping homes and businesses comfortable
+						across the Puget Sound region for decades. From Seattle high-rises to Snohomish County
+						neighborhoods, our licensed plumbers are ready to handle everything from emergency
+						repairs to complete system installations. We’re proud to serve customers throughout
+						Seattle, King County, Pierce County, and Snohomish County. Select your area below to see
+						the full list of cities we cover.
 					</p>
 				</div>
 

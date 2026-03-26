@@ -31,9 +31,9 @@ export default function DIYPlumbingPermit() {
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 				</h4>
 				<p className="text-[#2B2B2B]">
-					If you’re a homeowner planning plumbing updates or installations,
-					fill out the form below to request permit assistance. We’ll help
-					ensure your project meets local code requirements.
+					If you’re a homeowner planning plumbing updates or installations, fill out the form below
+					to request permit assistance. We’ll help ensure your project meets local code
+					requirements.
 				</p>
 			</div>
 
@@ -120,9 +120,7 @@ export default function DIYPlumbingPermit() {
 
 				{/* Project Description */}
 				<div>
-					<label className="block font-bold text-[#2B2B2B]">
-						Project Description
-					</label>
+					<label className="block font-bold text-[#2B2B2B]">Project Description</label>
 					<textarea
 						name="projectDescription"
 						rows="4"

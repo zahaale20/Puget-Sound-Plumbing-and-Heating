@@ -11,27 +11,42 @@ export default function History() {
 				{/* Text */}
 				<div className="text-[#2B2B2B] space-y-6">
 					<p>
-						Puget Sound Plumbing & Heating was founded in the early 2000s by a local Seattle family with decades of combined experience in plumbing and mechanical systems. After working for larger companies throughout the Northwest, the founders set out to build a service business grounded in honesty, craftsmanship, and genuine customer care.
+						Puget Sound Plumbing & Heating was founded in the early 2000s by a local Seattle family
+						with decades of combined experience in plumbing and mechanical systems. After working
+						for larger companies throughout the Northwest, the founders set out to build a service
+						business grounded in honesty, craftsmanship, and genuine customer care.
 					</p>
 
 					<p>
-						Early growth came largely through word-of-mouth—neighbors recommending the company to neighbors, contractors sending difficult jobs their way, and families calling back year after year as their trusted plumbing provider.
+						Early growth came largely through word-of-mouth—neighbors recommending the company to
+						neighbors, contractors sending difficult jobs their way, and families calling back year
+						after year as their trusted plumbing provider.
 					</p>
 
 					<p>
-						As demand increased, the company expanded from basic plumbing repairs into sewer services, water heater installations, heating solutions, and full-service residential plumbing. Even as the team grew, Puget Sound Plumbing & Heating stayed rooted in its founding values of treating every customer like part of the community.
+						As demand increased, the company expanded from basic plumbing repairs into sewer
+						services, water heater installations, heating solutions, and full-service residential
+						plumbing. Even as the team grew, Puget Sound Plumbing & Heating stayed rooted in its
+						founding values of treating every customer like part of the community.
 					</p>
 
 					<p>
-						By the 2010s, the company had become known throughout Seattle and the wider Puget Sound region, serving thousands of homeowners from North Seattle to Renton. Investments in training, equipment, and 24/7 service solidified their reputation for reliability and expertise.
+						By the 2010s, the company had become known throughout Seattle and the wider Puget Sound
+						region, serving thousands of homeowners from North Seattle to Renton. Investments in
+						training, equipment, and 24/7 service solidified their reputation for reliability and
+						expertise.
 					</p>
 
 					<p>
-						Now with over 20 years of continuous service, Puget Sound Plumbing & Heating remains proudly family-owned and operated. Many long-time team members still serve the community, and many customers have relied on the company for more than a decade.
+						Now with over 20 years of continuous service, Puget Sound Plumbing & Heating remains
+						proudly family-owned and operated. Many long-time team members still serve the
+						community, and many customers have relied on the company for more than a decade.
 					</p>
 
 					<p>
-						Today, the company continues to uphold its original principles—quality workmanship, honest communication, and dependable solutions that keep Seattle homes safe, warm, and comfortable.
+						Today, the company continues to uphold its original principles—quality workmanship,
+						honest communication, and dependable solutions that keep Seattle homes safe, warm, and
+						comfortable.
 					</p>
 				</div>
 			</div>

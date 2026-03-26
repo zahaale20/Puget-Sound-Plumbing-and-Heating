@@ -17,7 +17,6 @@ export default function CareersPage() {
 	});
 	const [expandedJob, setExpandedJob] = useState(null);
 
-
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
@@ -35,22 +34,23 @@ export default function CareersPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">
 						Careers
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h3>
 					<p className="relative inline-block">
-						Ready for your next step? We're hiring experienced plumbers to join our high-performing residential team.
+						Ready for your next step? We're hiring experienced plumbers to join our high-performing
+						residential team.
 					</p>
 				</div>
 			</section>
@@ -137,15 +137,15 @@ export default function CareersPage() {
 			</section>
 
 			{/* Application Form Section */}
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]"
+			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col w-full max-w-7xl px-6">
 					<div className="w-full mb-6 text-left">
 						<h4 className="text-[#0C2D70] inline-block relative pb-2">
@@ -157,42 +157,85 @@ export default function CareersPage() {
 					<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<label className="text-[#2B2B2B]">First Name <span className="text-[#B32020] font-normal italic">*</span></label>
-								<input className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]" type="text" name="firstName" required value={formData.firstName} onChange={handleChange} />
+								<label className="text-[#2B2B2B]">
+									First Name <span className="text-[#B32020] font-normal italic">*</span>
+								</label>
+								<input
+									className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+									type="text"
+									name="firstName"
+									required
+									value={formData.firstName}
+									onChange={handleChange}
+								/>
 							</div>
 							<div>
-								<label className="text-[#2B2B2B]">Last Name <span className="text-[#B32020] font-normal italic">*</span></label>
-								<input className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]" type="text" name="lastName" required value={formData.lastName} onChange={handleChange} />
+								<label className="text-[#2B2B2B]">
+									Last Name <span className="text-[#B32020] font-normal italic">*</span>
+								</label>
+								<input
+									className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+									type="text"
+									name="lastName"
+									required
+									value={formData.lastName}
+									onChange={handleChange}
+								/>
 							</div>
 						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
-								<label className="text-[#2B2B2B]">Phone <span className="text-[#B32020] italic">*</span></label>
-								<input className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]" type="tel" name="phone" required value={formData.phone} onChange={handleChange} />
+								<label className="text-[#2B2B2B]">
+									Phone <span className="text-[#B32020] italic">*</span>
+								</label>
+								<input
+									className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+									type="tel"
+									name="phone"
+									required
+									value={formData.phone}
+									onChange={handleChange}
+								/>
 							</div>
 							<div>
-								<label className="text-[#2B2B2B]">Email <span className="text-[#B32020] italic">*</span></label>
-								<input className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]" type="email" name="email" required value={formData.email} onChange={handleChange} />
+								<label className="text-[#2B2B2B]">
+									Email <span className="text-[#B32020] italic">*</span>
+								</label>
+								<input
+									className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+									type="email"
+									name="email"
+									required
+									value={formData.email}
+									onChange={handleChange}
+								/>
 							</div>
 						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div className="relative">
-								<label className="text-[#2B2B2B]">Position <span className="text-[#B32020] italic">*</span></label>
+								<label className="text-[#2B2B2B]">
+									Position <span className="text-[#B32020] italic">*</span>
+								</label>
 								<div
 									className="border border-gray-300 px-4 py-2 bg-white cursor-pointer flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
 									onClick={() => setDropdownOpen(!dropdownOpen)}
 								>
 									<span>{formData.position || "Select a position"}</span>
-									<FaChevronDown className={`text-[#0C2D70] transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`} />
+									<FaChevronDown
+										className={`text-[#0C2D70] transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`}
+									/>
 								</div>
 								{dropdownOpen && (
 									<ul className="absolute z-10 w-full bg-white border-b border-x border-gray-300 shadow-lg max-h-56 overflow-y-auto">
 										{openings.map((job, index) => (
 											<li
 												key={index}
-												onClick={() => { setFormData({ ...formData, position: job.name }); setDropdownOpen(false); }}
+												onClick={() => {
+													setFormData({ ...formData, position: job.name });
+													setDropdownOpen(false);
+												}}
 												className={`px-4 py-2 cursor-pointer hover:bg-[#F5F5F5] transition-colors ${formData.position === job.name ? "bg-[#F5F5F5]" : ""}`}
 											>
 												{job.name}

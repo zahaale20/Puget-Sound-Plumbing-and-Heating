@@ -6,7 +6,6 @@ import { getCloudFrontUrl } from "../api/imageService";
 export default function RegionsPage() {
 	const { regionSlug } = useParams();
 
-
 	const region = ServiceAreaLinks.find(
 		(item) => item.name.replace(/\s+/g, "-").toLowerCase() === regionSlug
 	);
@@ -16,22 +15,25 @@ export default function RegionsPage() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">
 						Professional Plumbers in {regionName}
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h3>
 					<p className="relative inline-block">
-						Residents and businesses across {regionName} rely on Puget Sound Plumbing & Heating for licensed, 24/7 plumbing, drain cleaning, water heater repair, and emergency services. With over 20 years of experience, our local plumbers provide fast, reliable solutions tailored to {regionName} homes and businesses.
+						Residents and businesses across {regionName} rely on Puget Sound Plumbing & Heating for
+						licensed, 24/7 plumbing, drain cleaning, water heater repair, and emergency services.
+						With over 20 years of experience, our local plumbers provide fast, reliable solutions
+						tailored to {regionName} homes and businesses.
 					</p>
 				</div>
 			</section>
@@ -52,7 +54,9 @@ export default function RegionsPage() {
 								<ul className="list-disc pl-5 space-y-4 text-[#2B2B2B]">
 									{category.submenu.map((item, index) => (
 										<li key={index}>
-											<a href={item.href} className="text-[#0C2D70] hover:underline">{item.name}</a>
+											<a href={item.href} className="text-[#0C2D70] hover:underline">
+												{item.name}
+											</a>
 										</li>
 									))}
 								</ul>
@@ -65,31 +69,35 @@ export default function RegionsPage() {
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-						{regionName} {regionName.toLowerCase() === "seattle" ? "Neighborhoods" : "Cities"} We Serve
+						{regionName} {regionName.toLowerCase() === "seattle" ? "Neighborhoods" : "Cities"} We
+						Serve
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h4>
 					<p className="text-[#2B2B2B]">
-						We proudly serve every corner of {regionName}. Click below to explore plumbing services tailored to your neighborhood:
+						We proudly serve every corner of {regionName}. Click below to explore plumbing services
+						tailored to your neighborhood:
 					</p>
 					<ul className="list-disc pl-5 columns-2 md:columns-3 lg:columns-4 space-y-4 text-[#2B2B2B]">
 						{neighborhoods.map((neighborhood, index) => (
 							<li key={index}>
-								<a href={neighborhood.href} className="text-[#0C2D70] hover:underline">{neighborhood.name}</a>
+								<a href={neighborhood.href} className="text-[#0C2D70] hover:underline">
+									{neighborhood.name}
+								</a>
 							</li>
 						))}
 					</ul>
 				</div>
 			</section>
 
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16"
+			<section className="relative overflow-hidden flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<ScheduleOnline />
 			</section>
 		</div>

@@ -5,3 +5,5 @@ python-dotenv==1.0.1
 supabase==2.3.7
 python-multipart==0.0.9
 httpx
+resend>=2.2.0
+psycopg2-binary>=2.9.9

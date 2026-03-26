@@ -14,9 +14,7 @@ export default function RecentBlogPosts() {
 	useEffect(() => {
 		const uniqueKeys = [...new Set(recentPosts.map((p) => p.imageKey))];
 		const loadImages = async () => {
-			const entries = await Promise.all(
-				uniqueKeys.map((key) => [key, getCloudFrontUrl(key)])
-			);
+			const entries = await Promise.all(uniqueKeys.map((key) => [key, getCloudFrontUrl(key)]));
 			setImageUrls(Object.fromEntries(entries));
 		};
 		loadImages();
@@ -75,7 +73,10 @@ export default function RecentBlogPosts() {
 
 			{/* View All Posts Link */}
 			<div className="flex justify-end">
-				<a href="/blog" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors">
+				<a
+					href="/blog"
+					className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline transition-colors"
+				>
 					View All Posts <FaArrowRight />
 				</a>
 			</div>

@@ -12,22 +12,20 @@ import CallNow from "../components/CallNow";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Home() {
-
-
 	return (
 		<div>
 			<Hero />
 			<EmergencyBar />
 
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				<OurServices />
 			</section>
 
@@ -35,15 +33,15 @@ export default function Home() {
 				<WhyChooseUs />
 			</section>
 
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16"
+			<section className="relative overflow-hidden flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<CustomerReviews />
 			</section>
 
@@ -53,15 +51,14 @@ export default function Home() {
 
 			<FinancingBar />
 
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16"
-
-			>
-			
-			
-			
-			
-			
+			<section className="relative overflow-hidden flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 				<LimitedTimeOffers />
 			</section>
 
@@ -69,15 +66,14 @@ export default function Home() {
 				<CallNow />
 			</section>
 
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16"
-
-			>
-			
-			
-			
-			
-			
+			<section className="relative overflow-hidden flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 				<ScheduleOnline />
 			</section>
 

@@ -25,12 +25,19 @@ export default function WhyChooseUs() {
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">
-					For over 20 years, Puget Sound Plumbing and Heating has been Seattle’s trusted, family-run choice for reliable home comfort solutions. Our licensed professionals deliver expert workmanship, honest pricing, and outstanding customer care on every job. Whether it’s a minor repair or an urgent emergency, we’re available 24/7 to keep your home safe, comfortable, and running smoothly.
+					For over 20 years, Puget Sound Plumbing and Heating has been Seattle’s trusted, family-run
+					choice for reliable home comfort solutions. Our licensed professionals deliver expert
+					workmanship, honest pricing, and outstanding customer care on every job. Whether it’s a
+					minor repair or an urgent emergency, we’re available 24/7 to keep your home safe,
+					comfortable, and running smoothly.
 				</p>
 
 				{/* Learn More Link */}
 				<div className="flex justify-end">
-					<a href="/about-us" className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline">
+					<a
+						href="/about-us"
+						className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline"
+					>
 						Learn More
 						<FaArrowRight />
 					</a>

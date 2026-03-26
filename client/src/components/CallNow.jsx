@@ -8,11 +8,11 @@ export default function CallNow() {
 			{/* Image */}
 			<div className="block self-center lg:self-end shrink-0">
 				<ImageWithLoader
-                    src={getCloudFrontUrl("private/woman-calling.png")}
-                    alt="Woman Calling Plumbers"
-                    className="w-auto h-80 object-cover rounded-lg"
-                    loading="lazy"
-                />
+					src={getCloudFrontUrl("private/woman-calling.png")}
+					alt="Woman Calling Plumbers"
+					className="w-auto h-80 object-cover rounded-lg"
+					loading="lazy"
+				/>
 			</div>
 
 			{/* Header Container */}
@@ -25,7 +25,10 @@ export default function CallNow() {
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">
-					Whether it’s a burst pipe, a cold shower, or a strange noise from your furnace, help is just a call away. Our certified plumbers and heating specialists are available 24/7 to keep your home safe, comfortable, and running smoothly. Don’t wait — talk to a real expert today and get the reliable service you deserve.
+					Whether it’s a burst pipe, a cold shower, or a strange noise from your furnace, help is
+					just a call away. Our certified plumbers and heating specialists are available 24/7 to
+					keep your home safe, comfortable, and running smoothly. Don’t wait — talk to a real expert
+					today and get the reliable service you deserve.
 				</p>
 
 				{/* Call Now Button */}

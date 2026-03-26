@@ -1,9 +1,4 @@
-import {
-	FaRegCalendarAlt,
-	FaArrowRight,
-	FaSearch,
-	FaChevronDown,
-} from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown } from "react-icons/fa";
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,9 +14,7 @@ export default function BlogPage() {
 	useEffect(() => {
 		const uniqueKeys = [...new Set(posts.map((p) => p.imageKey))];
 		const loadImages = async () => {
-			const entries = await Promise.all(
-				uniqueKeys.map((key) => [key, getCloudFrontUrl(key)])
-			);
+			const entries = await Promise.all(uniqueKeys.map((key) => [key, getCloudFrontUrl(key)]));
 			setImageUrls(Object.fromEntries(entries));
 		};
 		loadImages();
@@ -40,8 +33,7 @@ export default function BlogPage() {
 	// Utils
 	const parseDate = (d) => new Date(d);
 	const normalize = (s) => (s || "").toString().toLowerCase();
-	const truncateText = (text, max) =>
-		text.length > max ? text.slice(0, max) + "..." : text;
+	const truncateText = (text, max) => (text.length > max ? text.slice(0, max) + "..." : text);
 
 	const handleOpen = (type) => {
 		clearTimeout(dropdownTimeout.current);
@@ -79,12 +71,18 @@ export default function BlogPage() {
 
 	let sorted = [...filtered].sort((a, b) => {
 		switch (selectedSort) {
-			case "dateDesc": return parseDate(b.date) - parseDate(a.date);
-			case "dateAsc": return parseDate(a.date) - parseDate(b.date);
-			case "viewsDesc": return b.views - a.views;
-			case "titleAsc": return a.title.localeCompare(b.title);
-			case "titleDesc": return b.title.localeCompare(a.title);
-			default: return 0;
+			case "dateDesc":
+				return parseDate(b.date) - parseDate(a.date);
+			case "dateAsc":
+				return parseDate(a.date) - parseDate(b.date);
+			case "viewsDesc":
+				return b.views - a.views;
+			case "titleAsc":
+				return a.title.localeCompare(b.title);
+			case "titleDesc":
+				return b.title.localeCompare(a.title);
+			default:
+				return 0;
 		}
 	});
 
@@ -93,10 +91,23 @@ export default function BlogPage() {
 	const topPosts = slicedPosts.length > 6 ? slicedPosts.slice(0, slicedPosts.length - 6) : [];
 	const bottomPosts = slicedPosts.slice(-6);
 
-	const handleSearchChange = (e) => { setSearchTerm(e.target.value); setCurrentPage(1); };
-	const handleCategorySelect = (category) => { setSelectedCategory(category); setFilterDropdownOpen(false); setCurrentPage(1); };
-	const handleSortSelect = (value) => { setSelectedSort(value); setSortDropdownOpen(false); setCurrentPage(1); };
-	const handleNextPage = () => { if (currentPage < totalPages) setCurrentPage(currentPage + 1); };
+	const handleSearchChange = (e) => {
+		setSearchTerm(e.target.value);
+		setCurrentPage(1);
+	};
+	const handleCategorySelect = (category) => {
+		setSelectedCategory(category);
+		setFilterDropdownOpen(false);
+		setCurrentPage(1);
+	};
+	const handleSortSelect = (value) => {
+		setSelectedSort(value);
+		setSortDropdownOpen(false);
+		setCurrentPage(1);
+	};
+	const handleNextPage = () => {
+		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+	};
 	const handleReadPost = (link) => navigate(link);
 
 	const PostCard = ({ post }) => (
@@ -125,17 +136,16 @@ export default function BlogPage() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-
 			{/* Header */}
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<h3 className="relative inline-block pb-2 w-fit">
 						Blog
@@ -166,9 +176,13 @@ export default function BlogPage() {
 							onMouseEnter={() => handleOpen("filter")}
 							onMouseLeave={() => handleClose("filter")}
 						>
-							<button className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${filterDropdownOpen ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"}`}>
+							<button
+								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${filterDropdownOpen ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"}`}
+							>
 								{selectedCategory}
-								<FaChevronDown className={`h-3 w-3 ml-1 transition-transform duration-300 ${filterDropdownOpen ? "rotate-180" : ""}`} />
+								<FaChevronDown
+									className={`h-3 w-3 ml-1 transition-transform duration-300 ${filterDropdownOpen ? "rotate-180" : ""}`}
+								/>
 							</button>
 							{filterDropdownOpen && (
 								<div
@@ -179,7 +193,10 @@ export default function BlogPage() {
 									<ul className="py-2">
 										{categoryOptions.map((cat) => (
 											<li key={cat}>
-												<button onClick={() => handleCategorySelect(cat)} className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap">
+												<button
+													onClick={() => handleCategorySelect(cat)}
+													className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap"
+												>
 													{cat}
 												</button>
 											</li>
@@ -195,9 +212,13 @@ export default function BlogPage() {
 							onMouseEnter={() => handleOpen("sort")}
 							onMouseLeave={() => handleClose("sort")}
 						>
-							<button className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${sortDropdownOpen ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"}`}>
+							<button
+								className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold text-[#0C2D70] uppercase whitespace-nowrap transition-all duration-200 border-b-4 cursor-pointer ${sortDropdownOpen ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:border-[#B32020] hover:bg-[#F5F5F5]"}`}
+							>
 								{sortOptions.find((s) => s.value === selectedSort)?.name}
-								<FaChevronDown className={`h-3 w-3 ml-1 transition-transform duration-300 ${sortDropdownOpen ? "rotate-180" : ""}`} />
+								<FaChevronDown
+									className={`h-3 w-3 ml-1 transition-transform duration-300 ${sortDropdownOpen ? "rotate-180" : ""}`}
+								/>
 							</button>
 							{sortDropdownOpen && (
 								<div
@@ -208,7 +229,10 @@ export default function BlogPage() {
 									<ul className="py-2">
 										{sortOptions.map((opt) => (
 											<li key={opt.value}>
-												<button onClick={() => handleSortSelect(opt.value)} className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap">
+												<button
+													onClick={() => handleSortSelect(opt.value)}
+													className="block w-full text-left text-xs font-semibold text-[#2B2B2B] uppercase transition-all hover:bg-[#F5F5F5] cursor-pointer px-4 py-2 whitespace-nowrap"
+												>
 													{opt.name}
 												</button>
 											</li>
@@ -225,23 +249,27 @@ export default function BlogPage() {
 			{topPosts.length > 0 && (
 				<section className="bg-white w-full pb-6">
 					<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-						{topPosts.map((post) => <PostCard key={post.id} post={post} />)}
+						{topPosts.map((post) => (
+							<PostCard key={post.id} post={post} />
+						))}
 					</div>
 				</section>
 			)}
 
 			{/* Blog Cards (Bottom - Skyline) */}
-			<section
-				className="relative overflow-hidden w-full pb-16 space-y-6"
+			<section className="relative overflow-hidden w-full pb-16 space-y-6">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-					{bottomPosts.map((post) => <PostCard key={post.id} post={post} />)}
+					{bottomPosts.map((post) => (
+						<PostCard key={post.id} post={post} />
+					))}
 				</div>
 
 				<div className="flex justify-center">
@@ -255,7 +283,6 @@ export default function BlogPage() {
 					)}
 				</div>
 			</section>
-
 		</div>
 	);
 }

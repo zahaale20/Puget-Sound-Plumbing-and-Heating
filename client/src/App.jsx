@@ -15,7 +15,7 @@ import LimitedTimeOffersPage from "./pages/LimitedTimeOffersPage";
 import ResourcesPage from "./pages/ResourcesPage";
 import AboutUsPage from "./pages/AboutUsPage";
 
-import FAQsPage from "./pages/FAQsPage"
+import FAQsPage from "./pages/FAQsPage";
 
 import ServiceAreasPage from "./pages/ServiceAreasPage";
 import RegionsPage from "./pages/RegionsPage";
@@ -25,9 +25,9 @@ import ServiceCategoriesPage from "./pages/ServiceCategoriesPage";
 import ServiceCategoryPage from "./pages/ServiceCategoryPage";
 import ServicePage from "./pages/ServicePage";
 
-import FinancingPage from "./pages/FinancingPage"
-import WarrantyPage from "./pages/WarrantyPage"
-import CustomerReviewsPage from "./pages/CustomerReviewsPage"
+import FinancingPage from "./pages/FinancingPage";
+import WarrantyPage from "./pages/WarrantyPage";
+import CustomerReviewsPage from "./pages/CustomerReviewsPage";
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
@@ -43,7 +43,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
-			<div className="flex flex-col min-h-screen mx-auto">
+			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
 				<Routes>
 					<Route path="/" element={<HomePage />} />

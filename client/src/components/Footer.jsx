@@ -14,30 +14,51 @@ import { useState, useEffect } from "react";
 import { getCloudFrontUrl } from "../api/imageService";
 import { ImageWithLoader } from "./LoadingComponents";
 
-
-
 export default function Footer() {
 	const navigate = useNavigate();
-    const [patternUrl, setPatternUrl] = useState(null);
+	const [patternUrl, setPatternUrl] = useState(null);
 
 	useEffect(() => {
-        setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
-    }, []);
+		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+	}, []);
 
 	return (
 		<footer className="w-full items-center justify-center">
 			<div className="w-full bg-white flex justify-center">
 				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
 					{/* Logo */}
-					<button onClick={() => navigate("/")} className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer">
-						<ImageWithLoader src={getCloudFrontUrl("public/pspah-logo.png")} alt="Puget Sound Plumbing and Heating Logo" className="h-full w-auto object-contain" fetchPriority="high" />
+					<button
+						onClick={() => navigate("/")}
+						className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
+					>
+						<ImageWithLoader
+							src={getCloudFrontUrl("public/pspah-logo.png")}
+							alt="Puget Sound Plumbing and Heating Logo"
+							className="h-full w-auto object-contain"
+							fetchPriority="high"
+						/>
 					</button>
 
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
-						<ImageWithLoader src={getCloudFrontUrl("private/google-reviews.png")} alt="Google Reviews" className="h-[55px] object-contain" loading="lazy" />
-						<ImageWithLoader src={getCloudFrontUrl("private/bbb-accredited-business.png")} alt="BBB Accredited Business" className="h-[55px] object-contain" loading="lazy" />
-						<ImageWithLoader src={getCloudFrontUrl("private/year-20-anniversary.png")} alt="20 Year Anniversary" className="hidden sm:block h-[55px] object-contain" loading="lazy" />
+						<ImageWithLoader
+							src={getCloudFrontUrl("private/google-reviews.png")}
+							alt="Google Reviews"
+							className="h-[55px] object-contain"
+							loading="lazy"
+						/>
+						<ImageWithLoader
+							src={getCloudFrontUrl("private/bbb-accredited-business.png")}
+							alt="BBB Accredited Business"
+							className="h-[55px] object-contain"
+							loading="lazy"
+						/>
+						<ImageWithLoader
+							src={getCloudFrontUrl("private/year-20-anniversary.png")}
+							alt="20 Year Anniversary"
+							className="hidden sm:block h-[55px] object-contain"
+							loading="lazy"
+						/>
 					</div>
 				</div>
 			</div>
@@ -55,7 +76,6 @@ export default function Footer() {
 			>
 				{/* Content */}
 				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
-					
 					{/* LEFT COLUMN: Brand + Contact (1/4 space) */}
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
@@ -69,11 +89,16 @@ export default function Footer() {
 							<ul className="flex flex-col space-y-2">
 								<li className="flex items-center gap-2">
 									<FaPhone />
-									<a href="tel:206-938-3219" className="hover:underline">(206) 938-3219</a>
+									<a href="tel:206-938-3219" className="hover:underline">
+										(206) 938-3219
+									</a>
 								</li>
 								<li className="flex gap-2">
 									<FaLocationDot className="mt-1" />
-									<a href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168" className="flex flex-col hover:underline">
+									<a
+										href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168"
+										className="flex flex-col hover:underline"
+									>
 										<span>11803 Des Moines Memorial Dr S</span>
 										<span>Burien, WA 98168</span>
 									</a>
@@ -91,7 +116,8 @@ export default function Footer() {
 									<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 								</h5>
 								<p className="text-white/90 leading-relaxed">
-									Join our mailing list for seasonal maintenance tips, exclusive promotions, and Puget Sound news.
+									Join our mailing list for seasonal maintenance tips, exclusive promotions, and
+									Puget Sound news.
 								</p>
 							</div>
 
@@ -101,8 +127,8 @@ export default function Footer() {
 									placeholder="Email Address"
 									className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
 								/>
-								<button 
-									onClick={() => navigate("/schedule-online")} 
+								<button
+									onClick={() => navigate("/schedule-online")}
 									className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300"
 								>
 									Join Now
@@ -123,10 +149,26 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li><a href="/services/plumbing" className="hover:underline">Plumbing</a></li>
-								<li><a href="/services/drain-and-sewer" className="hover:underline">Drain & Sewer</a></li>
-								<li><a href="/services/water-heaters" className="hover:underline">Water Heaters</a></li>
-								<li><a href="/services/heating-and-cooling" className="hover:underline">Heating & Cooling</a></li>
+								<li>
+									<a href="/services/plumbing" className="hover:underline">
+										Plumbing
+									</a>
+								</li>
+								<li>
+									<a href="/services/drain-and-sewer" className="hover:underline">
+										Drain & Sewer
+									</a>
+								</li>
+								<li>
+									<a href="/services/water-heaters" className="hover:underline">
+										Water Heaters
+									</a>
+								</li>
+								<li>
+									<a href="/services/heating-and-cooling" className="hover:underline">
+										Heating & Cooling
+									</a>
+								</li>
 							</ul>
 						</div>
 
@@ -137,11 +179,31 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li><a href="/blog" className="hover:underline">Blog</a></li>
-								<li><a href="/coupons" className="hover:underline">Coupons</a></li>
-								<li><a href="/faqs" className="hover:underline">FAQs</a></li>
-								<li><a href="/financing" className="hover:underline">Financing</a></li>
-								<li><a href="/warranty" className="hover:underline">Warranty</a></li>
+								<li>
+									<a href="/blog" className="hover:underline">
+										Blog
+									</a>
+								</li>
+								<li>
+									<a href="/coupons" className="hover:underline">
+										Coupons
+									</a>
+								</li>
+								<li>
+									<a href="/faqs" className="hover:underline">
+										FAQs
+									</a>
+								</li>
+								<li>
+									<a href="/financing" className="hover:underline">
+										Financing
+									</a>
+								</li>
+								<li>
+									<a href="/warranty" className="hover:underline">
+										Warranty
+									</a>
+								</li>
 							</ul>
 						</div>
 
@@ -152,10 +214,26 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<ul className="space-y-2">
-								<li><a href="/about-us" className="hover:underline">About Us</a></li>
-								<li><a href="/careers" className="hover:underline">Careers</a></li>
-								<li><a href="/reviews" className="hover:underline">Reviews</a></li>
-								<li><a href="/service-areas" className="hover:underline">Service Areas</a></li>
+								<li>
+									<a href="/about-us" className="hover:underline">
+										About Us
+									</a>
+								</li>
+								<li>
+									<a href="/careers" className="hover:underline">
+										Careers
+									</a>
+								</li>
+								<li>
+									<a href="/reviews" className="hover:underline">
+										Reviews
+									</a>
+								</li>
+								<li>
+									<a href="/service-areas" className="hover:underline">
+										Service Areas
+									</a>
+								</li>
 							</ul>
 						</div>
 
@@ -167,16 +245,37 @@ export default function Footer() {
 							</h5>
 							<ul className="flex flex-col space-y-2">
 								<li className="flex items-center gap-2">
-									<FaFacebookF /> <a href="https://www.facebook.com/pugetsoundplumbing/" className="hover:underline">Facebook</a>
+									<FaFacebookF />{" "}
+									<a
+										href="https://www.facebook.com/pugetsoundplumbing/"
+										className="hover:underline"
+									>
+										Facebook
+									</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaInstagram /> <a href="https://www.instagram.com/puget_sound_plumbing_heating/" className="hover:underline">Instagram</a>
+									<FaInstagram />{" "}
+									<a
+										href="https://www.instagram.com/puget_sound_plumbing_heating/"
+										className="hover:underline"
+									>
+										Instagram
+									</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaYoutube /> <a href="https://www.youtube.com/user/pugetsoundplumbing" className="hover:underline">YouTube</a>
+									<FaYoutube />{" "}
+									<a
+										href="https://www.youtube.com/user/pugetsoundplumbing"
+										className="hover:underline"
+									>
+										YouTube
+									</a>
 								</li>
 								<li className="flex items-center gap-2">
-									<FaXTwitter /> <a href="https://x.com/PugetPlumbing" className="hover:underline">X</a>
+									<FaXTwitter />{" "}
+									<a href="https://x.com/PugetPlumbing" className="hover:underline">
+										X
+									</a>
 								</li>
 							</ul>
 						</div>

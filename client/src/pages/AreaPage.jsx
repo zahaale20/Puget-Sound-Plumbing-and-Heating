@@ -5,8 +5,6 @@ import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function AreaPage() {
-
-
 	const { regionSlug, areaSlug } = useParams();
 
 	const region = ServiceAreaLinks.find(
@@ -16,26 +14,23 @@ export default function AreaPage() {
 	const regionName = region ? region.name : "Service Area";
 
 	const area = region
-		? region.areas.find(
-			(item) => item.name.replace(/\s+/g, "-").toLowerCase() === areaSlug
-		)
+		? region.areas.find((item) => item.name.replace(/\s+/g, "-").toLowerCase() === areaSlug)
 		: null;
 
 	const areaName = area ? area.name : areaSlug || "area";
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			
 			{/* Header Section*/}
-			<section
-				className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16"
+			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/pattern1.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
 					<h3 className="relative inline-block pb-2 w-fit">
@@ -45,9 +40,11 @@ export default function AreaPage() {
 
 					{/* Description */}
 					<p className="relative inline-block">
-						When plumbing or heating problems disrupt your home, you need a team you can count on. At Puget Sound Plumbing & Heating, we’ve been serving {areaName} in {regionName} for more than 20 years. Our licensed technicians are available 24/7 to deliver fast, reliable service with guaranteed results.
+						When plumbing or heating problems disrupt your home, you need a team you can count on.
+						At Puget Sound Plumbing & Heating, we’ve been serving {areaName} in {regionName} for
+						more than 20 years. Our licensed technicians are available 24/7 to deliver fast,
+						reliable service with guaranteed results.
 					</p>
-
 				</div>
 			</section>
 
@@ -62,7 +59,8 @@ export default function AreaPage() {
 
 					{/* Description */}
 					<p className="text-[#2B2B2B]">
-						No matter the size of the job, our team has the tools and expertise to get it done right. We proudly offer:
+						No matter the size of the job, our team has the tools and expertise to get it done
+						right. We proudly offer:
 					</p>
 
 					{/* Services */}
@@ -82,20 +80,19 @@ export default function AreaPage() {
 							</div>
 						))}
 					</div>
-
 				</div>
 			</section>
 
 			{/* Why Choose Us Section*/}
-			<section
-				className="relative overflow-hidden flex justify-center w-full py-16"
+			<section className="relative overflow-hidden flex justify-center w-full py-16">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 
-			>
-			<img src={getCloudFrontUrl("private/seattle-skyline.png")} alt="" aria-hidden="true" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover object-bottom z-0" />
-			
-			
-			
-			
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{/* Title */}
 					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
@@ -107,11 +104,13 @@ export default function AreaPage() {
 					<ul className="pl-0 space-y-4 text-[#2B2B2B]" role="list">
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
-							<strong>24/7 Emergency Plumbing</strong> – Fast response for leaks, clogs, and burst pipes.
+							<strong>24/7 Emergency Plumbing</strong> – Fast response for leaks, clogs, and burst
+							pipes.
 						</li>
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
-							<strong>Licensed Local Plumbers</strong> – Certified and trusted across Seattle and King County.
+							<strong>Licensed Local Plumbers</strong> – Certified and trusted across Seattle and
+							King County.
 						</li>
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
@@ -119,14 +118,15 @@ export default function AreaPage() {
 						</li>
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
-							<strong>Comprehensive Services</strong> – Drain cleaning, water heater repair, sewer line work, and more.
+							<strong>Comprehensive Services</strong> – Drain cleaning, water heater repair, sewer
+							line work, and more.
 						</li>
 						<li className="flex items-start gap-2">
 							<FaCheck className="text-[#B32020] mt-1" />
-							<strong>Proven Local Expertise</strong> – Serving Seattle, King County, Pierce County, and Snohomish County for 20+ years.
+							<strong>Proven Local Expertise</strong> – Serving Seattle, King County, Pierce County,
+							and Snohomish County for 20+ years.
 						</li>
 					</ul>
-
 				</div>
 			</section>
 
@@ -134,7 +134,6 @@ export default function AreaPage() {
 			<section className="flex justify-center w-full py-16 bg-[#F5F5F5]">
 				<ScheduleOnline />
 			</section>
-
 		</div>
 	);
 }

@@ -13,22 +13,26 @@ export default function TeamMembers() {
 		{
 			name: "Carlos M.",
 			position: "Master Plumber",
-			description: "Carlos brings 15 years of hands-on plumbing experience, specializing in whole-home repipes and advanced diagnostic work. Customers value his calm presence and problem-solving mindset.",
+			description:
+				"Carlos brings 15 years of hands-on plumbing experience, specializing in whole-home repipes and advanced diagnostic work. Customers value his calm presence and problem-solving mindset.",
 		},
 		{
 			name: "Jenna R.",
 			position: "Office Coordinator",
-			description: "Jenna ensures every service call runs smoothly from start to finish. She keeps communication clear, schedules efficient appointments, and supports the entire field team.",
+			description:
+				"Jenna ensures every service call runs smoothly from start to finish. She keeps communication clear, schedules efficient appointments, and supports the entire field team.",
 		},
 		{
 			name: "Tyler S.",
 			position: "Water Heater Technician",
-			description: "Tyler focuses on water heater repairs, installations, and safety checks. His attention to detail and clear explanations make homeowners feel confident in every service he provides.",
+			description:
+				"Tyler focuses on water heater repairs, installations, and safety checks. His attention to detail and clear explanations make homeowners feel confident in every service he provides.",
 		},
 		{
 			name: "Linda K.",
 			position: "Customer Care Specialist",
-			description: "Linda is known for her friendly demeanor and exceptional customer service. She helps clients understand their options and ensures every experience is stress-free and well-coordinated.",
+			description:
+				"Linda is known for her friendly demeanor and exceptional customer service. She helps clients understand their options and ensures every experience is stress-free and well-coordinated.",
 		},
 	];
 

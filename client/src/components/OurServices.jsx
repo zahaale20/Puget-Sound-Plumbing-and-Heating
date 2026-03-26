@@ -7,47 +7,53 @@ export default function OurServices() {
 	const [imageUrls, setImageUrls] = useState({});
 
 	const services = [
-		{ 
+		{
 			imageKey: "private/water-heaters.png",
 			imageColorKey: "private/water-heaters-color.png",
-			title: "Water Heaters", 
-			description: "Expert installation, maintenance, and repair for tank and tankless water heaters. We ensure reliable, energy-efficient hot water tailored to your home.",
-			path: "/services/water-heaters" 
+			title: "Water Heaters",
+			description:
+				"Expert installation, maintenance, and repair for tank and tankless water heaters. We ensure reliable, energy-efficient hot water tailored to your home.",
+			path: "/services/water-heaters",
 		},
-		{ 
+		{
 			imageKey: "private/faucet-repair.png",
 			imageColorKey: "private/faucet-repair-color.png",
-			title: "Faucets", 
-			description: "Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency.",
-			path: "/services/plumbing/faucets" 
+			title: "Faucets",
+			description:
+				"Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency.",
+			path: "/services/plumbing/faucets",
 		},
-		{ 
+		{
 			imageKey: "private/toilet-repair.png",
 			imageColorKey: "private/toilet-repair-color.png",
-			title: "Toilets", 
-			description: "Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. We restore efficiency and install water-saving models.",
-			path: "/services/plumbing/toilets" 
+			title: "Toilets",
+			description:
+				"Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. We restore efficiency and install water-saving models.",
+			path: "/services/plumbing/toilets",
 		},
-		{ 
+		{
 			imageKey: "private/garbage-disposal.png",
 			imageColorKey: "private/garbage-disposal-color.png",
-			title: "Garbage Disposal", 
-			description: "From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation and long-lasting performance.",
-			path: "/services/plumbing/garbage-disposal" 
+			title: "Garbage Disposal",
+			description:
+				"From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation and long-lasting performance.",
+			path: "/services/plumbing/garbage-disposal",
 		},
-		{ 
+		{
 			imageKey: "private/water-filtration.png",
 			imageColorKey: "private/water-filtration-color.png",
-			title: "Water Filtration Systems", 
-			description: "Expert filtration installation and maintenance that removes contaminants, improves taste, and protects your plumbing and appliances.",
-			path: "/services/plumbing/water-filtration-systems" 
+			title: "Water Filtration Systems",
+			description:
+				"Expert filtration installation and maintenance that removes contaminants, improves taste, and protects your plumbing and appliances.",
+			path: "/services/plumbing/water-filtration-systems",
 		},
-		{ 
+		{
 			imageKey: "private/plumbing-repair.png",
 			imageColorKey: "private/plumbing-repair-color.png",
-			title: "Plumbing Repairs", 
-			description: "Comprehensive repair for leaks, burst pipes, and low water pressure. Fast, affordable service to keep your plumbing system running perfectly.",
-			path: "/services/plumbing/plumbing-repairs" 
+			title: "Plumbing Repairs",
+			description:
+				"Comprehensive repair for leaks, burst pipes, and low water pressure. Fast, affordable service to keep your plumbing system running perfectly.",
+			path: "/services/plumbing/plumbing-repairs",
 		},
 	];
 
@@ -83,7 +89,8 @@ export default function OurServices() {
 
 				{/* Description */}
 				<p className="inline-block relative leading-normal">
-					Explore reliable plumbing and heating solutions delivered by experienced local technicians.
+					Explore reliable plumbing and heating solutions delivered by experienced local
+					technicians.
 				</p>
 			</div>
 

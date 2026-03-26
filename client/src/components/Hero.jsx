@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function Hero() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const shouldPrioritizeHeroImage = location.pathname === "/";
 
 	return (
 		<section
@@ -16,7 +19,7 @@ export default function Hero() {
 				src={getCloudFrontUrl("private/home-page-hero2.png")}
 				alt=""
 				aria-hidden="true"
-				fetchPriority="high"
+				fetchPriority={shouldPrioritizeHeroImage ? "high" : "auto"}
 				className="absolute inset-0 w-full h-full object-cover"
 			/>
 
@@ -33,11 +36,16 @@ export default function Hero() {
 				</h1>
 
 				{/* Description */}
-				<p className="text-base lg:text-lg text-white">The sound solution to your plumbing problems.</p>
+				<p className="text-base lg:text-lg text-white">
+					The sound solution to your plumbing problems.
+				</p>
 
 				{/* Buttons */}
 				<div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch w-full">
-					<button onClick={() => navigate("/schedule-online")} className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]">
+					<button
+						onClick={() => navigate("/schedule-online")}
+						className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
+					>
 						<FaRegCalendarAlt />
 						Schedule Online
 					</button>

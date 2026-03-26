@@ -23,9 +23,7 @@ export function ImageWithLoader({
 
 	return (
 		<div className={`relative ${className}`}>
-			{isLoading && (
-				<div className="absolute inset-0 bg-gray-50" />
-			)}
+			{isLoading && <div className="absolute inset-0 bg-gray-50" />}
 			{hasError ? (
 				<div className="flex items-center justify-center bg-gray-50 text-gray-400 text-sm h-full">
 					Image unavailable
@@ -34,7 +32,7 @@ export function ImageWithLoader({
 				<img
 					src={src}
 					alt={alt}
-					className={`${className} ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-200`}
+					className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
 					loading={loading}
 					decoding={decoding}
 					fetchPriority={fetchPriority}
@@ -54,7 +52,7 @@ export function TextSkeleton({ lines = 1, className = "" }) {
 				<div
 					key={i}
 					className="h-4 bg-gray-50"
-					style={{ width: i === lines - 1 ? '70%' : '100%' }}
+					style={{ width: i === lines - 1 ? "70%" : "100%" }}
 				/>
 			))}
 		</div>

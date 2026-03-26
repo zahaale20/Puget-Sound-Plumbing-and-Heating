@@ -1,11 +1,8 @@
-
-
 import { getCloudFrontUrl } from "../api/imageService";
 
 export default function OurMission() {
 	return (
 		<div className="flex flex-col max-w-7xl mx-auto px-6 space-y-12">
-			
 			{/* Text Section */}
 			<div className="flex-1 space-y-6">
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
@@ -14,8 +11,9 @@ export default function OurMission() {
 				</h4>
 
 				<p className="text-[#2B2B2B]">
-					Our mission is to deliver trusted plumbing solutions to homeowners and businesses across the Puget Sound, 
-					big enough to serve every need yet small enough to care for each customer.
+					Our mission is to deliver trusted plumbing solutions to homeowners and businesses across
+					the Puget Sound, big enough to serve every need yet small enough to care for each
+					customer.
 				</p>
 			</div>
 
@@ -28,7 +26,6 @@ export default function OurMission() {
 					loading="lazy"
 				/>
 			</div>
-			
 		</div>
 	);
 }
