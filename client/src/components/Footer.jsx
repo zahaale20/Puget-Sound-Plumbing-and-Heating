@@ -70,24 +70,18 @@ export default function Footer() {
 			</div>
 
 			{/* Main Footer */}
-						setTimeout(() => setNewsletterSuccess(false), 5000);
 			<div
-						setNewsletterError(err.message || "An error occurred. Please try again.");
+				className="relative flex flex-col items-center w-full py-16"
 				style={{
 					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
 					backgroundColor: "#0C2D70",
 					backgroundRepeat: "no-repeat",
 					backgroundPosition: "center",
-						<div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-							Thank you! We'll be in touch soon.
-						</div>
+					backgroundSize: "cover",
 				}}
 			>
 				{/* Content */}
 				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
-						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-3">
-							{newsletterError}
-						</div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
 							<h5 className="relative inline-block py-1 w-fit">
