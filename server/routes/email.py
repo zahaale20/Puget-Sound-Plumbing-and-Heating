@@ -7,11 +7,11 @@ import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response, Request
 from typing import Optional
 from urllib.parse import quote
-from pydantic import BaseModel
 import resend
 from database import get_db_connection
 from services.s3_service import S3Service
 from services.rate_limiter import check_rate_limit
+from models.requests import EmailRequest, ScheduleRequest, NewsletterRequest, RedeemOfferRequest, DiyPermitRequest
 
 router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
@@ -38,47 +38,6 @@ def _get_client_ip(request: Request) -> str:
     if forwarded:
         return forwarded.split(",")[0].strip()
     return "0.0.0.0"
-
-
-class EmailRequest(BaseModel):
-    email: str
-    firstName: str
-
-
-class ScheduleRequest(BaseModel):
-    firstName: str
-    lastName: str
-    phone: str
-    email: str
-    message: str = ""
-    recaptchaToken: Optional[str] = None
-
-
-class NewsletterRequest(BaseModel):
-    email: str
-    recaptchaToken: Optional[str] = None
-
-
-class RedeemOfferRequest(BaseModel):
-    firstName: str
-    lastName: str
-    phone: str
-    email: str
-    couponDiscount: str
-    couponCondition: str
-    recaptchaToken: Optional[str] = None
-
-
-class DiyPermitRequest(BaseModel):
-    firstName: str
-    lastName: str
-    email: str
-    phone: str
-    address: str
-    city: str = ""
-    projectDescription: str = ""
-    inspection: str = "unsure"
-    recaptchaToken: Optional[str] = None
 
 
 def _normalize_email(email: str) -> str:
