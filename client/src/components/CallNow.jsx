@@ -1,0 +1,45 @@
+import { FaPhone } from "react-icons/fa";
+import { getCloudFrontUrl } from "../services/imageService";
+import { ImageWithLoader } from "./ui/LoadingComponents";
+
+export default function CallNow() {
+	return (
+		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
+			{/* Image */}
+			<div className="block self-center lg:self-end shrink-0">
+				<ImageWithLoader
+					src={getCloudFrontUrl("private/woman-calling.png")}
+					alt="Woman Calling Plumbers"
+					className="w-auto h-80 object-cover rounded-lg"
+					loading="lazy"
+				/>
+			</div>
+
+			{/* Header Container */}
+			<div className="space-y-6 py-16">
+				{/* Title */}
+				<h4 className="text-[#0C2D70] inline-block relative pb-2">
+					Call Now
+					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+				</h4>
+
+				{/* Description */}
+				<p className="text-[#2B2B2B]">
+					Whether it’s a burst pipe, a cold shower, or a strange noise from your furnace, help is
+					just a call away. Our certified plumbers and heating specialists are available 24/7 to
+					keep your home safe, comfortable, and running smoothly. Don’t wait — talk to a real expert
+					today and get the reliable service you deserve.
+				</p>
+
+				{/* Call Now Button */}
+				<a
+					href="tel:206-938-3219"
+					className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
+				>
+					<FaPhone />
+					(206) 938-3219
+				</a>
+			</div>
+		</div>
+	);
+}
