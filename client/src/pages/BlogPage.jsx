@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { getCloudFrontUrl } from "../api/imageService";
 
 import { categoryOptions, sortOptions, posts } from "../data/data";
-import { ImageWithLoader } from "../components/LoadingComponents";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function BlogPage() {
 	const navigate = useNavigate();

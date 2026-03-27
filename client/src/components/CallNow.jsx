@@ -1,6 +1,6 @@
 import { FaPhone } from "react-icons/fa";
 import { getCloudFrontUrl } from "../api/imageService";
-import { ImageWithLoader } from "./LoadingComponents";
+import { ImageWithLoader } from "./ui/LoadingComponents";
 
 export default function CallNow() {
 	return (

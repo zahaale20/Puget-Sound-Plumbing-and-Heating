@@ -4,7 +4,7 @@ import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
 import { submitJobApplication } from "../api/emailService";
 import { getRecaptchaToken } from "../api/recaptchaService";
-import FormResponseMessage from "../components/FormResponseMessage";
+import FormResponseMessage from "../components/ui/FormResponseMessage";
 
 export default function CareersPage() {
 	const [dropdownOpen, setDropdownOpen] = useState(false);

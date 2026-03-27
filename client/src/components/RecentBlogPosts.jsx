@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
 import { posts } from "../data/data";
 import { getCloudFrontUrl } from "../api/imageService";
-import { ImageWithLoader } from "./LoadingComponents";
+import { ImageWithLoader } from "./ui/LoadingComponents";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getCloudFrontUrl } from "../api/imageService";
-import { ImageWithLoader } from "./LoadingComponents";
+import { ImageWithLoader } from "./ui/LoadingComponents";
 
 export default function TeamMembers() {
 	const [defaultProfilePic, setDefaultProfilePic] = useState(null);

@@ -13,9 +13,9 @@ import { useState, useEffect } from "react";
 
 import { getCloudFrontUrl } from "../api/imageService";
 import { getRecaptchaToken } from "../api/recaptchaService";
-import { ImageWithLoader } from "./LoadingComponents";
+import { ImageWithLoader } from "./ui/LoadingComponents";
 import { subscribeNewsletter } from "../api/emailService";
-import FormResponseMessage from "./FormResponseMessage";
+import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function Footer() {
 	const navigate = useNavigate();
@@ -157,15 +157,6 @@ export default function Footer() {
 														"This email is already subscribed to our mailing list."
 													);
 												}
-												setNewsletterSuccess(true);
-												setNewsletterEmail("");
-												setTimeout(() => setNewsletterSuccess(false), 5000);
-											} catch (err) {
-												setNewsletterError(err.message || "An error occurred. Please try again.");
-											} finally {
-												setNewsletterSubmitting(false);
-											}
-										}}
 												setNewsletterSuccess(true);
 												setNewsletterEmail("");
 												setTimeout(() => setNewsletterSuccess(false), 5000);

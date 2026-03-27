@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 import { redeemOffer } from "../api/emailService";
 import { getRecaptchaToken } from "../api/recaptchaService";
-import FormResponseMessage from "./FormResponseMessage";
+import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [
