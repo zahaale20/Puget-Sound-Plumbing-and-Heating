@@ -11,11 +11,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import { getCloudFrontUrl } from "../services/imageService";
-import { getRecaptchaToken } from "../services/recaptchaService";
-import { ImageWithLoader } from "./ui/LoadingComponents";
-import { subscribeNewsletter } from "../services/emailService";
-import FormResponseMessage from "./ui/FormResponseMessage";
+import { getCloudFrontUrl } from "../../services/imageService";
+import { getRecaptchaToken } from "../../services/recaptchaService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
+import { subscribeNewsletter } from "../../services/emailService";
+import FormResponseMessage from "../ui/FormResponseMessage";
 
 export default function Footer() {
 	const navigate = useNavigate();
