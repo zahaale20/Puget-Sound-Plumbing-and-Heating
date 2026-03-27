@@ -31,12 +31,13 @@ NEWSLETTER_UNSUBSCRIBE_SECRET = (
 
 def _get_client_ip(request: Request) -> str:
     """Extract client IP from request, accounting for proxies"""
-    if request.client:
-        return request.client.host
-    # Fallback to X-Forwarded-For header if behind proxy
+    # Check X-Forwarded-For first — behind Vercel/reverse proxies,
+    # request.client.host is the proxy IP, not the real client.
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
         return forwarded.split(",")[0].strip()
+    if request.client:
+        return request.client.host
     return "0.0.0.0"
 
 
@@ -129,15 +130,21 @@ def _build_newsletter_unsubscribe_url(email: str) -> str:
 
 
 @router.post("/verify-recaptcha")
-async def verify_recaptcha(request: dict):
+async def verify_recaptcha(request: dict, req: Request):
     """Verify reCAPTCHA v3 token from frontend"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "verify-recaptcha")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+
     token = request.get("token")
     if not token:
         raise HTTPException(status_code=400, detail="Token is required")
 
     if not RECAPTCHA_SECRET_KEY:
         logger.warning("RECAPTCHA_SECRET_KEY not configured, allowing request")
-        return {"success": True, "score": 1.0, "message": "reCAPTCHA not configured"}
+        return {"success": True, "message": "reCAPTCHA not configured"}
 
     try:
         response = requests.post(
@@ -156,12 +163,12 @@ async def verify_recaptcha(request: dict):
 
         # Block if score is too low (indicates likely bot)
         if success and score >= RECAPTCHA_SCORE_THRESHOLD:
-            return {"success": True, "score": score}
+            return {"success": True}
         else:
             logger.warning(f"reCAPTCHA validation failed: success={success}, score={score}")
             raise HTTPException(
                 status_code=403,
-                detail=f"Failed reCAPTCHA verification (score: {score}). Please try again.",
+                detail="Failed reCAPTCHA verification. Please try again.",
             )
     except requests.RequestException as e:
         logger.exception(f"reCAPTCHA API error: {str(e)}")
@@ -169,8 +176,21 @@ async def verify_recaptcha(request: dict):
 
 
 @router.post("/send-email")
-async def send_email(request: EmailRequest):
+async def send_email(request: EmailRequest, req: Request):
     """Send a professional follow-up email to schedule online requests"""
+    # Check rate limit
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "send-email")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
+
+    # Verify reCAPTCHA token
+    if not _verify_recaptcha(request.recaptchaToken):
+        raise HTTPException(
+            status_code=403,
+            detail="Security verification failed. Please try again.",
+        )
+
     try:
         email = _normalize_email(request.email)
         first_name = _normalize_text(request.firstName)
@@ -312,8 +332,15 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
 
 
 @router.get("/newsletter/unsubscribe")
-async def unsubscribe_newsletter(email: str, token: Optional[str] = None):
+async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: Request = None):
     """One-click unsubscribe endpoint that removes user from mailing list."""
+    # Check rate limit
+    if req:
+        client_ip = _get_client_ip(req)
+        is_allowed, rate_limit_msg = check_rate_limit(client_ip, "unsubscribe")
+        if not is_allowed:
+            raise HTTPException(status_code=429, detail=rate_limit_msg)
+
     normalized_email = _normalize_email(email)
     if token is not None and token.strip():
         expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
@@ -498,11 +525,10 @@ async def submit_job_application(
 ):
     """Insert job application into DB, email resume to company, send confirmation to applicant"""
     # Check rate limit
-    if req:
-        client_ip = _get_client_ip(req)
-        is_allowed, rate_limit_msg = check_rate_limit(client_ip, "job-application")
-        if not is_allowed:
-            raise HTTPException(status_code=429, detail=rate_limit_msg)
+    client_ip = _get_client_ip(req)
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "job-application")
+    if not is_allowed:
+        raise HTTPException(status_code=429, detail=rate_limit_msg)
     
     # Verify reCAPTCHA token
     if not _verify_recaptcha(recaptchaToken):

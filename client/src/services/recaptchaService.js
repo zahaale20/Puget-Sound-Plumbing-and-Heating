@@ -15,7 +15,7 @@ export const loadRecaptcha = () => {
 
 	return new Promise((resolve, reject) => {
 		const script = document.createElement("script");
-		script.src = "https://www.google.com/recaptcha/api.js";
+		script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
 		script.async = true;
 		script.defer = true;
 		script.onload = resolve;
@@ -83,6 +83,6 @@ export const verifyRecaptchaToken = async (token) => {
 		return await response.json();
 	} catch (error) {
 		console.error("reCAPTCHA verification error:", error);
-		return { success: false, score: 0 };
+		return { success: false };
 	}
 };

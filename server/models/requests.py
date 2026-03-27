@@ -5,6 +5,7 @@ from typing import Optional
 class EmailRequest(BaseModel):
     email: str
     firstName: str
+    recaptchaToken: Optional[str] = None
 
 
 class ScheduleRequest(BaseModel):
