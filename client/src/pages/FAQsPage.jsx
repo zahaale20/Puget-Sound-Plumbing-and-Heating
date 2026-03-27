@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState(null);

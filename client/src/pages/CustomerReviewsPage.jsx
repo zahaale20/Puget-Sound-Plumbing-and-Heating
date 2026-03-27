@@ -1,5 +1,5 @@
 import CustomerReviews from "../components/CustomerReviews";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function CustomerReviewsPage() {
 	return (

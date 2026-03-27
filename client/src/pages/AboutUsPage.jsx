@@ -3,7 +3,7 @@ import OurHistory from "../components/OurHistory";
 import OurTeam from "../components/OurTeam";
 import ServiceCategories from "../components/ServiceCategories";
 import ServiceAreas from "../components/ServiceAreas";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function AboutUsPage() {
 	return (

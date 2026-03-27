@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { posts } from "../data/data";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function BlogPostPage() {
 	const { slug } = useParams();

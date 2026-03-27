@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
 
 export default function TeamMembers() {

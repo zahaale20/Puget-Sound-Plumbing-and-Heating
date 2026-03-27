@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function AreaPage() {
 	const { regionSlug, areaSlug } = useParams();

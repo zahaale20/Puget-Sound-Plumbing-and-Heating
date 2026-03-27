@@ -11,10 +11,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import { getCloudFrontUrl } from "../api/imageService";
-import { getRecaptchaToken } from "../api/recaptchaService";
+import { getCloudFrontUrl } from "../services/imageService";
+import { getRecaptchaToken } from "../services/recaptchaService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
-import { subscribeNewsletter } from "../api/emailService";
+import { subscribeNewsletter } from "../services/emailService";
 import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function Footer() {

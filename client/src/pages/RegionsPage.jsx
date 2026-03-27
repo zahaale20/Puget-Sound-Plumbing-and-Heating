@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function RegionsPage() {
 	const { regionSlug } = useParams();

@@ -1,4 +1,4 @@
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 import ServiceAreas from "../components/ServiceAreas";
 

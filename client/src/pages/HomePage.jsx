@@ -9,7 +9,7 @@ import LimitedTimeOffers from "../components/LimitedTimeOffers";
 import RecentBlogPosts from "../components/RecentBlogPosts";
 import FAQs from "../components/FAQs";
 import CallNow from "../components/CallNow";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function Home() {
 	return (

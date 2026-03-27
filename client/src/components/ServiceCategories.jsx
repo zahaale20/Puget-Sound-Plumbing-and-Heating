@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
 
 import { ServiceLinks } from "../data/data";

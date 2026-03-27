@@ -1,4 +1,4 @@
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function Financing() {
 	const HEARTH_URL =

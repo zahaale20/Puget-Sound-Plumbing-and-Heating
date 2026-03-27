@@ -1,5 +1,5 @@
 import Warranty from "../components/Warranty";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function WarrantyPage() {
 	return (

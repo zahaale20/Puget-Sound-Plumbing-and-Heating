@@ -1,5 +1,5 @@
 import ScheduleOnline from "../components/ScheduleOnline";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ScheduleOnlinePage() {
 	return (

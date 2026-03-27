@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import { CompanyLinks, ServiceLinks } from "../data/data";
 
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 export default function Header() {
 	const navigate = useNavigate();

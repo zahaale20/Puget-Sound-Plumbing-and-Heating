@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
-import { getCloudFrontUrl } from "../api/imageService";
-import { submitJobApplication } from "../api/emailService";
-import { getRecaptchaToken } from "../api/recaptchaService";
+import { getCloudFrontUrl } from "../services/imageService";
+import { submitJobApplication } from "../services/emailService";
+import { getRecaptchaToken } from "../services/recaptchaService";
 import FormResponseMessage from "../components/ui/FormResponseMessage";
 
 export default function CareersPage() {

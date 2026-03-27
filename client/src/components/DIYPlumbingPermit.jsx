@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { submitDiyPermit } from "../api/emailService";
-import { getRecaptchaToken } from "../api/recaptchaService";
+import { submitDiyPermit } from "../services/emailService";
+import { getRecaptchaToken } from "../services/recaptchaService";
 import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function DIYPlumbingPermit() {

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/ScheduleOnline";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 import { ServiceLinks } from "../data/data";
 
 export default function ServicePage() {

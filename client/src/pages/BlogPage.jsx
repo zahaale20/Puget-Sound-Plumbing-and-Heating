@@ -2,7 +2,7 @@ import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown } from "react-i
 
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCloudFrontUrl } from "../api/imageService";
+import { getCloudFrontUrl } from "../services/imageService";
 
 import { categoryOptions, sortOptions, posts } from "../data/data";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";

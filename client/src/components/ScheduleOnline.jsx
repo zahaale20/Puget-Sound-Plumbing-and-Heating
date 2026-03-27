@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { submitSchedule } from "../api/emailService";
-import { getRecaptchaToken } from "../api/recaptchaService";
+import { submitSchedule } from "../services/emailService";
+import { getRecaptchaToken } from "../services/recaptchaService";
 import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function ScheduleOnline() {
