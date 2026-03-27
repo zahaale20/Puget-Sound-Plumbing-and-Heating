@@ -1,4 +1,4 @@
-import ScheduleOnline from "../components/ScheduleOnline";
+import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ScheduleOnlinePage() {

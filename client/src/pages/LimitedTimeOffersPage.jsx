@@ -1,4 +1,4 @@
-import LimitedTimeOffers from "../components/LimitedTimeOffers";
+import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function LimitedTimeOffersPage() {

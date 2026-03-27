@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
-import { redeemOffer } from "../services/emailService";
-import { getRecaptchaToken } from "../services/recaptchaService";
-import FormResponseMessage from "./ui/FormResponseMessage";
+import { redeemOffer } from "../../services/emailService";
+import { getRecaptchaToken } from "../../services/recaptchaService";
+import FormResponseMessage from "../ui/FormResponseMessage";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [

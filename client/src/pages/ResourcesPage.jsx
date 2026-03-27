@@ -1,5 +1,5 @@
 import Financing from "../components/Financing.jsx";
-import DIYPlumbingPermit from "../components/DIYPlumbingPermit.jsx";
+import DIYPlumbingPermit from "../components/forms/DIYPlumbingPermit.jsx";
 import Warranty from "../components/Warranty.jsx";
 import { getCloudFrontUrl } from "../services/imageService";
 

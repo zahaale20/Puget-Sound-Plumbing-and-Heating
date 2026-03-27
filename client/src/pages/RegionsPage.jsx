@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import ScheduleOnline from "../components/ScheduleOnline";
+import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
 
