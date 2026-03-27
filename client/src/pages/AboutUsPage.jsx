@@ -1,8 +1,8 @@
-import OurMission from "../components/OurMission";
-import OurHistory from "../components/OurHistory";
-import OurTeam from "../components/OurTeam";
-import ServiceCategories from "../components/ServiceCategories";
-import ServiceAreas from "../components/ServiceAreas";
+import OurMission from "../components/sections/OurMission";
+import OurHistory from "../components/sections/OurHistory";
+import OurTeam from "../components/sections/OurTeam";
+import ServiceCategories from "../components/sections/ServiceCategories";
+import ServiceAreas from "../components/sections/ServiceAreas";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function AboutUsPage() {

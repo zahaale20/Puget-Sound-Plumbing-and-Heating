@@ -1,9 +1,9 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "./ui/LoadingComponents";
+import { getCloudFrontUrl } from "../../services/imageService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 
-import { ServiceLinks } from "../data/data";
+import { ServiceLinks } from "../../data/data";
 
 export default function ServiceCategories() {
 	return (

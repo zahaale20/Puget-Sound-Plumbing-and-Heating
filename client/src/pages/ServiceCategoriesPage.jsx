@@ -1,4 +1,4 @@
-import ServiceCategories from "../components/ServiceCategories";
+import ServiceCategories from "../components/sections/ServiceCategories";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ServiceCategoriesPage() {

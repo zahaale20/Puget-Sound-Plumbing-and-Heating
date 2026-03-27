@@ -1,14 +1,14 @@
-import Hero from "../components/Hero";
+import Hero from "../components/sections/Hero";
 import EmergencyBar from "../components/layout/EmergencyBar";
-import OurServices from "../components/OurServices";
-import WhyChooseUs from "../components/WhyChooseUs";
+import OurServices from "../components/sections/OurServices";
+import WhyChooseUs from "../components/sections/WhyChooseUs";
 import FinancingBar from "../components/layout/FinancingBar";
-import CustomerReviews from "../components/CustomerReviews";
+import CustomerReviews from "../components/sections/CustomerReviews";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
-import RecentBlogPosts from "../components/RecentBlogPosts";
-import FAQs from "../components/FAQs";
-import CallNow from "../components/CallNow";
+import RecentBlogPosts from "../components/sections/RecentBlogPosts";
+import FAQs from "../components/sections/FAQs";
+import CallNow from "../components/sections/CallNow";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function Home() {

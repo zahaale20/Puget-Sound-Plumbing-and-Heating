@@ -1,4 +1,4 @@
-import Financing from "../components/Financing";
+import Financing from "../components/sections/Financing";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function FinancingPage() {

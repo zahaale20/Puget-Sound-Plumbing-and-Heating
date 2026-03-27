@@ -1,6 +1,6 @@
-import Financing from "../components/Financing.jsx";
+import Financing from "../components/sections/Financing.jsx";
 import DIYPlumbingPermit from "../components/forms/DIYPlumbingPermit.jsx";
-import Warranty from "../components/Warranty.jsx";
+import Warranty from "../components/sections/Warranty.jsx";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ResourcesPage() {

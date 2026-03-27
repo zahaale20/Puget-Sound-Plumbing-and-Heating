@@ -1,7 +1,7 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "./ui/LoadingComponents";
+import { getCloudFrontUrl } from "../../services/imageService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function ServiceAreas() {
 	return (

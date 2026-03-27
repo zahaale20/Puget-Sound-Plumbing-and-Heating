@@ -1,6 +1,6 @@
 import { getCloudFrontUrl } from "../services/imageService";
 
-import ServiceAreas from "../components/ServiceAreas";
+import ServiceAreas from "../components/sections/ServiceAreas";
 
 export default function ServiceAreasPage() {
 	return (
