@@ -46,12 +46,16 @@ const loadHCaptcha = () => {
 const ensureWidget = () => {
 	if (hcaptchaWidgetId !== null) return;
 
-	// Create a hidden container for the invisible widget
+	// Create a container for the invisible widget that stays centered on screen
 	let container = document.getElementById("hcaptcha-invisible");
 	if (!container) {
 		container = document.createElement("div");
 		container.id = "hcaptcha-invisible";
-		container.style.display = "none";
+		container.style.position = "fixed";
+		container.style.top = "50%";
+		container.style.left = "50%";
+		container.style.transform = "translate(-50%, -50%)";
+		container.style.zIndex = "9999999";
 		document.body.appendChild(container);
 	}
 
