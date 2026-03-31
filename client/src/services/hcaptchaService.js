@@ -51,7 +51,14 @@ const ensureWidget = () => {
 	if (!container) {
 		container = document.createElement("div");
 		container.id = "hcaptcha-invisible";
-		container.style.display = "none";
+		container.style.position = "fixed";
+		container.style.bottom = "0";
+		container.style.left = "0";
+		container.style.width = "1px";
+		container.style.height = "1px";
+		container.style.overflow = "hidden";
+		container.style.opacity = "0";
+		container.style.pointerEvents = "none";
 		document.body.appendChild(container);
 	}
 
