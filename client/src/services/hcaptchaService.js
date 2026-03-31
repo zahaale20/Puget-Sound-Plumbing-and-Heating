@@ -59,6 +59,7 @@ const ensureWidget = () => {
 		container.style.overflow = "hidden";
 		container.style.opacity = "0";
 		container.style.pointerEvents = "none";
+		container.style.background = "transparent";
 		document.body.appendChild(container);
 	}
 

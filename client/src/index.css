@@ -103,9 +103,17 @@ label {
 
 /* Force hCaptcha challenge overlay to stay viewport-centered regardless of body scroll lock */
 iframe[src*="hcaptcha"],
-div[style*="hcaptcha"],
-#hcaptcha-invisible {
+div[style*="hcaptcha"] {
 	z-index: 2147483647 !important;
+}
+
+#hcaptcha-invisible {
+	z-index: -1 !important;
+	background: transparent !important;
+}
+
+#hcaptcha-invisible iframe {
+	background: transparent !important;
 }
 
 body > div[style*="position"][style*="fixed"][style*="hcaptcha"],
