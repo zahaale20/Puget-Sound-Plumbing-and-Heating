@@ -26,22 +26,14 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const openModal = (coupon) => {
 		setSelectedCoupon(coupon);
 		scrollY.current = window.scrollY || window.pageYOffset;
-		document.documentElement.style.scrollBehavior = "auto";
-		document.body.style.position = "fixed";
-		document.body.style.top = `-${scrollY.current}px`;
-		document.body.style.left = "0";
-		document.body.style.right = "0";
+		document.documentElement.style.overflow = "hidden";
 		document.body.style.overflow = "hidden";
 		setIsPopUpOpen(true);
 	};
 
 	const closeModal = () => {
-		document.body.style.position = "";
-		document.body.style.top = "";
-		document.body.style.left = "";
-		document.body.style.right = "";
+		document.documentElement.style.overflow = "";
 		document.body.style.overflow = "";
-		window.scrollTo(0, scrollY.current || 0);
 
 		setIsPopUpOpen(false);
 		setSelectedCoupon(null);
