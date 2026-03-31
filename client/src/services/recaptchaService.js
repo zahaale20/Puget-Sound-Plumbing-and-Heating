@@ -14,8 +14,12 @@ export const loadRecaptcha = () => {
 	}
 
 	return new Promise((resolve, reject) => {
+		if (!RECAPTCHA_SITE_KEY) {
+			reject(new Error("reCAPTCHA site key not configured"));
+			return;
+		}
 		const script = document.createElement("script");
-		script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+		script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
 		script.async = true;
 		script.defer = true;
 		script.onload = resolve;
