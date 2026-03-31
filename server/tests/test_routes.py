@@ -341,7 +341,8 @@ def test_newsletter_duplicate_email_failure(client, monkeypatch):
 
 def test_unsubscribe_success(client):
     resp = client.get("/api/newsletter/unsubscribe", params={"email": "sub@example.com"})
-    assert resp.status_code == 204
+    assert resp.status_code == 200
+    assert "You've Been Unsubscribed" in resp.text
 
 
 def test_unsubscribe_with_valid_token(client):
@@ -349,7 +350,8 @@ def test_unsubscribe_with_valid_token(client):
     email = "sub@example.com"
     token = _generate_newsletter_unsubscribe_token(email)
     resp = client.get("/api/newsletter/unsubscribe", params={"email": email, "token": token})
-    assert resp.status_code == 204
+    assert resp.status_code == 200
+    assert "You've Been Unsubscribed" in resp.text
 
 
 def test_unsubscribe_with_invalid_token(client):
@@ -376,7 +378,8 @@ def test_unsubscribe_email_not_in_db(client, monkeypatch):
     import routes.email as email_mod
     monkeypatch.setattr(email_mod, "get_db_connection", _zero_rows_conn)
     resp = client.get("/api/newsletter/unsubscribe", params={"email": "nobody@example.com"})
-    assert resp.status_code == 204
+    assert resp.status_code == 200
+    assert "You've Been Unsubscribed" in resp.text
 
 
 def test_unsubscribe_db_error(client, monkeypatch):
@@ -406,7 +409,8 @@ def test_unsubscribe_confirmation_email_failure(client, monkeypatch):
         raise _HTTPExc(status_code=500, detail="mail down")
     monkeypatch.setattr(email_mod, "_send_newsletter_unsubscribe_confirmation_email", _fail)
     resp = client.get("/api/newsletter/unsubscribe", params={"email": "sub@example.com"})
-    assert resp.status_code == 204
+    assert resp.status_code == 200
+    assert "You've Been Unsubscribed" in resp.text
 
 
 def test_unsubscribe_empty_token_skips_validation(client):
@@ -415,7 +419,8 @@ def test_unsubscribe_empty_token_skips_validation(client):
         "/api/newsletter/unsubscribe",
         params={"email": "sub@example.com", "token": "   "},
     )
-    assert resp.status_code == 204
+    assert resp.status_code == 200
+    assert "You've Been Unsubscribed" in resp.text
 
 
 def test_unsubscribe_rate_limited(client, monkeypatch):

@@ -5,6 +5,7 @@ import hashlib
 import hmac
 import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response, Request
+from fastapi.responses import HTMLResponse
 from typing import Optional
 from urllib.parse import quote
 import resend
@@ -378,7 +379,48 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
                     email_error.detail,
                 )
 
-        return Response(status_code=204)
+        return HTMLResponse(
+            content="""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Unsubscribed — Puget Sound Plumbing and Heating</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;color:#2B2B2B}
+  .card{background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.08);max-width:480px;width:90%;text-align:center;overflow:hidden}
+  .card-logo{padding:36px 32px 24px}
+  .card-logo img{max-width:260px;width:100%}
+  .divider{border:none;border-top:1px solid #e5e5e5;margin:0 32px}
+  .card-body{padding:32px}
+  .icon{width:56px;height:56px;margin:0 auto 16px;background:#e6f4ea;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .icon svg{width:28px;height:28px;fill:#1e8e3e}
+  h1{font-size:20px;font-weight:700;color:#0C2D70;margin-bottom:8px}
+  p{font-size:14px;color:#555;line-height:1.6;margin-bottom:20px}
+  .footer{background:#f8f8f8;border-top:1px solid #e5e5e5;padding:16px 32px}
+  .footer p{font-size:11px;color:#aaa;margin:0}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-logo">
+    <img src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating"/>
+  </div>
+  <hr class="divider"/>
+  <div class="card-body">
+    <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+    <h1>You've Been Unsubscribed</h1>
+    <p>You will no longer receive newsletter emails from us. If this was a mistake, you can subscribe again on our website.</p>
+  </div>
+  <div class="footer">
+    <p>Puget Sound Plumbing and Heating &middot; 11803 Des Moines Memorial Dr S, Burien, WA 98168</p>
+  </div>
+</div>
+</body>
+</html>""",
+            status_code=200,
+        )
     except Exception as e:
         _raise_internal_api_error("unsubscribe_newsletter failed", e)
 
