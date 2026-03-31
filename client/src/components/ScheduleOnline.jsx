@@ -162,24 +162,30 @@ export default function ScheduleOnline() {
 						/>
 					</div>
 
-					{/* Error Message */}
-					<FormResponseMessage type="error" message={error} />
-
-					{/* Success Message */}
-					<FormResponseMessage
-						type="success"
-						message={success ? successMessage : null}
-					/>
-
-					{/* Submit Button */}
+					{/* Submit */}
 					<div className="flex justify-center mt-4">
-						<button
-							type="submit"
-							disabled={loading}
-							className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
-						>
-							{loading ? "Submitting..." : "Submit Request"}
-						</button>
+						{success ? (
+							<FormResponseMessage
+								type="success"
+								message={successMessage}
+								className="w-full text-center"
+							/>
+						) : (
+							<>
+								<FormResponseMessage
+									type="error"
+									message={error}
+									className="w-full text-center mb-2"
+								/>
+								<button
+									type="submit"
+									disabled={loading}
+									className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
+								>
+									{loading ? "Submitting..." : "Submit Request"}
+								</button>
+							</>
+						)}
 					</div>
 				</form>
 			</div>

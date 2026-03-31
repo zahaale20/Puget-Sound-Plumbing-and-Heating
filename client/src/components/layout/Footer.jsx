@@ -184,7 +184,7 @@ export default function Footer() {
 											{newsletterSubmitting ? "..." : "Join Now"}
 										</button>
 									</form>
-									<FormResponseMessage type="error" message={newsletterError} className="mb-3" />
+									<FormResponseMessage type="error" message={newsletterError} className="mt-3 mb-3" />
 								</>
 							)}
 							<p className="text-[10px] text-white/70 uppercase tracking-widest">

@@ -178,13 +178,6 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 								}}
 								className="flex flex-col gap-4 text-left"
 							>
-								<FormResponseMessage type="error" message={submitError} />
-
-								<FormResponseMessage
-									type="success"
-									message={submitSuccess ? submitSuccessMessage : null}
-								/>
-
 									{/* First + Last Name */}
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 										<div>
@@ -242,13 +235,30 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									</div>
 
 									{/* Submit */}
-									<button
-										type="submit"
-										disabled={isSubmitting || submitSuccess}
-										className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
-									>
-										{isSubmitting ? "Submitting..." : "Submit Request"}
-									</button>
+									<div className="flex justify-center mt-4">
+										{submitSuccess ? (
+											<FormResponseMessage
+												type="success"
+												message={submitSuccessMessage}
+												className="w-full text-center"
+											/>
+										) : (
+											<>
+												<FormResponseMessage
+													type="error"
+													message={submitError}
+													className="w-full text-center mb-2"
+												/>
+												<button
+													type="submit"
+													disabled={isSubmitting}
+													className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
+												>
+													{isSubmitting ? "Submitting..." : "Submit Request"}
+												</button>
+											</>
+										)}
+									</div>
 								</form>
 						</div>
 					</div>,
