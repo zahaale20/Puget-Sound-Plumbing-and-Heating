@@ -248,14 +248,21 @@ async def schedule_online(request: ScheduleRequest, req: Request):
 
         try:
             _send_followup_email(email, first_name)
-            return {"success": True, "emailStatus": "sent"}
+            email_status = "sent"
         except HTTPException as email_error:
             logger.exception("Message saved to Supabase but follow-up email failed: %s", email_error.detail)
-            return {
-                "success": True,
-                "emailStatus": "failed",
-                "message": "Schedule request saved, but follow-up email could not be sent.",
-            }
+            email_status = "failed"
+
+        # Notify company (non-critical)
+        _send_schedule_notification_email(email, first_name, last_name, phone, message)
+
+        if email_status == "sent":
+            return {"success": True, "emailStatus": "sent"}
+        return {
+            "success": True,
+            "emailStatus": "failed",
+            "message": "Schedule request saved, but follow-up email could not be sent.",
+        }
     except Exception as e:
         _raise_internal_api_error("schedule_online failed", e)
 
@@ -299,6 +306,15 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
         unsubscribe_url = _build_newsletter_unsubscribe_url(email)
         try:
             _send_newsletter_confirmation_email(email, unsubscribe_url)
+            email_status = "sent"
+        except HTTPException as email_error:
+            logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
+            email_status = "failed"
+
+        # Notify company (non-critical)
+        _send_newsletter_notification_email(email)
+
+        if email_status == "sent":
             return {
                 "success": True,
                 "emailStatus": "sent",
@@ -311,18 +327,16 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
                     else {}
                 ),
             }
-        except HTTPException as email_error:
-            logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
-            return {
-                "success": True,
-                "emailStatus": "failed",
-                **({"duplicate": True} if duplicate else {}),
-                "message": (
-                    "This email is already subscribed to the mailing list. We could not resend confirmation email right now."
-                    if duplicate
-                    else "Subscription saved, but confirmation email could not be sent."
-                ),
-            }
+        return {
+            "success": True,
+            "emailStatus": "failed",
+            **({"duplicate": True} if duplicate else {}),
+            "message": (
+                "This email is already subscribed to the mailing list. We could not resend confirmation email right now."
+                if duplicate
+                else "Subscription saved, but confirmation email could not be sent."
+            ),
+        }
     except Exception as e:
         _raise_internal_api_error("subscribe_newsletter failed", e)
 
@@ -730,6 +744,96 @@ def _send_followup_email(email: str, firstName: str):
         )
 
 
+def _send_schedule_notification_email(email: str, firstName: str, lastName: str, phone: str, message: str):
+    """Internal helper – notify the business owner of a new schedule request."""
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": COMPANY_EMAIL,
+                "subject": f"New Service Request — {firstName} {lastName}",
+                "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <!-- Logo -->
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:36px 40px 28px;">
+                            <h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">New Service Request</h2>
+                            <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 20px;">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Name:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{firstName} {lastName}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Email:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{email}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Phone:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{phone}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                {"<tr><td style=\"padding:10px 0;border-bottom:1px solid #eeeeee;\"><table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td style=\"width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;\">Message:</td><td style=\"font-size:14px;color:#2B2B2B;\">" + message + "</td></tr></table></td></tr>" if message else ""}
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0;font-size:11px;color:#aaaaaa;">Schedule Online Request Alert</p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
+            }
+        )
+    except Exception:
+        # Company notification failure is non-critical; customer already confirmed
+        logger.exception("Company schedule request notification email failed")
+
+
 def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
     """Internal helper – send the newsletter confirmation email with unsubscribe button."""
     try:
@@ -945,6 +1049,79 @@ def _send_newsletter_unsubscribe_confirmation_email(email: str):
         )
 
 
+def _send_newsletter_notification_email(email: str):
+    """Internal helper – notify the business owner of a new newsletter subscription."""
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": COMPANY_EMAIL,
+                "subject": f"New Newsletter Subscriber — {email}",
+                "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <!-- Logo -->
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:36px 40px 28px;">
+                            <h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">New Newsletter Subscriber</h2>
+                            <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 20px;">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Email:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{email}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0;font-size:11px;color:#aaaaaa;">Newsletter Subscription Alert</p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
+            }
+        )
+    except Exception:
+        # Company notification failure is non-critical; subscriber already confirmed
+        logger.exception("Company newsletter subscription notification email failed")
+
+
 def _send_coupon_email(
     email: str,
     firstName: str,
@@ -1072,7 +1249,7 @@ def _send_coupon_email(
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
-                "to": EMAIL_FROM,
+                "to": COMPANY_EMAIL,
                 "subject": f"New Coupon Redemption: {couponDiscount} — {firstName} {lastName}",
                 "html": f"""<p>A new coupon redemption has been submitted.</p>
                     <ul>
