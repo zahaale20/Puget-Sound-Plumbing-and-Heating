@@ -11,66 +11,62 @@ def test_root(client):
     assert resp.json()["status"] == "PSPAH API is running"
 
 
-# ── POST /api/verify-recaptcha ────────────────────────────────────────────
+# ── POST /api/verify-captcha ────────────────────────────────────────────
 
-def test_verify_recaptcha_no_token(client):
-    resp = client.post("/api/verify-recaptcha", json={})
+def test_verify_captcha_no_token(client):
+    resp = client.post("/api/verify-captcha", json={})
     assert resp.status_code == 400
 
 
-def test_verify_recaptcha_not_configured(client):
-    """When RECAPTCHA_SECRET_KEY is unset, allow without leaking score."""
-    resp = client.post("/api/verify-recaptcha", json={"token": "abc"})
+def test_verify_captcha_not_configured(client):
+    """When HCAPTCHA_SECRET_KEY is unset, allow."""
+    resp = client.post("/api/verify-captcha", json={"token": "abc"})
     assert resp.status_code == 200
     data = resp.json()
     assert data["success"] is True
-    assert "score" not in data
 
 
-def test_verify_recaptcha_success(client, enable_recaptcha):
+def test_verify_captcha_success(client, enable_captcha):
     mock_resp = MagicMock()
-    mock_resp.json.return_value = {"success": True, "score": 0.9}
+    mock_resp.json.return_value = {"success": True}
     mock_resp.raise_for_status = MagicMock()
     with patch("routes.email.requests.post", return_value=mock_resp):
-        resp = client.post("/api/verify-recaptcha", json={"token": "valid"})
+        resp = client.post("/api/verify-captcha", json={"token": "valid"})
     assert resp.status_code == 200
     data = resp.json()
     assert data["success"] is True
-    assert "score" not in data  # Score must not be leaked to client
 
 
-def test_verify_recaptcha_low_score(client, enable_recaptcha):
+def test_verify_captcha_failure(client, enable_captcha):
     mock_resp = MagicMock()
-    mock_resp.json.return_value = {"success": True, "score": 0.1}
+    mock_resp.json.return_value = {"success": False}
     mock_resp.raise_for_status = MagicMock()
     with patch("routes.email.requests.post", return_value=mock_resp):
-        resp = client.post("/api/verify-recaptcha", json={"token": "bot"})
+        resp = client.post("/api/verify-captcha", json={"token": "bot"})
     assert resp.status_code == 403
-    # Score must not be leaked in error detail
-    assert "0.1" not in resp.json()["detail"]
 
 
-def test_verify_recaptcha_rate_limited(client, monkeypatch):
+def test_verify_captcha_rate_limited(client, monkeypatch):
     import routes.email as email_mod
     monkeypatch.setattr(email_mod, "check_rate_limit", lambda ip, ep: (False, "Rate limit exceeded."))
-    resp = client.post("/api/verify-recaptcha", json={"token": "abc"})
+    resp = client.post("/api/verify-captcha", json={"token": "abc"})
     assert resp.status_code == 429
 
 
-def test_verify_recaptcha_api_error(client, enable_recaptcha):
+def test_verify_captcha_api_error(client, enable_captcha):
     import requests as req_lib
     with patch("routes.email.requests.post", side_effect=req_lib.RequestException("timeout")):
-        resp = client.post("/api/verify-recaptcha", json={"token": "err"})
+        resp = client.post("/api/verify-captcha", json={"token": "err"})
     assert resp.status_code == 500
 
 
-def test_verify_recaptcha_google_success_false(client, enable_recaptcha):
-    """Google returns success=False at the endpoint level — should 403."""
+def test_verify_captcha_hcaptcha_success_false(client, enable_captcha):
+    """hCaptcha returns success=False — should 403."""
     mock_resp = MagicMock()
-    mock_resp.json.return_value = {"success": False, "score": 0.0}
+    mock_resp.json.return_value = {"success": False}
     mock_resp.raise_for_status = MagicMock()
     with patch("routes.email.requests.post", return_value=mock_resp):
-        resp = client.post("/api/verify-recaptcha", json={"token": "invalid"})
+        resp = client.post("/api/verify-captcha", json={"token": "invalid"})
     assert resp.status_code == 403
 
 
@@ -114,8 +110,8 @@ def test_send_email_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_send_email_recaptcha_rejected(client, enable_recaptcha):
-    """When reCAPTCHA is enabled but no token supplied, reject."""
+def test_send_email_captcha_rejected(client, enable_captcha):
+    """When captcha is enabled but no token supplied, reject."""
     resp = client.post("/api/send-email", json={
         "email": "user@example.com",
         "firstName": "Jane",
@@ -174,8 +170,8 @@ def test_schedule_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_schedule_recaptcha_rejected(client, enable_recaptcha):
-    """When reCAPTCHA is enabled but no token supplied, reject."""
+def test_schedule_captcha_rejected(client, enable_captcha):
+    """When captcha is enabled but no token supplied, reject."""
     resp = client.post("/api/schedule", json=_schedule_payload())
     assert resp.status_code == 403
 
@@ -220,13 +216,13 @@ def test_schedule_db_non_duplicate_error(client, monkeypatch):
     assert resp.status_code == 500
 
 
-def test_schedule_with_valid_recaptcha(client, enable_recaptcha):
+def test_schedule_with_valid_recaptcha(client, enable_captcha):
     """Full happy path with reCAPTCHA enabled and a valid token."""
     mock_resp = MagicMock()
     mock_resp.json.return_value = {"success": True, "score": 0.9}
     mock_resp.raise_for_status = MagicMock()
     with patch("routes.email.requests.post", return_value=mock_resp):
-        resp = client.post("/api/schedule", json=_schedule_payload(recaptchaToken="valid-token"))
+        resp = client.post("/api/schedule", json=_schedule_payload(captchaToken="valid-token"))
     assert resp.status_code == 200
     assert resp.json()["success"] is True
 
@@ -267,7 +263,7 @@ def test_newsletter_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_newsletter_recaptcha_rejected(client, enable_recaptcha):
+def test_newsletter_captcha_rejected(client, enable_captcha):
     resp = client.post("/api/newsletter", json={"email": "x@example.com"})
     assert resp.status_code == 403
 
@@ -477,7 +473,7 @@ def test_redeem_offer_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_redeem_offer_recaptcha_rejected(client, enable_recaptcha):
+def test_redeem_offer_captcha_rejected(client, enable_captcha):
     resp = client.post("/api/redeem-offer", json=_offer_payload())
     assert resp.status_code == 403
 
@@ -546,7 +542,7 @@ def test_diy_permit_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_diy_permit_recaptcha_rejected(client, enable_recaptcha):
+def test_diy_permit_captcha_rejected(client, enable_captcha):
     resp = client.post("/api/diy-permit", json=_permit_payload())
     assert resp.status_code == 403
 
@@ -625,7 +621,7 @@ def test_job_application_rate_limited(client, monkeypatch):
     assert resp.status_code == 429
 
 
-def test_job_application_recaptcha_rejected(client, enable_recaptcha):
+def test_job_application_captcha_rejected(client, enable_captcha):
     resp = client.post("/api/job-application", data=_job_form_data())
     assert resp.status_code == 403
 

@@ -18,7 +18,7 @@ RATE_LIMITS = {
     "diy-permit": (10, 3600),  # 10 requests per hour
     "job-application": (5, 3600),  # 5 requests per hour
     "send-email": (10, 3600),  # 10 requests per hour
-    "verify-recaptcha": (20, 3600),  # 20 requests per hour
+    "verify-captcha": (20, 3600),  # 20 requests per hour
     "unsubscribe": (10, 3600),  # 10 requests per hour
     "images": (100, 3600),  # 100 requests per hour
 }

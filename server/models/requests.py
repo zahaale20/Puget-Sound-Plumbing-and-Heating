@@ -5,7 +5,7 @@ from typing import Optional
 class EmailRequest(BaseModel):
     email: str
     firstName: str
-    recaptchaToken: Optional[str] = None
+    captchaToken: Optional[str] = None
 
 
 class ScheduleRequest(BaseModel):
@@ -14,12 +14,12 @@ class ScheduleRequest(BaseModel):
     phone: str
     email: str
     message: str = ""
-    recaptchaToken: Optional[str] = None
+    captchaToken: Optional[str] = None
 
 
 class NewsletterRequest(BaseModel):
     email: str
-    recaptchaToken: Optional[str] = None
+    captchaToken: Optional[str] = None
 
 
 class RedeemOfferRequest(BaseModel):
@@ -29,7 +29,7 @@ class RedeemOfferRequest(BaseModel):
     email: str
     couponDiscount: str
     couponCondition: str
-    recaptchaToken: Optional[str] = None
+    captchaToken: Optional[str] = None
 
 
 class DiyPermitRequest(BaseModel):
@@ -41,4 +41,4 @@ class DiyPermitRequest(BaseModel):
     city: str = ""
     projectDescription: str = ""
     inspection: str = "unsure"
-    recaptchaToken: Optional[str] = None
+    captchaToken: Optional[str] = None

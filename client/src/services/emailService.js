@@ -33,13 +33,13 @@ export const sendFollowUpEmail = async (email, firstName) => {
 	}
 };
 
-export const submitSchedule = async (formData, recaptchaToken) => {
+export const submitSchedule = async (formData, captchaToken) => {
 	const response = await fetch(buildApiUrl("/api/schedule"), {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify({ ...formData, recaptchaToken }),
+		body: JSON.stringify({ ...formData, captchaToken }),
 	});
 
 	if (!response.ok) {
@@ -56,11 +56,11 @@ export const submitSchedule = async (formData, recaptchaToken) => {
 	return await response.json();
 };
 
-export const subscribeNewsletter = async (email, recaptchaToken) => {
+export const subscribeNewsletter = async (email, captchaToken) => {
 	const response = await fetch(buildApiUrl("/api/newsletter"), {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ email, recaptchaToken }),
+		body: JSON.stringify({ email, captchaToken }),
 	});
 
 	if (!response.ok) {
@@ -77,11 +77,11 @@ export const subscribeNewsletter = async (email, recaptchaToken) => {
 	return await response.json();
 };
 
-export const submitDiyPermit = async (formData, recaptchaToken) => {
+export const submitDiyPermit = async (formData, captchaToken) => {
 	const response = await fetch(buildApiUrl("/api/diy-permit"), {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ ...formData, recaptchaToken }),
+		body: JSON.stringify({ ...formData, captchaToken }),
 	});
 
 	if (!response.ok) {
@@ -98,7 +98,7 @@ export const submitDiyPermit = async (formData, recaptchaToken) => {
 	return await response.json();
 };
 
-export const submitJobApplication = async (formData, resumeFile, recaptchaToken) => {
+export const submitJobApplication = async (formData, resumeFile, captchaToken) => {
 	const data = new FormData();
 	data.append("firstName", formData.firstName);
 	data.append("lastName", formData.lastName);
@@ -111,8 +111,8 @@ export const submitJobApplication = async (formData, resumeFile, recaptchaToken)
 	if (resumeFile) {
 		data.append("resume", resumeFile);
 	}
-	if (recaptchaToken) {
-		data.append("recaptchaToken", recaptchaToken);
+	if (captchaToken) {
+		data.append("captchaToken", captchaToken);
 	}
 
 	const response = await fetch(buildApiUrl("/api/job-application"), {
@@ -134,11 +134,11 @@ export const submitJobApplication = async (formData, resumeFile, recaptchaToken)
 	return await response.json();
 };
 
-export const redeemOffer = async (formData, recaptchaToken) => {
+export const redeemOffer = async (formData, captchaToken) => {
 	const response = await fetch(buildApiUrl("/api/redeem-offer"), {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ ...formData, recaptchaToken }),
+		body: JSON.stringify({ ...formData, captchaToken }),
 	});
 
 	if (!response.ok) {

@@ -69,17 +69,17 @@ def mock_s3(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def disable_recaptcha(monkeypatch):
-    """Disable reCAPTCHA verification by default (no secret key configured)."""
+def disable_captcha(monkeypatch):
+    """Disable hCaptcha verification by default (no secret key configured)."""
     import routes.email as email_mod
-    monkeypatch.setattr(email_mod, "RECAPTCHA_SECRET_KEY", None)
+    monkeypatch.setattr(email_mod, "HCAPTCHA_SECRET_KEY", None)
 
 
 @pytest.fixture()
-def enable_recaptcha(monkeypatch):
-    """Fixture to re-enable reCAPTCHA for specific tests."""
+def enable_captcha(monkeypatch):
+    """Fixture to re-enable hCaptcha for specific tests."""
     import routes.email as email_mod
-    monkeypatch.setattr(email_mod, "RECAPTCHA_SECRET_KEY", "test-secret-key")
+    monkeypatch.setattr(email_mod, "HCAPTCHA_SECRET_KEY", "test-secret-key")
 
 
 @pytest.fixture(autouse=True)

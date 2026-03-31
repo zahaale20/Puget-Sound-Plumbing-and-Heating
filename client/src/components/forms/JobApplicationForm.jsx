@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../../data/data";
 import { submitJobApplication } from "../../services/emailService";
-import { getRecaptchaToken } from "../../services/recaptchaService";
+import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 
 export default function JobApplicationForm() {
@@ -33,15 +33,15 @@ export default function JobApplicationForm() {
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 		try {
-			// Get reCAPTCHA token
-			const recaptchaToken = await getRecaptchaToken("job_apply");
-			if (!recaptchaToken) {
+			// Get hCaptcha token
+			const captchaToken = await getHCaptchaToken();
+			if (!captchaToken) {
 				setSubmitError("Security verification failed. Please refresh and try again.");
 				setIsSubmitting(false);
 				return;
 			}
 
-			const result = await submitJobApplication(formData, resumeFile, recaptchaToken);
+			const result = await submitJobApplication(formData, resumeFile, captchaToken);
 			if (result?.duplicate) {
 				setSubmitSuccessMessage(result.message || "This application already exists.");
 			}

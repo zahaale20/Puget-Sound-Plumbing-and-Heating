@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 import { redeemOffer } from "../services/emailService";
-import { getRecaptchaToken } from "../services/recaptchaService";
+import { getHCaptchaToken } from "../services/hcaptchaService";
 import FormResponseMessage from "./ui/FormResponseMessage";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
@@ -155,9 +155,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									setSubmitSuccess(false);
 									setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
 									try {
-										// Get reCAPTCHA token
-										const recaptchaToken = await getRecaptchaToken("redeem_offer");
-										if (!recaptchaToken) {
+										// Get hCaptcha token
+										const captchaToken = await getHCaptchaToken();
+										if (!captchaToken) {
 											setSubmitError("Security verification failed. Please refresh and try again.");
 											setIsSubmitting(false);
 											return;
@@ -169,7 +169,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 												couponDiscount: selectedCoupon.discount,
 												couponCondition: selectedCoupon.condition,
 											},
-											recaptchaToken
+											captchaToken
 										);
 										if (result?.duplicate) {
 											setSubmitSuccessMessage(result.message || "This request already exists.");

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { getCloudFrontUrl } from "../services/imageService";
-import { getRecaptchaToken } from "../services/recaptchaService";
+import { getHCaptchaToken } from "../services/hcaptchaService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
 import { subscribeNewsletter } from "../services/emailService";
 import FormResponseMessage from "./ui/FormResponseMessage";
@@ -143,15 +143,15 @@ export default function Footer() {
 											setNewsletterError(null);
 											setNewsletterSuccessMessage("Thank you! We'll be in touch soon.");
 											try {
-												// Get reCAPTCHA token
-												const recaptchaToken = await getRecaptchaToken("newsletter");
-												if (!recaptchaToken) {
+												// Get hCaptcha token
+												const captchaToken = await getHCaptchaToken("newsletter");
+												if (!captchaToken) {
 													setNewsletterError("Security verification failed. Please refresh and try again.");
 													setNewsletterSubmitting(false);
 													return;
 												}
 
-												const result = await subscribeNewsletter(newsletterEmail, recaptchaToken);
+												const result = await subscribeNewsletter(newsletterEmail, captchaToken);
 												if (result?.duplicate) {
 													setNewsletterSuccessMessage(
 														"This email is already subscribed to our mailing list."

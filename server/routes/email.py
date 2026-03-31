@@ -19,8 +19,7 @@ logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = "alexthebestest@gmail.com"
 s3_service = S3Service()
-RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
-RECAPTCHA_SCORE_THRESHOLD = float(os.getenv("RECAPTCHA_SCORE_THRESHOLD", "0.5"))
+HCAPTCHA_SECRET_KEY = os.getenv("HCAPTCHA_SECRET_KEY")
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
     or os.getenv("RESEND_API_KEY")
@@ -59,29 +58,28 @@ def _raise_internal_api_error(context: str, error: Exception):
     raise HTTPException(status_code=500, detail="An unexpected error occurred. Please try again.")
 
 
-def _verify_recaptcha(token: Optional[str]) -> bool:
-    """Verify reCAPTCHA token (returns True if valid, False otherwise)"""
-    if not RECAPTCHA_SECRET_KEY:
-        return True  # Allow if reCAPTCHA not configured
+def _verify_captcha(token: Optional[str]) -> bool:
+    """Verify hCaptcha token (returns True if valid, False otherwise)"""
+    if not HCAPTCHA_SECRET_KEY:
+        return True  # Allow if hCaptcha not configured
     if not token:
-        return False  # Reject missing token when reCAPTCHA is configured
+        return False  # Reject missing token when hCaptcha is configured
 
     try:
         response = requests.post(
-            "https://www.google.com/recaptcha/api/siteverify",
-            data={"secret": RECAPTCHA_SECRET_KEY, "response": token},
+            "https://api.hcaptcha.com/siteverify",
+            data={"secret": HCAPTCHA_SECRET_KEY, "response": token},
             timeout=5,
         )
         response.raise_for_status()
         data = response.json()
 
         success = data.get("success", False)
-        score = data.get("score", 0)
 
-        logger.info(f"reCAPTCHA: success={success}, score={score}")
-        return success and score >= RECAPTCHA_SCORE_THRESHOLD
+        logger.info(f"hCaptcha: success={success}")
+        return success
     except Exception as e:
-        logger.warning(f"reCAPTCHA verification error: {str(e)}")
+        logger.warning(f"hCaptcha verification error: {str(e)}")
         return False  # Fail securely
 
 
@@ -129,12 +127,12 @@ def _build_newsletter_unsubscribe_url(email: str) -> str:
     )
 
 
-@router.post("/verify-recaptcha")
-async def verify_recaptcha(request: dict, req: Request):
-    """Verify reCAPTCHA v3 token from frontend"""
+@router.post("/verify-captcha")
+async def verify_captcha(request: dict, req: Request):
+    """Verify hCaptcha token from frontend"""
     # Check rate limit
     client_ip = _get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "verify-recaptcha")
+    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "verify-captcha")
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
 
@@ -142,37 +140,35 @@ async def verify_recaptcha(request: dict, req: Request):
     if not token:
         raise HTTPException(status_code=400, detail="Token is required")
 
-    if not RECAPTCHA_SECRET_KEY:
-        logger.warning("RECAPTCHA_SECRET_KEY not configured, allowing request")
-        return {"success": True, "message": "reCAPTCHA not configured"}
+    if not HCAPTCHA_SECRET_KEY:
+        logger.warning("HCAPTCHA_SECRET_KEY not configured, allowing request")
+        return {"success": True, "message": "hCaptcha not configured"}
 
     try:
         response = requests.post(
-            "https://www.google.com/recaptcha/api/siteverify",
-            data={"secret": RECAPTCHA_SECRET_KEY, "response": token},
+            "https://api.hcaptcha.com/siteverify",
+            data={"secret": HCAPTCHA_SECRET_KEY, "response": token},
             timeout=5,
         )
         response.raise_for_status()
         data = response.json()
 
         success = data.get("success", False)
-        score = data.get("score", 0)
 
         # Log the result for monitoring
-        logger.info(f"reCAPTCHA verification: success={success}, score={score}")
+        logger.info(f"hCaptcha verification: success={success}")
 
-        # Block if score is too low (indicates likely bot)
-        if success and score >= RECAPTCHA_SCORE_THRESHOLD:
+        if success:
             return {"success": True}
         else:
-            logger.warning(f"reCAPTCHA validation failed: success={success}, score={score}")
+            logger.warning(f"hCaptcha validation failed: success={success}")
             raise HTTPException(
                 status_code=403,
-                detail="Failed reCAPTCHA verification. Please try again.",
+                detail="Failed captcha verification. Please try again.",
             )
     except requests.RequestException as e:
-        logger.exception(f"reCAPTCHA API error: {str(e)}")
-        raise HTTPException(status_code=500, detail="reCAPTCHA verification failed")
+        logger.exception(f"hCaptcha API error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Captcha verification failed")
 
 
 @router.post("/send-email")
@@ -184,8 +180,8 @@ async def send_email(request: EmailRequest, req: Request):
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
 
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(request.recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -209,8 +205,8 @@ async def schedule_online(request: ScheduleRequest, req: Request):
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
     
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(request.recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -273,8 +269,8 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
     
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(request.recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -382,8 +378,8 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
     
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(request.recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -452,8 +448,8 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request):
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
     
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(request.recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -519,7 +515,7 @@ async def submit_job_application(
     experience: str = Form(""),
     message: str = Form(""),
     additionalInfo: str = Form(""),
-    recaptchaToken: Optional[str] = Form(None),
+    captchaToken: Optional[str] = Form(None),
     resume: Optional[UploadFile] = File(None),
     req: Request = None,
 ):
@@ -530,8 +526,8 @@ async def submit_job_application(
     if not is_allowed:
         raise HTTPException(status_code=429, detail=rate_limit_msg)
     
-    # Verify reCAPTCHA token
-    if not _verify_recaptcha(recaptchaToken):
+    # Verify captcha token
+    if not _verify_captcha(captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",

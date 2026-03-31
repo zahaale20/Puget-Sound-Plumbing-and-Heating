@@ -140,12 +140,12 @@ class TestModels:
         from models.requests import ScheduleRequest
         r = ScheduleRequest(firstName="A", lastName="B", phone="1", email="a@b.com")
         assert r.message == ""
-        assert r.recaptchaToken is None
+        assert r.captchaToken is None
 
     def test_newsletter_request(self):
         from models.requests import NewsletterRequest
         r = NewsletterRequest(email="a@b.com")
-        assert r.recaptchaToken is None
+        assert r.captchaToken is None
 
     def test_redeem_offer_request(self):
         from models.requests import RedeemOfferRequest
@@ -226,42 +226,42 @@ class TestEmailHelpers:
         req.headers.get.return_value = None
         assert _get_client_ip(req) == "0.0.0.0"
 
-    def test_verify_recaptcha_no_key(self, monkeypatch):
+    def test_verify_captcha_no_key(self, monkeypatch):
         import routes.email as mod
-        monkeypatch.setattr(mod, "RECAPTCHA_SECRET_KEY", None)
-        assert mod._verify_recaptcha("any-token") is True
+        monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", None)
+        assert mod._verify_captcha("any-token") is True
 
-    def test_verify_recaptcha_no_token(self, monkeypatch):
+    def test_verify_captcha_no_token(self, monkeypatch):
         import routes.email as mod
-        monkeypatch.setattr(mod, "RECAPTCHA_SECRET_KEY", "key")
-        assert mod._verify_recaptcha(None) is False
+        monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", "key")
+        assert mod._verify_captcha(None) is False
 
-    def test_verify_recaptcha_boundary_score(self, monkeypatch):
-        """Score exactly at threshold (0.5) should pass."""
+    def test_verify_captcha_success(self, monkeypatch):
+        """hCaptcha returns success=True — should pass."""
         import routes.email as mod
-        monkeypatch.setattr(mod, "RECAPTCHA_SECRET_KEY", "key")
+        monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", "key")
         mock_resp = MagicMock()
-        mock_resp.json.return_value = {"success": True, "score": 0.5}
+        mock_resp.json.return_value = {"success": True}
         mock_resp.raise_for_status = MagicMock()
         with patch("routes.email.requests.post", return_value=mock_resp):
-            assert mod._verify_recaptcha("token") is True
+            assert mod._verify_captcha("token") is True
 
-    def test_verify_recaptcha_google_returns_failure(self, monkeypatch):
-        """Google returns success=False (replay/invalid token)."""
+    def test_verify_captcha_hcaptcha_returns_failure(self, monkeypatch):
+        """hCaptcha returns success=False (invalid token)."""
         import routes.email as mod
-        monkeypatch.setattr(mod, "RECAPTCHA_SECRET_KEY", "key")
+        monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", "key")
         mock_resp = MagicMock()
-        mock_resp.json.return_value = {"success": False, "score": 0.9}
+        mock_resp.json.return_value = {"success": False}
         mock_resp.raise_for_status = MagicMock()
         with patch("routes.email.requests.post", return_value=mock_resp):
-            assert mod._verify_recaptcha("token") is False
+            assert mod._verify_captcha("token") is False
 
-    def test_verify_recaptcha_network_error(self, monkeypatch):
+    def test_verify_captcha_network_error(self, monkeypatch):
         """Network error during verification should fail securely."""
         import routes.email as mod
-        monkeypatch.setattr(mod, "RECAPTCHA_SECRET_KEY", "key")
+        monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", "key")
         with patch("routes.email.requests.post", side_effect=Exception("timeout")):
-            assert mod._verify_recaptcha("token") is False
+            assert mod._verify_captcha("token") is False
 
     def test_generate_unsubscribe_token_deterministic(self):
         from routes.email import _generate_newsletter_unsubscribe_token
