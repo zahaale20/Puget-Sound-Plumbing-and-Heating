@@ -972,10 +972,6 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
 
                         <tr>
                             <td style="padding:0 40px 44px;text-align:center;">
-                            <a
-                                href="{unsubscribe_url}"
-                                style="display:inline-block;background-color:#ffffff;color:#0C2D70;font-size:12px;font-weight:700;text-decoration:none;padding:10px 24px;border-radius:3px;border:1px solid #0C2D70;letter-spacing:0.05em;"
-                            >UNSUBSCRIBE</a>
                             </td>
                         </tr>
 
@@ -983,10 +979,11 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
                             <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
                             <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
                             <p style="margin:0 0 10px;font-size:11px;color:#aaaaaa;">Licensed &amp; Insured &nbsp;&middot;&nbsp; Serving Greater Seattle Since 1984</p>
-                            <p style="margin:0;font-size:11px;color:#bbbbbb;line-height:1.6;">
+                            <p style="margin:0 0 8px;font-size:11px;color:#bbbbbb;line-height:1.6;">
                                 This automated email was sent because you joined our mailing list on our website.<br/>
                                 Please do not reply — call us at (206) 938-3219 for immediate help.
                             </p>
+                            <a href="{unsubscribe_url}" style="font-size:10px;color:#cccccc;text-decoration:underline;">Unsubscribe</a>
                             </td>
                         </tr>
 
