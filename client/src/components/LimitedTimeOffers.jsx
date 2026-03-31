@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 import { redeemOffer } from "../services/emailService";
@@ -21,16 +21,27 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
+	const scrollY = useRef(0);
+
 	const openModal = (coupon) => {
 		setSelectedCoupon(coupon);
-		document.documentElement.style.overflow = "hidden";
+		scrollY.current = window.scrollY || window.pageYOffset;
+		document.documentElement.style.scrollBehavior = "auto";
+		document.body.style.position = "fixed";
+		document.body.style.top = `-${scrollY.current}px`;
+		document.body.style.left = "0";
+		document.body.style.right = "0";
 		document.body.style.overflow = "hidden";
 		setIsPopUpOpen(true);
 	};
 
 	const closeModal = () => {
-		document.documentElement.style.overflow = "";
+		document.body.style.position = "";
+		document.body.style.top = "";
+		document.body.style.left = "";
+		document.body.style.right = "";
 		document.body.style.overflow = "";
+		window.scrollTo(0, scrollY.current || 0);
 
 		setIsPopUpOpen(false);
 		setSelectedCoupon(null);
