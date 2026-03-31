@@ -52,10 +52,15 @@ const ensureWidget = () => {
 		container = document.createElement("div");
 		container.id = "hcaptcha-invisible";
 		container.style.position = "fixed";
-		container.style.top = "50%";
-		container.style.left = "50%";
-		container.style.transform = "translate(-50%, -50%)";
+		container.style.top = "0";
+		container.style.left = "0";
+		container.style.width = "100%";
+		container.style.height = "100%";
+		container.style.display = "flex";
+		container.style.alignItems = "center";
+		container.style.justifyContent = "center";
 		container.style.zIndex = "9999999";
+		container.style.pointerEvents = "none";
 		document.body.appendChild(container);
 	}
 
