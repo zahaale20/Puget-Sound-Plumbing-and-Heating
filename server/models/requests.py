@@ -40,6 +40,8 @@ class DiyPermitRequest(BaseModel):
     phone: str
     address: str
     city: str = ""
+    state: str = ""
+    zipCode: str = ""
     projectDescription: str = ""
     inspection: str = "unsure"
     captchaToken: Optional[str] = None

@@ -72,32 +72,15 @@ describe("NotFoundPage", () => {
 		expect(screen.getByText("Page Not Found")).toBeInTheDocument();
 	});
 
-	it("renders Back to Home button", () => {
+	it("renders Return Home button", () => {
 		wrap(<NotFoundPage />);
-		expect(screen.getByText("Back to Home")).toBeInTheDocument();
+		expect(screen.getByText("Return Home")).toBeInTheDocument();
 	});
 
-	it("renders Schedule Online button", () => {
+	it("navigates home on Return Home click", () => {
 		wrap(<NotFoundPage />);
-		expect(screen.getByText("Schedule Online")).toBeInTheDocument();
-	});
-
-	it("navigates home on Back to Home click", () => {
-		wrap(<NotFoundPage />);
-		fireEvent.click(screen.getByText("Back to Home"));
+		fireEvent.click(screen.getByText("Return Home"));
 		expect(mockNavigate).toHaveBeenCalledWith("/");
-	});
-
-	it("navigates to schedule on Schedule Online click", () => {
-		wrap(<NotFoundPage />);
-		fireEvent.click(screen.getByText("Schedule Online"));
-		expect(mockNavigate).toHaveBeenCalledWith("/schedule-online");
-	});
-
-	it("renders phone number link", () => {
-		wrap(<NotFoundPage />);
-		const link = screen.getByText("(206) 938-3219");
-		expect(link.closest("a")).toHaveAttribute("href", "tel:206-938-3219");
 	});
 });
 
@@ -135,20 +118,10 @@ describe("BlogPage", () => {
 // BlogPostPage
 // ========================
 describe("BlogPostPage", () => {
-	it("renders Post Not Found for invalid slug", () => {
+	it("renders 404 page for invalid slug", () => {
 		wrapWithRoute("/blog/:slug", <BlogPostPage />, "/blog/nonexistent-post-slug");
-		expect(screen.getByText("Post Not Found")).toBeInTheDocument();
-	});
-
-	it("renders Back to Blog button on not found", () => {
-		wrapWithRoute("/blog/:slug", <BlogPostPage />, "/blog/nonexistent-post-slug");
-		expect(screen.getByText("Back to Blog")).toBeInTheDocument();
-	});
-
-	it("navigates to /blog on Back to Blog click", () => {
-		wrapWithRoute("/blog/:slug", <BlogPostPage />, "/blog/nonexistent-post-slug");
-		fireEvent.click(screen.getByText("Back to Blog"));
-		expect(mockNavigate).toHaveBeenCalledWith("/blog");
+		expect(screen.getByText("404")).toBeInTheDocument();
+		expect(screen.getByText("Page Not Found")).toBeInTheDocument();
 	});
 });
 
@@ -274,13 +247,14 @@ describe("ServicePage", () => {
 		expect(screen.getByText("Faucets")).toBeInTheDocument();
 	});
 
-	it("renders Service Not Found for invalid slug", () => {
+	it("renders 404 page for invalid slug", () => {
 		wrapWithRoute(
 			"/services/:categorySlug/:serviceSlug",
 			<ServicePage />,
 			"/services/plumbing/nonexistent-service"
 		);
-		expect(screen.getByText("Service Not Found")).toBeInTheDocument();
+		expect(screen.getByText("404")).toBeInTheDocument();
+		expect(screen.getByText("Page Not Found")).toBeInTheDocument();
 	});
 });
 
@@ -293,9 +267,10 @@ describe("RegionsPage", () => {
 		expect(screen.getByText(/Professional Plumbers in Seattle/)).toBeInTheDocument();
 	});
 
-	it("renders Service Area for unknown region", () => {
+	it("renders 404 page for unknown region", () => {
 		wrapWithRoute("/service-areas/:regionSlug", <RegionsPage />, "/service-areas/nonexistent");
-		expect(screen.getByText(/Professional Plumbers in Service Area/)).toBeInTheDocument();
+		expect(screen.getByText("404")).toBeInTheDocument();
+		expect(screen.getByText("Page Not Found")).toBeInTheDocument();
 	});
 });
 

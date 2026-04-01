@@ -11,6 +11,8 @@ export default function DIYPlumbingPermit() {
 		phone: "",
 		address: "",
 		city: "",
+		state: "",
+		zipCode: "",
 		projectDescription: "",
 		inspection: "unsure",
 	});
@@ -53,6 +55,8 @@ export default function DIYPlumbingPermit() {
 				phone: "",
 				address: "",
 				city: "",
+				state: "",
+				zipCode: "",
 				projectDescription: "",
 				inspection: "unsure",
 			});
@@ -157,6 +161,44 @@ export default function DIYPlumbingPermit() {
 						value={formData.address}
 						onChange={handleChange}
 					/>
+				</div>
+
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					{/* City */}
+					<div>
+						<label className="block font-bold text-[#2B2B2B]">City</label>
+						<input
+							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							type="text"
+							name="city"
+							value={formData.city}
+							onChange={handleChange}
+						/>
+					</div>
+
+					{/* State */}
+					<div>
+						<label className="block font-bold text-[#2B2B2B]">State</label>
+						<input
+							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							type="text"
+							name="state"
+							value={formData.state}
+							onChange={handleChange}
+						/>
+					</div>
+
+					{/* Zip Code */}
+					<div>
+						<label className="block font-bold text-[#2B2B2B]">Zip Code</label>
+						<input
+							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							type="text"
+							name="zipCode"
+							value={formData.zipCode}
+							onChange={handleChange}
+						/>
+					</div>
 				</div>
 
 				{/* Project Description */}

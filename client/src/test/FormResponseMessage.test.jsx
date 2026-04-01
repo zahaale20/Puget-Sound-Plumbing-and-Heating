@@ -34,6 +34,14 @@ describe("FormResponseMessage", () => {
 		expect(el.className).toContain("text-red-700");
 	});
 
+	it("renders warning message with orange styling", () => {
+		render(<FormResponseMessage type="warning" message="Already subscribed" />);
+		const el = screen.getByText("Already subscribed");
+		expect(el).toBeInTheDocument();
+		expect(el.className).toContain("bg-orange-100");
+		expect(el.className).toContain("text-orange-700");
+	});
+
 	it("applies custom className", () => {
 		render(<FormResponseMessage message="Test" className="w-full text-center" />);
 		const el = screen.getByText("Test");

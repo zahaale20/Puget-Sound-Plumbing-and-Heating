@@ -1306,10 +1306,19 @@ def _send_coupon_email(
                             <table cellpadding="0" cellspacing="0" style="width:420px;margin:0 auto;border:4px dashed #B32020;background-color:#ffffff;box-shadow:0 4px 12px rgba(0,0,0,0.12);position:relative;">
                                 <tr>
                                 <td style="width:420px;padding:24px 32px;text-align:center;vertical-align:middle;">
-                                    <!-- FaTag icon (exact FA5 SVG) -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="48" height="48" fill="#B32020" style="display:block;margin:0 auto 14px;">
+                                    <!-- Coupon icon badge with ID -->
+                                    <table cellpadding="0" cellspacing="0" style="margin:0 auto 14px;border-radius:4px;overflow:hidden;">
+                                    <tr>
+                                    <td style="background-color:#B32020;padding:8px 10px 8px 14px;vertical-align:middle;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="22" height="22" fill="#ffffff" style="display:block;">
                                     <path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/>
                                     </svg>
+                                    </td>
+                                    <td style="background-color:#B32020;padding:8px 14px 8px 6px;vertical-align:middle;font-size:13px;font-weight:700;color:#ffffff;letter-spacing:0.05em;white-space:nowrap;">
+                                    {couponId}
+                                    </td>
+                                    </tr>
+                                    </table>
                                     <!-- Discount amount with red underline -->
                                     <table cellpadding="0" cellspacing="0" style="margin:0 auto 12px;">
                                     <tr>
@@ -1321,9 +1330,7 @@ def _send_coupon_email(
                                     <!-- Condition -->
                                     <p style="font-size:14px;font-weight:600;color:#2B2B2B;text-transform:uppercase;margin:0 0 8px;letter-spacing:0.03em;">{couponCondition}</p>
                                     <!-- Fine print -->
-                                    <p style="font-size:11px;color:#555555;margin:0 0 8px;">Cannot be combined with other offers.</p>
-                                    <!-- Coupon ID -->
-                                    <p style="font-size:10px;color:#888888;margin:0;">Coupon ID: {couponId}</p>
+                                    <p style="font-size:11px;color:#555555;margin:0;">Cannot be combined with other offers.</p>
                                 </td>
                                 <!-- Scissors icon (FaCut SVG) -->
                                 <td style="width:32px;vertical-align:bottom;padding-bottom:40px;padding-right:0;">
