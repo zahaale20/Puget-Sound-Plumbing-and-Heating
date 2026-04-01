@@ -45,15 +45,6 @@ export default function OurServices() {
 					Explore reliable plumbing and heating solutions delivered by experienced local
 					technicians.
 				</p>
-
-				<div className="flex justify-end">
-				<a
-					href="/services"
-					className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline"
-				>
-					See All Services <FaArrowRight />
-				</a>
-			</div>
 			</div>
 
 			{/* Services Grid */}
@@ -86,6 +77,16 @@ export default function OurServices() {
 						<p className="text-[#2B2B2B]">{service.description}</p>
 					</button>
 				))}
+			</div>
+
+			{/* See All Services Link */}
+			<div className="flex justify-end">
+				<a
+					href="/services"
+					className="text-white font-semibold flex items-center gap-2 hover:underline"
+				>
+					See All Services <FaArrowRight />
+				</a>
 			</div>
 		</div>
 	);
