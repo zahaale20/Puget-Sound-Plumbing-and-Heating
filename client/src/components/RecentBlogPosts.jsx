@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowRight, FaUser, FaEye } from "react-icons/fa";
 import { posts } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
@@ -53,8 +53,10 @@ export default function RecentBlogPosts() {
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
-							<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
-								<FaRegCalendarAlt /> <span>{post.date}</span>
+							<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#949494] text-sm mb-2">
+								<span className="flex items-center gap-1"><FaRegCalendarAlt /> {post.date}</span>
+								<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
+								<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 							</div>
 							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 							<span className="text-[#2B2B2B] flex-1 mb-6">

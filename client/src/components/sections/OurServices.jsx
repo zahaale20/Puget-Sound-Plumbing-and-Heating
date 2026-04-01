@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { HomeServices } from "../../data/data";
 
@@ -45,12 +46,14 @@ export default function OurServices() {
 					technicians.
 				</p>
 
-				<button
-					onClick={() => navigate("/services")}
-					className="inline-flex mx-auto text-white font-semibold hover:underline cursor-pointer"
+				<div className="flex justify-end">
+				<a
+					href="/services"
+					className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline"
 				>
-					See all services
-				</button>
+					See All Services <FaArrowRight />
+				</a>
+			</div>
 			</div>
 
 			{/* Services Grid */}

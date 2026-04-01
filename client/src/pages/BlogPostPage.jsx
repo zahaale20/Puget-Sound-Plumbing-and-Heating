@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser, FaEye } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { posts } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
@@ -80,9 +80,10 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						<div className="flex items-center gap-2 text-[#949494] text-sm mb-4">
-							<FaRegCalendarAlt />
-							<span>{post.date}</span>
+						<div className="flex flex-wrap items-center gap-4 text-[#949494] text-sm mb-4">
+							<span className="flex items-center gap-2"><FaRegCalendarAlt /> {post.date}</span>
+							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
+							<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
 						</div>
 						<h3 className="text-[#0C2D70] text-3xl md:text-4xl font-bold mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">

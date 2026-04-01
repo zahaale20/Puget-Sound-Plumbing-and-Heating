@@ -9,7 +9,7 @@ export default function Warranty() {
 				<ImageWithLoader
 					src={getCloudFrontUrl("private/warranty.png")}
 					alt="Lifetime Warranty"
-					className="mt-4 w-280 h-auto object-cover"
+					className="mt-4 w-150 h-auto object-cover"
 					loading="lazy"
 				/>
 			</div>
