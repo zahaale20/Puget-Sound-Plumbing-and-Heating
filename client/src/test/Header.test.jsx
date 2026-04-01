@@ -53,7 +53,7 @@ describe("Header", () => {
 		expect(screen.getByText("Plumbing")).toBeInTheDocument();
 		expect(screen.getByText("Drain and Sewer")).toBeInTheDocument();
 		expect(screen.getByText("Water Heaters")).toBeInTheDocument();
-		expect(screen.getByText("Heating & Cooling")).toBeInTheDocument();
+		expect(screen.getByText("Heating and Cooling")).toBeInTheDocument();
 	});
 
 	it("renders Schedule Online button", () => {

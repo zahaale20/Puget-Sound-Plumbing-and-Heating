@@ -24,6 +24,16 @@ function getInput(container, name) {
 	return container.querySelector(`[name="${name}"]`);
 }
 
+function fillValidForm(container) {
+	fireEvent.change(getInput(container, "firstName"), { target: { value: "Jane", name: "firstName" } });
+	fireEvent.change(getInput(container, "lastName"), { target: { value: "Smith", name: "lastName" } });
+	fireEvent.change(getInput(container, "phone"), { target: { value: "2065551234", name: "phone" } });
+	fireEvent.change(getInput(container, "email"), { target: { value: "jane@example.com", name: "email" } });
+	// Select a position
+	fireEvent.click(screen.getByText("Select a position"));
+	fireEvent.click(screen.getByText("Licensed Residential Plumber"));
+}
+
 describe("JobApplicationForm", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -56,6 +66,7 @@ describe("JobApplicationForm", () => {
 		submitJobApplication.mockResolvedValue({ success: true });
 
 		const { container } = render(<JobApplicationForm />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -68,6 +79,7 @@ describe("JobApplicationForm", () => {
 		getHCaptchaToken.mockResolvedValue(null);
 
 		const { container } = render(<JobApplicationForm />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -83,6 +95,7 @@ describe("JobApplicationForm", () => {
 		submitJobApplication.mockRejectedValue(new Error("Server error"));
 
 		const { container } = render(<JobApplicationForm />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -99,6 +112,7 @@ describe("JobApplicationForm", () => {
 		});
 
 		const { container } = render(<JobApplicationForm />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -114,6 +128,7 @@ describe("JobApplicationForm", () => {
 		);
 
 		const { container } = render(<JobApplicationForm />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {

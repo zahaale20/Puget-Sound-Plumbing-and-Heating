@@ -17,6 +17,13 @@ function getInput(container, name) {
 	return container.querySelector(`[name="${name}"]`);
 }
 
+function fillValidForm(container) {
+	fireEvent.change(getInput(container, "firstName"), { target: { value: "John", name: "firstName" } });
+	fireEvent.change(getInput(container, "lastName"), { target: { value: "Doe", name: "lastName" } });
+	fireEvent.change(getInput(container, "phone"), { target: { value: "2065551234", name: "phone" } });
+	fireEvent.change(getInput(container, "email"), { target: { value: "john@example.com", name: "email" } });
+}
+
 describe("ScheduleOnline", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -66,6 +73,7 @@ describe("ScheduleOnline", () => {
 		getHCaptchaToken.mockResolvedValue(null);
 
 		const { container } = render(<ScheduleOnline />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -81,6 +89,7 @@ describe("ScheduleOnline", () => {
 		submitSchedule.mockRejectedValue(new Error("Server error"));
 
 		const { container } = render(<ScheduleOnline />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -97,6 +106,7 @@ describe("ScheduleOnline", () => {
 		});
 
 		const { container } = render(<ScheduleOnline />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -112,6 +122,7 @@ describe("ScheduleOnline", () => {
 		);
 
 		const { container } = render(<ScheduleOnline />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -131,6 +142,7 @@ describe("ScheduleOnline", () => {
 		submitSchedule.mockRejectedValue(err);
 
 		const { container } = render(<ScheduleOnline />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {

@@ -8,10 +8,10 @@ import { Coupons, CompanyInfo } from "../data/data";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [
-		{ id: "PSPAH-1950", discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
-		{ id: "PSPAH-5950", discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
-		{ id: "PSPAH-6950", discount: "$69.50 OFF", condition: "ANY SERVICE OVER $800" },
-		{ id: "PSPAH-7975", discount: "$79.75 OFF", condition: "ANY SERVICE OVER $1,500" },
+		{ discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
+		{ discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
+		{ discount: "$69.50 OFF", condition: "ANY SERVICE OVER $800" },
+		{ discount: "$79.75 OFF", condition: "ANY SERVICE OVER $1,500" },
 	];
 
 	const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -133,9 +133,6 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 								<p className="text-[#2B2B2B] uppercase text-lg">{selectedCoupon?.condition}</p>
 								<p className="text-[#2B2B2B] mt-2">Cannot be combined with other offers.</p>
 
-								{/* Coupon ID */}
-								<p className="text-[#888] text-xs mt-1">Coupon ID: {selectedCoupon?.id}</p>
-
 								{/* Scissors Icon */}
 								<div className="absolute -right-[16px] bottom-1/4 text-[#B32020] text-3xl rotate-270">
 									<FaCut />
@@ -162,7 +159,6 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 										const result = await redeemOffer(
 											{
 												...formData,
-												couponId: selectedCoupon.id,
 												couponDiscount: selectedCoupon.discount,
 												couponCondition: selectedCoupon.condition,
 											},

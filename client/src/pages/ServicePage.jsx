@@ -3,6 +3,7 @@ import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { ServiceLinks } from "../data/data";
 
 export default function ServicePage() {
@@ -84,7 +85,7 @@ export default function ServicePage() {
 
 					<div className="relative h-[400px] w-full xl:w-1/2 overflow-hidden">
 						{serviceImageKey && (
-							<img
+							<ImageWithLoader
 								src={getCloudFrontUrl(serviceImageKey)}
 								alt={serviceName}
 								className="w-full h-full object-cover"

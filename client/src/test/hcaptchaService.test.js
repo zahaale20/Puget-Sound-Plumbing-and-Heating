@@ -71,16 +71,20 @@ describe("getHCaptchaToken", () => {
 		vi.stubEnv("VITE_HCAPTCHA_SITE_KEY", "test-site-key");
 
 		window.hcaptcha = {
-			render: vi.fn(() => "widget-0"),
+			render: vi.fn((container, options) => {
+				window._hcaptchaCallback = options.callback;
+				return "widget-0";
+			}),
 			reset: vi.fn(),
-			execute: vi.fn(),
+			execute: vi.fn(() => {
+				window._hcaptchaCallback("token");
+			}),
 		};
 
 		const mod = await import("../services/hcaptchaService");
 		getHCaptchaToken = mod.getHCaptchaToken;
 
-		// Start the process but don't await (it will hang waiting for callback)
-		const promise = getHCaptchaToken();
+		await getHCaptchaToken();
 
 		// Verify container was created
 		const container = document.getElementById("hcaptcha-invisible");
@@ -88,11 +92,7 @@ describe("getHCaptchaToken", () => {
 		expect(container.style.position).toBe("fixed");
 		expect(container.style.zIndex).toBe("9999999");
 
-		// Resolve the promise to prevent hanging
-		const renderCall = window.hcaptcha.render.mock.calls[0];
-		renderCall[1].callback("token");
-		await promise;
-
+		delete window._hcaptchaCallback;
 		vi.unstubAllEnvs();
 	});
 
@@ -125,25 +125,26 @@ describe("getHCaptchaToken", () => {
 		vi.stubEnv("VITE_HCAPTCHA_SITE_KEY", "test-site-key");
 
 		window.hcaptcha = {
-			render: vi.fn(() => "widget-0"),
+			render: vi.fn((container, options) => {
+				window._hcaptchaErrorCallback = options["error-callback"];
+				return "widget-0";
+			}),
 			reset: vi.fn(),
-			execute: vi.fn(),
+			execute: vi.fn(() => {
+				// Trigger the error callback
+				window._hcaptchaErrorCallback();
+			}),
 		};
 
 		const mod = await import("../services/hcaptchaService");
 		getHCaptchaToken = mod.getHCaptchaToken;
 
 		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-		const promise = getHCaptchaToken();
+		const token = await getHCaptchaToken();
 
-		// Trigger the error callback
-		const renderCall = window.hcaptcha.render.mock.calls[0];
-		renderCall[1]["error-callback"]();
-
-		const token = await promise;
 		expect(token).toBeNull();
 		errorSpy.mockRestore();
-
+		delete window._hcaptchaErrorCallback;
 		vi.unstubAllEnvs();
 	});
 });

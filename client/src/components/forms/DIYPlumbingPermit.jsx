@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { submitDiyPermit } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
+import FieldError from "../ui/FieldError";
+import { validateName, validateEmail, validatePhone, validateRequired, formatPhone } from "../../services/formValidation";
+import useFormValidation from "../../hooks/useFormValidation";
 
 export default function DIYPlumbingPermit() {
+	const validationSchema = useMemo(() => ({
+		firstName: [(v) => validateName(v, "First name")],
+		lastName: [(v) => validateName(v, "Last name")],
+		email: [validateEmail],
+		phone: [validatePhone],
+		address: [(v) => validateRequired(v, "Property address")],
+	}), []);
+
+	const { errors: fieldErrors, touched, handleBlur, validateField, validateAll, resetValidation } = useFormValidation(validationSchema);
+
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -20,11 +33,17 @@ export default function DIYPlumbingPermit() {
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const handleChange = (e) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+		const newValue = name === "phone" ? formatPhone(value) : value;
+		setFormData({ ...formData, [name]: newValue });
+		if (touched[name]) validateField(name, newValue);
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		const { isValid } = validateAll(formData);
+		if (!isValid) return;
+
 		setIsSubmitting(true);
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
@@ -53,6 +72,7 @@ export default function DIYPlumbingPermit() {
 				projectDescription: "",
 				inspection: "unsure",
 			});
+			resetValidation();
 		} catch (err) {
 			setSubmitError(err.message || "An error occurred. Please try again.");
 		} finally {
@@ -76,7 +96,7 @@ export default function DIYPlumbingPermit() {
 			</div>
 
 			{/* Form */}
-			<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left">
+			<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left" noValidate>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{/* First Name */}
 					<div>
@@ -84,13 +104,14 @@ export default function DIYPlumbingPermit() {
 							First Name <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
-							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.firstName && fieldErrors.firstName ? "border-red-500" : "border-gray-300"}`}
 							type="text"
 							name="firstName"
-							required
 							value={formData.firstName}
 							onChange={handleChange}
+							onBlur={handleBlur}
 						/>
+						<FieldError error={fieldErrors.firstName} touched={touched.firstName} />
 					</div>
 
 					{/* Last Name */}
@@ -99,13 +120,14 @@ export default function DIYPlumbingPermit() {
 							Last Name <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
-							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.lastName && fieldErrors.lastName ? "border-red-500" : "border-gray-300"}`}
 							type="text"
 							name="lastName"
-							required
 							value={formData.lastName}
 							onChange={handleChange}
+							onBlur={handleBlur}
 						/>
+						<FieldError error={fieldErrors.lastName} touched={touched.lastName} />
 					</div>
 				</div>
 
@@ -116,13 +138,14 @@ export default function DIYPlumbingPermit() {
 							Email <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
-							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.email && fieldErrors.email ? "border-red-500" : "border-gray-300"}`}
 							type="email"
 							name="email"
-							required
 							value={formData.email}
 							onChange={handleChange}
+							onBlur={handleBlur}
 						/>
+						<FieldError error={fieldErrors.email} touched={touched.email} />
 					</div>
 
 					{/* Phone */}
@@ -131,13 +154,14 @@ export default function DIYPlumbingPermit() {
 							Phone <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
-							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.phone && fieldErrors.phone ? "border-red-500" : "border-gray-300"}`}
 							type="tel"
 							name="phone"
-							required
 							value={formData.phone}
 							onChange={handleChange}
+							onBlur={handleBlur}
 						/>
+						<FieldError error={fieldErrors.phone} touched={touched.phone} />
 					</div>
 				</div>
 
@@ -147,13 +171,14 @@ export default function DIYPlumbingPermit() {
 						Property Address <span className="text-[#B32020] italic">*</span>
 					</label>
 					<input
-						className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.address && fieldErrors.address ? "border-red-500" : "border-gray-300"}`}
 						type="text"
 						name="address"
-						required
 						value={formData.address}
 						onChange={handleChange}
+						onBlur={handleBlur}
 					/>
+					<FieldError error={fieldErrors.address} touched={touched.address} />
 				</div>
 
 				{/* Project Description */}

@@ -1215,13 +1215,13 @@ export const HomeServices = [
 // ============================================================
 
 export const ServiceCategoryDescriptions = {
-	Plumbing:
+	plumbing:
 		"Our plumbing team handles repairs, replacements, leak diagnostics, fixture installations, and remodel support. Whether you're dealing with unexpected drips or major water line issues, we deliver dependable, long-lasting solutions for your home. We also help you plan proactive upgrades and maintenance so small issues don't turn into costly emergencies later on.",
-	"Drain and Sewer":
+	drainAndSewer:
 		"From kitchen drains to main sewer lines, our specialists clear clogs, eliminate backups, and repair damaged piping using advanced diagnostics to protect your home from water damage. We identify the root cause of recurring issues and offer long-term solutions, not just quick fixes, so your drainage system keeps working smoothly.",
-	"Water Heaters":
+	waterHeaters:
 		"We install, repair, and maintain tank and tankless water heaters, ensuring safe installation, proper sizing, and reliable performance for consistent hot water year-round. Our technicians help you choose the right system for your household, focusing on efficiency, lifespan, and total cost of ownership over time.",
-	"Heating and Cooling":
+	heatingAndCooling:
 		"We maintain and repair AC units, heat pumps, and furnaces, optimizing energy efficiency and indoor comfort through expert diagnostics and high-quality system care. Whether you need seasonal tune-ups or emergency service, we focus on safe operation, consistent temperatures, and lower utility costs wherever possible.",
 };
 
@@ -1232,13 +1232,13 @@ export const ServiceCategoryDescriptions = {
 // ============================================================
 
 export const ServiceAreaDescriptions = {
-	Seattle:
+	seattle:
 		"Seattle is our home base, and we know the plumbing challenges that come with older homes, new construction, and everything in between. Whether it's a burst pipe on Capitol Hill, a water heater replacement in Ballard, or a sewer line issue in West Seattle, our team has you covered.",
-	"King County":
+	kingCounty:
 		"As one of the largest counties in Washington, King County has diverse plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide full-service plumbing, heating, and drain cleaning throughout the county, ensuring fast, reliable solutions whenever you need them.",
-	"Pierce County":
+	pierceCounty:
 		"From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound Plumbing for dependable service and honest pricing. Whether it's routine maintenance, fixture installation, or an urgent late-night emergency, our plumbers are just a call away.",
-	"Snohomish County":
+	snohomishCounty:
 		"Serving growing communities like Everett, Lynnwood, and Marysville, our team brings decades of plumbing expertise to Snohomish County. We understand local building codes, water system requirements, and the unique needs of homes in the area.",
 };
 

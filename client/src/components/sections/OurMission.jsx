@@ -1,4 +1,5 @@
 import { getCloudFrontUrl } from "../../services/imageService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { OurMissionContent } from "../../data/data";
 
 export default function OurMission() {
@@ -18,7 +19,7 @@ export default function OurMission() {
 
 			{/* Image Section */}
 			<div className="flex justify-center w-full">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/team2.jpeg")}
 					alt="Our team"
 					className="w-full h-auto object-cover"

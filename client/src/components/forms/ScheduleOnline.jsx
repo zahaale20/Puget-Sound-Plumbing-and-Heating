@@ -1,10 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { submitSchedule } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
+import FieldError from "../ui/FieldError";
 import { CompanyInfo } from "../../data/data";
+import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
+import useFormValidation from "../../hooks/useFormValidation";
 
 export default function ScheduleOnline() {
+	const validationSchema = useMemo(() => ({
+		firstName: [(v) => validateName(v, "First name")],
+		lastName: [(v) => validateName(v, "Last name")],
+		phone: [validatePhone],
+		email: [validateEmail],
+	}), []);
+
+	const { errors: fieldErrors, touched, handleBlur, validateField, validateAll, resetValidation } = useFormValidation(validationSchema);
+
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -19,11 +31,17 @@ export default function ScheduleOnline() {
 	const [successMessage, setSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 
 	const handleChange = (e) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+		const newValue = name === "phone" ? formatPhone(value) : value;
+		setFormData({ ...formData, [name]: newValue });
+		if (touched[name]) validateField(name, newValue);
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		const { isValid } = validateAll(formData);
+		if (!isValid) return;
+
 		setLoading(true);
 		setError(null);
 		setSuccess(false);
@@ -51,6 +69,7 @@ export default function ScheduleOnline() {
 				email: "",
 				message: "",
 			});
+			resetValidation();
 			setSuccess(true);
 
 			// Clear success message after 5 seconds
@@ -86,7 +105,7 @@ export default function ScheduleOnline() {
 				</div>
 
 				{/* Contact Form */}
-				<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left">
+				<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left" noValidate>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{/* First Name */}
 						<div>
@@ -94,13 +113,14 @@ export default function ScheduleOnline() {
 								First Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
 							<input
-								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								className={`w-full border-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.firstName && fieldErrors.firstName ? "border-red-500" : "border-[#DEDEDE]"}`}
 								type="text"
 								name="firstName"
-								required
 								value={formData.firstName}
 								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
+							<FieldError error={fieldErrors.firstName} touched={touched.firstName} />
 						</div>
 
 						{/* Last Name */}
@@ -109,13 +129,14 @@ export default function ScheduleOnline() {
 								Last Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
 							<input
-								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								className={`w-full border-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.lastName && fieldErrors.lastName ? "border-red-500" : "border-[#DEDEDE]"}`}
 								type="text"
 								name="lastName"
-								required
 								value={formData.lastName}
 								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
+							<FieldError error={fieldErrors.lastName} touched={touched.lastName} />
 						</div>
 					</div>
 
@@ -126,13 +147,14 @@ export default function ScheduleOnline() {
 								Phone <span className="text-[#B32020] italic">*</span>
 							</label>
 							<input
-								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								className={`w-full border-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.phone && fieldErrors.phone ? "border-red-500" : "border-[#DEDEDE]"}`}
 								type="tel"
 								name="phone"
-								required
 								value={formData.phone}
 								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
+							<FieldError error={fieldErrors.phone} touched={touched.phone} />
 						</div>
 
 						{/* Email */}
@@ -141,13 +163,14 @@ export default function ScheduleOnline() {
 								Email <span className="text-[#B32020] italic">*</span>
 							</label>
 							<input
-								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+								className={`w-full border-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.email && fieldErrors.email ? "border-red-500" : "border-[#DEDEDE]"}`}
 								type="email"
 								name="email"
-								required
 								value={formData.email}
 								onChange={handleChange}
+								onBlur={handleBlur}
 							/>
+							<FieldError error={fieldErrors.email} touched={touched.email} />
 						</div>
 					</div>
 

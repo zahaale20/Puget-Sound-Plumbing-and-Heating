@@ -1,17 +1,20 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { FaTag, FaCut } from "react-icons/fa";
 import { redeemOffer } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
+import FieldError from "../ui/FieldError";
 import { Coupons, CompanyInfo } from "../../data/data";
+import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
+import useFormValidation from "../../hooks/useFormValidation";
 
 export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const coupons = [
-		{ id: "PSPAH-1950", discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
-		{ id: "PSPAH-5950", discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
-		{ id: "PSPAH-6950", discount: "$69.50 OFF", condition: "ANY SERVICE OVER $800" },
-		{ id: "PSPAH-7975", discount: "$79.75 OFF", condition: "ANY SERVICE OVER $1,500" },
+		{ discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
+		{ discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
+		{ discount: "$69.50 OFF", condition: "ANY SERVICE OVER $800" },
+		{ discount: "$79.75 OFF", condition: "ANY SERVICE OVER $1,500" },
 	];
 
 	const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -21,6 +24,15 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+
+	const validationSchema = useMemo(() => ({
+		firstName: [(v) => validateName(v, "First name")],
+		lastName: [(v) => validateName(v, "Last name")],
+		email: [validateEmail],
+		phone: [validatePhone],
+	}), []);
+
+	const { errors: fieldErrors, touched, handleBlur, validateField, validateAll, resetValidation } = useFormValidation(validationSchema);
 
 	const scrollY = useRef(0);
 
@@ -42,6 +54,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 		setSubmitError(null);
 		setSubmitSuccess(false);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
+		resetValidation();
 	};
 
 	return (
@@ -133,9 +146,6 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 								<p className="text-[#2B2B2B] uppercase text-lg">{selectedCoupon?.condition}</p>
 								<p className="text-[#2B2B2B] mt-2">Cannot be combined with other offers.</p>
 
-								{/* Coupon ID */}
-								<p className="text-[#888] text-xs mt-1">Coupon ID: {selectedCoupon?.id}</p>
-
 								{/* Scissors Icon */}
 								<div className="absolute -right-[16px] bottom-1/4 text-[#B32020] text-3xl rotate-270">
 									<FaCut />
@@ -146,6 +156,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 							<form
 								onSubmit={async (e) => {
 									e.preventDefault();
+									const { isValid } = validateAll(formData);
+									if (!isValid) return;
+
 									setIsSubmitting(true);
 									setSubmitError(null);
 									setSubmitSuccess(false);
@@ -182,6 +195,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									}
 								}}
 								className="flex flex-col gap-4 text-left"
+								noValidate
 							>
 									{/* First + Last Name */}
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -190,12 +204,17 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 												First Name <span className="text-[#B32020] italic">*</span>
 											</label>
 											<input
-												required
 												type="text"
+												name="firstName"
 												value={formData.firstName}
-												onChange={(e) => setFormData((p) => ({ ...p, firstName: e.target.value }))}
-												className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+												onChange={(e) => {
+													setFormData((p) => ({ ...p, firstName: e.target.value }));
+													if (touched.firstName) validateField("firstName", e.target.value);
+												}}
+												onBlur={handleBlur}
+												className={`w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.firstName && fieldErrors.firstName ? "border-red-500" : "border-gray-300"}`}
 											/>
+											<FieldError error={fieldErrors.firstName} touched={touched.firstName} />
 										</div>
 
 										<div>
@@ -203,12 +222,17 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 												Last Name <span className="text-[#B32020] italic">*</span>
 											</label>
 											<input
-												required
 												type="text"
+												name="lastName"
 												value={formData.lastName}
-												onChange={(e) => setFormData((p) => ({ ...p, lastName: e.target.value }))}
-												className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+												onChange={(e) => {
+													setFormData((p) => ({ ...p, lastName: e.target.value }));
+													if (touched.lastName) validateField("lastName", e.target.value);
+												}}
+												onBlur={handleBlur}
+												className={`w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.lastName && fieldErrors.lastName ? "border-red-500" : "border-gray-300"}`}
 											/>
+											<FieldError error={fieldErrors.lastName} touched={touched.lastName} />
 										</div>
 									</div>
 
@@ -218,12 +242,17 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 											Email <span className="text-[#B32020] italic">*</span>
 										</label>
 										<input
-											required
 											type="email"
+											name="email"
 											value={formData.email}
-											onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+											onChange={(e) => {
+												setFormData((p) => ({ ...p, email: e.target.value }));
+												if (touched.email) validateField("email", e.target.value);
+											}}
+											onBlur={handleBlur}
+											className={`w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.email && fieldErrors.email ? "border-red-500" : "border-gray-300"}`}
 										/>
+										<FieldError error={fieldErrors.email} touched={touched.email} />
 									</div>
 
 									<div>
@@ -231,12 +260,18 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 											Phone <span className="text-[#B32020] italic">*</span>
 										</label>
 										<input
-											required
 											type="tel"
+											name="phone"
 											value={formData.phone}
-											onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-											className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
+											onChange={(e) => {
+												const formatted = formatPhone(e.target.value);
+												setFormData((p) => ({ ...p, phone: formatted }));
+												if (touched.phone) validateField("phone", formatted);
+											}}
+											onBlur={handleBlur}
+											className={`w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white ${touched.phone && fieldErrors.phone ? "border-red-500" : "border-gray-300"}`}
 										/>
+										<FieldError error={fieldErrors.phone} touched={touched.phone} />
 									</div>
 
 									{/* Submit */}

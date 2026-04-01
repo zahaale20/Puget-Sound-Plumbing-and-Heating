@@ -13,6 +13,17 @@ import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
 import { redeemOffer } from "../services/emailService";
 import { getHCaptchaToken } from "../services/hcaptchaService";
 
+function fillModalForm() {
+	const firstNameInput = document.querySelector('.fixed input[name="firstName"]');
+	const lastNameInput = document.querySelector('.fixed input[name="lastName"]');
+	const emailInput = document.querySelector('.fixed input[name="email"]');
+	const phoneInput = document.querySelector('.fixed input[name="phone"]');
+	fireEvent.change(firstNameInput, { target: { value: "Jane", name: "firstName" } });
+	fireEvent.change(lastNameInput, { target: { value: "Doe", name: "lastName" } });
+	fireEvent.change(emailInput, { target: { value: "jane@example.com", name: "email" } });
+	fireEvent.change(phoneInput, { target: { value: "2065550000", name: "phone" } });
+}
+
 describe("LimitedTimeOffers", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -76,7 +87,6 @@ describe("LimitedTimeOffers", () => {
 				firstName: "Jane",
 				lastName: "Doe",
 				email: "jane@example.com",
-				couponId: "PSPAH-5950",
 				couponDiscount: "$59.50 OFF",
 				couponCondition: "ANY SERVICE OVER $250",
 			}),
@@ -91,6 +101,7 @@ describe("LimitedTimeOffers", () => {
 		const buttons = screen.getAllByText("Redeem Offer");
 		fireEvent.click(buttons[0]);
 
+		fillModalForm();
 		const form = document.querySelector(".fixed form");
 		fireEvent.submit(form);
 
@@ -110,6 +121,7 @@ describe("LimitedTimeOffers", () => {
 		const buttons = screen.getAllByText("Redeem Offer");
 		fireEvent.click(buttons[0]);
 
+		fillModalForm();
 		const form = document.querySelector(".fixed form");
 		fireEvent.submit(form);
 
@@ -130,6 +142,7 @@ describe("LimitedTimeOffers", () => {
 		const buttons = screen.getAllByText("Redeem Offer");
 		fireEvent.click(buttons[0]);
 
+		fillModalForm();
 		const form = document.querySelector(".fixed form");
 		fireEvent.submit(form);
 
@@ -149,6 +162,7 @@ describe("LimitedTimeOffers", () => {
 		const buttons = screen.getAllByText("Redeem Offer");
 		fireEvent.click(buttons[0]);
 
+		fillModalForm();
 		const form = document.querySelector(".fixed form");
 		fireEvent.submit(form);
 

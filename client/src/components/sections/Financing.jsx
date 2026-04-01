@@ -1,4 +1,5 @@
 import { getCloudFrontUrl } from "../../services/imageService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { CompanyInfo, FinancingContent } from "../../data/data";
 
 export default function Financing() {
@@ -44,7 +45,7 @@ export default function Financing() {
 			</div>
 
 			<div className="hidden lg:block">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/easy-financing-available.png")}
 					alt="Easy Financing Available"
 					className="mt-4 w-150 h-auto object-cover"

@@ -185,9 +185,8 @@ class TestRedeemOfferIntegration:
             "lastName": "Doe",
             "phone": "2065559999",
             "email": "jane@example.com",
-            "couponId": "PSPAH-1950",
-            "couponDiscount": "20%",
-            "couponCondition": "First visit",
+            "couponDiscount": "$19.50 OFF",
+            "couponCondition": "ANY SERVICE UP TO $150",
         })
         assert resp.status_code == 200
         data = resp.json()
@@ -197,7 +196,7 @@ class TestRedeemOfferIntegration:
         assert len(coupon_calls) == 1
         assert coupon_calls[0][0][0] == "jane@example.com"
         assert coupon_calls[0][0][4] == "PSPAH-1950"
-        assert coupon_calls[0][0][5] == "20%"
+        assert coupon_calls[0][0][5] == "$19.50 OFF"
 
 
 # ── DIY Permit: DB → permit email ────────────────────────────────────────

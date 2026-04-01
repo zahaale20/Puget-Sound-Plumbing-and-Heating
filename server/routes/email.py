@@ -93,6 +93,16 @@ def _duplicate_response(message: str):
     }
 
 
+import re as _re
+
+def _generate_coupon_id(coupon_discount: str) -> str:
+    """Generate a coupon ID from the discount string (e.g. '$19.50 OFF' -> 'PSPAH-1950')."""
+    match = _re.search(r"\$(\d+)\.(\d+)", coupon_discount)
+    if match:
+        return f"PSPAH-{match.group(1)}{match.group(2)}"
+    return f"PSPAH-{abs(hash(coupon_discount)) % 10000:04d}"
+
+
 def _generate_newsletter_unsubscribe_token(email: str) -> str:
     normalized_email = _normalize_email(email)
     return hmac.new(
@@ -445,6 +455,7 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
     last_name = _normalize_text(request.lastName)
     email = _normalize_email(request.email)
     phone = _normalize_text(request.phone)
+    coupon_id = _generate_coupon_id(request.couponDiscount)
 
     try:
         with get_db_connection() as conn:
@@ -461,7 +472,7 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                             last_name,
                             email,
                             phone,
-                            request.couponId,
+                            coupon_id,
                             request.couponDiscount,
                             request.couponCondition,
                         ),
@@ -481,7 +492,7 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                 first_name,
                 last_name,
                 request.phone,
-                request.couponId,
+                coupon_id,
                 request.couponDiscount,
                 request.couponCondition,
             )

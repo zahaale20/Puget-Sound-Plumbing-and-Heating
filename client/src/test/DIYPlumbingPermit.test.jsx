@@ -17,6 +17,14 @@ function getInput(container, name) {
 	return container.querySelector(`[name="${name}"]`);
 }
 
+function fillValidForm(container) {
+	fireEvent.change(getInput(container, "firstName"), { target: { value: "Bob", name: "firstName" } });
+	fireEvent.change(getInput(container, "lastName"), { target: { value: "Builder", name: "lastName" } });
+	fireEvent.change(getInput(container, "email"), { target: { value: "bob@example.com", name: "email" } });
+	fireEvent.change(getInput(container, "phone"), { target: { value: "2065550000", name: "phone" } });
+	fireEvent.change(getInput(container, "address"), { target: { value: "123 Main St", name: "address" } });
+}
+
 describe("DIYPlumbingPermit", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -59,6 +67,7 @@ describe("DIYPlumbingPermit", () => {
 		getHCaptchaToken.mockResolvedValue(null);
 
 		const { container } = render(<DIYPlumbingPermit />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -74,6 +83,7 @@ describe("DIYPlumbingPermit", () => {
 		submitDiyPermit.mockRejectedValue(new Error("Network error"));
 
 		const { container } = render(<DIYPlumbingPermit />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {
@@ -90,6 +100,7 @@ describe("DIYPlumbingPermit", () => {
 		});
 
 		const { container } = render(<DIYPlumbingPermit />);
+		fillValidForm(container);
 		fireEvent.submit(container.querySelector("form"));
 
 		await waitFor(() => {

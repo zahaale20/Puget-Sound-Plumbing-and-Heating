@@ -23,7 +23,7 @@ export function ImageWithLoader({
 
 	return (
 		<div className={`relative ${className}`}>
-			{isLoading && <div className="absolute inset-0 bg-gray-50" />}
+			{isLoading && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
 			{hasError ? (
 				<div className="flex items-center justify-center bg-gray-50 text-gray-400 text-sm h-full">
 					Image unavailable

@@ -19,9 +19,8 @@ def _offer_payload(**overrides):
         "lastName": "Doe",
         "phone": "2065559999",
         "email": "jane@example.com",
-        "couponId": "PSPAH-1950",
-        "couponDiscount": "20%",
-        "couponCondition": "First visit",
+        "couponDiscount": "$19.50 OFF",
+        "couponCondition": "ANY SERVICE UP TO $150",
     }
     base.update(overrides)
     return base
@@ -221,7 +220,7 @@ class TestModelEdgeCases:
         from models.requests import RedeemOfferRequest
         r = RedeemOfferRequest(
             firstName="A", lastName="B", phone="1", email="a@b.com",
-            couponId="PSPAH-1000", couponDiscount="10%", couponCondition="Any", captchaToken="tok",
+            couponDiscount="10%", couponCondition="Any", captchaToken="tok",
         )
         assert r.captchaToken == "tok"
 

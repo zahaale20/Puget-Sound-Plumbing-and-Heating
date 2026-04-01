@@ -17,6 +17,7 @@ import { ImageWithLoader } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import { CompanyInfo, SocialLinks } from "../../data/data";
+import { validateEmail } from "../../services/formValidation";
 
 export default function Footer() {
 	const navigate = useNavigate();
@@ -140,6 +141,11 @@ export default function Footer() {
 									<form
 										onSubmit={async (e) => {
 											e.preventDefault();
+											const emailError = validateEmail(newsletterEmail);
+											if (emailError) {
+												setNewsletterError(emailError);
+												return;
+											}
 											setNewsletterSubmitting(true);
 											setNewsletterError(null);
 											setNewsletterSuccessMessage("Thank you! We'll be in touch soon.");
@@ -167,23 +173,28 @@ export default function Footer() {
 												setNewsletterSubmitting(false);
 											}
 										}}
-										className="relative flex w-full max-w-md shadow-lg overflow-hidden mb-4"
+										className="relative flex flex-col w-full max-w-md mb-4"
+										noValidate
 									>
-										<input
-											required
-											type="email"
-											placeholder="Email Address"
-											value={newsletterEmail}
-											onChange={(e) => setNewsletterEmail(e.target.value)}
-											className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
-										/>
-										<button
-											type="submit"
-											disabled={newsletterSubmitting}
-											className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
-										>
-											{newsletterSubmitting ? "..." : "Join Now"}
-										</button>
+										<div className="flex shadow-lg overflow-hidden">
+											<input
+												type="email"
+												placeholder="Email Address"
+												value={newsletterEmail}
+												onChange={(e) => {
+													setNewsletterEmail(e.target.value);
+													if (newsletterError) setNewsletterError(null);
+												}}
+												className="flex-[2] p-2.5 text-black focus:outline-none bg-white placeholder:text-gray-400 border-gray-200"
+											/>
+											<button
+												type="submit"
+												disabled={newsletterSubmitting}
+												className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
+											>
+												{newsletterSubmitting ? "..." : "Join Now"}
+											</button>
+										</div>
 									</form>
 									<FormResponseMessage type="error" message={newsletterError} className="mt-3 mb-3" />
 								</>

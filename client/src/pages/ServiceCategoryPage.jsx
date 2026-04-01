@@ -3,6 +3,7 @@ import { FaArrowRight } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 
 import { getCloudFrontUrl } from "../services/imageService";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 import { ServiceLinks } from "../data/data";
 
@@ -60,7 +61,7 @@ export default function ServiceCategoryPage() {
 							<div
 								className={`flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
 							>
-								<img
+								<ImageWithLoader
 									src={getCloudFrontUrl("private/" + service.image)}
 									alt={service.name}
 									className="w-[600px] h-72 object-cover"

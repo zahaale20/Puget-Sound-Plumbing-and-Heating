@@ -1,6 +1,7 @@
 import { FaArrowRight } from "react-icons/fa";
 
 import { getCloudFrontUrl } from "../../services/imageService";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function FAQS() {
 	return (
@@ -34,7 +35,7 @@ export default function FAQS() {
 
 			{/* Image */}
 			<div className="block self-center shrink-0 pb-16 lg:pb-0">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/plumbing-truck.png")}
 					alt="Plumbing Truck"
 					className="w-full lg:w-auto h-auto lg:h-60 object-cover"
