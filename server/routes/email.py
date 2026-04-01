@@ -236,8 +236,8 @@ async def schedule_online(request: ScheduleRequest, req: Request):
                     cur.execute(
                         """
                         INSERT INTO "Schedule Online"
-                            (first_name, last_name, email, phone, message, "hasBeenContacted")
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                            (first_name, last_name, email, phone, message)
+                        VALUES (%s, %s, %s, %s, %s)
                         """,
                         (
                             first_name,
@@ -245,7 +245,6 @@ async def schedule_online(request: ScheduleRequest, req: Request):
                             email,
                             phone,
                             message,
-                            False,
                         ),
                     )
                 except Exception as insert_error:

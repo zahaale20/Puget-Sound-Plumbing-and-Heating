@@ -1,24 +1,19 @@
-import { FaStar, FaArrowRight } from "react-icons/fa";
-import { CustomerReviewsData, CompanyInfo } from "../../data/data";
+import { FaStar, FaStarHalfAlt, FaRegStar, FaArrowRight, FaGoogle } from "react-icons/fa";
+import { CustomerReviewsData, GoogleReviewsSummary, CompanyInfo } from "../../data/data";
 
 export default function CustomerReviews() {
-	const reviews = [
-		{
-			name: "- Amy W.",
-			rating: 5,
-			text: '"Puget Sound Plumbing was quick, prompt, and professional. Their customer service is amazing, and they made the whole process easy and stress-free. Michael & Sean came out quickly to fix the sub pump issue. Highly recommend!"',
-		},
-		{
-			name: "- Edith S.",
-			rating: 5,
-			text: '"I have used Puget Sound Plumbing and Heating several times now. Each time I have been impressed with how efficient and fast they are. Every person they have sent has listened carefully to the problem. They talk me through all my options and the prices. They answer all my questions. They are polite and respectful."',
-		},
-		{
-			name: "- Charlotte P.",
-			rating: 5,
-			text: '"Michael L saved the day, truly took my breath away! Friendly and knowledgeable to a T, I’m very thankful for how he helped me. His service was a 10/10, I will definitely call Puget Sound Plumbing again. Michael fixed my plumbing with ease, I would love to work with him again please."',
-		},
-	];
+	const reviews = CustomerReviewsData.filter((r) => r.rating >= 4);
+
+	const renderStars = (rating) => {
+		const stars = [];
+		const fullStars = Math.floor(rating);
+		const hasHalf = rating % 1 >= 0.25 && rating % 1 < 0.75;
+		const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+		for (let i = 0; i < fullStars; i++) stars.push(<FaStar key={`f${i}`} />);
+		if (hasHalf) stars.push(<FaStarHalfAlt key="h" />);
+		for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={`e${i}`} />);
+		return stars;
+	};
 
 	return (
 		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
@@ -29,6 +24,20 @@ export default function CustomerReviews() {
 					Customer Reviews
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 				</h4>
+
+				{/* Google Rating Summary */}
+				<div className="flex items-center justify-center gap-3">
+					<FaGoogle className="text-2xl text-[#4285F4]" />
+					<div className="flex items-center gap-2 text-[#B32020] text-xl">
+						{renderStars(GoogleReviewsSummary.rating)}
+					</div>
+					<span className="text-[#2B2B2B] font-semibold text-lg">
+						{GoogleReviewsSummary.rating}
+					</span>
+					<span className="text-[#666]">
+						Based on {GoogleReviewsSummary.totalReviews} reviews
+					</span>
+				</div>
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">
@@ -55,7 +64,7 @@ export default function CustomerReviews() {
 						<p className="flex-1 text-[#2B2B2B]">{review.text}</p>
 
 						{/* Reviewer */}
-						<h6 className="text-[#0C2D70]">{review.name}</h6>
+						<h6 className="text-[#0C2D70]">— {review.name}</h6>
 					</div>
 				))}
 			</div>

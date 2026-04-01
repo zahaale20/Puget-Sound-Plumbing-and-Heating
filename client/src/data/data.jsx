@@ -1059,21 +1059,122 @@ export const TeamMembers = [
 // Testimonials shown on the home page and Reviews page.
 // ============================================================
 
+export const GoogleReviewsSummary = {
+	rating: 4.4,
+	totalReviews: 906,
+	source: "Google",
+};
+
 export const CustomerReviewsData = [
 	{
-		name: "- Amy W.",
+		name: "Michael Rowberg",
 		rating: 5,
-		text: '"Puget Sound Plumbing was quick, prompt, and professional. Their customer service is amazing, and they made the whole process easy and stress-free. Michael & Sean came out quickly to fix the sub pump issue. Highly recommend!"',
+		text: "Nate is the best! Had a busted shower valve that required removing a shower wall and replacing pipes. I'm so glad I went with Puget Sound! Nate was prompt, skilled, knowledgeable, and professional. He fixed everything quickly and beautifully and for less than another company quoted. First rate job!",
 	},
 	{
-		name: "- Edith S.",
+		name: "Mike Os",
 		rating: 5,
-		text: '"I have used Puget Sound Plumbing and Heating several times now. Each time I have been impressed with how efficient and fast they are. Every person they have sent has listened carefully to the problem. They talk me through all my options and the prices. They answer all my questions. They are polite and respectful."',
+		text: "Michael L came out within hours of me calling and repaired a deep in the ground leak near my meter I found and was very easy to work with, fast and efficient, friendly and pretty fast with the repair allowing me to have running water again. He also explained what would be best to do if my water main line leaks again and that they can replace the water main for a somewhat reasonable price. I am a very satisfied customer.",
 	},
 	{
-		name: "- Charlotte P.",
+		name: "Sierra Reed",
 		rating: 5,
-		text: '"Michael L saved the day, truly took my breath away! Friendly and knowledgeable to a T, I\'m very thankful for how he helped me. His service was a 10/10, I will definitely call Puget Sound Plumbing again. Michael fixed my plumbing with ease, I would love to work with him again please."',
+		text: "Michael L was just an absolute life saver (or at least a kitchen saver lol). Cleared out a really nasty clog from the kitchen sink and replaced the previous accordion drain with much sturdier piping. He answered all my questions and was just generally calm and collected throughout the process. The job was done within a couple hours of getting here, including cleanup. I was able to book the night before and they were out at 11 the next morning. Highly recommend, seems like a good crew.",
+	},
+	{
+		name: "Evan Shuster",
+		rating: 5,
+		text: "Really terrific service and expert work. Joseph was amazing. Diagnosed the issue and re-piped our kitchen to perfection. I also appreciate how kind he was to his co-worker. Nice mentorship! This is now my go to plumbing company.",
+	},
+	{
+		name: "Sara De Anda",
+		rating: 5,
+		text: "Had a plumbing emergency. They sent a plumber the same day. Michael Lawson did a great job. Worked with the old galvanized plumbing. He was able to fix the bad part while being careful of the rest of the old pipe. Tried to do as little damage to the plaster wall as possible. Ensured the faucet was flowing properly and no leakage. Answered all my questions before leaving. I was very impressed with his work and customer service.",
+	},
+	{
+		name: "Edith Stewart",
+		rating: 5,
+		text: "I have used Puget Sound Plumbing and Heating several times now. Each time I have been impressed with how efficient and fast they are. Every person they have sent has listened carefully to the problem. They talk me through all my options and the prices. They answer all my questions. They are polite and respectful. A special shout-out to Joseph. He's amazing. The pipes that go from the meter to the house were very old and leaking. Joseph, in one day, got an excavator, dug up the old one, replaced it with a new one and back filled the trench in one day. I had Joseph come out again this last time to replace a toilet and sink. He did an amazing job.",
+	},
+	{
+		name: "Kellie Leake",
+		rating: 5,
+		text: "I called to schedule a drain scope and was able to get same-day service. Michael L. came out and was fantastic\u2014he scoped the drain, explained everything clearly, and showed me exactly where things looked good and where there were issues. I decided to go ahead with hydro jetting, and he got it all done that same day. Great service and solid advice\u2014highly recommend!",
+	},
+	{
+		name: "HeXp Pie",
+		rating: 5,
+		text: "Paul was on time, knew what he needed to do (water heater expansion tank installation) and did it quickly & correctly for a fair price! I was kept in the loop on arrival times by dispatch. Great service and I plan to use them again in the future for all my plumbing needs.",
+	},
+	{
+		name: "Nick Hubeek",
+		rating: 5,
+		text: "Had a leak coming through living room ceiling. Spoke with Chris on the phone and Adam was our technician. Both were courteous and treated my issue with same urgency that I felt. Adam was efficient, neat and great to work with. He quickly found the issue (upstairs shower) and found both a cracked pipe leading to the shower head and the bigger problem (leaking around the shower handle/cartridge). Adam did a good job explaining what the issue was and fixing it quickly, even with 4 crazy kids running around and a toddler napping. He left the space cleaner than it started. I really appreciate the job he did today.",
+	},
+	{
+		name: "Wilfredo Abenes",
+		rating: 5,
+		text: "Michael M and Joseph K from Puget Sound plumbing did a great job replacing and installing my new water heater.",
+	},
+	{
+		name: "Alexis Lanier",
+		rating: 5,
+		text: "Great work! Highly recommended.",
+	},
+	{
+		name: "Paula Ryan",
+		rating: 5,
+		text: "They did a good job. Very professional. I would recommend to friends and family.",
+	},
+	{
+		name: "Christopher Berger",
+		rating: 5,
+		text: "Very pleasant technicians, did great work and they explained what they found.",
+	},
+	{
+		name: "Pepper Salsa",
+		rating: 4,
+		text: "Everyone I dealt with on the phone was professional and courteous. Office staff tried to keep me in the loop about when to expect technicians, but there was a big gap between expected time and arrival. However, I am more than pleased with the work that Josh and Salvador did. Courteous, patient, very careful while inside the house. Went above and beyond with their diagnosis and effort. Took a lot of time to answer my questions. I will recommend Puget Sound, and use them again if needed.",
+	},
+	{
+		name: "Jaadi Marchant",
+		rating: 5,
+		text: "I had a very good experience with Puget Sound Plumbing and Heating. I had a leak coming out of our smaller side faucet and they came out the same day to inspect it. When they got here there was no leak that they could detect. Matt and his assistant were both very friendly and professional. I asked what I owed for their time and they said there would be no charge! Which to me was unheard of, so I was pleasantly surprised! I will definitely use their services again and recommend them to my friends and colleagues.",
+	},
+	{
+		name: "Joseph Pascual",
+		rating: 5,
+		text: "Mia in office called to schedule an onsite estimate. They also waived the come out fee since I scheduled a next day appointment. Justin H came out and was very informative and straightforward with the estimate and the work to be done. The quote itself was around the same cost as others I had received from other plumbers. Scheduled the appointment the following week and Justin H came back out to do work. He came in within the time window I scheduled & finished the work pretty quickly. During the process he was very informative and answered any and every question I had. Justin H did great work, 10/10 would recommend!",
+	},
+	{
+		name: "Yeli Xu",
+		rating: 5,
+		text: "I got a disposer replaced with Puget Sound Plumbing and Heating last year. It was working perfectly. Then I got a dishwasher replaced later from Best Buy. The guy who installed the dishwasher messed up the disposer (did not tighten the screw, and even lost one of the screws). My disposer started leaking. I called the team, got the technician on board immediately within a couple hours. They addressed the issue very quickly and fixed it for me. Super professional, best team!",
+	},
+	{
+		name: "William Pick",
+		rating: 4,
+		text: "The two young representatives were on-time, courteous, inspected the fault, and explained their detailed estimate. Would have been a 5 stars rating if they had defined which line items were required to fix the root cause.",
+	},
+	{
+		name: "Alex Rinehart",
+		rating: 5,
+		text: "Some of their competitors are cheaper, but the unmatched professionalism, knowledge, and speed make Puget Sound Plumbing worth spending a little extra on. You get what you pay for!",
+	},
+	{
+		name: "Jeff Roth",
+		rating: 5,
+		text: "Positive experience. Work performed methodically & with care. As promised Derek & his apprentice Michael showed up within a few hours. Derek immediately assessed our entire plumbing system from the outside in. They were at my house all day but maintained good attitudes & were very courteous. They were courteous, hardworking, patient & determined. All super qualities.",
+	},
+	{
+		name: "Amy W.",
+		rating: 5,
+		text: "Puget Sound Plumbing was quick, prompt, and professional. Their customer service is amazing, and they made the whole process easy and stress-free. Michael & Sean came out quickly to fix the sub pump issue. Highly recommend!",
+	},
+	{
+		name: "Charlotte P.",
+		rating: 5,
+		text: "Michael L saved the day, truly took my breath away! Friendly and knowledgeable to a T, I'm very thankful for how he helped me. His service was a 10/10, I will definitely call Puget Sound Plumbing again. Michael fixed my plumbing with ease, I would love to work with him again please.",
 	},
 ];
 
