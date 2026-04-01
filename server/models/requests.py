@@ -27,6 +27,7 @@ class RedeemOfferRequest(BaseModel):
     lastName: str
     phone: str
     email: str
+    couponId: str
     couponDiscount: str
     couponCondition: str
     captchaToken: Optional[str] = None

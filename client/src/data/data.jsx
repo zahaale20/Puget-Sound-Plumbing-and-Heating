@@ -1,3 +1,44 @@
+// ============================================================
+// COMPANY CONTACT INFO
+// Update phone, address, license, and key URLs here.
+// These are used across headers, footers, and every page.
+// ============================================================
+
+export const CompanyInfo = {
+	phone: "(206) 938-3219",
+	phoneTel: "tel:206-938-3219",
+	address: "11803 Des Moines Memorial Dr S",
+	city: "Burien, WA 98168",
+	license: "#PUGETSP929CF",
+	tagline: "The sound solution to your plumbing problems.",
+	mapsUrl:
+		"https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168",
+	directionsUrl:
+		"https://www.google.com/maps/dir/47.5922432,-122.0182016/11803+Des+Moines+Memorial+Dr,+Burien,+WA+98168",
+	financingUrl:
+		"https://app.gethearth.com/financing/29435/47842/prequalify?utm_campaign=29435&utm_content=darkblue&utm_medium=contractor-website&utm_source=contractor&utm_term=47842",
+	googleReviewsUrl:
+		"https://www.google.com/search?q=puget+sound+plumbing+reviews&sca_esv=d8140a1b87a5a1ad&rlz=1C5CHFA_enUS1041US1041&sxsrf=AE3TifN7dQPUHVuLtMIr3K6x_wZWzGFzJg%3A1763500132860&ei=ZOAcafGhNIWC0PEPitT70AM&ved=0ahUKEwjx4-v3zfyQAxUFATQIHQrqHjoQ4dUDCBE&uact=5&oq=puget+sound+plumbing+reviews&gs_lp=Egxnd3Mtd2l6LXNlcnAiHHB1Z2V0IHNvdW5kIHBsdW1iaW5nIHJldmlld3MyDhAuGIAEGMcBGI4FGK8BMgYQABgIGB4yCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyBRAAGO8FMggQABiABBiiBDIIEAAYgAQYogQyHRAuGIAEGMcBGI4FGK8BGJcFGNwEGN4EGOAE2AEBSMACUABYAHAAeAGQAQCYAWigAWiqAQMwLjG4AQPIAQD4AQGYAgGgAm-YAwC6BgYIARABGBSSBwMwLjGgB7MIsgcDMC4xuAdvwgcDMi0xyAcE&sclient=gws-wiz-serp#lrd=0x549043aef46f30f9:0x8357f4ac9a2ff339,1,,,,",
+};
+
+// ============================================================
+// SOCIAL MEDIA LINKS
+// Update social media profile URLs here.
+// Used in the Hero section and Footer.
+// ============================================================
+
+export const SocialLinks = {
+	facebook: "https://www.facebook.com/pugetsoundplumbing/",
+	instagram: "https://www.instagram.com/puget_sound_plumbing_heating/",
+	youtube: "https://www.youtube.com/user/pugetsoundplumbing",
+	twitter: "https://x.com/PugetPlumbing",
+};
+
+// ============================================================
+// NAVIGATION LINKS
+// Update the top-bar navigation links here.
+// ============================================================
+
 export const CompanyLinks = [
 	{ name: "Blog", href: "/blog" },
 	{ name: "Careers", href: "/careers" },
@@ -5,6 +46,13 @@ export const CompanyLinks = [
 	{ name: "Resources", href: "/resources" },
 	{ name: "About Us", href: "/about-us" },
 ];
+
+// ============================================================
+// SERVICE CATEGORIES AND DETAILS
+// Each category has a name, link, and submenu of services.
+// Each service has a name, link, image, description,
+// common problems, and prevention tips.
+// ============================================================
 
 export const ServiceLinks = [
 	{
@@ -495,6 +543,11 @@ export const ServiceLinks = [
 	},
 ];
 
+// ============================================================
+// SERVICE AREAS
+// Regions (Seattle, King County, etc.) and their neighborhoods.
+// ============================================================
+
 export const ServiceAreaLinks = [
 	{
 		name: "Seattle",
@@ -627,6 +680,11 @@ export const ServiceAreaLinks = [
 	},
 ];
 
+// ============================================================
+// BLOG CATEGORIES AND SORTING
+// Filter categories and sort options for the blog page.
+// ============================================================
+
 export const categoryOptions = [
 	"All",
 	"Bathroom Plumbing",
@@ -654,6 +712,13 @@ export const sortOptions = [
 	{ name: "Title (A-Z)", value: "titleAsc" },
 	{ name: "Title (Z-A)", value: "titleDesc" },
 ];
+
+// ============================================================
+// BLOG POSTS
+// All blog entries displayed on the Blog page.
+// Each post has a title, image, author, date, views, link,
+// description, and keyword tags.
+// ============================================================
 
 export const posts = [
 	{
@@ -874,6 +939,11 @@ export const posts = [
 	},
 ];
 
+// ============================================================
+// JOB OPENINGS
+// Current job listings for the Careers page.
+// ============================================================
+
 export const openings = [
 	{
 		name: "Licensed Residential Plumber",
@@ -907,3 +977,324 @@ export const openings = [
 		],
 	},
 ];
+
+// ============================================================
+// HERO SECTION
+// Main heading and tagline on the home page.
+// ============================================================
+
+export const HeroContent = {
+	heading: "Seattle's Trusted\nPlumbing Experts",
+	description: "The sound solution to your plumbing problems.",
+};
+
+// ============================================================
+// WHY CHOOSE US
+// Home page "Why Choose Us" paragraph.
+// ============================================================
+
+export const WhyChooseUsContent = {
+	description:
+		"For over 20 years, Puget Sound Plumbing and Heating has been Seattle's trusted, family-run choice for reliable home comfort solutions. Our licensed professionals deliver expert workmanship, honest pricing, and outstanding customer care on every job. Whether it's a minor repair or an urgent emergency, we're available 24/7 to keep your home safe, comfortable, and running smoothly.",
+};
+
+// ============================================================
+// OUR MISSION
+// About Us page mission statement.
+// ============================================================
+
+export const OurMissionContent = {
+	description:
+		"Our mission is to deliver trusted plumbing solutions to homeowners and businesses across the Puget Sound, big enough to serve every need yet small enough to care for each customer.",
+};
+
+// ============================================================
+// COMPANY HISTORY
+// About Us page history paragraphs.
+// ============================================================
+
+export const OurHistoryContent = [
+	"Puget Sound Plumbing & Heating was founded in the early 2000s by a local Seattle family with decades of combined experience in plumbing and mechanical systems. After working for larger companies throughout the Northwest, the founders set out to build a service business grounded in honesty, craftsmanship, and genuine customer care.",
+	"Early growth came largely through word-of-mouth—neighbors recommending the company to neighbors, contractors sending difficult jobs their way, and families calling back year after year as their trusted plumbing provider.",
+	"As demand increased, the company expanded from basic plumbing repairs into sewer services, water heater installations, heating solutions, and full-service residential plumbing. Even as the team grew, Puget Sound Plumbing & Heating stayed rooted in its founding values of treating every customer like part of the community.",
+	"By the 2010s, the company had become known throughout Seattle and the wider Puget Sound region, serving thousands of homeowners from North Seattle to Renton. Investments in training, equipment, and 24/7 service solidified their reputation for reliability and expertise.",
+	"Now with over 20 years of continuous service, Puget Sound Plumbing & Heating remains proudly family-owned and operated. Many long-time team members still serve the community, and many customers have relied on the company for more than a decade.",
+	"Today, the company continues to uphold its original principles—quality workmanship, honest communication, and dependable solutions that keep Seattle homes safe, warm, and comfortable.",
+];
+
+// ============================================================
+// TEAM MEMBERS
+// Names, titles, and bios shown on the About Us / Our Team section.
+// ============================================================
+
+export const TeamMembers = [
+	{
+		name: "Carlos M.",
+		position: "Master Plumber",
+		description:
+			"Carlos brings 15 years of hands-on plumbing experience, specializing in whole-home repipes and advanced diagnostic work. Customers value his calm presence and problem-solving mindset.",
+	},
+	{
+		name: "Jenna R.",
+		position: "Office Coordinator",
+		description:
+			"Jenna ensures every service call runs smoothly from start to finish. She keeps communication clear, schedules efficient appointments, and supports the entire field team.",
+	},
+	{
+		name: "Tyler S.",
+		position: "Water Heater Technician",
+		description:
+			"Tyler focuses on water heater repairs, installations, and safety checks. His attention to detail and clear explanations make homeowners feel confident in every service he provides.",
+	},
+	{
+		name: "Linda K.",
+		position: "Customer Care Specialist",
+		description:
+			"Linda is known for her friendly demeanor and exceptional customer service. She helps clients understand their options and ensures every experience is stress-free and well-coordinated.",
+	},
+];
+
+// ============================================================
+// CUSTOMER REVIEWS
+// Testimonials shown on the home page and Reviews page.
+// ============================================================
+
+export const CustomerReviewsData = [
+	{
+		name: "- Amy W.",
+		rating: 5,
+		text: '"Puget Sound Plumbing was quick, prompt, and professional. Their customer service is amazing, and they made the whole process easy and stress-free. Michael & Sean came out quickly to fix the sub pump issue. Highly recommend!"',
+	},
+	{
+		name: "- Edith S.",
+		rating: 5,
+		text: '"I have used Puget Sound Plumbing and Heating several times now. Each time I have been impressed with how efficient and fast they are. Every person they have sent has listened carefully to the problem. They talk me through all my options and the prices. They answer all my questions. They are polite and respectful."',
+	},
+	{
+		name: "- Charlotte P.",
+		rating: 5,
+		text: '"Michael L saved the day, truly took my breath away! Friendly and knowledgeable to a T, I\'m very thankful for how he helped me. His service was a 10/10, I will definitely call Puget Sound Plumbing again. Michael fixed my plumbing with ease, I would love to work with him again please."',
+	},
+];
+
+// ============================================================
+// FAQs
+// Questions and answers for the FAQs page.
+// ============================================================
+
+export const FAQsData = [
+	{
+		question: "Where are you located?",
+		answer:
+			"Our home office has been in Burien, WA, for the past 20 years. We dispatch highly qualified, certified technicians to serve the entire greater Puget Sound area.",
+	},
+	{
+		question: "Is your work guaranteed?",
+		answer:
+			"Yes, it is. We stand by our work with a satisfaction guarantee and warranty. For detailed warranty questions regarding parts or labor, please speak with your technician.",
+	},
+	{
+		question: "Do you work weekends? Is there an extra charge? What about holidays?",
+		answer:
+			"We are open 24 hours a day, 7 days a week, 365 days a year — with *no* extra charge for weekends or holidays.",
+	},
+	{
+		question: "Why can't I get a quote over the phone?",
+		answer:
+			"Every situation is different. A technician must see the problem in person to provide an accurate, written quote.",
+	},
+	{
+		question: "What if the quote is more than I can afford?",
+		answer:
+			"You'll always receive an upfront price before any work begins. If it's out of budget, we offer flexible financing with no obligation to proceed.",
+	},
+	{
+		question: "What is a dispatch fee?",
+		answer:
+			"A dispatch fee covers a technician's time and expertise to diagnose the problem and provide an upfront quote.",
+	},
+	{
+		question: "Can I speak to a technician over the phone?",
+		answer:
+			"Our technicians are dispatched remotely. To ensure accuracy, we send a plumber to your home to diagnose the issue.",
+	},
+	{
+		question: "Are you licensed and insured?",
+		answer:
+			"Yes — fully licensed and insured (License #PUGETSP929CF), with certified plumbers trained in all local codes.",
+	},
+	{
+		question: "Do you really offer 24/7 emergency service?",
+		answer:
+			"Yes — day or night, weekends, holidays, or after-hours. A live person always picks up.",
+	},
+	{
+		question: "Should I be home during my plumbing service?",
+		answer:
+			"We recommend having someone present to allow access and discuss findings directly with our technician.",
+	},
+	{
+		question: "Which areas do you serve?",
+		answer:
+			"We proudly serve Seattle, Bellevue, Kirkland, Issaquah, Redmond, Renton, and surrounding areas.",
+	},
+	{
+		question: "Do you provide free estimates?",
+		answer:
+			"Yes — most residential jobs come with free estimates and completely transparent pricing.",
+	},
+	{
+		question: "What work can I do myself?",
+		answer:
+			"Simple tasks like changing a showerhead are fine DIY projects, but anything involving water lines, drains, or gas should be handled by a licensed pro.",
+	},
+];
+
+// ============================================================
+// HOME PAGE SERVICES
+// The six featured services shown on the home page.
+// Each has an icon image (normal + color hover variant),
+// a title, description, and link.
+// ============================================================
+
+export const HomeServices = [
+	{
+		imageKey: "private/water-heaters.png",
+		imageColorKey: "private/water-heaters-color.png",
+		title: "Water Heaters",
+		description:
+			"Expert installation, maintenance, and repair for tank and tankless water heaters. We ensure reliable, energy-efficient hot water tailored to your home.",
+		path: "/services/water-heaters",
+	},
+	{
+		imageKey: "private/faucet-repair.png",
+		imageColorKey: "private/faucet-repair-color.png",
+		title: "Faucets",
+		description:
+			"Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency.",
+		path: "/services/plumbing/faucets",
+	},
+	{
+		imageKey: "private/toilet-repair.png",
+		imageColorKey: "private/toilet-repair-color.png",
+		title: "Toilets",
+		description:
+			"Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. We restore efficiency and install water-saving models.",
+		path: "/services/plumbing/toilets",
+	},
+	{
+		imageKey: "private/garbage-disposal.png",
+		imageColorKey: "private/garbage-disposal-color.png",
+		title: "Garbage Disposal",
+		description:
+			"From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation and long-lasting performance.",
+		path: "/services/plumbing/garbage-disposal",
+	},
+	{
+		imageKey: "private/water-filtration.png",
+		imageColorKey: "private/water-filtration-color.png",
+		title: "Water Filtration Systems",
+		description:
+			"Expert filtration installation and maintenance that removes contaminants, improves taste, and protects your plumbing and appliances.",
+		path: "/services/plumbing/water-filtration-systems",
+	},
+	{
+		imageKey: "private/plumbing-repair.png",
+		imageColorKey: "private/plumbing-repair-color.png",
+		title: "Plumbing Repairs",
+		description:
+			"Comprehensive repair for leaks, burst pipes, and low water pressure. Fast, affordable service to keep your plumbing system running perfectly.",
+		path: "/services/plumbing/plumbing-repairs",
+	},
+];
+
+// ============================================================
+// SERVICE CATEGORY DESCRIPTIONS
+// Overview paragraphs for each service category
+// (shown on the Services page).
+// ============================================================
+
+export const ServiceCategoryDescriptions = {
+	Plumbing:
+		"Our plumbing team handles repairs, replacements, leak diagnostics, fixture installations, and remodel support. Whether you're dealing with unexpected drips or major water line issues, we deliver dependable, long-lasting solutions for your home. We also help you plan proactive upgrades and maintenance so small issues don't turn into costly emergencies later on.",
+	"Drain and Sewer":
+		"From kitchen drains to main sewer lines, our specialists clear clogs, eliminate backups, and repair damaged piping using advanced diagnostics to protect your home from water damage. We identify the root cause of recurring issues and offer long-term solutions, not just quick fixes, so your drainage system keeps working smoothly.",
+	"Water Heaters":
+		"We install, repair, and maintain tank and tankless water heaters, ensuring safe installation, proper sizing, and reliable performance for consistent hot water year-round. Our technicians help you choose the right system for your household, focusing on efficiency, lifespan, and total cost of ownership over time.",
+	"Heating and Cooling":
+		"We maintain and repair AC units, heat pumps, and furnaces, optimizing energy efficiency and indoor comfort through expert diagnostics and high-quality system care. Whether you need seasonal tune-ups or emergency service, we focus on safe operation, consistent temperatures, and lower utility costs wherever possible.",
+};
+
+// ============================================================
+// SERVICE AREA DESCRIPTIONS
+// Overview paragraphs for each region
+// (shown on the Service Areas page).
+// ============================================================
+
+export const ServiceAreaDescriptions = {
+	Seattle:
+		"Seattle is our home base, and we know the plumbing challenges that come with older homes, new construction, and everything in between. Whether it's a burst pipe on Capitol Hill, a water heater replacement in Ballard, or a sewer line issue in West Seattle, our team has you covered.",
+	"King County":
+		"As one of the largest counties in Washington, King County has diverse plumbing needs—from Redmond and Bellevue to Kent and Renton. We provide full-service plumbing, heating, and drain cleaning throughout the county, ensuring fast, reliable solutions whenever you need them.",
+	"Pierce County":
+		"From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound Plumbing for dependable service and honest pricing. Whether it's routine maintenance, fixture installation, or an urgent late-night emergency, our plumbers are just a call away.",
+	"Snohomish County":
+		"Serving growing communities like Everett, Lynnwood, and Marysville, our team brings decades of plumbing expertise to Snohomish County. We understand local building codes, water system requirements, and the unique needs of homes in the area.",
+};
+
+// ============================================================
+// WARRANTY TERMS
+// Warranty details shown on the Warranty page.
+// ============================================================
+
+export const WarrantyContent = {
+	description:
+		"At Puget Sound Plumbing and Heating, we employ a team of fully licensed plumbers dedicated to expert craftsmanship. We are proud to stand behind every job, which is why we offer our comprehensive warranty program. This is our commitment to providing you with reliable, lasting solutions and complete peace of mind.",
+	items: [
+		"Lifetime warranty on water heater parts and labor (10 years on the tank)",
+		"Lifetime warranty on copper water services",
+		"Lifetime warranty on complete water & waste repipes",
+		"Lifetime warranties on sewer replacements with all schedule 40 PVC pipes",
+		"20-year warranty on PEX (Wirsbo) water services",
+	],
+};
+
+// ============================================================
+// FINANCING
+// Financing section on the Financing page.
+// ============================================================
+
+export const FinancingContent = {
+	description:
+		"At Puget Sound Plumbing, we believe you shouldn't have to delay a necessary repair or major project due to budget concerns. That's why we offer convenient financing options to help you get the service you need—when you need it.",
+	subDescription:
+		"Our simple financing solutions allow you to get the quality service and products you need today and pay for them over time.",
+	benefits: [
+		{ label: "Convenient", text: "Get the job done now and pay later." },
+		{ label: "Simple Process", text: "Our team can walk you through the easy application." },
+		{ label: "Affordable", text: "Choose a plan that fits your budget." },
+	],
+	partner: "Wells Fargo",
+};
+
+// ============================================================
+// COUPONS / LIMITED-TIME OFFERS
+// Discount coupons shown on the Coupons page.
+// ============================================================
+
+export const Coupons = [
+	{ discount: "$19.50 OFF", condition: "ANY SERVICE UP TO $150" },
+	{ discount: "$59.50 OFF", condition: "ANY SERVICE OVER $250" },
+	{ discount: "$69.50 OFF", condition: "ANY SERVICE OVER $800" },
+	{ discount: "$79.75 OFF", condition: "ANY SERVICE OVER $1,500" },
+];
+
+// ============================================================
+// CALL NOW SECTION
+// Call-to-action description used on multiple pages.
+// ============================================================
+
+export const CallNowContent = {
+	description:
+		"Whether it's a burst pipe, a cold shower, or a strange noise from your furnace, help is just a call away. Our certified plumbers and heating specialists are available 24/7 to keep your home safe, comfortable, and running smoothly. Don't wait — talk to a real expert today and get the reliable service you deserve.",
+};

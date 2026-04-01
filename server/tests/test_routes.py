@@ -438,6 +438,7 @@ def _offer_payload(**overrides):
         "lastName": "Doe",
         "phone": "2065559999",
         "email": "jane@example.com",
+        "couponId": "PSPAH-1950",
         "couponDiscount": "20%",
         "couponCondition": "First visit",
     }

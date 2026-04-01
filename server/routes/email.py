@@ -453,14 +453,15 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                     cur.execute(
                         """
                         INSERT INTO "Redeemed Offers"
-                            (first_name, last_name, email, phone, coupon_discount, coupon_condition)
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                            (first_name, last_name, email, phone, coupon_id, coupon_discount, coupon_condition)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
                         """,
                         (
                             first_name,
                             last_name,
                             email,
                             phone,
+                            request.couponId,
                             request.couponDiscount,
                             request.couponCondition,
                         ),
@@ -480,6 +481,7 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                 first_name,
                 last_name,
                 request.phone,
+                request.couponId,
                 request.couponDiscount,
                 request.couponCondition,
             )
@@ -1166,6 +1168,7 @@ def _send_coupon_email(
     firstName: str,
     lastName: str,
     phone: str,
+    couponId: str,
     couponDiscount: str,
     couponCondition: str,
 ):
@@ -1218,9 +1221,9 @@ def _send_coupon_email(
                         <!-- Coupon Card -->
                         <tr>
                             <td style="padding:4px 40px 36px;">
-                            <table cellpadding="0" cellspacing="0" style="width:420px;height:200px;margin:0 auto;border:4px dashed #B32020;background-color:#ffffff;box-shadow:0 4px 12px rgba(0,0,0,0.12);">
+                            <table cellpadding="0" cellspacing="0" style="width:420px;margin:0 auto;border:4px dashed #B32020;background-color:#ffffff;box-shadow:0 4px 12px rgba(0,0,0,0.12);position:relative;">
                                 <tr>
-                                <td style="width:420px;height:200px;padding:24px 32px;text-align:center;vertical-align:middle;">
+                                <td style="width:420px;padding:24px 32px;text-align:center;vertical-align:middle;">
                                     <!-- FaTag icon (exact FA5 SVG) -->
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="48" height="48" fill="#B32020" style="display:block;margin:0 auto 14px;">
                                     <path d="M0 252.118V48C0 21.49 21.49 0 48 0h204.118a48 48 0 0 1 33.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137 0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882 0L14.059 286.059A48 48 0 0 1 0 252.118zM112 64c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/>
@@ -1236,7 +1239,15 @@ def _send_coupon_email(
                                     <!-- Condition -->
                                     <p style="font-size:14px;font-weight:600;color:#2B2B2B;text-transform:uppercase;margin:0 0 8px;letter-spacing:0.03em;">{couponCondition}</p>
                                     <!-- Fine print -->
-                                    <p style="font-size:11px;color:#555555;margin:0;">Cannot be combined with other offers.</p>
+                                    <p style="font-size:11px;color:#555555;margin:0 0 8px;">Cannot be combined with other offers.</p>
+                                    <!-- Coupon ID -->
+                                    <p style="font-size:10px;color:#888888;margin:0;">Coupon ID: {couponId}</p>
+                                </td>
+                                <!-- Scissors icon (FaCut SVG) -->
+                                <td style="width:32px;vertical-align:bottom;padding-bottom:40px;padding-right:0;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="24" height="24" fill="#B32020" style="display:block;transform:rotate(270deg);">
+                                    <path d="M278.06 256L444.48 89.57c4.69-4.69 4.69-12.29 0-16.97-32.8-32.8-85.99-32.8-118.79 0L210.18 188.12l-24.86-24.86c4.31-10.92 6.68-22.81 6.68-35.26 0-53.02-42.98-96-96-96S0 74.98 0 128s42.98 96 96 96c12.45 0 24.34-2.37 35.27-6.68l24.85 24.85-24.85 24.86C120.34 262.37 108.45 260 96 260c-53.02 0-96 42.98-96 96s42.98 96 96 96c53.02 0 96-42.98 96-96 0-12.45-2.37-24.34-6.68-35.27l24.86-24.85L325.69 411.4c32.8 32.8 85.99 32.8 118.79 0 4.69-4.68 4.69-12.28 0-16.97L278.06 256zM96 160c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32zm0 256c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z"/>
+                                    </svg>
                                 </td>
                                 </tr>
                             </table>
@@ -1289,12 +1300,13 @@ def _send_coupon_email(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"New Coupon Redemption: {couponDiscount} — {firstName} {lastName}",
+                "subject": f"New Coupon Redemption: {couponId} ({couponDiscount}) — {firstName} {lastName}",
                 "html": f"""<p>A new coupon redemption has been submitted.</p>
                     <ul>
                         <li><strong>Name:</strong> {firstName} {lastName}</li>
                         <li><strong>Email:</strong> {email}</li>
                         <li><strong>Phone:</strong> {phone}</li>
+                        <li><strong>Coupon ID:</strong> {couponId}</li>
                         <li><strong>Coupon:</strong> {couponDiscount}</li>
                         <li><strong>Condition:</strong> {couponCondition}</li>
                     </ul>""",

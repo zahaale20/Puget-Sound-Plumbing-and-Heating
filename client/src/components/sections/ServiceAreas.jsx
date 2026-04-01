@@ -2,6 +2,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { ServiceAreaDescriptions } from "../../data/data";
 
 export default function ServiceAreas() {
 	return (
@@ -21,10 +22,7 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Seattle, WA</h5>
 							<p>
-								Seattle is our home base, and we know the plumbing challenges that come with older
-								homes, new construction, and everything in between. Whether it’s a burst pipe on
-								Capitol Hill, a water heater replacement in Ballard, or a sewer line issue in West
-								Seattle, our team has you covered.
+								{ServiceAreaDescriptions.seattle}
 							</p>
 						</div>
 					</div>
@@ -53,10 +51,7 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">King County, WA</h5>
 							<p>
-								As one of the largest counties in Washington, King County has diverse plumbing
-								needs—from Redmond and Bellevue to Kent and Renton. We provide full-service
-								plumbing, heating, and drain cleaning throughout the county, ensuring fast, reliable
-								solutions whenever you need them.
+								{ServiceAreaDescriptions.kingCounty}
 							</p>
 						</div>
 					</div>
@@ -85,9 +80,7 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Pierce County, WA</h5>
 							<p>
-								From Tacoma to Puyallup, Pierce County homeowners trust Puget Sound Plumbing for
-								dependable service and honest pricing. Whether it’s routine maintenance, fixture
-								installation, or an urgent late-night emergency, our plumbers are just a call away.
+								{ServiceAreaDescriptions.pierceCounty}
 							</p>
 						</div>
 					</div>
@@ -116,9 +109,7 @@ export default function ServiceAreas() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">Snohomish County, WA</h5>
 							<p>
-								Serving growing communities like Everett, Lynnwood, and Marysville, our team brings
-								decades of plumbing expertise to Snohomish County. We understand local building
-								codes, water system requirements, and the unique needs of homes in the area.
+								{ServiceAreaDescriptions.snohomishCounty}
 							</p>
 						</div>
 					</div>

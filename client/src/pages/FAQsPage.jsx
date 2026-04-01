@@ -1,77 +1,12 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getCloudFrontUrl } from "../services/imageService";
+import { FAQsData } from "../data/data";
 
 export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState(null);
 
-	const faqs = [
-		{
-			question: "Where are you located?",
-			answer:
-				"Our home office has been in Burien, WA, for the past 20 years. We dispatch highly qualified, certified technicians to serve the entire greater Puget Sound area.",
-		},
-		{
-			question: "Is your work guaranteed?",
-			answer:
-				"Yes, it is. We stand by our work with a satisfaction guarantee and warranty. For detailed warranty questions regarding parts or labor, please speak with your technician.",
-		},
-		{
-			question: "Do you work weekends? Is there an extra charge? What about holidays?",
-			answer:
-				"We are open 24 hours a day, 7 days a week, 365 days a year — with *no* extra charge for weekends or holidays.",
-		},
-		{
-			question: "Why can't I get a quote over the phone?",
-			answer:
-				"Every situation is different. A technician must see the problem in person to provide an accurate, written quote.",
-		},
-		{
-			question: "What if the quote is more than I can afford?",
-			answer:
-				"You'll always receive an upfront price before any work begins. If it's out of budget, we offer flexible financing with no obligation to proceed.",
-		},
-		{
-			question: "What is a dispatch fee?",
-			answer:
-				"A dispatch fee covers a technician's time and expertise to diagnose the problem and provide an upfront quote.",
-		},
-		{
-			question: "Can I speak to a technician over the phone?",
-			answer:
-				"Our technicians are dispatched remotely. To ensure accuracy, we send a plumber to your home to diagnose the issue.",
-		},
-		{
-			question: "Are you licensed and insured?",
-			answer:
-				"Yes — fully licensed and insured (License #PUGETSP929CF), with certified plumbers trained in all local codes.",
-		},
-		{
-			question: "Do you really offer 24/7 emergency service?",
-			answer:
-				"Yes — day or night, weekends, holidays, or after-hours. A live person always picks up.",
-		},
-		{
-			question: "Should I be home during my plumbing service?",
-			answer:
-				"We recommend having someone present to allow access and discuss findings directly with our technician.",
-		},
-		{
-			question: "Which areas do you serve?",
-			answer:
-				"We proudly serve Seattle, Bellevue, Kirkland, Issaquah, Redmond, Renton, and surrounding areas.",
-		},
-		{
-			question: "Do you provide free estimates?",
-			answer:
-				"Yes — most residential jobs come with free estimates and completely transparent pricing.",
-		},
-		{
-			question: "What work can I do myself?",
-			answer:
-				"Simple tasks like changing a showerhead are fine DIY projects, but anything involving water lines, drains, or gas should be handled by a licensed pro.",
-		},
-	];
+	const faqs = FAQsData;
 
 	const firstSection = faqs.slice(0, faqs.length - 5);
 	const secondSection = faqs.slice(faqs.length - 5);

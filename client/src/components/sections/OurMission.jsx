@@ -1,4 +1,5 @@
 import { getCloudFrontUrl } from "../../services/imageService";
+import { OurMissionContent } from "../../data/data";
 
 export default function OurMission() {
 	return (
@@ -11,9 +12,7 @@ export default function OurMission() {
 				</h4>
 
 				<p className="text-[#2B2B2B]">
-					Our mission is to deliver trusted plumbing solutions to homeowners and businesses across
-					the Puget Sound, big enough to serve every need yet small enough to care for each
-					customer.
+					{OurMissionContent.description}
 				</p>
 			</div>
 

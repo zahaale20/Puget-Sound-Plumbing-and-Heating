@@ -10,7 +10,7 @@ import {
 	FaPhone,
 	FaRegCalendarAlt,
 } from "react-icons/fa";
-import { CompanyLinks, ServiceLinks } from "../../data/data";
+import { CompanyLinks, ServiceLinks, CompanyInfo } from "../../data/data";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 
@@ -57,7 +57,7 @@ export default function Header() {
 			<section className="flex w-full bg-[#0C2D70] items-center justify-center">
 				<div className="flex flex-row w-full max-w-7xl px-6 py-1.5 mx-auto items-center justify-center">
 					<a
-						href="https://app.gethearth.com/financing/29435/47842/prequalify?utm_campaign=29435&utm_content=darkblue&utm_medium=contractor-website&utm_source=contractor&utm_term=47842"
+						href={CompanyInfo.financingUrl}
 						className="flex items-center text-white font-semibold"
 					>
 						<FaCreditCard className="mr-2" />
@@ -192,11 +192,11 @@ export default function Header() {
 							Schedule Online
 						</button>
 						<a
-							href="tel:206-938-3219"
+							href={CompanyInfo.phoneTel}
 							className="flex items-center gap-2 px-3 py-2 text-white text-sm font-semibold cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]"
 						>
 							<FaPhone />
-							(206) 938-3219
+							{CompanyInfo.phone}
 						</a>
 					</div>
 				</div>
@@ -275,11 +275,11 @@ export default function Header() {
 								Schedule Online
 							</button>
 							<a
-								href="tel:206-938-3219"
+								href={CompanyInfo.phoneTel}
 								className="flex items-center justify-center gap-2 py-3 text-white text-sm font-semibold cursor-pointer transition-all duration-300 bg-[#0C2D70] hover:bg-[#081a46]"
 							>
 								<FaPhone />
-								(206) 938-3219
+								{CompanyInfo.phone}
 							</a>
 						</li>
 					</ul>

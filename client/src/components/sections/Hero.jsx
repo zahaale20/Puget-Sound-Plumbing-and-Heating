@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import { getCloudFrontUrl } from "../../services/imageService";
+import { CompanyInfo, SocialLinks, HeroContent } from "../../data/data";
 
 export default function Hero() {
 	const navigate = useNavigate();
@@ -30,14 +31,17 @@ export default function Hero() {
 			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-16 gap-8">
 				{/* Title */}
 				<h1 className="uppercase leading-tight text-white">
-					Seattle's Trusted
-					<br />
-					Plumbing Experts
+					{HeroContent.heading.split("\n").map((line, i) => (
+						<span key={i}>
+							{i > 0 && <br />}
+							{line}
+						</span>
+					))}
 				</h1>
 
 				{/* Description */}
 				<p className="text-base lg:text-lg text-white">
-					The sound solution to your plumbing problems.
+					{HeroContent.description}
 				</p>
 
 				{/* Buttons */}
@@ -50,11 +54,11 @@ export default function Hero() {
 						Schedule Online
 					</button>
 					<a
-						href="tel:206-938-3219"
+						href={CompanyInfo.phoneTel}
 						className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#0C2D70] hover:bg-[#081a46]"
 					>
 						<FaPhone />
-						(206) 938-3219
+						{CompanyInfo.phone}
 					</a>
 				</div>
 			</div>
@@ -62,7 +66,7 @@ export default function Hero() {
 			{/* Social Media Icons */}
 			<div className="absolute bottom-6 flex flex-row gap-6 items-center z-10 justify-end">
 				<a
-					href="https://www.facebook.com/pugetsoundplumbing/"
+					href={SocialLinks.facebook}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Facebook"
@@ -70,7 +74,7 @@ export default function Hero() {
 					<FaFacebookF className="text-xl text-white" />
 				</a>
 				<a
-					href="https://www.instagram.com/puget_sound_plumbing_heating/"
+					href={SocialLinks.instagram}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Instagram"
@@ -78,7 +82,7 @@ export default function Hero() {
 					<FaInstagram className="text-xl text-white" />
 				</a>
 				<a
-					href="https://www.youtube.com/user/pugetsoundplumbing"
+					href={SocialLinks.youtube}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="YouTube"
@@ -86,7 +90,7 @@ export default function Hero() {
 					<FaYoutube className="text-xl text-white" />
 				</a>
 				<a
-					href="https://x.com/PugetPlumbing"
+					href={SocialLinks.twitter}
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Twitter"

@@ -1,6 +1,7 @@
 import { FaPhone } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { CompanyInfo, CallNowContent } from "../../data/data";
 
 export default function CallNow() {
 	return (
@@ -25,19 +26,16 @@ export default function CallNow() {
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">
-					Whether it’s a burst pipe, a cold shower, or a strange noise from your furnace, help is
-					just a call away. Our certified plumbers and heating specialists are available 24/7 to
-					keep your home safe, comfortable, and running smoothly. Don’t wait — talk to a real expert
-					today and get the reliable service you deserve.
+					{CallNowContent.description}
 				</p>
 
 				{/* Call Now Button */}
 				<a
-					href="tel:206-938-3219"
+					href={CompanyInfo.phoneTel}
 					className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
 				>
 					<FaPhone />
-					(206) 938-3219
+					{CompanyInfo.phone}
 				</a>
 			</div>
 		</div>

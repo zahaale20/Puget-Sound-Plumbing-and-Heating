@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { CompanyInfo } from "../data/data";
 
 export default function NotFoundPage() {
 	const navigate = useNavigate();
@@ -31,8 +32,8 @@ export default function NotFoundPage() {
 
 			<p className="text-sm text-gray-500 mt-4">
 				Need immediate help?{" "}
-				<a href="tel:206-938-3219" className="text-[#B32020] font-semibold hover:underline">
-					(206) 938-3219
+				<a href={CompanyInfo.phoneTel} className="text-[#B32020] font-semibold hover:underline">
+					{CompanyInfo.phone}
 				</a>
 			</p>
 		</div>

@@ -3,7 +3,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 
-import { ServiceLinks } from "../../data/data";
+import { ServiceLinks, ServiceCategoryDescriptions } from "../../data/data";
 
 export default function ServiceCategories() {
 	return (
@@ -23,11 +23,7 @@ export default function ServiceCategories() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">{ServiceLinks[0].name}</h5>
 							<p>
-								Our plumbing team handles repairs, replacements, leak diagnostics, fixture
-								installations, and remodel support. Whether you're dealing with unexpected drips or
-								major water line issues, we deliver dependable, long-lasting solutions for your
-								home. We also help you plan proactive upgrades and maintenance so small issues don’t
-								turn into costly emergencies later on.
+								{ServiceCategoryDescriptions.plumbing}
 							</p>
 						</div>
 					</div>
@@ -56,11 +52,7 @@ export default function ServiceCategories() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">{ServiceLinks[1].name}</h5>
 							<p>
-								From kitchen drains to main sewer lines, our specialists clear clogs, eliminate
-								backups, and repair damaged piping using advanced diagnostics to protect your home
-								from water damage. We identify the root cause of recurring issues and offer
-								long-term solutions, not just quick fixes, so your drainage system keeps working
-								smoothly.
+								{ServiceCategoryDescriptions.drainAndSewer}
 							</p>
 						</div>
 					</div>
@@ -89,10 +81,7 @@ export default function ServiceCategories() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">{ServiceLinks[2].name}</h5>
 							<p>
-								We install, repair, and maintain tank and tankless water heaters, ensuring safe
-								installation, proper sizing, and reliable performance for consistent hot water
-								year-round. Our technicians help you choose the right system for your household,
-								focusing on efficiency, lifespan, and total cost of ownership over time.
+								{ServiceCategoryDescriptions.waterHeaters}
 							</p>
 						</div>
 					</div>
@@ -121,10 +110,7 @@ export default function ServiceCategories() {
 						<div className="flex-1">
 							<h5 className="text-[#2B2B2B] mb-2">{ServiceLinks[3].name}</h5>
 							<p>
-								We maintain and repair AC units, heat pumps, and furnaces, optimizing energy
-								efficiency and indoor comfort through expert diagnostics and high-quality system
-								care. Whether you need seasonal tune-ups or emergency service, we focus on safe
-								operation, consistent temperatures, and lower utility costs wherever possible.
+								{ServiceCategoryDescriptions.heatingAndCooling}
 							</p>
 						</div>
 					</div>

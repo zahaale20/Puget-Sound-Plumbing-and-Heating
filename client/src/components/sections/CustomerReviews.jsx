@@ -1,4 +1,5 @@
 import { FaStar, FaArrowRight } from "react-icons/fa";
+import { CustomerReviewsData, CompanyInfo } from "../../data/data";
 
 export default function CustomerReviews() {
 	const reviews = [
@@ -62,7 +63,7 @@ export default function CustomerReviews() {
 			{/* See More Reviews Link */}
 			<div className="flex justify-end">
 				<a
-					href="https://www.google.com/search?q=puget+sound+plumbing+reviews&sca_esv=d8140a1b87a5a1ad&rlz=1C5CHFA_enUS1041US1041&sxsrf=AE3TifN7dQPUHVuLtMIr3K6x_wZWzGFzJg%3A1763500132860&ei=ZOAcafGhNIWC0PEPitT70AM&ved=0ahUKEwjx4-v3zfyQAxUFATQIHQrqHjoQ4dUDCBE&uact=5&oq=puget+sound+plumbing+reviews&gs_lp=Egxnd3Mtd2l6LXNlcnAiHHB1Z2V0IHNvdW5kIHBsdW1iaW5nIHJldmlld3MyDhAuGIAEGMcBGI4FGK8BMgYQABgIGB4yCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyBRAAGO8FMggQABiABBiiBDIIEAAYgAQYogQyHRAuGIAEGMcBGI4FGK8BGJcFGNwEGN4EGOAE2AEBSMACUABYAHAAeAGQAQCYAWigAWiqAQMwLjG4AQPIAQD4AQGYAgGgAm-YAwC6BgYIARABGBSSBwMwLjGgB7MIsgcDMC4xuAdvwgcDMi0xyAcE&sclient=gws-wiz-serp#lrd=0x549043aef46f30f9:0x8357f4ac9a2ff339,1,,,,"
+					href={CompanyInfo.googleReviewsUrl}
 					className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline"
 				>
 					See More Reviews <FaArrowRight />

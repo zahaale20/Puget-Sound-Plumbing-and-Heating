@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { submitSchedule } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
+import { CompanyInfo } from "../../data/data";
 
 export default function ScheduleOnline() {
 	const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ export default function ScheduleOnline() {
 			console.error("Error:", err);
 			if (err?.code === "PGRST205" || err?.status === 404) {
 				setError(
-					"Scheduling service is temporarily unavailable (missing database table). Please contact us at (206) 938-3219."
+					`Scheduling service is temporarily unavailable (missing database table). Please contact us at ${CompanyInfo.phone}.`
 				);
 			} else {
 				setError(err.message || "An error occurred. Please try again.");

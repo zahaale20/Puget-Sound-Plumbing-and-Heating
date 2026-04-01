@@ -151,7 +151,7 @@ class TestModels:
         from models.requests import RedeemOfferRequest
         r = RedeemOfferRequest(
             firstName="A", lastName="B", phone="1",
-            email="a@b.com", couponDiscount="10%", couponCondition="Any",
+            email="a@b.com", couponId="PSPAH-1950", couponDiscount="10%", couponCondition="Any",
         )
         assert r.couponDiscount == "10%"
 

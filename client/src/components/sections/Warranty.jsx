@@ -1,4 +1,5 @@
 import { getCloudFrontUrl } from "../../services/imageService";
+import { WarrantyContent } from "../../data/data";
 
 export default function Warranty() {
 	return (
@@ -20,20 +21,15 @@ export default function Warranty() {
 						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 					</h4>
 					<p>
-						At Puget Sound Plumbing and Heating, we employ a team of fully licensed plumbers
-						dedicated to expert craftsmanship. We are proud to stand behind every job, which is why
-						we offer our comprehensive warranty program. This is our commitment to providing you
-						with reliable, lasting solutions and complete peace of mind.
+						{WarrantyContent.description}
 					</p>
 				</div>
 
 				{/* Warranty List */}
 				<ul className="list-disc pl-6 space-y-3 text-[#2B2B2B]">
-					<li>Lifetime warranty on water heater parts and labor (10 years on the tank)</li>
-					<li>Lifetime warranty on copper water services</li>
-					<li>Lifetime warranty on complete water & waste repipes</li>
-					<li>Lifetime warranties on sewer replacements with all schedule 40 PVC pipes</li>
-					<li>20-year warranty on PEX (Wirsbo) water services</li>
+					{WarrantyContent.items.map((item, idx) => (
+						<li key={idx}>{item}</li>
+					))}
 				</ul>
 			</div>
 		</div>

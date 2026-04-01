@@ -16,6 +16,7 @@ import { getHCaptchaToken } from "../../services/hcaptchaService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
 import FormResponseMessage from "../ui/FormResponseMessage";
+import { CompanyInfo, SocialLinks } from "../../data/data";
 
 export default function Footer() {
 	const navigate = useNavigate();
@@ -91,28 +92,28 @@ export default function Footer() {
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
 							<p className="relative inline-block w-fit">
-								"The sound solution to your plumbing problems."
+								"{CompanyInfo.tagline}"
 							</p>
 							<ul className="flex flex-col space-y-2">
 								<li className="flex items-center gap-2">
 									<FaPhone />
-									<a href="tel:206-938-3219" className="hover:underline">
-										(206) 938-3219
+									<a href={CompanyInfo.phoneTel} className="hover:underline">
+										{CompanyInfo.phone}
 									</a>
 								</li>
 								<li className="flex gap-2">
 									<FaLocationDot className="mt-1" />
 									<a
-										href="https://www.google.com/maps?ll=47.497727,-122.309506&z=16&t=m&hl=en&gl=US&mapclient=embed&q=11803+Des+Moines+Memorial+Dr+S+Burien,+WA+98168"
+										href={CompanyInfo.mapsUrl}
 										className="flex flex-col hover:underline"
 									>
-										<span>11803 Des Moines Memorial Dr S</span>
-										<span>Burien, WA 98168</span>
+										<span>{CompanyInfo.address}</span>
+										<span>{CompanyInfo.city}</span>
 									</a>
 								</li>
 								<li className="flex items-center gap-2">
 									<FaIdCard />
-									<p>#PUGETSP929CF</p>
+									<p>{CompanyInfo.license}</p>
 								</li>
 							</ul>
 						</div>
@@ -300,7 +301,7 @@ export default function Footer() {
 								<li className="flex items-center gap-2">
 									<FaFacebookF />{" "}
 									<a
-										href="https://www.facebook.com/pugetsoundplumbing/"
+										href={SocialLinks.facebook}
 										className="hover:underline"
 									>
 										Facebook
@@ -309,7 +310,7 @@ export default function Footer() {
 								<li className="flex items-center gap-2">
 									<FaInstagram />{" "}
 									<a
-										href="https://www.instagram.com/puget_sound_plumbing_heating/"
+										href={SocialLinks.instagram}
 										className="hover:underline"
 									>
 										Instagram
@@ -318,7 +319,7 @@ export default function Footer() {
 								<li className="flex items-center gap-2">
 									<FaYoutube />{" "}
 									<a
-										href="https://www.youtube.com/user/pugetsoundplumbing"
+										href={SocialLinks.youtube}
 										className="hover:underline"
 									>
 										YouTube
@@ -326,7 +327,7 @@ export default function Footer() {
 								</li>
 								<li className="flex items-center gap-2">
 									<FaXTwitter />{" "}
-									<a href="https://x.com/PugetPlumbing" className="hover:underline">
+									<a href={SocialLinks.twitter} className="hover:underline">
 										X
 									</a>
 								</li>
