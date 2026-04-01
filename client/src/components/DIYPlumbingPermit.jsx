@@ -18,6 +18,7 @@ export default function DIYPlumbingPermit() {
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+	const [submitResponseType, setSubmitResponseType] = useState("success");
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +29,7 @@ export default function DIYPlumbingPermit() {
 		setIsSubmitting(true);
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
+		setSubmitResponseType("success");
 		try {
 			// Get hCaptcha token
 			const captchaToken = await getHCaptchaToken();
@@ -40,6 +42,7 @@ export default function DIYPlumbingPermit() {
 			const result = await submitDiyPermit(formData, captchaToken);
 			if (result?.duplicate) {
 				setSubmitSuccessMessage(result.message || "This request already exists.");
+				setSubmitResponseType("warning");
 			}
 			setSubmitSuccess(true);
 			setTimeout(() => setSubmitSuccess(false), 5000);
@@ -172,7 +175,7 @@ export default function DIYPlumbingPermit() {
 				<div className="flex justify-center mt-4">
 					{submitSuccess ? (
 						<FormResponseMessage
-							type="success"
+							type={submitResponseType}
 							message={submitSuccessMessage}
 							className="w-full text-center"
 						/>

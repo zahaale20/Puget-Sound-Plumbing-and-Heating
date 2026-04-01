@@ -6,13 +6,17 @@ import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 import { ServiceLinks } from "../data/data";
+import NotFoundPage from "./NotFoundPage";
 
 export default function ServiceCategoryPage() {
 	const { categorySlug } = useParams();
 	const category = ServiceLinks.find((item) => item.href.split("/").pop() === categorySlug);
+
+	if (!category) return <NotFoundPage />;
+
  	const skylineUrl = getCloudFrontUrl("private/seattle-skyline.png");
 
-	const categoryName = category ? category.name : "Service";
+	const categoryName = category.name;
 	const services = category ? category.submenu : [];
 
 	return (

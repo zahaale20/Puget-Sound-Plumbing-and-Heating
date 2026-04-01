@@ -388,6 +388,9 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
                     email_error.detail,
                 )
 
+            # Notify company (non-critical)
+            _send_newsletter_unsubscribe_notification_email(normalized_email)
+
         return HTMLResponse(
             content="""<!DOCTYPE html>
 <html lang="en">
@@ -395,36 +398,31 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Unsubscribed — Puget Sound Plumbing and Heating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  body{min-height:100vh;display:flex;align-items:center;justify-content:center;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;color:#2B2B2B}
-  .card{background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.08);max-width:480px;width:90%;text-align:center;overflow:hidden}
-  .card-logo{padding:36px 32px 24px}
-  .card-logo img{max-width:260px;width:100%}
-  .divider{border:none;border-top:1px solid #e5e5e5;margin:0 32px}
-  .card-body{padding:32px}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fff;font-family:'Open Sans',sans-serif;color:#2B2B2B}
+  .card{max-width:480px;width:90%;text-align:center;padding:48px 24px}
+  .card img{max-width:260px;width:100%;margin-bottom:32px}
   .icon{width:56px;height:56px;margin:0 auto 16px;background:#e6f4ea;border-radius:50%;display:flex;align-items:center;justify-content:center}
   .icon svg{width:28px;height:28px;fill:#1e8e3e}
-  h1{font-size:20px;font-weight:700;color:#0C2D70;margin-bottom:8px}
-  p{font-size:14px;color:#555;line-height:1.6;margin-bottom:20px}
-  .footer{background:#f8f8f8;border-top:1px solid #e5e5e5;padding:16px 32px}
-  .footer p{font-size:11px;color:#aaa;margin:0}
+  h1{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:700;color:#0C2D70;margin-bottom:12px}
+  p{font-size:15px;line-height:1.6;color:#2B2B2B;margin-bottom:24px}
+  .btn{display:inline-block;padding:12px 32px;font-family:'Open Sans',sans-serif;font-size:15px;font-weight:600;color:#fff;background:#B32020;text-decoration:none;transition:background .3s}
+  .btn:hover{background:#7a1515}
+  .meta{font-size:12px;color:#999;margin-top:32px;margin-bottom:0}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="card-logo">
-    <img src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating"/>
-  </div>
-  <hr class="divider"/>
-  <div class="card-body">
-    <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
-    <h1>You've Been Unsubscribed</h1>
-    <p>You will no longer receive newsletter emails from us. If this was a mistake, you can subscribe again on our website.</p>
-  </div>
-  <div class="footer">
-    <p>Puget Sound Plumbing and Heating &middot; 11803 Des Moines Memorial Dr S, Burien, WA 98168</p>
-  </div>
+  <img src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating"/>
+  <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+  <h1>You've Been Unsubscribed</h1>
+  <p>You will no longer receive newsletter emails from us. If this was a mistake, you can subscribe again on our website.</p>
+  <a class="btn" href="https://pugetsoundplumbingandheating.com">Back to Home</a>
+  <p class="meta">Puget Sound Plumbing and Heating &middot; 11803 Des Moines Memorial Dr S, Burien, WA 98168</p>
 </div>
 </body>
 </html>""",
@@ -1171,6 +1169,80 @@ def _send_newsletter_notification_email(email: str):
     except Exception:
         # Company notification failure is non-critical; subscriber already confirmed
         logger.exception("Company newsletter subscription notification email failed")
+
+
+def _send_newsletter_unsubscribe_notification_email(email: str):
+    """Internal helper – notify the business owner of a newsletter unsubscribe."""
+    try:
+        resend.Emails.send(
+            {
+                "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
+                "to": COMPANY_EMAIL,
+                "subject": f"Newsletter Unsubscribe — {email}",
+                "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <!-- Logo -->
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:36px 40px 28px;">
+                            <h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">Newsletter Unsubscribe</h2>
+                            <p style="margin:0 0 20px;font-size:14px;line-height:1.75;color:#555555;">The following email has unsubscribed from the newsletter mailing list:</p>
+                            <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 20px;">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Email:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{email}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0;font-size:11px;color:#aaaaaa;">Newsletter Unsubscribe Alert</p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
+            }
+        )
+    except Exception:
+        # Company notification failure is non-critical; subscriber already unsubscribed
+        logger.exception("Company newsletter unsubscribe notification email failed")
 
 
 def _send_coupon_email(

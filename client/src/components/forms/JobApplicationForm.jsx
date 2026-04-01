@@ -35,6 +35,7 @@ export default function JobApplicationForm() {
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+	const [submitResponseType, setSubmitResponseType] = useState("success");
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -51,6 +52,7 @@ export default function JobApplicationForm() {
 		setIsSubmitting(true);
 		setSubmitError(null);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
+		setSubmitResponseType("success");
 		try {
 			// Get hCaptcha token
 			const captchaToken = await getHCaptchaToken();
@@ -63,6 +65,7 @@ export default function JobApplicationForm() {
 			const result = await submitJobApplication(formData, resumeFile, captchaToken);
 			if (result?.duplicate) {
 				setSubmitSuccessMessage(result.message || "This application already exists.");
+				setSubmitResponseType("warning");
 			}
 			setSubmitSuccess(true);
 			setTimeout(() => setSubmitSuccess(false), 5000);
@@ -190,7 +193,7 @@ export default function JobApplicationForm() {
 			<div className="flex justify-center mt-4">
 				{submitSuccess ? (
 					<FormResponseMessage
-						type="success"
+					type={submitResponseType}
 						message={submitSuccessMessage}
 						className="w-full text-center"
 					/>

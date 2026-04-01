@@ -5,6 +5,7 @@ import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { ServiceLinks } from "../data/data";
+import NotFoundPage from "./NotFoundPage";
 
 export default function ServicePage() {
 	const { categorySlug, serviceSlug } = useParams();
@@ -15,7 +16,9 @@ export default function ServicePage() {
 		? category.submenu.find((item) => item.href.split("/").pop() === serviceSlug)
 		: null;
 
-	const serviceName = service ? service.name : "Service Not Found";
+	if (!category || !service) return <NotFoundPage />;
+
+	const serviceName = service.name;
 	const serviceDescription = service?.description || "";
 	const serviceImageKey = service?.image ? `private/${service.image}` : null;
 
@@ -57,7 +60,7 @@ export default function ServicePage() {
 					<div className="relative flex flex-col gap-6 w-full z-10">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
 							Warning Signs for {serviceName}
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
+							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 						</h4>
 
 						<p className="text-[#2B2B2B] leading-relaxed">
@@ -67,7 +70,7 @@ export default function ServicePage() {
 						<ul className="space-y-6 text-[#2B2B2B]">
 							{problems.length > 0 ? (
 								problems.map((problem, index) => (
-									<li key={index} className="flex items-start gap-3">
+									<li key={index} className="flex items-start gap-4">
 										<FaExclamationTriangle
 											className="text-[#B32020] mt-1 flex-shrink-0"
 											size={18}
@@ -109,9 +112,9 @@ export default function ServicePage() {
 				<div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
 					<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
 						What To Expect From Our {serviceName} Service
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
+							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 					</h4>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 						{[
 							{
 								step: "1",
@@ -134,12 +137,12 @@ export default function ServicePage() {
 								desc: "The technician will perform the repairs and clean up the work area.",
 							},
 						].map((item, i) => (
-							<div key={i} className="flex flex-col gap-6 p-8 bg-white">
+							<div key={i} className="flex flex-col gap-6 p-6 bg-white border-1 border-[#DEDEDE]">
 								<div className="flex items-center gap-3">
 									<span className="text-2xl font-bold text-[#0C2D70]">{item.step}.</span>
 									<h5 className="font-bold text-[#0C2D70]">{item.title}</h5>
 								</div>
-								<p className="text-sm text-[#2B2B2B]">{item.desc}</p>
+								<p className="text-[#2B2B2B]">{item.desc}</p>
 							</div>
 						))}
 					</div>
@@ -225,7 +228,7 @@ export default function ServicePage() {
 					<div className="flex flex-col gap-6">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight inline-block">
 							Prevention Tips for {serviceName}
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
+							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
 						</h4>
 						<ul className="flex flex-col gap-6">
 							{preventionTips.map((tip, i) => (

@@ -48,7 +48,7 @@ export default function Financing() {
 				<ImageWithLoader
 					src={getCloudFrontUrl("private/easy-financing-available.png")}
 					alt="Easy Financing Available"
-					className="mt-4 w-120 h-auto object-cover"
+					className="mt-4 w-110 h-auto object-cover"
 					loading="lazy"
 				/>
 			</div>

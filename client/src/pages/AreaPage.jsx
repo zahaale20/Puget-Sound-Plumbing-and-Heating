@@ -3,6 +3,7 @@ import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
+import NotFoundPage from "./NotFoundPage";
 
 export default function AreaPage() {
 	const { regionSlug, areaSlug } = useParams();
@@ -11,13 +12,14 @@ export default function AreaPage() {
 		(item) => item.name.replace(/\s+/g, "-").toLowerCase() === regionSlug
 	);
 
-	const regionName = region ? region.name : "Service Area";
-
 	const area = region
 		? region.areas.find((item) => item.name.replace(/\s+/g, "-").toLowerCase() === areaSlug)
 		: null;
 
-	const areaName = area ? area.name : areaSlug || "area";
+	if (!region || !area) return <NotFoundPage />;
+
+	const regionName = region.name;
+	const areaName = area.name;
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">

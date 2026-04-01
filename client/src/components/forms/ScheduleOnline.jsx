@@ -29,6 +29,7 @@ export default function ScheduleOnline() {
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(false);
 	const [successMessage, setSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+	const [responseType, setResponseType] = useState("success");
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -46,6 +47,7 @@ export default function ScheduleOnline() {
 		setError(null);
 		setSuccess(false);
 		setSuccessMessage("Thank you! We'll be in touch soon.");
+		setResponseType("success");
 
 		try {
 			// Get hCaptcha token
@@ -59,6 +61,7 @@ export default function ScheduleOnline() {
 			const result = await submitSchedule(formData, captchaToken);
 			if (result?.duplicate) {
 				setSuccessMessage(result.message || "A request for this contact already exists.");
+				setResponseType("warning");
 			}
 
 			// Reset form on success
@@ -190,7 +193,7 @@ export default function ScheduleOnline() {
 					<div className="flex justify-center mt-4">
 						{success ? (
 							<FormResponseMessage
-								type="success"
+							type={responseType}
 								message={successMessage}
 								className="w-full text-center"
 							/>

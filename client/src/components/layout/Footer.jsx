@@ -26,6 +26,7 @@ export default function Footer() {
 	const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
 	const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 	const [newsletterSuccessMessage, setNewsletterSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+	const [newsletterResponseType, setNewsletterResponseType] = useState("success");
 	const [newsletterError, setNewsletterError] = useState(null);
 
 	useEffect(() => {
@@ -132,7 +133,7 @@ export default function Footer() {
 
 							{newsletterSuccess ? (
 								<FormResponseMessage
-									type="success"
+									type={newsletterResponseType}
 									message={newsletterSuccessMessage}
 									className="mb-4"
 								/>
@@ -149,6 +150,7 @@ export default function Footer() {
 											setNewsletterSubmitting(true);
 											setNewsletterError(null);
 											setNewsletterSuccessMessage("Thank you! We'll be in touch soon.");
+											setNewsletterResponseType("success");
 											try {
 												// Get hCaptcha token
 												const captchaToken = await getHCaptchaToken();
@@ -163,6 +165,7 @@ export default function Footer() {
 													setNewsletterSuccessMessage(
 														"This email is already subscribed to our mailing list."
 													);
+													setNewsletterResponseType("warning");
 												}
 												setNewsletterSuccess(true);
 												setNewsletterEmail("");

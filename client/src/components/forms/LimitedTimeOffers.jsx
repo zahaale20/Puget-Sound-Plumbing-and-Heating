@@ -24,6 +24,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 	const [submitError, setSubmitError] = useState(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitSuccessMessage, setSubmitSuccessMessage] = useState("Thank you! We'll be in touch soon.");
+	const [submitResponseType, setSubmitResponseType] = useState("success");
 
 	const validationSchema = useMemo(() => ({
 		firstName: [(v) => validateName(v, "First name")],
@@ -54,6 +55,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 		setSubmitError(null);
 		setSubmitSuccess(false);
 		setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
+		setSubmitResponseType("success");
 		resetValidation();
 	};
 
@@ -163,6 +165,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									setSubmitError(null);
 									setSubmitSuccess(false);
 									setSubmitSuccessMessage("Thank you! We'll be in touch soon.");
+									setSubmitResponseType("success");
 									try {
 										// Get hCaptcha token
 										const captchaToken = await getHCaptchaToken();
@@ -183,8 +186,10 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 										);
 										if (result?.duplicate) {
 											setSubmitSuccessMessage(result.message || "This request already exists.");
+											setSubmitResponseType("warning");
 										} else if (result?.emailStatus === "failed") {
 											setSubmitSuccessMessage(`Your request was saved, but we couldn't send your coupon email. Please call us at ${CompanyInfo.phone}.`);
+											setSubmitResponseType("warning");
 										}
 										setSubmitSuccess(true);
 										setTimeout(() => setSubmitSuccess(false), 5000);
@@ -278,7 +283,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									<div className="flex justify-center mt-4">
 										{submitSuccess ? (
 											<FormResponseMessage
-												type="success"
+											type={submitResponseType}
 												message={submitSuccessMessage}
 												className="w-full text-center"
 											/>

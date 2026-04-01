@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
+import NotFoundPage from "./NotFoundPage";
 
 export default function RegionsPage() {
 	const { regionSlug } = useParams();
@@ -10,8 +11,10 @@ export default function RegionsPage() {
 		(item) => item.name.replace(/\s+/g, "-").toLowerCase() === regionSlug
 	);
 
-	const regionName = region ? region.name : "Service Area";
-	const neighborhoods = region ? region.areas : [];
+	if (!region) return <NotFoundPage />;
+
+	const regionName = region.name;
+	const neighborhoods = region.areas;
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">

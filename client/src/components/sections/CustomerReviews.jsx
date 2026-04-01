@@ -1,19 +1,62 @@
-import { FaStar, FaStarHalfAlt, FaRegStar, FaArrowRight, FaGoogle } from "react-icons/fa";
-import { CustomerReviewsData, GoogleReviewsSummary, CompanyInfo } from "../../data/data";
+import { useState, useEffect, useMemo } from "react";
+import { FaStar, FaArrowRight } from "react-icons/fa";
+import { CustomerReviewsData, CompanyInfo } from "../../data/data";
+
+function RotatingReviewCard({ reviews, intervalMs, delayMs }) {
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [visible, setVisible] = useState(true);
+
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			const interval = setInterval(() => {
+				setVisible(false);
+				setTimeout(() => {
+					setCurrentIndex((prev) => (prev + 1) % reviews.length);
+					setVisible(true);
+				}, 600);
+			}, intervalMs);
+			return () => clearInterval(interval);
+		}, delayMs);
+		return () => clearTimeout(timeout);
+	}, [reviews.length, intervalMs, delayMs]);
+
+	const review = reviews[currentIndex];
+
+	return (
+		<div
+			className="flex flex-col gap-6 text-start bg-white p-6 border-1 border-[#DEDEDE] min-h-[280px]"
+			style={{
+				opacity: visible ? 1 : 0,
+				transition: "opacity 0.6s ease-in-out",
+			}}
+		>
+			{/* Star Rating */}
+			<div className="flex gap-1.5 text-[#B32020] text-lg">
+				{Array.from({ length: review.rating }, (_, i) => (
+					<FaStar key={i} />
+				))}
+			</div>
+
+			{/* Review Text */}
+			<p className="flex-1 text-[#2B2B2B]">{review.text}</p>
+
+			{/* Reviewer */}
+			<h6 className="text-[#0C2D70]">— {review.name}</h6>
+		</div>
+	);
+}
 
 export default function CustomerReviews() {
 	const reviews = CustomerReviewsData.filter((r) => r.rating >= 4);
 
-	const renderStars = (rating) => {
-		const stars = [];
-		const fullStars = Math.floor(rating);
-		const hasHalf = rating % 1 >= 0.25 && rating % 1 < 0.75;
-		const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
-		for (let i = 0; i < fullStars; i++) stars.push(<FaStar key={`f${i}`} />);
-		if (hasHalf) stars.push(<FaStarHalfAlt key="h" />);
-		for (let i = 0; i < emptyStars; i++) stars.push(<FaRegStar key={`e${i}`} />);
-		return stars;
-	};
+	const groups = useMemo(() => {
+		const third = Math.ceil(reviews.length / 3);
+		return [
+			reviews.slice(0, third),
+			reviews.slice(third, third * 2),
+			reviews.slice(third * 2),
+		];
+	}, [reviews]);
 
 	return (
 		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
@@ -25,20 +68,6 @@ export default function CustomerReviews() {
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 				</h4>
 
-				{/* Google Rating Summary */}
-				<div className="flex items-center justify-center gap-3">
-					<FaGoogle className="text-2xl text-[#4285F4]" />
-					<div className="flex items-center gap-2 text-[#B32020] text-xl">
-						{renderStars(GoogleReviewsSummary.rating)}
-					</div>
-					<span className="text-[#2B2B2B] font-semibold text-lg">
-						{GoogleReviewsSummary.rating}
-					</span>
-					<span className="text-[#666]">
-						Based on {GoogleReviewsSummary.totalReviews} reviews
-					</span>
-				</div>
-
 				{/* Description */}
 				<p className="text-[#2B2B2B]">
 					See what our customers are saying about our plumbing services. Your satisfaction is our
@@ -48,24 +77,13 @@ export default function CustomerReviews() {
 
 			{/* Customer Reviews Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{reviews.map((review, idx) => (
-					<div
+				{groups.map((group, idx) => (
+					<RotatingReviewCard
 						key={idx}
-						className="flex flex-col gap-6 text-start bg-white p-6 border-1 border-[#DEDEDE]"
-					>
-						{/* Star Rating */}
-						<div className="flex gap-1.5 text-[#B32020] text-lg">
-							{Array.from({ length: review.rating }, (_, i) => (
-								<FaStar key={i} />
-							))}
-						</div>
-
-						{/* Review Text */}
-						<p className="flex-1 text-[#2B2B2B]">{review.text}</p>
-
-						{/* Reviewer */}
-						<h6 className="text-[#0C2D70]">— {review.name}</h6>
-					</div>
+						reviews={group}
+						intervalMs={5000}
+						delayMs={idx * 2000}
+					/>
 				))}
 			</div>
 
