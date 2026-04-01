@@ -3,6 +3,7 @@ import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser, FaEye } from "reac
 import { useParams, useNavigate } from "react-router-dom";
 import { posts } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
+import NotFoundPage from "./NotFoundPage";
 
 export default function BlogPostPage() {
 	const { slug } = useParams();
@@ -16,30 +17,7 @@ export default function BlogPostPage() {
 		if (post) setPostImageUrl(getCloudFrontUrl(post.imageKey));
 	}, [post]);
 
-	if (!post) {
-		return (
-			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[172px]">
-				<img
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
-					alt=""
-					aria-hidden="true"
-					fetchPriority="high"
-					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
-				/>
-
-				<div className="max-w-7xl mx-auto px-6 w-full">
-					<h3 className="text-[#0C2D70] mb-4">Post Not Found</h3>
-					<p className="text-[#2B2B2B] mb-6">The blog post you're looking for doesn't exist.</p>
-					<button
-						onClick={() => navigate("/blog")}
-						className="flex items-center gap-4 text-[#0C2D70] font-semibold hover:underline"
-					>
-						<FaArrowLeft /> Back to Blog
-					</button>
-				</div>
-			</section>
-		);
-	}
+	if (!post) return <NotFoundPage />;
 
 	const currentIndex = posts.findIndex((p) => p.link === fullLink);
 	const prevPost = posts[currentIndex - 1];
