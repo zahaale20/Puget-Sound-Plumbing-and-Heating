@@ -55,14 +55,12 @@ export default function RecentBlogPosts() {
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
-							<div className="text-[#949494] text-sm mb-2 space-y-1">
+							<div className="text-[#949494] text-sm mb-2 flex flex-col items-start gap-1">
 								<div className="flex items-center gap-2">
 									<FaRegCalendarAlt /> <span>{new Date(post.date).toLocaleDateString()}</span>
 								</div>
-								<div className="flex items-center justify-between gap-3">
-									<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
-									<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
-								</div>
+								<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
+								<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 							</div>
 							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 							<span className="text-[#2B2B2B] flex-1 mb-6">

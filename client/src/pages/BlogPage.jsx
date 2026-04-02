@@ -143,15 +143,13 @@ export default function BlogPage() {
 				loading="lazy"
 			/>
 			<div className="p-6 flex flex-col flex-1">
-				<div className="text-sm text-[#949494] mb-2 space-y-1">
+				<div className="text-sm text-[#949494] mb-2 flex flex-col items-start gap-1">
 					<div className="flex items-center gap-1">
 						<FaRegCalendarAlt />
 						<span>{new Date(post.date).toLocaleDateString()}</span>
 					</div>
-					<div className="flex items-center justify-between gap-3">
-						<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
-						<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
-					</div>
+					<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
+					<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 				</div>
 				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>

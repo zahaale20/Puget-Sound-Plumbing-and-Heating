@@ -30,3 +30,32 @@ export async function fetchBlogPosts() {
 	if (error) throw error;
 	return (data || []).map(mapBlogPost);
 }
+
+export async function incrementBlogPostViews(slug) {
+	if (!slug) return null;
+
+	const { data: rpcData, error: rpcError } = await supabase.rpc("increment_blog_post_views", {
+		post_slug: slug,
+	});
+
+	if (!rpcError) {
+		return Number(rpcData || 0);
+	}
+
+	const { data: row, error: readError } = await supabase
+		.from(BLOG_TABLE)
+		.select("id,views")
+		.eq("slug", slug)
+		.single();
+
+	if (readError || !row) throw readError || new Error("Post not found for view increment.");
+
+	const nextViews = Number(row.views || 0) + 1;
+	const { error: updateError } = await supabase
+		.from(BLOG_TABLE)
+		.update({ views: nextViews })
+		.eq("id", row.id);
+
+	if (updateError) throw updateError;
+	return nextViews;
+}

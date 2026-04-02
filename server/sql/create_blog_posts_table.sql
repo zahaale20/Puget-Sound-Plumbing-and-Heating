@@ -41,6 +41,23 @@ ALTER TABLE public."Blog Posts"
 CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON public."Blog Posts" (slug);
 CREATE INDEX IF NOT EXISTS idx_blog_posts_views_desc ON public."Blog Posts" (views DESC);
 
+CREATE OR REPLACE FUNCTION public.increment_blog_post_views(post_slug TEXT)
+RETURNS BIGINT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    next_views BIGINT;
+BEGIN
+    UPDATE public."Blog Posts"
+    SET views = views + 1,
+        updated_at = NOW()
+    WHERE slug = post_slug
+    RETURNING views INTO next_views;
+
+    RETURN next_views;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.set_blog_posts_updated_at()
 RETURNS TRIGGER
 LANGUAGE plpgsql

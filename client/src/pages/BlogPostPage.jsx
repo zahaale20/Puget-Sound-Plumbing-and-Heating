@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser, FaEye } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchBlogPosts } from "../services/blogService";
+import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
 import NotFoundPage from "./NotFoundPage";
 
@@ -34,6 +34,26 @@ export default function BlogPostPage() {
 	useEffect(() => {
 		if (post) setPostImageUrl(getCloudFrontUrl(post.featuredImageKey));
 	}, [post]);
+
+	useEffect(() => {
+		const bumpViews = async () => {
+			if (!post) return;
+			try {
+				const updatedViews = await incrementBlogPostViews(post.slug);
+				if (typeof updatedViews === "number") {
+					setPosts((prev) =>
+						prev.map((item) =>
+							item.slug === post.slug ? { ...item, views: updatedViews } : item
+						)
+					);
+				}
+			} catch (error) {
+				console.error("Failed to increment blog post views", error);
+			}
+		};
+
+		bumpViews();
+	}, [post?.slug]);
 
 	if (isLoading) {
 		return (
@@ -122,14 +142,12 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						<div className="text-[#949494] text-sm mb-4 space-y-2">
+						<div className="text-[#949494] text-sm mb-4 flex flex-col items-start gap-2">
 							<div className="flex items-center gap-2">
 								<FaRegCalendarAlt /> {new Date(post.date).toLocaleDateString()}
 							</div>
-							<div className="flex items-center justify-between gap-4">
-								<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
-								<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
-							</div>
+							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
+							<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
 						</div>
 						<h3 className="text-[#0C2D70] mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
