@@ -236,9 +236,12 @@ def extract_content_images(soup, post_url):
 
 def extract_post_content(soup):
     """Extract the main blog post content as structured sections."""
-    content_area = soup.find(class_=re.compile("entry-content|post-content|blog-content", re.I))
-    if not content_area:
-        content_area = soup.find("article")
+    content_area = (
+        soup.select_one("article .entry-content, article .post-content, article .blog-content")
+        or soup.find(class_=re.compile("entry-content|post-content|blog-content", re.I))
+        or soup.find("article")
+        or soup.find(class_=re.compile("post|postsBlock", re.I))
+    )
 
     if not content_area:
         return [], ""
@@ -247,13 +250,7 @@ def extract_post_content(soup):
     current_section = {"heading": "", "content": []}
     description = ""
 
-    for element in content_area.children:
-        if not hasattr(element, 'name') or element.name is None:
-            text = str(element).strip()
-            if text:
-                current_section["content"].append(text)
-            continue
-
+    for element in content_area.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "blockquote", "table"]):
         if element.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
             # Save previous section
             if current_section["content"] or current_section["heading"]:
@@ -263,13 +260,15 @@ def extract_post_content(soup):
                 "content": []
             }
         elif element.name == "p":
+            if element.find_parent(["li", "blockquote", "td", "th"]):
+                continue
             text = element.get_text(strip=True)
             if text:
                 current_section["content"].append(text)
                 if not description:
                     description = text
         elif element.name in ["ul", "ol"]:
-            items = [li.get_text(strip=True) for li in element.find_all("li")]
+            items = [li.get_text(strip=True) for li in element.find_all("li", recursive=False)]
             if items:
                 current_section["content"].append(items)
         elif element.name == "blockquote":
