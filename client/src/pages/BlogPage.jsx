@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaUser, FaEye } from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
@@ -156,7 +156,6 @@ export default function BlogPage() {
 							<FaRegCalendarAlt />
 							<span>{formatBlogDate(post.date)}</span>
 						</div>
-						<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 					</div>
 					<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
 				</div>

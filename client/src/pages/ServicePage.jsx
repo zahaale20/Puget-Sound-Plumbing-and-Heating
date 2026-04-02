@@ -86,7 +86,7 @@ export default function ServicePage() {
 						</ul>
 					</div>
 
-					<div className="relative h-[400px] w-full xl:w-[calc(50%+40px)] overflow-hidden">
+					<div className="relative h-[380px] w-full xl:w-[calc(50%+40px)] overflow-hidden">
 						{serviceImageKey && (
 							<ImageWithLoader
 								src={getCloudFrontUrl(serviceImageKey)}
