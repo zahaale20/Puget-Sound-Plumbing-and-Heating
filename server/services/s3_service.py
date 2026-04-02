@@ -8,11 +8,12 @@ logger = logging.getLogger(__name__)
 
 class S3Service:
     # S3 prefix conventions (folders inside the single bucket):
-    #   private/       – site images (served via CloudFront)
-    #   resumes/       – uploaded applicant resumes
-    #   blog-posts/    – scraped blog post images
+    #   private/            – private site images (served via CloudFront)
+    #   public/             – public site assets
+    #   resumes/            – uploaded applicant resumes
+    #   blog-posts-images/  – scraped blog post images
     RESUMES_PREFIX = "resumes/"
-    BLOG_POSTS_PREFIX = "blog-posts/"
+    BLOG_POSTS_PREFIX = "blog-posts-images/"
 
     def __init__(self):
         self.cloudfront_url = os.getenv("CLOUDFRONT_URL")

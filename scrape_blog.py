@@ -25,7 +25,7 @@ TOTAL_PAGES = 36
 IMAGES_DIR = Path("scraped_images")
 OUTPUT_FILE = "blog_posts.json"
 S3_BUCKET = os.getenv("S3_BUCKET_NAME", "pspah-bucket")
-S3_PREFIX = "blog-posts/"
+S3_PREFIX = "blog-posts-images/"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
