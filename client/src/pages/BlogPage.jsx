@@ -57,6 +57,13 @@ export default function BlogPage() {
 		return safeText.length > max ? safeText.slice(0, max) + "..." : safeText;
 	};
 
+	const formatBlogDate = (dateValue) =>
+		new Date(dateValue).toLocaleDateString("en-US", {
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+		});
+
 	const handleOpen = (type) => {
 		clearTimeout(dropdownTimeout.current);
 		if (type === "filter") {
@@ -143,13 +150,15 @@ export default function BlogPage() {
 				loading="lazy"
 			/>
 			<div className="p-6 flex flex-col flex-1">
-				<div className="text-sm text-[#949494] mb-2 flex flex-col items-start gap-1">
-					<div className="flex items-center gap-1">
-						<FaRegCalendarAlt />
-						<span>{new Date(post.date).toLocaleDateString()}</span>
+				<div className="text-sm text-[#949494] mb-2 flex justify-between items-start gap-3">
+					<div className="flex flex-col items-start gap-1">
+						<div className="flex items-center gap-1">
+							<FaRegCalendarAlt />
+							<span>{formatBlogDate(post.date)}</span>
+						</div>
+						<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 					</div>
-					<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
-					<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
+					<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
 				</div>
 				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>

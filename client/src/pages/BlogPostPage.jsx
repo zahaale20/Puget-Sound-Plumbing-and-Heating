@@ -107,6 +107,13 @@ export default function BlogPostPage() {
 	const prevPost = posts[currentIndex - 1];
 	const nextPost = posts[currentIndex + 1];
 
+	const formatBlogDate = (dateValue) =>
+		new Date(dateValue).toLocaleDateString("en-US", {
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+		});
+
 	return (
 		<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<img
@@ -142,12 +149,14 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						<div className="text-[#949494] text-sm mb-4 flex flex-col items-start gap-2">
-							<div className="flex items-center gap-2">
-								<FaRegCalendarAlt /> {new Date(post.date).toLocaleDateString()}
+						<div className="text-[#949494] text-sm mb-4 flex justify-between items-start gap-3">
+							<div className="flex flex-col items-start gap-2">
+								<div className="flex items-center gap-2">
+									<FaRegCalendarAlt /> {formatBlogDate(post.date)}
+								</div>
+								<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
 							</div>
-							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
-							<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
+							<span className="flex items-center gap-2 text-right"><FaUser /> {post.author}</span>
 						</div>
 						<h3 className="text-[#0C2D70] mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">

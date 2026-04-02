@@ -94,7 +94,7 @@ export default function CustomerReviews() {
 					<RotatingReviewCard
 						key={idx}
 						reviews={group}
-						intervalMs={5000}
+						intervalMs={9000}
 						delayMs={idx * 2000}
 					/>
 				))}

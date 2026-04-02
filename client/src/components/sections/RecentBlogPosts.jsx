@@ -28,6 +28,13 @@ export default function RecentBlogPosts() {
 		return sliced.endsWith(".") ? sliced + ".." : sliced + "...";
 	};
 
+	const formatBlogDate = (dateValue) =>
+		new Date(dateValue).toLocaleDateString("en-US", {
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+		});
+
 	return (
 		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
 			{/* Header Container */}
@@ -55,12 +62,14 @@ export default function RecentBlogPosts() {
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
-							<div className="text-[#949494] text-sm mb-2 flex flex-col items-start gap-1">
-								<div className="flex items-center gap-2">
-									<FaRegCalendarAlt /> <span>{new Date(post.date).toLocaleDateString()}</span>
+							<div className="text-[#949494] text-sm mb-2 flex justify-between items-start gap-3">
+								<div className="flex flex-col items-start gap-1">
+									<div className="flex items-center gap-2">
+										<FaRegCalendarAlt /> <span>{formatBlogDate(post.date)}</span>
+									</div>
+									<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 								</div>
-								<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
-								<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
+								<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
 							</div>
 							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 							<span className="text-[#2B2B2B] flex-1 mb-6">

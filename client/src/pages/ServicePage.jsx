@@ -57,7 +57,7 @@ export default function ServicePage() {
 			{/* 2. Warning Signs (White Background) */}
 			<section className="flex justify-center w-full py-16 bg-white">
 				<div className="flex flex-col xl:flex-row gap-6 w-full max-w-7xl px-6">
-					<div className="relative flex flex-col gap-6 w-full z-10">
+					<div className="relative flex flex-col gap-6 w-full xl:w-[calc(50%-40px)] z-10">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
 							Warning Signs for {serviceName}
 							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
@@ -86,7 +86,7 @@ export default function ServicePage() {
 						</ul>
 					</div>
 
-					<div className="relative h-[400px] w-full xl:w-1/2 overflow-hidden">
+					<div className="relative h-[400px] w-full xl:w-[calc(50%+40px)] overflow-hidden">
 						{serviceImageKey && (
 							<ImageWithLoader
 								src={getCloudFrontUrl(serviceImageKey)}
