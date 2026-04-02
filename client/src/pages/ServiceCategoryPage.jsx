@@ -63,7 +63,7 @@ export default function ServiceCategoryPage() {
 					<section key={index} className={sectionClass} style={sectionStyle}>
 						<div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-6 w-full gap-16 items-center">
 							<div
-								className={`flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
+								className={`order-2 flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
 							>
 								<ImageWithLoader
 									src={getCloudFrontUrl("private/" + service.image)}
@@ -74,7 +74,7 @@ export default function ServiceCategoryPage() {
 							</div>
 
 							<div
-								className={`flex flex-col gap-6 ${index % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}
+								className={`order-1 flex flex-col gap-6 ${index % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}
 							>
 								<h4 className="text-[#0C2D70] relative pb-2 w-fit">
 									{service.name}

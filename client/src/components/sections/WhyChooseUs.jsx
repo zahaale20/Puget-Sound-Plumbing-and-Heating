@@ -8,7 +8,7 @@ export default function WhyChooseUs() {
 	return (
 		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 mx-auto lg:gap-16 items-start">
 			{/* Image */}
-			<div className="block self-center lg:self-end shrink-0">
+			<div className="order-2 lg:order-none block self-center lg:self-end shrink-0">
 				<ImageWithLoader
 					src={getCloudFrontUrl("private/plumbing-bros.png")}
 					alt="Plumber Bros"
@@ -18,7 +18,7 @@ export default function WhyChooseUs() {
 			</div>
 
 			{/* Header Container */}
-			<div className="space-y-6 py-16">
+			<div className="order-1 lg:order-none space-y-6 py-16">
 				{/* Title */}
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
 					Why Choose Us?

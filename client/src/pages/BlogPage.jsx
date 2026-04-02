@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { BlogGridSkeleton, ImageWithLoader } from "../components/ui/LoadingComponents";
 
 const sortOptions = [
 	{ name: "Most Recent", value: "dateDesc" },
@@ -285,7 +285,9 @@ export default function BlogPage() {
 
 			{isLoading && (
 				<section className="bg-white w-full pb-6">
-					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">Loading blog posts...</div>
+					<div className="max-w-7xl mx-auto px-6">
+						<BlogGridSkeleton count={POSTS_PER_PAGE} />
+					</div>
 				</section>
 			)}
 
@@ -295,6 +297,7 @@ export default function BlogPage() {
 				</section>
 			)}
 
+			{!isLoading && (
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
 				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
@@ -311,13 +314,13 @@ export default function BlogPage() {
 				</div>
 
 				{totalPages > 1 && (
-					<div className="flex justify-center items-center">
-						<div className="inline-flex items-center gap-1 rounded-full border border-white/60 bg-white/80 backdrop-blur-md p-1.5 shadow-[0_8px_28px_rgba(12,45,112,0.2)]">
+					<div className="max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
+						<div className="inline-flex items-center gap-1 rounded-xl border border-white/60 bg-white/80 backdrop-blur-md p-1.5">
 						<button
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage === 1}
 							aria-label="Go to previous page"
-							className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
+							className="h-10 w-10 inline-flex items-center justify-center rounded-lg bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
 						>
 							<FaChevronLeft />
 						</button>
@@ -330,7 +333,7 @@ export default function BlogPage() {
 									onClick={() => handlePageChange(page)}
 									aria-label={`Go to page ${page}`}
 									aria-current={currentPage === page ? "page" : undefined}
-									className={`h-10 min-w-10 px-3 inline-flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35 ${
+									className={`h-10 min-w-10 px-3 inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35 ${
 										currentPage === page
 											? "bg-[#0C2D70] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]"
 											: "bg-white/70 text-[#0C2D70] hover:bg-white"
@@ -344,7 +347,7 @@ export default function BlogPage() {
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage === totalPages}
 							aria-label="Go to next page"
-							className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
+							className="h-10 w-10 inline-flex items-center justify-center rounded-lg bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
 						>
 							<FaChevronRight />
 						</button>
@@ -352,6 +355,7 @@ export default function BlogPage() {
 					</div>
 				)}
 			</section>
+			)}
 		</div>
 	);
 }

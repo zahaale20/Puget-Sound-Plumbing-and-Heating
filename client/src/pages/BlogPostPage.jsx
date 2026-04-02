@@ -3,6 +3,7 @@ import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser } from "react-icons
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
+import { BlogPostSkeleton } from "../components/ui/LoadingComponents";
 import NotFoundPage from "./NotFoundPage";
 
 export default function BlogPostPage() {
@@ -56,11 +57,7 @@ export default function BlogPostPage() {
 	}, [post?.slug]);
 
 	if (isLoading) {
-		return (
-			<section className="flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]">
-				<div className="max-w-7xl mx-auto px-6 w-full">Loading post...</div>
-			</section>
-		);
+		return <BlogPostSkeleton />;
 	}
 
 	if (!post) return <NotFoundPage />;
