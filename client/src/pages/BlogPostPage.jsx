@@ -121,7 +121,7 @@ export default function BlogPostPage() {
 				className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 			/>
 
-			<div className="max-w-7xl mx-auto px-6 w-full">
+			<div className="max-w-7xl mx-auto w-full">
 				{/* Back Button */}
 				<button
 					onClick={() => navigate("/blog")}
@@ -145,7 +145,7 @@ export default function BlogPostPage() {
 					)}
 
 					{/* Post Content */}
-					<div className="p-8 md:p-12">
+					<div className="py-8 md:py-12">
 						<h3 className="text-[#0C2D70] mb-4">{post.title}</h3>
 						<div className="text-[#949494] text-sm mb-6 flex flex-col items-start gap-2">
 							<div className="flex items-center gap-2">

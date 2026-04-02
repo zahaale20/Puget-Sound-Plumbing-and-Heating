@@ -315,28 +315,28 @@ export default function BlogPage() {
 
 				{totalPages > 1 && (
 					<div className="max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
-						<div className="inline-flex items-center gap-1 rounded-xl border border-white/60 bg-white/80 backdrop-blur-md p-1.5">
+						<div className="inline-flex items-center bg-white border border-gray-300 shadow-lg">
 						<button
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage === 1}
 							aria-label="Go to previous page"
-							className="h-10 w-10 inline-flex items-center justify-center rounded-lg bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
+							className="h-10 w-10 inline-flex items-center justify-center text-[#0C2D70] border-r border-gray-300 transition-all duration-200 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0C2D70]"
 						>
 							<FaChevronLeft />
 						</button>
 						{getPageNumbers().map((page, i) =>
 							page === "..." ? (
-								<span key={`ellipsis-${i}`} className="px-1.5 text-[#0C2D70]/60 font-semibold select-none">...</span>
+								<span key={`ellipsis-${i}`} className="px-3 h-10 inline-flex items-center text-[#0C2D70]/60 font-semibold select-none border-r border-gray-300">...</span>
 							) : (
 								<button
 									key={page}
 									onClick={() => handlePageChange(page)}
 									aria-label={`Go to page ${page}`}
 									aria-current={currentPage === page ? "page" : undefined}
-									className={`h-10 min-w-10 px-3 inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35 ${
+									className={`h-10 min-w-10 px-3 inline-flex items-center justify-center text-sm font-semibold transition-all duration-200 cursor-pointer border-r border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0C2D70] ${
 										currentPage === page
-											? "bg-[#0C2D70] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]"
-											: "bg-white/70 text-[#0C2D70] hover:bg-white"
+											? "bg-[#0C2D70] text-white"
+											: "text-[#0C2D70] hover:bg-gray-100"
 									}`}
 								>
 									{page}
@@ -347,7 +347,7 @@ export default function BlogPage() {
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage === totalPages}
 							aria-label="Go to next page"
-							className="h-10 w-10 inline-flex items-center justify-center rounded-lg bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
+							className="h-10 w-10 inline-flex items-center justify-center text-[#0C2D70] transition-all duration-200 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0C2D70]"
 						>
 							<FaChevronRight />
 						</button>
