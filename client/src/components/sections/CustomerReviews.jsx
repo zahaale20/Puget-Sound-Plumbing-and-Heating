@@ -2,6 +2,18 @@ import { useState, useEffect, useMemo } from "react";
 import { FaStar, FaArrowRight } from "react-icons/fa";
 import { CustomerReviewsData, CompanyInfo } from "../../data/data";
 
+const MAX_REVIEW_CHARACTERS = 280;
+
+function truncateReviewText(text, maxChars = MAX_REVIEW_CHARACTERS) {
+	if (!text || text.length <= maxChars) return text;
+
+	const clipped = text.slice(0, maxChars);
+	const lastSpaceIndex = clipped.lastIndexOf(" ");
+	const truncated = lastSpaceIndex > 0 ? clipped.slice(0, lastSpaceIndex) : clipped;
+
+	return `${truncated}...`;
+}
+
 function RotatingReviewCard({ reviews, intervalMs, delayMs }) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [visible, setVisible] = useState(true);
@@ -21,6 +33,7 @@ function RotatingReviewCard({ reviews, intervalMs, delayMs }) {
 	}, [reviews.length, intervalMs, delayMs]);
 
 	const review = reviews[currentIndex];
+	const reviewText = truncateReviewText(review.text);
 
 	return (
 		<div
@@ -38,7 +51,7 @@ function RotatingReviewCard({ reviews, intervalMs, delayMs }) {
 			</div>
 
 			{/* Review Text */}
-			<p className="flex-1 text-[#2B2B2B]">{review.text}</p>
+			<p className="flex-1 text-[#2B2B2B]">{reviewText}</p>
 
 			{/* Reviewer */}
 			<h6 className="text-[#0C2D70]">— {review.name}</h6>
