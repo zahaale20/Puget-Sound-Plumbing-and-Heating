@@ -158,14 +158,12 @@ export default function BlogPage() {
 			/>
 			<div className="p-6 flex flex-col flex-1">
 				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
-				<div className="text-sm text-[#949494] mb-2 flex justify-between items-start gap-3">
-					<div className="flex flex-col items-start gap-1">
-						<div className="flex items-center gap-1">
-							<FaRegCalendarAlt />
-							<span>{formatBlogDate(post.date)}</span>
-						</div>
+				<div className="text-sm text-[#949494] mb-2 flex flex-col items-start gap-1">
+					<div className="flex items-center gap-1">
+						<FaRegCalendarAlt />
+						<span>{formatBlogDate(post.date)}</span>
 					</div>
-					<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
+					<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
 				</div>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>
 				<button
