@@ -3,6 +3,7 @@ import base64
 import logging
 import hashlib
 import hmac
+import secrets
 import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response, Request
 from fastapi.responses import HTMLResponse
@@ -96,11 +97,16 @@ def _duplicate_response(message: str):
 import re as _re
 
 def _generate_coupon_id(coupon_discount: str) -> str:
-    """Generate a coupon ID from the discount string (e.g. '$19.50 OFF' -> 'PSPAH-1950')."""
+    """Generate a unique coupon ID from the discount string plus a random suffix.
+
+    Format: PSPAH-<discount_digits>-<6 random hex chars>
+    Example: '$19.50 OFF' -> 'PSPAH-1950-a3f7c2'
+    """
     match = _re.search(r"\$(\d+)\.(\d+)", coupon_discount)
+    suffix = secrets.token_hex(3)  # 6 hex chars = 16^6 = ~16M combinations
     if match:
-        return f"PSPAH-{match.group(1)}{match.group(2)}"
-    return f"PSPAH-{abs(hash(coupon_discount)) % 10000:04d}"
+        return f"PSPAH-{match.group(1)}{match.group(2)}-{suffix}"
+    return f"PSPAH-{abs(hash(coupon_discount)) % 10000:04d}-{suffix}"
 
 
 def _generate_newsletter_unsubscribe_token(email: str) -> str:
