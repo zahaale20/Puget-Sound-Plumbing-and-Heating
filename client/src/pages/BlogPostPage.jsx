@@ -45,6 +45,44 @@ export default function BlogPostPage() {
 
 	if (!post) return <NotFoundPage />;
 
+	const renderContentItem = (item, key) => {
+		if (typeof item === "string") {
+			return <p key={key}>{item}</p>;
+		}
+
+		if (Array.isArray(item)) {
+			return (
+				<ul key={key} className="list-disc pl-6 space-y-1">
+					{item.map((entry, entryIndex) => (
+						<li key={`${key}-li-${entryIndex}`}>{entry}</li>
+					))}
+				</ul>
+			);
+		}
+
+		if (item && typeof item === "object" && Array.isArray(item.table)) {
+			return (
+				<div key={key} className="overflow-x-auto">
+					<table className="w-full border-collapse">
+						<tbody>
+							{item.table.map((row, rowIndex) => (
+								<tr key={`${key}-row-${rowIndex}`}>
+									{row.map((cell, cellIndex) => (
+										<td key={`${key}-cell-${rowIndex}-${cellIndex}`} className="border border-[#DEDEDE] px-3 py-2 align-top">
+											{cell}
+										</td>
+									))}
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			);
+		}
+
+		return null;
+	};
+
 	const currentIndex = posts.findIndex((p) => p.slug === slug);
 	const prevPost = posts[currentIndex - 1];
 	const nextPost = posts[currentIndex + 1];
@@ -99,11 +137,9 @@ export default function BlogPostPage() {
 							{post.sections.map((section, index) => (
 								<div key={`${section.heading}-${index}`} className="space-y-2">
 									{section.heading ? <h5 className="text-[#0C2D70]">{section.heading}</h5> : null}
-									{(section.content || []).map((item, itemIndex) => (
-										typeof item === "string" ? (
-											<p key={`${index}-content-${itemIndex}`}>{item}</p>
-										) : null
-									))}
+									{(section.content || []).map((item, itemIndex) =>
+										renderContentItem(item, `${index}-content-${itemIndex}`)
+									)}
 								</div>
 							))}
 						</div>
