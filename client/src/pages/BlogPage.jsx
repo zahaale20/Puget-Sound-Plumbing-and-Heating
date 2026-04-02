@@ -143,7 +143,8 @@ export default function BlogPage() {
 	};
 
 	const handlePageChange = (page) => {
-		setCurrentPage(page);
+		const targetPage = Math.min(Math.max(page, 1), totalPages);
+		setCurrentPage(targetPage);
 		window.scrollTo({ top: 0, behavior: "smooth" });
 	};
 
@@ -312,25 +313,29 @@ export default function BlogPage() {
 				</div>
 
 				{totalPages > 1 && (
-					<div className="flex justify-center items-center gap-2">
+					<div className="flex justify-center items-center">
+						<div className="inline-flex items-center gap-1 rounded-full border border-white/60 bg-white/80 backdrop-blur-md p-1.5 shadow-[0_8px_28px_rgba(12,45,112,0.2)]">
 						<button
 							onClick={() => handlePageChange(currentPage - 1)}
 							disabled={currentPage === 1}
-							className="px-3 py-2 bg-white text-[#0C2D70] font-semibold disabled:opacity-40 cursor-pointer hover:bg-gray-100 disabled:cursor-default"
+							aria-label="Go to previous page"
+							className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
 						>
 							<FaChevronLeft />
 						</button>
 						{getPageNumbers().map((page, i) =>
 							page === "..." ? (
-								<span key={`ellipsis-${i}`} className="px-2 text-white font-semibold">…</span>
+								<span key={`ellipsis-${i}`} className="px-1.5 text-[#0C2D70]/60 font-semibold select-none">...</span>
 							) : (
 								<button
 									key={page}
 									onClick={() => handlePageChange(page)}
-									className={`px-3 py-2 font-semibold cursor-pointer ${
+									aria-label={`Go to page ${page}`}
+									aria-current={currentPage === page ? "page" : undefined}
+									className={`h-10 min-w-10 px-3 inline-flex items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35 ${
 										currentPage === page
-											? "bg-[#B32020] text-white"
-											: "bg-white text-[#0C2D70] hover:bg-gray-100"
+											? "bg-[#0C2D70] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)]"
+											: "bg-white/70 text-[#0C2D70] hover:bg-white"
 									}`}
 								>
 									{page}
@@ -340,10 +345,12 @@ export default function BlogPage() {
 						<button
 							onClick={() => handlePageChange(currentPage + 1)}
 							disabled={currentPage === totalPages}
-							className="px-3 py-2 bg-white text-[#0C2D70] font-semibold disabled:opacity-40 cursor-pointer hover:bg-gray-100 disabled:cursor-default"
+							aria-label="Go to next page"
+							className="h-10 w-10 inline-flex items-center justify-center rounded-full bg-white/70 text-[#0C2D70] transition-all duration-200 hover:bg-white disabled:opacity-40 disabled:cursor-default disabled:hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2D70]/35"
 						>
 							<FaChevronRight />
 						</button>
+						</div>
 					</div>
 				)}
 			</section>

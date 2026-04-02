@@ -320,38 +320,36 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
             conn.commit()
 
         unsubscribe_url = _build_newsletter_unsubscribe_url(email)
-        try:
-            _send_newsletter_confirmation_email(email, unsubscribe_url)
-            email_status = "sent"
-        except HTTPException as email_error:
-            logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
-            email_status = "failed"
+        if duplicate:
+            email_status = "skipped"
+        else:
+            try:
+                _send_newsletter_confirmation_email(email, unsubscribe_url)
+                email_status = "sent"
+            except HTTPException as email_error:
+                logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
+                email_status = "failed"
 
         # Notify company (non-critical)
         _send_newsletter_notification_email(email)
+
+        if duplicate:
+            return {
+                "success": True,
+                "emailStatus": "skipped",
+                "duplicate": True,
+                "message": "This email is already subscribed to the mailing list.",
+            }
 
         if email_status == "sent":
             return {
                 "success": True,
                 "emailStatus": "sent",
-                **(
-                    {
-                        "duplicate": True,
-                        "message": "This email is already subscribed to the mailing list.",
-                    }
-                    if duplicate
-                    else {}
-                ),
             }
         return {
             "success": True,
             "emailStatus": "failed",
-            **({"duplicate": True} if duplicate else {}),
-            "message": (
-                "This email is already subscribed to the mailing list. We could not resend confirmation email right now."
-                if duplicate
-                else "Subscription saved, but confirmation email could not be sent."
-            ),
+            "message": "Subscription saved, but confirmation email could not be sent.",
         }
     except Exception as e:
         _raise_internal_api_error("subscribe_newsletter failed", e)
