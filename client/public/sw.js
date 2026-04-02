@@ -1,27 +1,58 @@
-// Basic service worker for caching static assets
-const CACHE_NAME = "pspah-v1";
+// Basic service worker for caching static assets only
+const CACHE_NAME = "pspah-v2";
 const CLOUDFRONT_URL = "https://d1fyhmg0o2pfye.cloudfront.net";
 const STATIC_CACHE_URLS = [
 	"/",
-	"/assets/",
 	`${CLOUDFRONT_URL}/public/pspah-logo.png`,
 ];
 
-// Install event - cache static assets
+// URLs/origins that must never be cached (API calls, dynamic data)
+const BYPASS_CACHE_ORIGINS = [
+	"supabase.co",
+	"supabase.in",
+	"supabase.io",
+];
+
+function isApiRequest(url) {
+	return BYPASS_CACHE_ORIGINS.some((origin) => url.hostname.includes(origin));
+}
+
+function isStaticAsset(url) {
+	// Same-origin static assets: JS, CSS, fonts, images bundled by Vite
+	if (url.origin === self.location.origin) {
+		return /\.(js|css|woff2?|ttf|eot|png|jpg|jpeg|webp|gif|svg|ico)(\?.*)?$/.test(url.pathname);
+	}
+	// CloudFront images (cache these, they are content-addressed)
+	if (url.hostname === new URL(CLOUDFRONT_URL).hostname) {
+		return true;
+	}
+	return false;
+}
+
+// Install event - cache critical static assets
 self.addEventListener("install", (event) => {
 	event.waitUntil(
 		caches.open(CACHE_NAME).then((cache) => {
 			return cache.addAll(STATIC_CACHE_URLS);
 		})
 	);
+	// Take control immediately
+	self.skipWaiting();
 });
 
-// Fetch event - serve from cache when possible
+// Fetch event - network-first for API, cache-first for static assets
 self.addEventListener("fetch", (event) => {
-	// Only cache GET requests
+	// Only handle GET requests
 	if (event.request.method !== "GET") return;
 
-	// Handle navigation requests
+	const url = new URL(event.request.url);
+
+	// Always go to network for API requests (Supabase, etc.)
+	if (isApiRequest(url)) {
+		return; // Let browser handle it without SW interference
+	}
+
+	// Handle navigation requests - network first, fallback to shell
 	if (event.request.mode === "navigate") {
 		event.respondWith(
 			fetch(event.request).catch(() => {
@@ -31,28 +62,31 @@ self.addEventListener("fetch", (event) => {
 		return;
 	}
 
-	// Handle static assets
-	event.respondWith(
-		caches.match(event.request).then((response) => {
-			// Return cached version or fetch from network
-			return (
-				response ||
-				fetch(event.request).then((response) => {
-					// Cache successful responses
-					if (response.status === 200) {
-						const responseClone = response.clone();
-						caches.open(CACHE_NAME).then((cache) => {
-							cache.put(event.request, responseClone);
-						});
-					}
-					return response;
-				})
-			);
-		})
-	);
+	// Cache-first for known static assets only
+	if (isStaticAsset(url)) {
+		event.respondWith(
+			caches.match(event.request).then((cached) => {
+				return (
+					cached ||
+					fetch(event.request).then((response) => {
+						if (response.status === 200) {
+							const clone = response.clone();
+							caches.open(CACHE_NAME).then((cache) => {
+								cache.put(event.request, clone);
+							});
+						}
+						return response;
+					})
+				);
+			})
+		);
+		return;
+	}
+
+	// For everything else, go to network without caching
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and claim clients immediately
 self.addEventListener("activate", (event) => {
 	event.waitUntil(
 		caches.keys().then((cacheNames) => {
@@ -63,6 +97,6 @@ self.addEventListener("activate", (event) => {
 					}
 				})
 			);
-		})
+		}).then(() => self.clients.claim())
 	);
 });
