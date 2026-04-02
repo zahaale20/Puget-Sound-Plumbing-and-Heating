@@ -1392,15 +1392,102 @@ def _send_coupon_email(
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
                 "subject": f"New Coupon Redemption: {couponId} ({couponDiscount}) — {firstName} {lastName}",
-                "html": f"""<p>A new coupon redemption has been submitted.</p>
-                    <ul>
-                        <li><strong>Name:</strong> {firstName} {lastName}</li>
-                        <li><strong>Email:</strong> {email}</li>
-                        <li><strong>Phone:</strong> {phone}</li>
-                        <li><strong>Coupon ID:</strong> {couponId}</li>
-                        <li><strong>Coupon:</strong> {couponDiscount}</li>
-                        <li><strong>Condition:</strong> {couponCondition}</li>
-                    </ul>""",
+                "html": f"""<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                </head>
+                <body style="margin:0;padding:0;background-color:#f0f0f0;font-family:Arial,Helvetica,sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f0f0;padding:48px 0;">
+                    <tr>
+                    <td align="center">
+                        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:#ffffff;border-radius:6px;overflow:hidden;">
+
+                        <!-- Logo -->
+                        <tr>
+                            <td style="padding:40px 40px 32px;text-align:center;">
+                            <img
+                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                alt="Puget Sound Plumbing and Heating"
+                                width="300"
+                                style="display:block;margin:0 auto;"
+                            />
+                            </td>
+                        </tr>
+
+                        <!-- Divider -->
+                        <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e5e5e5;"></div></td></tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:36px 40px 24px;">
+                            <h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">New Coupon Redemption</h2>
+                            <table cellpadding="0" cellspacing="0" width="100%" style="margin:0;">
+                                <tr>
+                                <td style="padding:10px 0;border-top:1px solid #eeeeee;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Name:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{firstName} {lastName}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Email:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{email}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Phone:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{phone}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Coupon Card -->
+                        <tr>
+                            <td style="padding:0 40px 32px;">
+                            <table cellpadding="0" cellspacing="0" style="width:420px;max-width:100%;margin:0 auto;border:4px dashed #B32020;background-color:#ffffff;">
+                                <tr>
+                                <td style="padding:22px 20px;text-align:center;">
+                                    <table cellpadding="0" cellspacing="0" style="margin:0 auto 12px;">
+                                    <tr>
+                                    <td style="background-color:#B32020;padding:8px 14px;font-size:12px;font-weight:700;color:#ffffff;letter-spacing:0.06em;white-space:nowrap;">
+                                        COUPON ID: {couponId}
+                                    </td>
+                                    </tr>
+                                    </table>
+                                    <p style="margin:0 0 10px;font-size:25px;font-weight:700;color:#0C2D70;text-transform:uppercase;letter-spacing:0.04em;">{couponDiscount}</p>
+                                    <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:#2B2B2B;text-transform:uppercase;letter-spacing:0.03em;">{couponCondition}</p>
+                                    <p style="margin:0;font-size:11px;color:#555555;">Cannot be combined with other offers.</p>
+                                </td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f8f8f8;border-top:1px solid #e5e5e5;padding:20px 40px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#0C2D70;">Puget Sound Plumbing and Heating</p>
+                            <p style="margin:0;font-size:11px;color:#aaaaaa;">Coupon Redemption Alert</p>
+                            </td>
+                        </tr>
+
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>""",
             }
         )
     except Exception:
