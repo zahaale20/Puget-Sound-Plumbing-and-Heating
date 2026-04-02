@@ -592,7 +592,7 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request):
             conn.commit()
 
         try:
-            _send_diy_permit_email(email, first_name, last_name, phone, address, request.city.strip(), request.state.strip(), request.zipCode.strip(), request.projectDescription.strip())
+            _send_diy_permit_email(email, first_name, last_name, phone, address, request.city.strip(), request.state.strip(), request.zipCode.strip(), request.projectDescription.strip(), request.inspection)
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("DIY permit saved but email failed: %s", email_error.detail)
@@ -1534,7 +1534,7 @@ def _send_coupon_redemption_notification_email(
         logger.exception("Company coupon redemption notification email failed")
 
 
-def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str, address: str, city: str = "", state: str = "", zipCode: str = "", projectDescription: str = ""):
+def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str, address: str, city: str = "", state: str = "", zipCode: str = "", projectDescription: str = "", inspection: str = "unsure"):
     """Internal helper – send DIY permit confirmation to requester + company notification."""
     # 1. Confirmation to requester
     try:
@@ -1735,6 +1735,14 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
                                 </td>
                                 </tr>
                                 {"<tr><td style=\"padding:10px 0;border-bottom:1px solid #eeeeee;\"><table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td style=\"width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;\">Project:</td><td style=\"font-size:14px;color:#2B2B2B;\">" + projectDescription + "</td></tr></table></td></tr>" if projectDescription else ""}
+                                <tr>
+                                <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
+                                    <table cellpadding="0" cellspacing="0" width="100%"><tr>
+                                    <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Inspection:</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{'Yes' if inspection == 'yes' else 'No' if inspection == 'no' else 'Not sure'}</td>
+                                    </tr></table>
+                                </td>
+                                </tr>
                             </table>
                             </td>
                         </tr>

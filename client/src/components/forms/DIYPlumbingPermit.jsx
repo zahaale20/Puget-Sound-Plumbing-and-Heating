@@ -238,6 +238,21 @@ export default function DIYPlumbingPermit() {
 					/>
 				</div>
 
+				{/* Inspection */}
+				<div>
+					<label className="text-[#2B2B2B]">Do you need an inspection?</label>
+					<select
+						name="inspection"
+						value={formData.inspection}
+						onChange={handleChange}
+						className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
+					>
+						<option value="unsure">Not sure</option>
+						<option value="yes">Yes</option>
+						<option value="no">No</option>
+					</select>
+				</div>
+
 				{/* Submit */}
 				<div className="flex justify-center mt-4">
 					{submitSuccess ? (
