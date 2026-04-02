@@ -53,20 +53,20 @@ export default function OurServices() {
 					<button
 						key={idx}
 						onClick={() => navigate(service.path)}
-						className="group relative overflow-hidden flex flex-col text-left p-6 cursor-pointer bg-white hover:bg-[#DEDEDE] border-1 border-[#DEDEDE]"
+						className="group relative overflow-hidden flex flex-col text-left p-6 h-[280px] cursor-pointer bg-white hover:bg-[#DEDEDE] border-1 border-[#DEDEDE]"
 					>
 						{/* Image — both variants stacked; color fades in on hover */}
 						<div className="relative w-12 h-12 mb-6 shrink-0">
 							<img
 								src={imageUrls[service.imageKey]}
 								alt={service.title}
-								className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+								className="absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ease-in-out opacity-100 group-hover:opacity-0"
 							/>
 							<img
 								src={imageUrls[service.imageColorKey]}
 								alt=""
 								aria-hidden="true"
-								className="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+								className="absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ease-in-out opacity-0 group-hover:opacity-100"
 							/>
 						</div>
 

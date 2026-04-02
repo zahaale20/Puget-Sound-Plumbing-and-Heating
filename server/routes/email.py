@@ -434,7 +434,7 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
 
 @router.post("/redeem-offer")
 async def redeem_offer(request: RedeemOfferRequest, req: Request):
-    """Insert coupon redemption into DB and send coupon email"""
+    """Send coupon confirmation, persist redemption, then notify company."""
     # Check rate limit
     client_ip = _get_client_ip(req)
     is_allowed, rate_limit_msg = check_rate_limit(client_ip, "redeem-offer")
@@ -455,6 +455,36 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
     coupon_id = _generate_coupon_id(request.couponDiscount)
 
     try:
+        # Fast duplicate check so we avoid re-sending coupon emails for the same redemption.
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT 1
+                    FROM "Redeemed Offers"
+                    WHERE email = %s
+                      AND phone = %s
+                      AND coupon_discount = %s
+                      AND coupon_condition = %s
+                    LIMIT 1
+                    """,
+                    (email, phone, request.couponDiscount, request.couponCondition),
+                )
+                if cur.fetchone():
+                    return _duplicate_response(
+                        "This coupon request already exists for this contact. Please check your email for your coupon."
+                    )
+
+        # 1) Send coupon email to customer first.
+        _send_coupon_confirmation_email(
+            email,
+            first_name,
+            coupon_id,
+            request.couponDiscount,
+            request.couponCondition,
+        )
+
+        # 2) Persist the redemption in Supabase.
         with get_db_connection() as conn:
             with conn.cursor() as cur:
                 try:
@@ -483,24 +513,20 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                     raise
             conn.commit()
 
-        try:
-            _send_coupon_email(
-                email,
-                first_name,
-                last_name,
-                request.phone,
-                coupon_id,
-                request.couponDiscount,
-                request.couponCondition,
-            )
-            return {"success": True, "emailStatus": "sent"}
-        except HTTPException as email_error:
-            logger.exception("Offer saved but coupon email failed: %s", email_error.detail)
-            return {
-                "success": True,
-                "emailStatus": "failed",
-                "message": "Offer saved, but coupon email could not be sent.",
-            }
+        # 3) Notify the company after customer + DB steps complete.
+        _send_coupon_redemption_notification_email(
+            email,
+            first_name,
+            last_name,
+            phone,
+            coupon_id,
+            request.couponDiscount,
+            request.couponCondition,
+        )
+
+        return {"success": True, "emailStatus": "sent"}
+    except HTTPException as e:
+        raise e
     except Exception as e:
         _raise_internal_api_error("redeem_offer failed", e)
 
@@ -1247,17 +1273,14 @@ def _send_newsletter_unsubscribe_notification_email(email: str):
         logger.exception("Company newsletter unsubscribe notification email failed")
 
 
-def _send_coupon_email(
+def _send_coupon_confirmation_email(
     email: str,
     firstName: str,
-    lastName: str,
-    phone: str,
     couponId: str,
     couponDiscount: str,
     couponCondition: str,
 ):
-    """Internal helper – send coupon confirmation to customer and notify the company."""
-    # 1. Coupon confirmation to customer
+    """Send coupon confirmation email to the customer."""
     try:
         resend.Emails.send(
             {
@@ -1385,7 +1408,17 @@ def _send_coupon_email(
             detail=f"Coupon email send failed for sender '{EMAIL_FROM}': {str(e)}",
         )
 
-    # 2. Notification to company
+
+def _send_coupon_redemption_notification_email(
+    email: str,
+    firstName: str,
+    lastName: str,
+    phone: str,
+    couponId: str,
+    couponDiscount: str,
+    couponCondition: str,
+):
+    """Send coupon redemption notification email to the company."""
     try:
         resend.Emails.send(
             {

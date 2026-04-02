@@ -18,6 +18,14 @@ from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 import boto3
 from pathlib import Path
+from dotenv import load_dotenv
+import psycopg2
+from psycopg2.extras import Json
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+load_dotenv(PROJECT_ROOT / "server" / ".env")
+load_dotenv(PROJECT_ROOT / ".env")
+load_dotenv()
 
 BASE_URL = "https://pugetsoundplumbing.com"
 BLOG_URL = f"{BASE_URL}/blog/"
@@ -328,6 +336,7 @@ def scrape_blog_post(post_url, post_id):
         "link": f"/blog/{slug}",
         "date": date,
         "author": author,
+        "views": 0,
         "categories": categories,
         "description": description,
         "featured_image_url": featured_image,
@@ -338,6 +347,142 @@ def scrape_blog_post(post_url, post_id):
     }
 
     return post_data
+
+
+def _get_supabase_db_connection():
+    required_vars = ["SUPABASE_USER", "SUPABASE_PASSWORD", "SUPABASE_HOST", "SUPABASE_PORT", "SUPABASE_DBNAME"]
+    if any(not os.getenv(var) for var in required_vars):
+        return None
+
+    return psycopg2.connect(
+        user=os.getenv("SUPABASE_USER"),
+        password=os.getenv("SUPABASE_PASSWORD"),
+        host=os.getenv("SUPABASE_HOST"),
+        port=os.getenv("SUPABASE_PORT"),
+        dbname=os.getenv("SUPABASE_DBNAME"),
+    )
+
+
+def sync_posts_to_supabase(posts):
+    """Upsert scraped posts into Supabase Blog Posts table."""
+    conn = _get_supabase_db_connection()
+    if conn is None:
+        print("Skipping Supabase sync: missing SUPABASE_* environment variables.")
+        return
+
+    rename_sql = """
+    DO $$
+    BEGIN
+        IF to_regclass('public."Blog Posts"') IS NULL
+           AND to_regclass('public.blog_posts') IS NOT NULL THEN
+            EXECUTE 'ALTER TABLE public.blog_posts RENAME TO "Blog Posts"';
+        END IF;
+    END $$;
+    """
+
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS public."Blog Posts" (
+        id BIGSERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        source_url TEXT NOT NULL DEFAULT '',
+        published_date TEXT,
+        author TEXT NOT NULL DEFAULT 'Puget Sound Plumbing',
+        views BIGINT NOT NULL DEFAULT 0 CHECK (views >= 0),
+        content_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+        featured_image_s3_key TEXT,
+        content_image_s3_keys JSONB NOT NULL DEFAULT '[]'::jsonb,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    ALTER TABLE public."Blog Posts"
+        DROP COLUMN IF EXISTS source_post_id,
+        DROP COLUMN IF EXISTS url,
+        DROP COLUMN IF EXISTS link,
+        DROP COLUMN IF EXISTS categories,
+        DROP COLUMN IF EXISTS description,
+        DROP COLUMN IF EXISTS featured_image_url,
+        DROP COLUMN IF EXISTS content_images,
+        DROP COLUMN IF EXISTS sections;
+
+    ALTER TABLE public."Blog Posts"
+        ADD COLUMN IF NOT EXISTS source_url TEXT NOT NULL DEFAULT '',
+        ADD COLUMN IF NOT EXISTS content_json JSONB NOT NULL DEFAULT '{}'::jsonb;
+    """
+
+    upsert_sql = """
+    INSERT INTO public."Blog Posts" (
+        title,
+        slug,
+        source_url,
+        published_date,
+        author,
+        views,
+        content_json,
+        featured_image_s3_key,
+        content_image_s3_keys
+    ) VALUES (
+        %(title)s,
+        %(slug)s,
+        %(source_url)s,
+        %(published_date)s,
+        %(author)s,
+        %(views)s,
+        %(content_json)s,
+        %(featured_image_s3_key)s,
+        %(content_image_s3_keys)s
+    )
+    ON CONFLICT (slug) DO UPDATE SET
+        title = EXCLUDED.title,
+        source_url = EXCLUDED.source_url,
+        published_date = EXCLUDED.published_date,
+        author = EXCLUDED.author,
+        views = CASE
+            WHEN EXCLUDED.views > 0 THEN EXCLUDED.views
+            ELSE public."Blog Posts".views
+        END,
+        content_json = EXCLUDED.content_json,
+        featured_image_s3_key = EXCLUDED.featured_image_s3_key,
+        content_image_s3_keys = EXCLUDED.content_image_s3_keys,
+        updated_at = NOW();
+    """
+
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(rename_sql)
+                cur.execute(create_table_sql)
+
+                for post in posts:
+                    cur.execute(
+                        upsert_sql,
+                        {
+                            "title": post.get("title", ""),
+                            "slug": post.get("slug", ""),
+                            "source_url": post.get("url", ""),
+                            "published_date": post.get("date", ""),
+                            "author": post.get("author") or "Puget Sound Plumbing",
+                            "views": post.get("views", 0),
+                            "content_json": Json(
+                                {
+                                    "link": post.get("link", ""),
+                                    "description": post.get("description", ""),
+                                    "categories": post.get("categories", []),
+                                    "content_images": post.get("content_images", []),
+                                    "sections": post.get("sections", []),
+                                }
+                            ),
+                            "featured_image_s3_key": post.get("featured_image_s3_key", ""),
+                            "content_image_s3_keys": Json(post.get("content_image_s3_keys", [])),
+                        },
+                    )
+
+        print(f"Synced {len(posts)} blog posts to Supabase table public.\"Blog Posts\".")
+    except Exception as e:
+        print(f"Supabase sync failed: {e}")
+    finally:
+        conn.close()
 
 
 def download_image(url, save_dir):
@@ -517,6 +662,12 @@ def main():
     total_images = sum(1 for p in all_posts if p["featured_image_s3_key"]) + \
                    sum(len(p["content_image_s3_keys"]) for p in all_posts)
     print(f"Total images uploaded: {total_images}")
+
+    # Step 4: Persist to Supabase
+    print("\n" + "=" * 60)
+    print("STEP 4: Syncing posts to Supabase")
+    print("=" * 60)
+    sync_posts_to_supabase(all_posts)
 
 
 if __name__ == "__main__":

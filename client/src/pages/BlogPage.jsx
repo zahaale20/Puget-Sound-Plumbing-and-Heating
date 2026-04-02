@@ -1,26 +1,23 @@
-import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaUser, FaEye } from "react-icons/fa";
-
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaUser, FaEye } from "react-icons/fa";
+import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-
-import { categoryOptions, sortOptions, posts } from "../data/data";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+
+const sortOptions = [
+	{ name: "Most Recent", value: "dateDesc" },
+	{ name: "Oldest", value: "dateAsc" },
+	{ name: "Most Viewed", value: "viewsDesc" },
+	{ name: "Title (A-Z)", value: "titleAsc" },
+	{ name: "Title (Z-A)", value: "titleDesc" },
+];
 
 export default function BlogPage() {
 	const navigate = useNavigate();
-	const [imageUrls, setImageUrls] = useState({});
-
-	useEffect(() => {
-		const uniqueKeys = [...new Set(posts.map((p) => p.imageKey))];
-		const loadImages = async () => {
-			const entries = await Promise.all(uniqueKeys.map((key) => [key, getCloudFrontUrl(key)]));
-			setImageUrls(Object.fromEntries(entries));
-		};
-		loadImages();
-	}, []);
-
-	// State
+	const [posts, setPosts] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [loadError, setLoadError] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState("All");
 	const [selectedSort, setSelectedSort] = useState("dateDesc");
@@ -30,10 +27,35 @@ export default function BlogPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const POSTS_PER_PAGE = 6;
 
-	// Utils
-	const parseDate = (d) => new Date(d);
+	useEffect(() => {
+		const loadPosts = async () => {
+			try {
+				setIsLoading(true);
+				const data = await fetchBlogPosts();
+				setPosts(data);
+				setLoadError("");
+			} catch (error) {
+				console.error("Failed to load blog posts", error);
+				setLoadError("We couldn't load blog posts right now. Please try again shortly.");
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		loadPosts();
+	}, []);
+
+	const categoryOptions = [
+		"All",
+		...Array.from(new Set(posts.flatMap((post) => post.keywords || []).filter(Boolean))).sort(),
+	];
+
+	const parseDate = (d) => new Date(d || 0);
 	const normalize = (s) => (s || "").toString().toLowerCase();
-	const truncateText = (text, max) => (text.length > max ? text.slice(0, max) + "..." : text);
+	const truncateText = (text, max) => {
+		const safeText = text || "";
+		return safeText.length > max ? safeText.slice(0, max) + "..." : safeText;
+	};
 
 	const handleOpen = (type) => {
 		clearTimeout(dropdownTimeout.current);
@@ -55,21 +77,21 @@ export default function BlogPage() {
 
 	const matchesCategory = (post) => {
 		if (selectedCategory === "All") return true;
-		return post.keywords.includes(selectedCategory);
+		return (post.keywords || []).includes(selectedCategory);
 	};
 
 	const matchesKeywords = (post) => {
 		const tokens = normalize(searchTerm).split(/\s+/).filter(Boolean);
 		if (tokens.length === 0) return true;
 		const haystack = normalize(
-			post.title + " " + post.description + " " + post.author + " " + post.keywords.join(" ")
+			post.title + " " + post.description + " " + post.author + " " + (post.keywords || []).join(" ")
 		);
 		return tokens.every((token) => haystack.includes(token));
 	};
 
-	let filtered = posts.filter((post) => matchesCategory(post) && matchesKeywords(post));
+	const filtered = posts.filter((post) => matchesCategory(post) && matchesKeywords(post));
 
-	let sorted = [...filtered].sort((a, b) => {
+	const sorted = [...filtered].sort((a, b) => {
 		switch (selectedSort) {
 			case "dateDesc":
 				return parseDate(b.date) - parseDate(a.date);
@@ -95,39 +117,41 @@ export default function BlogPage() {
 		setSearchTerm(e.target.value);
 		setCurrentPage(1);
 	};
+
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
 		setFilterDropdownOpen(false);
 		setCurrentPage(1);
 	};
+
 	const handleSortSelect = (value) => {
 		setSelectedSort(value);
 		setSortDropdownOpen(false);
 		setCurrentPage(1);
 	};
+
 	const handleNextPage = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
 	};
-	const handleReadPost = (link) => navigate(link);
 
 	const PostCard = ({ post }) => (
 		<div className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]">
 			<ImageWithLoader
-				src={imageUrls[post.imageKey]}
+				src={getCloudFrontUrl(post.featuredImageKey)}
 				alt={post.title}
 				className="w-full h-48 object-cover"
 				loading="lazy"
 			/>
 			<div className="p-6 flex flex-col flex-1">
 				<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#949494] mb-2">
-					<span className="flex items-center gap-1"><FaRegCalendarAlt /> {post.date}</span>
+					<span className="flex items-center gap-1"><FaRegCalendarAlt /> {new Date(post.date).toLocaleDateString()}</span>
 					<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
 					<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 				</div>
 				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>
 				<button
-					onClick={() => handleReadPost(post.link)}
+					onClick={() => navigate(`/blog/${post.slug}`)}
 					className="text-[#0C2D70] font-semibold mt-4 flex items-center gap-2 hover:underline cursor-pointer transition-colors"
 				>
 					Continue Reading <FaArrowRight />
@@ -138,7 +162,6 @@ export default function BlogPage() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			{/* Header */}
 			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
 				<img
 					src={getCloudFrontUrl("private/pattern1.png")}
@@ -157,7 +180,6 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* Search + Filter + Sort */}
 			<section className="w-full bg-white pt-16 mb-6 text-[#2B2B2B]">
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 					<div className="relative w-full">
@@ -172,7 +194,6 @@ export default function BlogPage() {
 					</div>
 
 					<div className="flex flex-wrap lg:col-span-2">
-						{/* Filter Dropdown */}
 						<div
 							className="relative inline-block text-left z-10"
 							onMouseEnter={() => handleOpen("filter")}
@@ -208,7 +229,6 @@ export default function BlogPage() {
 							)}
 						</div>
 
-						{/* Sort Dropdown */}
 						<div
 							className="relative inline-block text-left z-10"
 							onMouseEnter={() => handleOpen("sort")}
@@ -247,7 +267,18 @@ export default function BlogPage() {
 				</div>
 			</section>
 
-			{/* Blog Cards (Top - White) */}
+			{isLoading && (
+				<section className="bg-white w-full pb-6">
+					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">Loading blog posts...</div>
+				</section>
+			)}
+
+			{loadError && !isLoading && (
+				<section className="bg-white w-full pb-6">
+					<div className="max-w-7xl mx-auto px-6 text-[#B32020]">{loadError}</div>
+				</section>
+			)}
+
 			{topPosts.length > 0 && (
 				<section className="bg-white w-full pb-6">
 					<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -258,7 +289,6 @@ export default function BlogPage() {
 				</section>
 			)}
 
-			{/* Blog Cards (Bottom - Skyline) */}
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
 				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}

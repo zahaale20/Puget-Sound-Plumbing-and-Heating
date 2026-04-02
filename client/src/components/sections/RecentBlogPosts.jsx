@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight } from "react-icons/fa";
-import { posts } from "../../data/data";
+import { fetchBlogPosts } from "../../services/blogService";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
-	const [imageUrls, setImageUrls] = useState({});
-
-	const recentPosts = posts.slice(0, 3);
+	const [recentPosts, setRecentPosts] = useState([]);
 
 	useEffect(() => {
-		const uniqueKeys = [...new Set(recentPosts.map((p) => p.imageKey))];
-		const loadImages = async () => {
-			const entries = await Promise.all(uniqueKeys.map((key) => [key, getCloudFrontUrl(key)]));
-			setImageUrls(Object.fromEntries(entries));
+		const loadRecentPosts = async () => {
+			try {
+				const allPosts = await fetchBlogPosts();
+				setRecentPosts(allPosts.slice(0, 3));
+			} catch (error) {
+				console.error("Failed to load recent blog posts", error);
+			}
 		};
-		loadImages();
+
+		loadRecentPosts();
 	}, []);
 
 	const truncateText = (text, maxLength) => {
@@ -45,7 +47,7 @@ export default function RecentBlogPosts() {
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 						{/* Image */}
 						<ImageWithLoader
-							src={imageUrls[post.imageKey]}
+							src={getCloudFrontUrl(post.featuredImageKey)}
 							alt={post.title}
 							className="w-full h-48 object-cover"
 							loading="lazy"
@@ -54,14 +56,14 @@ export default function RecentBlogPosts() {
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
 							<div className="flex items-center gap-2 text-[#949494] text-sm mb-2">
-								<FaRegCalendarAlt /> <span>{post.date}</span>
+								<FaRegCalendarAlt /> <span>{new Date(post.date).toLocaleDateString()}</span>
 							</div>
 							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 							<span className="text-[#2B2B2B] flex-1 mb-6">
 								{truncateText(post.description, 152)}..
 							</span>
 							<button
-								onClick={() => navigate(post.link)}
+								onClick={() => navigate(`/blog/${post.slug}`)}
 								className="text-[#0C2D70] font-semibold text-sm flex items-center gap-2 hover:underline transition-colors cursor-pointer"
 							>
 								Continue Reading <FaArrowRight />
