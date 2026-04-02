@@ -84,10 +84,14 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						<div className="flex flex-wrap items-center gap-4 text-[#949494] text-sm mb-4">
-							<span className="flex items-center gap-2"><FaRegCalendarAlt /> {new Date(post.date).toLocaleDateString()}</span>
-							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
-							<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
+						<div className="text-[#949494] text-sm mb-4 space-y-2">
+							<div className="flex items-center gap-2">
+								<FaRegCalendarAlt /> {new Date(post.date).toLocaleDateString()}
+							</div>
+							<div className="flex items-center justify-between gap-4">
+								<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
+								<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
+							</div>
 						</div>
 						<h3 className="text-[#0C2D70] mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
