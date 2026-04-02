@@ -534,8 +534,8 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request):
                     cur.execute(
                         """
                         INSERT INTO "DIY Permit Requests"
-                            (first_name, last_name, email, phone, address, city, project_description, inspection)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            (first_name, last_name, email, phone, address, city, state, zip_code, project_description, inspection)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                         """,
                         (
                             first_name,
@@ -544,6 +544,8 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request):
                             phone,
                             address,
                             request.city.strip(),
+                            request.state.strip(),
+                            request.zipCode.strip(),
                             request.projectDescription.strip(),
                             request.inspection,
                         ),
@@ -558,7 +560,7 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request):
             conn.commit()
 
         try:
-            _send_diy_permit_email(email, first_name, last_name, phone, address, request.city.strip(), request.projectDescription.strip())
+            _send_diy_permit_email(email, first_name, last_name, phone, address, request.city.strip(), request.state.strip(), request.zipCode.strip(), request.projectDescription.strip())
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception("DIY permit saved but email failed: %s", email_error.detail)
@@ -641,7 +643,7 @@ async def submit_job_application(
         if resume:
             resume_bytes = await resume.read()
             resume_filename = resume.filename
-            # Upload resume to separate S3 bucket
+            # Upload resume to resumes/ prefix in the main S3 bucket
             resume_s3_key = s3_service.upload_resume(resume_bytes, resume_filename)
             if not resume_s3_key:
                 logger.warning(f"Failed to upload resume {resume_filename} to S3, will attach to email anyway")
@@ -1406,7 +1408,7 @@ def _send_coupon_email(
         logger.exception("Company coupon redemption notification email failed")
 
 
-def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str, address: str, city: str = "", projectDescription: str = ""):
+def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str, address: str, city: str = "", state: str = "", zipCode: str = "", projectDescription: str = ""):
     """Internal helper – send DIY permit confirmation to requester + company notification."""
     # 1. Confirmation to requester
     try:
@@ -1602,7 +1604,7 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
                                 <td style="padding:10px 0;border-bottom:1px solid #eeeeee;">
                                     <table cellpadding="0" cellspacing="0" width="100%"><tr>
                                     <td style="width:140px;font-size:13px;font-weight:700;color:#0C2D70;vertical-align:top;padding-right:16px;">Address:</td>
-                                    <td style="font-size:14px;color:#2B2B2B;">{address}{f", {city}" if city else ""}</td>
+                                    <td style="font-size:14px;color:#2B2B2B;">{address}{f", {city}" if city else ""}{f", {state}" if state else ""}{f" {zipCode}" if zipCode else ""}</td>
                                     </tr></table>
                                 </td>
                                 </tr>

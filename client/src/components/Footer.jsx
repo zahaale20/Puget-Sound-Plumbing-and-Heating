@@ -197,7 +197,7 @@ export default function Footer() {
 					<div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
 						{/* Services */}
 						<div>
-							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+							<h5 className="relative inline-block py-1 mb-4 w-fit">
 								Our Services
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
@@ -227,7 +227,7 @@ export default function Footer() {
 
 						{/* Resources */}
 						<div>
-							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+							<h5 className="relative inline-block py-1 mb-4 w-fit">
 								Resources For You
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
@@ -262,7 +262,7 @@ export default function Footer() {
 
 						{/* Company */}
 						<div>
-							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+							<h5 className="relative inline-block py-1 mb-4 w-fit">
 								Our Company
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>
@@ -292,7 +292,7 @@ export default function Footer() {
 
 						{/* Socials */}
 						<div>
-							<h5 className="relative inline-block py-1 mb-4 text-lg font-semibold w-fit">
+							<h5 className="relative inline-block py-1 mb-4 w-fit">
 								Connect With Us
 								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
 							</h5>

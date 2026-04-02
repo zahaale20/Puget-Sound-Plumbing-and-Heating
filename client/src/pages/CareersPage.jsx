@@ -79,7 +79,7 @@ export default function CareersPage() {
 												<ul className="space-y-1">
 													{job.qualifications.map((q, i) => (
 														<li key={i} className="flex items-start gap-2">
-															<h6 className="text-[#B32020] font-bold">•</h6>
+															<h6 className="text-[#B32020]">•</h6>
 															<span className="leading-relaxed">{q}</span>
 														</li>
 													))}
@@ -97,11 +97,11 @@ export default function CareersPage() {
 												</ul>
 											</div>
 											<div className="mt-4">
-												<h6 className="block font-bold mb-2">Benefits</h6>
+												<h6 className="mb-2">Benefits</h6>
 												<ul className="space-y-1">
 													{job.benefits.map((b, i) => (
 														<li key={i} className="flex items-start gap-2">
-															<h6 className="text-[#B32020] font-bold mt-0.2">•</h6>
+															<h6 className="text-[#B32020]">•</h6>
 															<span className="leading-relaxed">{b}</span>
 														</li>
 													))}

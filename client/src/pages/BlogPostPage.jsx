@@ -63,7 +63,7 @@ export default function BlogPostPage() {
 							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
 							<span className="flex items-center gap-2"><FaEye /> {post.views.toLocaleString()} views</span>
 						</div>
-						<h3 className="text-[#0C2D70] text-3xl md:text-4xl font-bold mb-6">{post.title}</h3>
+						<h3 className="text-[#0C2D70] mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 						</div>

@@ -95,20 +95,22 @@ class TestS3Service:
         from services.s3_service import S3Service
         svc = S3Service.__new__(S3Service)
         svc.s3_client = MagicMock()
-        svc.resumes_bucket = "bucket"
+        svc.bucket = "bucket"
         result = svc.upload_resume(b"pdf-data", "resume.pdf")
-        assert result == "resume.pdf"
+        assert result == "resumes/resume.pdf"
         svc.s3_client.put_object.assert_called_once()
         call_kwargs = svc.s3_client.put_object.call_args[1]
         assert call_kwargs["ContentType"] == "application/pdf"
+        assert call_kwargs["Bucket"] == "bucket"
+        assert call_kwargs["Key"] == "resumes/resume.pdf"
 
     def test_upload_resume_non_pdf(self):
         from services.s3_service import S3Service
         svc = S3Service.__new__(S3Service)
         svc.s3_client = MagicMock()
-        svc.resumes_bucket = "bucket"
+        svc.bucket = "bucket"
         result = svc.upload_resume(b"doc-data", "resume.docx")
-        assert result == "resume.docx"
+        assert result == "resumes/resume.docx"
         call_kwargs = svc.s3_client.put_object.call_args[1]
         assert call_kwargs["ContentType"] == "application/octet-stream"
 
@@ -116,7 +118,7 @@ class TestS3Service:
         from services.s3_service import S3Service
         svc = S3Service.__new__(S3Service)
         svc.s3_client = MagicMock()
-        svc.resumes_bucket = "bucket"
+        svc.bucket = "bucket"
         svc.s3_client.put_object.side_effect = Exception("S3 error")
         assert svc.upload_resume(b"data", "resume.pdf") is None
 
@@ -162,6 +164,8 @@ class TestModels:
             phone="1", address="123 Main",
         )
         assert r.city == ""
+        assert r.state == ""
+        assert r.zipCode == ""
         assert r.inspection == "unsure"
 
 

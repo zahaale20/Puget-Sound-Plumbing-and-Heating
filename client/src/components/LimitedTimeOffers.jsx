@@ -127,7 +127,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 								</div>
 
 								{/* Coupon Discount */}
-								<h4 className="text-[#0C2D70] uppercase border-b-4 border-[#B32020] pb-1 text-3xl">
+								<h4 className="text-[#0C2D70] uppercase border-b-4 border-[#B32020] pb-1">
 									{selectedCoupon?.discount}
 								</h4>
 

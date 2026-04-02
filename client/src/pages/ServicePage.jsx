@@ -140,7 +140,7 @@ export default function ServicePage() {
 							<div key={i} className="flex flex-col gap-6 p-6 bg-white border-1 border-[#DEDEDE]">
 								<div className="flex items-center gap-3">
 									<span className="text-2xl font-bold text-[#0C2D70]">{item.step}.</span>
-									<h5 className="font-bold text-[#0C2D70]">{item.title}</h5>
+									<h5 className="text-[#0C2D70]">{item.title}</h5>
 								</div>
 								<p className="text-[#2B2B2B]">{item.desc}</p>
 							</div>

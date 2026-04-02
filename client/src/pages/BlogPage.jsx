@@ -124,7 +124,7 @@ export default function BlogPage() {
 					<span className="flex items-center gap-1"><FaUser /> {post.author}</span>
 					<span className="flex items-center gap-1"><FaEye /> {post.views.toLocaleString()}</span>
 				</div>
-				<h5 className="text-[#0C2D70] font-semibold mb-2">{post.title}</h5>
+				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>
 				<button
 					onClick={() => handleReadPost(post.link)}
