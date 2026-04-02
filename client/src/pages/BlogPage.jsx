@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaUser } from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
@@ -116,9 +116,14 @@ export default function BlogPage() {
 	});
 
 	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
-	const slicedPosts = sorted.slice(0, currentPage * POSTS_PER_PAGE);
-	const topPosts = slicedPosts.length > 6 ? slicedPosts.slice(0, slicedPosts.length - 6) : [];
-	const bottomPosts = slicedPosts.slice(-6);
+	const currentPagePosts = sorted.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+
+	const getPageNumbers = () => {
+		if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+		if (currentPage <= 4) return [1, 2, 3, 4, 5, "...", totalPages];
+		if (currentPage >= totalPages - 3) return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+		return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
+	};
 
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value);
@@ -137,8 +142,9 @@ export default function BlogPage() {
 		setCurrentPage(1);
 	};
 
-	const handleNextPage = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+	const handlePageChange = (page) => {
+		setCurrentPage(page);
+		window.scrollTo({ top: 0, behavior: "smooth" });
 	};
 
 	const PostCard = ({ post }) => (
@@ -150,6 +156,7 @@ export default function BlogPage() {
 				loading="lazy"
 			/>
 			<div className="p-6 flex flex-col flex-1">
+				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<div className="text-sm text-[#949494] mb-2 flex justify-between items-start gap-3">
 					<div className="flex flex-col items-start gap-1">
 						<div className="flex items-center gap-1">
@@ -159,7 +166,6 @@ export default function BlogPage() {
 					</div>
 					<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
 				</div>
-				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
 				<p className="text-[#2B2B2B] flex-1">{truncateText(post.description, 150)}</p>
 				<button
 					onClick={() => navigate(`/blog/${post.slug}`)}
@@ -290,16 +296,6 @@ export default function BlogPage() {
 				</section>
 			)}
 
-			{topPosts.length > 0 && (
-				<section className="bg-white w-full pb-6">
-					<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-						{topPosts.map((post) => (
-							<PostCard key={post.id} post={post} />
-						))}
-					</div>
-				</section>
-			)}
-
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
 				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
@@ -310,21 +306,46 @@ export default function BlogPage() {
 				/>
 
 				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-					{bottomPosts.map((post) => (
+					{currentPagePosts.map((post) => (
 						<PostCard key={post.id} post={post} />
 					))}
 				</div>
 
-				<div className="flex justify-center">
-					{currentPage < totalPages && (
+				{totalPages > 1 && (
+					<div className="flex justify-center items-center gap-2">
 						<button
-							onClick={handleNextPage}
-							className="px-6 py-3 bg-[#B32020] text-white font-semibold cursor-pointer hover:bg-[#7a1515]"
+							onClick={() => handlePageChange(currentPage - 1)}
+							disabled={currentPage === 1}
+							className="px-3 py-2 bg-white text-[#0C2D70] font-semibold disabled:opacity-40 cursor-pointer hover:bg-gray-100 disabled:cursor-default"
 						>
-							Load More
+							<FaChevronLeft />
 						</button>
-					)}
-				</div>
+						{getPageNumbers().map((page, i) =>
+							page === "..." ? (
+								<span key={`ellipsis-${i}`} className="px-2 text-white font-semibold">…</span>
+							) : (
+								<button
+									key={page}
+									onClick={() => handlePageChange(page)}
+									className={`px-3 py-2 font-semibold cursor-pointer ${
+										currentPage === page
+											? "bg-[#B32020] text-white"
+											: "bg-white text-[#0C2D70] hover:bg-gray-100"
+									}`}
+								>
+									{page}
+								</button>
+							)
+						)}
+						<button
+							onClick={() => handlePageChange(currentPage + 1)}
+							disabled={currentPage === totalPages}
+							className="px-3 py-2 bg-white text-[#0C2D70] font-semibold disabled:opacity-40 cursor-pointer hover:bg-gray-100 disabled:cursor-default"
+						>
+							<FaChevronRight />
+						</button>
+					</div>
+				)}
 			</section>
 		</div>
 	);

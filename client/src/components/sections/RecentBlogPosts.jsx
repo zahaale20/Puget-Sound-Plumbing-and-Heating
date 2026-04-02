@@ -62,16 +62,16 @@ export default function RecentBlogPosts() {
 
 						{/* Content Container */}
 						<div className="p-6 flex flex-col flex-1">
-							<div className="text-[#949494] text-sm mb-2 flex justify-between items-start gap-3">
-								<div className="flex flex-col items-start gap-1">
-									<div className="flex items-center gap-2">
-										<FaRegCalendarAlt /> <span>{formatBlogDate(post.date)}</span>
-									</div>
-
+						<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
+						<div className="text-[#949494] text-sm mb-2 flex justify-between items-start gap-3">
+							<div className="flex flex-col items-start gap-1">
+								<div className="flex items-center gap-2">
+									<FaRegCalendarAlt /> <span>{formatBlogDate(post.date)}</span>
 								</div>
-								<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
+
 							</div>
-							<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
+							<span className="flex items-center gap-1 text-right"><FaUser /> {post.author}</span>
+						</div>
 							<span className="text-[#2B2B2B] flex-1 mb-6">
 								{truncateText(post.description, 152)}..
 							</span>

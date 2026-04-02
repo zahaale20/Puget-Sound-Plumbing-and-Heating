@@ -149,7 +149,8 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="p-8 md:p-12">
-						<div className="text-[#949494] text-sm mb-4 flex justify-between items-start gap-3">
+						<h3 className="text-[#0C2D70] mb-4">{post.title}</h3>
+						<div className="text-[#949494] text-sm mb-6 flex justify-between items-start gap-3">
 							<div className="flex flex-col items-start gap-2">
 								<div className="flex items-center gap-2">
 									<FaRegCalendarAlt /> {formatBlogDate(post.date)}
@@ -157,7 +158,6 @@ export default function BlogPostPage() {
 							</div>
 							<span className="flex items-center gap-2 text-right"><FaUser /> {post.author}</span>
 						</div>
-						<h3 className="text-[#0C2D70] mb-6">{post.title}</h3>
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 							{post.sections.map((section, index) => (

@@ -74,8 +74,16 @@ export default function AboutUsPage() {
 				<ServiceCategories />
 			</section>
 
-			<section className="flex flex-col justify-center w-full bg-[#F5F5F5] py-16">
-				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
+			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
+				<img
+					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
+
+				<div className="relative z-10 flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					{/* Title */}
 					<h4 className="text-[#0C2D70] pb-2">
 						<span className="relative inline-block">
@@ -95,7 +103,9 @@ export default function AboutUsPage() {
 					</p>
 				</div>
 
-				<ServiceAreas />
+				<div className="relative z-10">
+					<ServiceAreas />
+				</div>
 			</section>
 		</div>
 	);
