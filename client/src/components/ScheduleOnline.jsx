@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { submitSchedule } from "../services/emailService";
 import { getHCaptchaToken } from "../services/hcaptchaService";
 import FormResponseMessage from "./ui/FormResponseMessage";

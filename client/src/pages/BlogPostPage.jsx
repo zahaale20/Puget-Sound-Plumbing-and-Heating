@@ -46,15 +46,17 @@ export default function BlogPostPage() {
 		if (post) setPostImageUrl(getCloudFrontUrl(post.featuredImageKey));
 	}, [post]);
 
+	const postSlug = post?.slug;
+
 	useEffect(() => {
 		const bumpViews = async () => {
-			if (!post) return;
+			if (!postSlug) return;
 			try {
-				const updatedViews = await incrementBlogPostViews(post.slug);
+				const updatedViews = await incrementBlogPostViews(postSlug);
 				if (typeof updatedViews === "number") {
 					setPosts((prev) =>
 						prev.map((item) =>
-							item.slug === post.slug ? { ...item, views: updatedViews } : item
+							item.slug === postSlug ? { ...item, views: updatedViews } : item
 						)
 					);
 				}
@@ -64,7 +66,7 @@ export default function BlogPostPage() {
 		};
 
 		bumpViews();
-	}, [post?.slug]);
+	}, [postSlug]);
 
 	if (isLoading) {
 		return <BlogPostSkeleton />;

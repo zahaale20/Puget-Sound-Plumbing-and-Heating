@@ -4,11 +4,11 @@ import { FaArrowRight } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { HomeServices } from "../../data/data";
 
+const services = HomeServices;
+
 export default function OurServices() {
 	const navigate = useNavigate();
 	const [imageUrls, setImageUrls] = useState({});
-
-	const services = HomeServices;
 
 	useEffect(() => {
 		const loadImages = async () => {

@@ -71,13 +71,15 @@ class TestS3Service:
         from services.s3_service import S3Service
         svc = S3Service.__new__(S3Service)
         svc.cloudfront_url = "https://cdn.example.com"
-        assert svc.get_image_url("hero.jpg") == "https://cdn.example.com/hero.jpg"
+        svc.allowed_image_prefixes = ("public/", "private/", "blog-posts-images/")
+        assert svc.get_image_url("public/hero.jpg") == "https://cdn.example.com/public/hero.jpg"
 
     def test_get_image_url_strips_leading_slash(self):
         from services.s3_service import S3Service
         svc = S3Service.__new__(S3Service)
         svc.cloudfront_url = "https://cdn.example.com"
-        assert svc.get_image_url("/hero.jpg") == "https://cdn.example.com/hero.jpg"
+        svc.allowed_image_prefixes = ("public/", "private/", "blog-posts-images/")
+        assert svc.get_image_url("/public/hero.jpg") == "https://cdn.example.com/public/hero.jpg"
 
     def test_get_image_url_none_when_no_cloudfront(self):
         from services.s3_service import S3Service
@@ -97,12 +99,13 @@ class TestS3Service:
         svc.s3_client = MagicMock()
         svc.bucket = "bucket"
         result = svc.upload_resume(b"pdf-data", "resume.pdf")
-        assert result == "resumes/resume.pdf"
+        assert result.startswith("resumes/")
+        assert result.endswith("-resume.pdf")
         svc.s3_client.put_object.assert_called_once()
         call_kwargs = svc.s3_client.put_object.call_args[1]
         assert call_kwargs["ContentType"] == "application/pdf"
         assert call_kwargs["Bucket"] == "bucket"
-        assert call_kwargs["Key"] == "resumes/resume.pdf"
+        assert call_kwargs["Key"] == result
 
     def test_upload_resume_non_pdf(self):
         from services.s3_service import S3Service
@@ -110,9 +113,13 @@ class TestS3Service:
         svc.s3_client = MagicMock()
         svc.bucket = "bucket"
         result = svc.upload_resume(b"doc-data", "resume.docx")
-        assert result == "resumes/resume.docx"
+        assert result.startswith("resumes/")
+        assert result.endswith("-resume.docx")
         call_kwargs = svc.s3_client.put_object.call_args[1]
-        assert call_kwargs["ContentType"] == "application/octet-stream"
+        assert (
+            call_kwargs["ContentType"]
+            == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
 
     def test_upload_resume_s3_error(self):
         from services.s3_service import S3Service
@@ -140,7 +147,7 @@ class TestModels:
 
     def test_schedule_request_defaults(self):
         from models.requests import ScheduleRequest
-        r = ScheduleRequest(firstName="A", lastName="B", phone="1", email="a@b.com")
+        r = ScheduleRequest(firstName="A", lastName="B", phone="2065550100", email="a@b.com")
         assert r.message == ""
         assert r.captchaToken is None
 
@@ -152,8 +159,8 @@ class TestModels:
     def test_redeem_offer_request(self):
         from models.requests import RedeemOfferRequest
         r = RedeemOfferRequest(
-            firstName="A", lastName="B", phone="1",
-            email="a@b.com", couponId="PSPAH-1950", couponDiscount="10%", couponCondition="Any",
+            firstName="A", lastName="B", phone="2065550100",
+            email="a@b.com", couponDiscount="10%", couponCondition="Any",
         )
         assert r.couponDiscount == "10%"
 
@@ -161,7 +168,7 @@ class TestModels:
         from models.requests import DiyPermitRequest
         r = DiyPermitRequest(
             firstName="A", lastName="B", email="a@b.com",
-            phone="1", address="123 Main",
+            phone="2065550100", address="123 Main",
         )
         assert r.city == ""
         assert r.state == ""
@@ -209,19 +216,22 @@ class TestEmailHelpers:
         req.client.host = "192.168.1.1"
         assert _get_client_ip(req) == "192.168.1.1"
 
-    def test_get_client_ip_from_forwarded_header(self):
-        from routes.email import _get_client_ip
+    def test_get_client_ip_from_forwarded_header(self, monkeypatch):
+        import routes.email as mod
+        monkeypatch.setattr(mod, "TRUST_PROXY_HEADERS", True)
         req = MagicMock()
         req.headers.get.return_value = "10.0.0.1, 172.16.0.1"
-        assert _get_client_ip(req) == "10.0.0.1"
+        req.client.host = "192.168.1.1"
+        assert mod._get_client_ip(req) == "10.0.0.1"
 
-    def test_get_client_ip_prefers_forwarded_over_client(self):
+    def test_get_client_ip_prefers_forwarded_over_client(self, monkeypatch):
         """X-Forwarded-For takes priority over request.client (proxy support)."""
-        from routes.email import _get_client_ip
+        import routes.email as mod
+        monkeypatch.setattr(mod, "TRUST_PROXY_HEADERS", True)
         req = MagicMock()
         req.headers.get.return_value = "203.0.113.50"
         req.client.host = "10.0.0.1"  # proxy IP
-        assert _get_client_ip(req) == "203.0.113.50"
+        assert mod._get_client_ip(req) == "203.0.113.50"
 
     def test_get_client_ip_fallback(self):
         from routes.email import _get_client_ip
@@ -233,6 +243,7 @@ class TestEmailHelpers:
     def test_verify_captcha_no_key(self, monkeypatch):
         import routes.email as mod
         monkeypatch.setattr(mod, "HCAPTCHA_SECRET_KEY", None)
+        monkeypatch.setattr(mod, "ALLOW_CAPTCHA_BYPASS", True)
         assert mod._verify_captcha("any-token") is True
 
     def test_verify_captcha_no_token(self, monkeypatch):
