@@ -1,9 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
-import { fetchBlogPosts } from "../../services/blogService";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+
+function RecentPostCardSkeleton() {
+	return (
+		<div className="flex flex-col bg-white border-1 border-[#DEDEDE] min-h-[420px] animate-pulse">
+			<div className="w-full h-48 bg-gray-200" />
+			<div className="p-6 flex flex-col flex-1 gap-3">
+				<div className="h-6 bg-gray-200 w-11/12" />
+				<div className="h-4 bg-gray-100 w-1/2" />
+				<div className="h-4 bg-gray-100 w-1/3" />
+				<div className="h-4 bg-gray-100 w-full mt-2" />
+				<div className="h-4 bg-gray-100 w-full" />
+				<div className="h-4 bg-gray-100 w-4/5" />
+			</div>
+		</div>
+	);
+}
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
@@ -34,6 +49,7 @@ export default function RecentBlogPosts() {
 		if (!shouldLoadPosts) return;
 		const loadRecentPosts = async () => {
 			try {
+				const { fetchBlogPosts } = await import("../../services/blogService");
 				const allPosts = await fetchBlogPosts();
 				setRecentPosts(allPosts.slice(0, 3));
 			} catch (error) {
@@ -72,8 +88,12 @@ export default function RecentBlogPosts() {
 
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{shouldLoadPosts && recentPosts.length === 0 && (
-					<div className="text-[#2B2B2B]">Loading recent posts...</div>
+				{recentPosts.length === 0 && (
+					<>
+						<RecentPostCardSkeleton />
+						<RecentPostCardSkeleton />
+						<RecentPostCardSkeleton />
+					</>
 				)}
 				{recentPosts.map((post) => (
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
