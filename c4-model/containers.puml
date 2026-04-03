@@ -5,6 +5,8 @@ LAYOUT_WITH_LEGEND()
 
 title Container Diagram: PSPAH Digital Ecosystem
 
+' Minor refresh to trigger CI/CD deployment
+
 Person(customers, "Customers", "Home or business owner in the Puget Sound area.")
 Person(pspah, "Puget Sound Plumbing and Heating", "Local plumbing and heating service provider.")
 
