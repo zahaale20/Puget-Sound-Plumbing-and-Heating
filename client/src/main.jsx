@@ -6,7 +6,10 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./index.css";
 import App from "./App.jsx";
 
+const ENABLE_LIVE_CHAT = import.meta.env.VITE_ENABLE_LIVECHAT === "true";
+
 function initLiveChat() {
+	if (!ENABLE_LIVE_CHAT) return;
 	if (!import.meta.env.PROD || typeof window === "undefined") return;
 	if (window.LiveChatWidget || document.getElementById("livechat-tracking-script")) return;
 
@@ -59,6 +62,7 @@ function initLiveChat() {
 }
 
 function initLiveChatDeferred() {
+	if (!ENABLE_LIVE_CHAT) return;
 	if (!import.meta.env.PROD || typeof window === "undefined") return;
 
 	let hasStarted = false;
