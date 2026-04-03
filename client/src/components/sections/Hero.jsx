@@ -30,7 +30,7 @@ export default function Hero() {
 			{/* Content Wrapper (Centered) */}
 			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-16 gap-8">
 				{/* Title */}
-				<h1 className="uppercase leading-tight text-white">
+				<h1 className="uppercase leading-tight text-white text-4xl md:text-5xl lg:text-6xl font-extrabold">
 					{HeroContent.heading.split("\n").map((line, i) => (
 						<span key={i}>
 							{i > 0 && <br />}
