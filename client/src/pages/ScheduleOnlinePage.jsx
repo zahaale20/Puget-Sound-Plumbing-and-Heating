@@ -6,7 +6,7 @@ export default function ScheduleOnlinePage() {
 		<>
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

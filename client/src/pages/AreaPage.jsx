@@ -55,7 +55,7 @@ export default function AreaPage() {
 			{/* Header Section*/}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

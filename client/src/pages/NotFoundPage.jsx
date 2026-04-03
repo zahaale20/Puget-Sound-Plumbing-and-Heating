@@ -15,7 +15,7 @@ export default function NotFoundPage() {
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-24">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					className="absolute inset-0 w-full h-full object-cover z-0"

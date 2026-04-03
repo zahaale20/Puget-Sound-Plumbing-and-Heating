@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 
 const SITE_NAME = "Puget Sound Plumbing and Heating";
-const DEFAULT_IMAGE = "https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png";
+const DEFAULT_IMAGE = "https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo-340.webp";
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
 
 export default function Seo({

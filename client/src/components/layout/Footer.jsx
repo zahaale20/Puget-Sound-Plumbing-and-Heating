@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa6";
 
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
@@ -21,6 +21,7 @@ import { validateEmail } from "../../services/formValidation";
 
 export default function Footer() {
 	const navigate = useNavigate();
+	const footerMainRef = useRef(null);
 	const [patternUrl, setPatternUrl] = useState(null);
 	const [newsletterEmail, setNewsletterEmail] = useState("");
 	const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
@@ -30,7 +31,40 @@ export default function Footer() {
 	const [newsletterError, setNewsletterError] = useState(null);
 
 	useEffect(() => {
-		setPatternUrl(getCloudFrontUrl("private/pattern1.png"));
+		let didLoad = false;
+
+		const loadPattern = () => {
+			if (didLoad) return;
+			didLoad = true;
+			setPatternUrl(getCloudFrontUrl("private/pattern1-1920.webp"));
+		};
+
+		if (typeof window === "undefined") {
+			loadPattern();
+			return;
+		}
+
+		const target = footerMainRef.current;
+		if (!target || typeof window.IntersectionObserver !== "function") {
+			loadPattern();
+			return;
+		}
+
+		const observer = new window.IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					loadPattern();
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: "300px 0px" }
+		);
+
+		observer.observe(target);
+
+		return () => {
+			observer.disconnect();
+		};
 	}, []);
 
 	return (
@@ -84,6 +118,7 @@ export default function Footer() {
 
 			{/* Main Footer */}
 			<div
+				ref={footerMainRef}
 				className="relative flex flex-col items-center w-full py-16"
 				style={{
 					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",

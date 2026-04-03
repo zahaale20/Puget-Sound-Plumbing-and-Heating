@@ -1,9 +1,9 @@
 // Basic service worker for caching static assets only
-const CACHE_NAME = "pspah-v2";
+const CACHE_NAME = "pspah-v3";
 const CLOUDFRONT_URL = "https://d1fyhmg0o2pfye.cloudfront.net";
 const STATIC_CACHE_URLS = [
 	"/",
-	`${CLOUDFRONT_URL}/public/pspah-logo.png`,
+	`${CLOUDFRONT_URL}/public/pspah-logo-340.webp`,
 ];
 
 // URLs/origins that must never be cached (API calls, dynamic data)

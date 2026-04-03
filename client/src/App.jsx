@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
 import RouteSeo from "./components/seo/RouteSeo";
+const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ScheduleOnlinePage = lazy(() => import("./pages/ScheduleOnlinePage"));
@@ -37,7 +37,43 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
-	return <div className="min-h-[40vh]" aria-hidden="true" />;
+	return <div className="flex-1 min-h-screen" aria-hidden="true" />;
+}
+
+function DeferredFooter() {
+	const [shouldRender, setShouldRender] = useState(false);
+	const footerRef = useRef(null);
+
+	useEffect(() => {
+		if (shouldRender) return;
+		const node = footerRef.current;
+		if (!node) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					setShouldRender(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: "350px 0px" }
+		);
+
+		observer.observe(node);
+		return () => observer.disconnect();
+	}, [shouldRender]);
+
+	return (
+		<div ref={footerRef}>
+			{shouldRender ? (
+				<Suspense fallback={<div className="min-h-[460px]" aria-hidden="true" />}>
+					<Footer />
+				</Suspense>
+			) : (
+				<div className="min-h-[460px]" aria-hidden="true" />
+			)}
+		</div>
+	);
 }
 
 function App() {
@@ -48,6 +84,7 @@ function App() {
 			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
 				<Suspense fallback={<RouteFallback />}>
+					<main className="flex-1">
 					<Routes>
 						<Route path="/" element={<HomePage />} />
 
@@ -75,8 +112,9 @@ function App() {
 
 						<Route path="*" element={<NotFoundPage />} />
 					</Routes>
+					</main>
 				</Suspense>
-				<Footer />
+				<DeferredFooter />
 			</div>
 		</BrowserRouter>
 	);
