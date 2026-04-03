@@ -73,10 +73,6 @@
 	background-color: #f9f9f9;
 }
 
-h1 {
-	@apply text-2xl md:text-3xl font-semibold;
-}
-
 h2 {
 	@apply text-3xl md:text-4xl font-bold;
 }
