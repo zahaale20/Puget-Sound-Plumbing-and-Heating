@@ -1,9 +1,11 @@
 import os
 import psycopg2
+import logging
 from contextlib import contextmanager
 from dotenv import load_dotenv
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 @contextmanager
 def get_db_connection():
@@ -26,4 +28,5 @@ def test_db():
                 cur.execute("SELECT NOW();")
                 return cur.fetchone()[0]
     except Exception as e:
-        return f"Error: {e}"
+        logger.exception("Database connectivity test failed: %s", str(e))
+        return "Database connection error"

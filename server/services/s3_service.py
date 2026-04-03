@@ -1,6 +1,9 @@
 import os
 import boto3
 import logging
+import re
+import uuid
+from urllib.parse import quote
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,6 +24,14 @@ class S3Service:
         self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         self.aws_region = os.getenv("AWS_REGION", "us-west-2")
         self.bucket = os.getenv("S3_BUCKET_NAME", "pspah-bucket")
+        self.allowed_image_prefixes = tuple(
+            prefix.strip().lstrip("/")
+            for prefix in os.getenv(
+                "ALLOWED_IMAGE_PREFIXES",
+                "public/,private/,blog-posts-images/",
+            ).split(",")
+            if prefix.strip()
+        )
         
         if not self.cloudfront_url:
             print("ERROR: CLOUDFRONT_URL is missing from environment variables!")
@@ -39,10 +50,22 @@ class S3Service:
         # This makes the loading near-instant for Seattle users
         if not self.cloudfront_url:
             return None
-        
-        # Ensure there is no double slash if object_name starts with /
-        clean_name = object_name.lstrip('/')
-        return f"{self.cloudfront_url}/{clean_name}"
+
+        clean_name = (object_name or "").strip().lstrip("/")
+        if not clean_name or ".." in clean_name or "\\" in clean_name:
+            return None
+
+        if not any(clean_name.startswith(prefix) for prefix in self.allowed_image_prefixes):
+            return None
+
+        return f"{self.cloudfront_url}/{quote(clean_name, safe='/-_.~')}"
+
+    @staticmethod
+    def _safe_filename(filename: str) -> str:
+        filename = os.path.basename((filename or "").strip())
+        filename = re.sub(r"[^a-zA-Z0-9._-]", "_", filename)
+        filename = filename.strip("._")
+        return filename or "resume.pdf"
     
     def upload_resume(self, resume_bytes: bytes, resume_filename: str) -> str:
         """Upload resume to the resumes/ prefix in the main S3 bucket."""
@@ -51,12 +74,21 @@ class S3Service:
             return None
         
         try:
-            s3_key = f"{self.RESUMES_PREFIX}{resume_filename}"
+            safe_filename = self._safe_filename(resume_filename)
+            extension = os.path.splitext(safe_filename)[1].lower()
+            content_type = {
+                ".pdf": "application/pdf",
+                ".doc": "application/msword",
+                ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            }.get(extension, "application/octet-stream")
+
+            s3_key = f"{self.RESUMES_PREFIX}{uuid.uuid4().hex}-{safe_filename}"
             self.s3_client.put_object(
                 Bucket=self.bucket,
                 Key=s3_key,
                 Body=resume_bytes,
-                ContentType="application/pdf" if resume_filename.endswith(".pdf") else "application/octet-stream",
+                ContentType=content_type,
+                ServerSideEncryption="AES256",
             )
             logger.info(f"Resume uploaded to S3: {self.bucket}/{s3_key}")
             return s3_key

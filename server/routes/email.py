@@ -4,6 +4,8 @@ import logging
 import hashlib
 import hmac
 import secrets
+import re
+import html
 import requests
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Response, Request
 from fastapi.responses import HTMLResponse
@@ -19,22 +21,34 @@ router = APIRouter(prefix="/api", tags=["email"])
 resend.api_key = os.getenv("RESEND_API_KEY")
 logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
-COMPANY_EMAIL = "alexthebestest@gmail.com"
+COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "alexthebestest@gmail.com").replace("\r", "").replace("\n", "").strip()
 s3_service = S3Service()
 HCAPTCHA_SECRET_KEY = os.getenv("HCAPTCHA_SECRET_KEY")
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
     or os.getenv("RESEND_API_KEY")
     or os.getenv("SUPABASE_PASSWORD")
-    or "pspah-newsletter-unsubscribe-secret"
+    or secrets.token_urlsafe(32)
 )
+TRUST_PROXY_HEADERS = os.getenv("TRUST_PROXY_HEADERS", "false").lower() == "true"
+ALLOW_CAPTCHA_BYPASS = os.getenv("ALLOW_CAPTCHA_BYPASS", "false").lower() == "true"
+MAX_RESUME_SIZE_BYTES = int(os.getenv("MAX_RESUME_SIZE_BYTES", str(5 * 1024 * 1024)))
+ALLOWED_RESUME_EXTENSIONS = {".pdf", ".doc", ".docx"}
+ALLOWED_RESUME_CONTENT_TYPES = {
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+
+if not os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET"):
+    logger.warning("NEWSLETTER_UNSUBSCRIBE_SECRET not set explicitly; using fallback secret source")
 
 
 def _get_client_ip(request: Request) -> str:
     """Extract client IP from request, accounting for proxies"""
     # Check X-Forwarded-For first — behind Vercel/reverse proxies,
     # request.client.host is the proxy IP, not the real client.
-    forwarded = request.headers.get("x-forwarded-for")
+    forwarded = request.headers.get("x-forwarded-for") if TRUST_PROXY_HEADERS else None
     if forwarded:
         return forwarded.split(",")[0].strip()
     if request.client:
@@ -50,6 +64,18 @@ def _normalize_text(value: str) -> str:
     return value.strip()
 
 
+def _safe_email_address(value: str) -> str:
+    return _normalize_email(value).replace("\r", "").replace("\n", "")
+
+
+def _safe_header_text(value: str) -> str:
+    return re.sub(r"[\r\n]+", " ", (value or "")).strip()
+
+
+def _escape_html(value: str) -> str:
+    return html.escape((value or "").strip(), quote=True)
+
+
 def _is_duplicate_error(error: Exception) -> bool:
     error_text = str(error).lower()
     return "unique" in error_text or "duplicate" in error_text
@@ -63,7 +89,8 @@ def _raise_internal_api_error(context: str, error: Exception):
 def _verify_captcha(token: Optional[str]) -> bool:
     """Verify hCaptcha token (returns True if valid, False otherwise)"""
     if not HCAPTCHA_SECRET_KEY:
-        return True  # Allow if hCaptcha not configured
+        logger.error("HCAPTCHA_SECRET_KEY is missing")
+        return ALLOW_CAPTCHA_BYPASS
     if not token:
         return False  # Reject missing token when hCaptcha is configured
 
@@ -94,15 +121,13 @@ def _duplicate_response(message: str):
     }
 
 
-import re as _re
-
 def _generate_coupon_id(coupon_discount: str) -> str:
     """Generate a unique coupon ID from the discount string plus a random suffix.
 
     Format: PSPAH-<discount_digits>-<6 random hex chars>
     Example: '$19.50 OFF' -> 'PSPAH-1950-a3f7c2'
     """
-    match = _re.search(r"\$(\d+)\.(\d+)", coupon_discount)
+    match = re.search(r"\$(\d+)\.(\d+)", coupon_discount)
     suffix = secrets.token_hex(3)  # 6 hex chars = 16^6 = ~16M combinations
     if match:
         return f"PSPAH-{match.group(1)}{match.group(2)}-{suffix}"
@@ -142,6 +167,33 @@ def _build_newsletter_unsubscribe_url(email: str) -> str:
         f"{normalized_base}/api/newsletter/unsubscribe"
         f"?email={quote(normalized_email)}&token={quote(token)}"
     )
+
+
+def _sanitize_resume_filename(filename: str) -> str:
+    filename = os.path.basename((filename or "").strip())
+    filename = re.sub(r"[^a-zA-Z0-9._-]", "_", filename)
+    filename = filename.strip("._")
+    return filename or "resume.pdf"
+
+
+def _validate_resume_upload(resume: UploadFile, resume_bytes: bytes) -> str:
+    if not resume_bytes:
+        raise HTTPException(status_code=400, detail="Uploaded resume is empty")
+
+    if len(resume_bytes) > MAX_RESUME_SIZE_BYTES:
+        raise HTTPException(status_code=413, detail="Resume file is too large")
+
+    safe_filename = _sanitize_resume_filename(resume.filename or "resume.pdf")
+    extension = os.path.splitext(safe_filename)[1].lower()
+
+    if extension not in ALLOWED_RESUME_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Unsupported resume file type")
+
+    content_type = (resume.content_type or "").lower()
+    if content_type and content_type not in ALLOWED_RESUME_CONTENT_TYPES:
+        raise HTTPException(status_code=400, detail="Unsupported resume content type")
+
+    return safe_filename
 
 
 @router.post("/verify-captcha")
@@ -366,12 +418,12 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
             raise HTTPException(status_code=429, detail=rate_limit_msg)
 
     normalized_email = _normalize_email(email)
-    if token is not None and token.strip():
-        expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
-        if not hmac.compare_digest(token.strip(), expected_token):
-            raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
-    else:
-        logger.warning("Newsletter unsubscribe called without token for email=%s", normalized_email)
+    if token is None or not token.strip():
+        raise HTTPException(status_code=400, detail="Unsubscribe token is required.")
+
+    expected_token = _generate_newsletter_unsubscribe_token(normalized_email)
+    if not hmac.compare_digest(token.strip(), expected_token):
+        raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
 
     try:
         with get_db_connection() as conn:
@@ -672,7 +724,7 @@ async def submit_job_application(
         resume_s3_key = None
         if resume:
             resume_bytes = await resume.read()
-            resume_filename = resume.filename
+            resume_filename = _validate_resume_upload(resume, resume_bytes)
             # Upload resume to resumes/ prefix in the main S3 bucket
             resume_s3_key = s3_service.upload_resume(resume_bytes, resume_filename)
             if not resume_s3_key:
@@ -701,6 +753,9 @@ async def submit_job_application(
 
 def _send_followup_email(email: str, firstName: str):
     """Internal helper – send the follow-up confirmation email."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+
     try:
         resend.Emails.send(
             {
@@ -830,12 +885,19 @@ def _send_followup_email(email: str, firstName: str):
 
 def _send_schedule_notification_email(email: str, firstName: str, lastName: str, phone: str, message: str):
     """Internal helper – notify the business owner of a new schedule request."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+    lastName = _escape_html(lastName)
+    phone = _escape_html(phone)
+    message = _escape_html(message)
+    subject_name = _safe_header_text(f"{firstName} {lastName}")
+
     try:
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"New Service Request — {firstName} {lastName}",
+                "subject": f"New Service Request — {subject_name}",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -920,6 +982,9 @@ def _send_schedule_notification_email(email: str, firstName: str, lastName: str,
 
 def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
     """Internal helper – send the newsletter confirmation email with unsubscribe button."""
+    email = _safe_email_address(email)
+    unsubscribe_url = _escape_html(unsubscribe_url)
+
     try:
         resend.Emails.send(
             {
@@ -1046,6 +1111,8 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
 
 def _send_newsletter_unsubscribe_confirmation_email(email: str):
     """Internal helper – send confirmation after newsletter unsubscribe."""
+    email = _safe_email_address(email)
+
     try:
         resend.Emails.send(
             {
@@ -1132,12 +1199,15 @@ def _send_newsletter_unsubscribe_confirmation_email(email: str):
 
 def _send_newsletter_notification_email(email: str):
     """Internal helper – notify the business owner of a new newsletter subscription."""
+    email = _safe_email_address(email)
+    subject_email = _safe_header_text(email)
+
     try:
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"New Newsletter Subscriber — {email}",
+                "subject": f"New Newsletter Subscriber — {subject_email}",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1205,12 +1275,15 @@ def _send_newsletter_notification_email(email: str):
 
 def _send_newsletter_unsubscribe_notification_email(email: str):
     """Internal helper – notify the business owner of a newsletter unsubscribe."""
+    email = _safe_email_address(email)
+    subject_email = _safe_header_text(email)
+
     try:
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"Newsletter Unsubscribe — {email}",
+                "subject": f"Newsletter Unsubscribe — {subject_email}",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1285,12 +1358,19 @@ def _send_coupon_confirmation_email(
     couponCondition: str,
 ):
     """Send coupon confirmation email to the customer."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+    couponId = _escape_html(couponId)
+    couponDiscount = _escape_html(couponDiscount)
+    couponCondition = _escape_html(couponCondition)
+    subject_coupon_discount = _safe_header_text(couponDiscount)
+
     try:
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": email,
-                "subject": f"Your Coupon: {couponDiscount} — Puget Sound Plumbing and Heating",
+                "subject": f"Your Coupon: {subject_coupon_discount} — Puget Sound Plumbing and Heating",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1423,12 +1503,23 @@ def _send_coupon_redemption_notification_email(
     couponCondition: str,
 ):
     """Send coupon redemption notification email to the company."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+    lastName = _escape_html(lastName)
+    phone = _escape_html(phone)
+    couponId = _escape_html(couponId)
+    couponDiscount = _escape_html(couponDiscount)
+    couponCondition = _escape_html(couponCondition)
+    subject_name = _safe_header_text(f"{firstName} {lastName}")
+    subject_coupon_id = _safe_header_text(couponId)
+    subject_coupon_discount = _safe_header_text(couponDiscount)
+
     try:
         resend.Emails.send(
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"New Coupon Redemption: {couponId} ({couponDiscount}) — {firstName} {lastName}",
+                "subject": f"New Coupon Redemption: {subject_coupon_id} ({subject_coupon_discount}) — {subject_name}",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1534,6 +1625,18 @@ def _send_coupon_redemption_notification_email(
 
 def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str, address: str, city: str = "", state: str = "", zipCode: str = "", projectDescription: str = "", inspection: str = "unsure"):
     """Internal helper – send DIY permit confirmation to requester + company notification."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+    lastName = _escape_html(lastName)
+    phone = _escape_html(phone)
+    address = _escape_html(address)
+    city = _escape_html(city)
+    state = _escape_html(state)
+    zipCode = _escape_html(zipCode)
+    projectDescription = _escape_html(projectDescription)
+    inspection = _escape_html(inspection)
+    subject_name = _safe_header_text(f"{firstName} {lastName}")
+
     # 1. Confirmation to requester
     try:
         resend.Emails.send(
@@ -1667,7 +1770,7 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
             {
                 "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
                 "to": COMPANY_EMAIL,
-                "subject": f"New DIY Permit Request — {firstName} {lastName}",
+                "subject": f"New DIY Permit Request — {subject_name}",
                 "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -1775,6 +1878,13 @@ def _send_job_application_email(
     resume_filename: str | None = None,
 ):
     """Internal helper – send applicant confirmation + company notification with resume."""
+    email = _safe_email_address(email)
+    firstName = _escape_html(firstName)
+    lastName = _escape_html(lastName)
+    position = _escape_html(position)
+    subject_name = _safe_header_text(f"{firstName} {lastName}")
+    subject_position = _safe_header_text(position)
+
     # 1. Confirmation to applicant
     try:
         resend.Emails.send(
@@ -1906,7 +2016,7 @@ def _send_job_application_email(
         company_email_payload = {
             "from": f"Puget Sound Plumbing and Heating <{EMAIL_FROM}>",
             "to": COMPANY_EMAIL,
-            "subject": f"New Job Application: {position} — {firstName} {lastName}",
+            "subject": f"New Job Application: {subject_position} — {subject_name}",
             "html": f"""<!DOCTYPE html>
                 <html lang="en">
                 <head>
