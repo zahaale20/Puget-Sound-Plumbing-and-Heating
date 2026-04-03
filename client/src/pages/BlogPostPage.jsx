@@ -131,7 +131,7 @@ export default function BlogPostPage() {
 				</button>
 
 				{/* Blog Post Content */}
-				<article className="bg-white overflow-hidden">
+				<article className="overflow-hidden">
 					{/* Featured Image */}
 					{postImageUrl ? (
 						<img
