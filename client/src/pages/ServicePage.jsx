@@ -76,7 +76,7 @@ export default function ServicePage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
-					<h1 className="relative inline-block pb-2 w-fit tracking-tight">
+					<h1 className="relative inline-block pb-2 w-fit tracking-tight text-2xl md:text-3xl font-semibold">
 						{serviceName}
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
 					</h1>
