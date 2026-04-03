@@ -75,9 +75,12 @@ export default function Header() {
 						className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<img
-							src={getCloudFrontUrl("public/pspah-logo.png")}
+							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
+							width="340"
+							height="100"
+							decoding="async"
 							fetchPriority="high"
 						/>
 					</button>

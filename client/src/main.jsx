@@ -58,7 +58,31 @@ function initLiveChat() {
 	})(window, document, [].slice);
 }
 
-initLiveChat();
+function initLiveChatDeferred() {
+	if (!import.meta.env.PROD || typeof window === "undefined") return;
+
+	let hasStarted = false;
+	const start = () => {
+		if (hasStarted) return;
+		hasStarted = true;
+		window.removeEventListener("pointerdown", start);
+		window.removeEventListener("keydown", start);
+		window.removeEventListener("scroll", start);
+		initLiveChat();
+	};
+
+	window.addEventListener("pointerdown", start, { once: true, passive: true });
+	window.addEventListener("keydown", start, { once: true });
+	window.addEventListener("scroll", start, { once: true, passive: true });
+
+	if ("requestIdleCallback" in window) {
+		window.requestIdleCallback(start, { timeout: 45000 });
+	} else {
+		window.setTimeout(start, 45000);
+	}
+}
+
+initLiveChatDeferred();
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>

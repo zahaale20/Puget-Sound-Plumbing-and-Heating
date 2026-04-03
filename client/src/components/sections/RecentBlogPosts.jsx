@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../../services/blogService";
@@ -8,8 +8,30 @@ import { ImageWithLoader } from "../ui/LoadingComponents";
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
 	const [recentPosts, setRecentPosts] = useState([]);
+	const [shouldLoadPosts, setShouldLoadPosts] = useState(false);
+	const sectionRef = useRef(null);
 
 	useEffect(() => {
+		if (shouldLoadPosts) return;
+		const node = sectionRef.current;
+		if (!node) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					setShouldLoadPosts(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: "400px 0px" }
+		);
+
+		observer.observe(node);
+		return () => observer.disconnect();
+	}, [shouldLoadPosts]);
+
+	useEffect(() => {
+		if (!shouldLoadPosts) return;
 		const loadRecentPosts = async () => {
 			try {
 				const allPosts = await fetchBlogPosts();
@@ -20,7 +42,7 @@ export default function RecentBlogPosts() {
 		};
 
 		loadRecentPosts();
-	}, []);
+	}, [shouldLoadPosts]);
 
 	const truncateText = (text, maxLength) => {
 		if (text.length <= maxLength) return text;
@@ -36,7 +58,7 @@ export default function RecentBlogPosts() {
 		});
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
+		<div ref={sectionRef} className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
 			{/* Header Container */}
 			<div className="space-y-6">
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
@@ -50,6 +72,9 @@ export default function RecentBlogPosts() {
 
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				{shouldLoadPosts && recentPosts.length === 0 && (
+					<div className="text-[#2B2B2B]">Loading recent posts...</div>
+				)}
 				{recentPosts.map((post) => (
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 						{/* Image */}

@@ -17,9 +17,17 @@ export default function Hero() {
 		>
 			{/* Hero image — real <img> so fetchPriority="high" is respected */}
 			<img
-				src={getCloudFrontUrl("private/home-page-hero2.png")}
+				src={getCloudFrontUrl("private/home-page-hero2-1920.webp")}
 				alt=""
 				aria-hidden="true"
+				width="1920"
+				height="1080"
+				decoding="async"
+				srcSet={[
+					`${getCloudFrontUrl("private/home-page-hero2-1280.webp")} 1280w`,
+					`${getCloudFrontUrl("private/home-page-hero2-1920.webp")} 1920w`,
+				].join(", ")}
+				sizes="100vw"
 				fetchPriority={shouldPrioritizeHeroImage ? "high" : "auto"}
 				className="absolute inset-0 w-full h-full object-cover"
 			/>

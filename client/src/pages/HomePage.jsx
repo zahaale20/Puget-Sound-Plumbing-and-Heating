@@ -19,10 +19,12 @@ export default function Home() {
 
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
-					fetchPriority="high"
+					loading="lazy"
+					decoding="async"
+					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover z-0"
 				/>
 
@@ -38,7 +40,9 @@ export default function Home() {
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
-					fetchPriority="high"
+					loading="lazy"
+					decoding="async"
+					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
@@ -53,10 +57,12 @@ export default function Home() {
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
-					fetchPriority="high"
+					loading="lazy"
+					decoding="async"
+					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 				<LimitedTimeOffers />
@@ -71,7 +77,9 @@ export default function Home() {
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
-					fetchPriority="high"
+					loading="lazy"
+					decoding="async"
+					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 				<ScheduleOnline />

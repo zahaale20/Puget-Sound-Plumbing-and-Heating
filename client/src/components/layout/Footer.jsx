@@ -43,9 +43,11 @@ export default function Footer() {
 						className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<ImageWithLoader
-							src={getCloudFrontUrl("public/pspah-logo.png")}
+							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
+							width={340}
+							height={100}
 							fetchPriority="high"
 						/>
 					</button>
@@ -53,22 +55,28 @@ export default function Footer() {
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
 						<ImageWithLoader
-							src={getCloudFrontUrl("private/google-reviews.png")}
+							src={getCloudFrontUrl("private/google-reviews-190.webp")}
 							alt="Google Reviews"
 							className="h-[55px] object-contain"
 							loading="lazy"
+							width={95}
+							height={55}
 						/>
 						<ImageWithLoader
-							src={getCloudFrontUrl("private/bbb-accredited-business.png")}
+							src={getCloudFrontUrl("private/bbb-accredited-business-295.webp")}
 							alt="BBB Accredited Business"
 							className="h-[55px] object-contain"
 							loading="lazy"
+							width={148}
+							height={55}
 						/>
 						<ImageWithLoader
 							src={getCloudFrontUrl("private/year-20-anniversary.png")}
 							alt="20 Year Anniversary"
 							className="hidden sm:block h-[55px] object-contain"
 							loading="lazy"
+							width={110}
+							height={55}
 						/>
 					</div>
 				</div>
