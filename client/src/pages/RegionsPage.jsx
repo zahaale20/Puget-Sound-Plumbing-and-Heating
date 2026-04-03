@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
+import Seo from "../components/seo/Seo";
+import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import NotFoundPage from "./NotFoundPage";
 
 export default function RegionsPage() {
@@ -15,9 +17,35 @@ export default function RegionsPage() {
 
 	const regionName = region.name;
 	const neighborhoods = region.areas;
+	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
+	const regionPath = region.href;
+	const regionJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Service",
+		name: `Plumbing Services in ${regionName}`,
+		description: `Local plumbing, drain, sewer, and water heater services in ${regionName}.`,
+		provider: {
+			"@type": "Plumber",
+			name: "Puget Sound Plumbing and Heating",
+			url: siteUrl,
+		},
+		areaServed: regionName,
+		url: `${siteUrl}${regionPath}`,
+	};
+	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+		{ name: "Home", path: "/" },
+		{ name: "Service Areas", path: "/service-areas" },
+		{ name: regionName, path: regionPath },
+	]);
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title={`Plumbers in ${regionName}`}
+				description={`Licensed local plumbers serving ${regionName} with drain, sewer, water heater, and emergency plumbing services.`}
+				path={regionPath}
+				jsonLd={[regionJsonLd, breadcrumbJsonLd]}
+			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
 					src={getCloudFrontUrl("private/pattern1.png")}
@@ -28,10 +56,10 @@ export default function RegionsPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h3 className="relative inline-block pb-2 w-fit">
+					<h1 className="relative inline-block pb-2 w-fit">
 						Professional Plumbers in {regionName}
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h3>
+					</h1>
 					<p className="relative inline-block">
 						Residents and businesses across {regionName} rely on Puget Sound Plumbing & Heating for
 						licensed, 24/7 plumbing, drain cleaning, water heater repair, and emergency services.

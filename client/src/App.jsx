@@ -1,34 +1,30 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import RouteSeo from "./components/seo/RouteSeo";
 
-import HomePage from "./pages/HomePage";
-import ScheduleOnlinePage from "./pages/ScheduleOnlinePage";
-
-import BlogPage from "./pages/BlogPage";
-import BlogPostPage from "./pages/BlogPostPage";
-import CareersPage from "./pages/CareersPage";
-import LimitedTimeOffersPage from "./pages/LimitedTimeOffersPage";
-import ResourcesPage from "./pages/ResourcesPage";
-import AboutUsPage from "./pages/AboutUsPage";
-
-import FAQsPage from "./pages/FAQsPage";
-
-import ServiceAreasPage from "./pages/ServiceAreasPage";
-import RegionsPage from "./pages/RegionsPage";
-import AreaPage from "./pages/AreaPage";
-
-import ServiceCategoriesPage from "./pages/ServiceCategoriesPage";
-import ServiceCategoryPage from "./pages/ServiceCategoryPage";
-import ServicePage from "./pages/ServicePage";
-
-import FinancingPage from "./pages/FinancingPage";
-import WarrantyPage from "./pages/WarrantyPage";
-import CustomerReviewsPage from "./pages/CustomerReviewsPage";
-import NotFoundPage from "./pages/NotFoundPage";
+const HomePage = lazy(() => import("./pages/HomePage"));
+const ScheduleOnlinePage = lazy(() => import("./pages/ScheduleOnlinePage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
+const CareersPage = lazy(() => import("./pages/CareersPage"));
+const LimitedTimeOffersPage = lazy(() => import("./pages/LimitedTimeOffersPage"));
+const ResourcesPage = lazy(() => import("./pages/ResourcesPage"));
+const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
+const FAQsPage = lazy(() => import("./pages/FAQsPage"));
+const ServiceAreasPage = lazy(() => import("./pages/ServiceAreasPage"));
+const RegionsPage = lazy(() => import("./pages/RegionsPage"));
+const AreaPage = lazy(() => import("./pages/AreaPage"));
+const ServiceCategoriesPage = lazy(() => import("./pages/ServiceCategoriesPage"));
+const ServiceCategoryPage = lazy(() => import("./pages/ServiceCategoryPage"));
+const ServicePage = lazy(() => import("./pages/ServicePage"));
+const FinancingPage = lazy(() => import("./pages/FinancingPage"));
+const WarrantyPage = lazy(() => import("./pages/WarrantyPage"));
+const CustomerReviewsPage = lazy(() => import("./pages/CustomerReviewsPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function ScrollToTop() {
 	const { pathname } = useLocation();
@@ -40,39 +36,46 @@ function ScrollToTop() {
 	return null;
 }
 
+function RouteFallback() {
+	return <div className="min-h-[40vh]" aria-hidden="true" />;
+}
+
 function App() {
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
+			<RouteSeo />
 			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
-				<Routes>
-					<Route path="/" element={<HomePage />} />
+				<Suspense fallback={<RouteFallback />}>
+					<Routes>
+						<Route path="/" element={<HomePage />} />
 
-					<Route path="/schedule-online" element={<ScheduleOnlinePage />} />
+						<Route path="/schedule-online" element={<ScheduleOnlinePage />} />
 
-					<Route path="/blog" element={<BlogPage />} />
-					<Route path="/blog/:slug" element={<BlogPostPage />} />
-					<Route path="/careers" element={<CareersPage />} />
-					<Route path="/coupons" element={<LimitedTimeOffersPage />} />
-					<Route path="/resources" element={<ResourcesPage />} />
-					<Route path="/about-us" element={<AboutUsPage />} />
-					<Route path="/financing" element={<FinancingPage />} />
-					<Route path="/warranty" element={<WarrantyPage />} />
-					<Route path="/reviews" element={<CustomerReviewsPage />} />
+						<Route path="/blog" element={<BlogPage />} />
+						<Route path="/blog/:slug" element={<BlogPostPage />} />
+						<Route path="/careers" element={<CareersPage />} />
+						<Route path="/coupons" element={<LimitedTimeOffersPage />} />
+						<Route path="/resources" element={<ResourcesPage />} />
+						<Route path="/about-us" element={<AboutUsPage />} />
+						<Route path="/financing" element={<FinancingPage />} />
+						<Route path="/warranty" element={<WarrantyPage />} />
+						<Route path="/reviews" element={<CustomerReviewsPage />} />
 
-					<Route path="/faqs" element={<FAQsPage />} />
+						<Route path="/faqs" element={<FAQsPage />} />
 
-					<Route path="/service-areas" element={<ServiceAreasPage />} />
-					<Route path="/service-areas/:regionSlug" element={<RegionsPage />} />
-					<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
+						<Route path="/service-areas" element={<ServiceAreasPage />} />
+						<Route path="/service-areas/:regionSlug" element={<RegionsPage />} />
+						<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
 
-					<Route path="/services" element={<ServiceCategoriesPage />} />
-					<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
-					<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
+						<Route path="/services" element={<ServiceCategoriesPage />} />
+						<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
+						<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
 
-					<Route path="*" element={<NotFoundPage />} />
-				</Routes>
+						<Route path="*" element={<NotFoundPage />} />
+					</Routes>
+				</Suspense>
 				<Footer />
 			</div>
 		</BrowserRouter>

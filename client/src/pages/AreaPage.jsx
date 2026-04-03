@@ -3,6 +3,8 @@ import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
+import Seo from "../components/seo/Seo";
+import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import NotFoundPage from "./NotFoundPage";
 
 export default function AreaPage() {
@@ -20,9 +22,36 @@ export default function AreaPage() {
 
 	const regionName = region.name;
 	const areaName = area.name;
+	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
+	const areaPath = area.href;
+	const areaJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Service",
+		name: `Plumbing Services in ${areaName}`,
+		description: `Professional plumbing services in ${areaName}, ${regionName}.`,
+		provider: {
+			"@type": "Plumber",
+			name: "Puget Sound Plumbing and Heating",
+			url: siteUrl,
+		},
+		areaServed: `${areaName}, ${regionName}`,
+		url: `${siteUrl}${areaPath}`,
+	};
+	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+		{ name: "Home", path: "/" },
+		{ name: "Service Areas", path: "/service-areas" },
+		{ name: regionName, path: region.href },
+		{ name: areaName, path: areaPath },
+	]);
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title={`Plumbers in ${areaName}, ${regionName}`}
+				description={`Need plumbing help in ${areaName}? Puget Sound Plumbing and Heating provides repairs, drain and sewer service, and water heater solutions.`}
+				path={areaPath}
+				jsonLd={[areaJsonLd, breadcrumbJsonLd]}
+			/>
 			{/* Header Section*/}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
@@ -35,10 +64,10 @@ export default function AreaPage() {
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
-					<h3 className="relative inline-block pb-2 w-fit">
+					<h1 className="relative inline-block pb-2 w-fit">
 						Professional Plumbers in {areaName}
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h3>
+					</h1>
 
 					{/* Description */}
 					<p className="relative inline-block">

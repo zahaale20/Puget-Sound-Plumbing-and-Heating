@@ -2,11 +2,24 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getCloudFrontUrl } from "../services/imageService";
 import { FAQsData } from "../data/data";
+import Seo from "../components/seo/Seo";
 
 export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState(null);
 
 	const faqs = FAQsData;
+	const faqJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		mainEntity: faqs.map((faq) => ({
+			"@type": "Question",
+			name: faq.question,
+			acceptedAnswer: {
+				"@type": "Answer",
+				text: faq.answer,
+			},
+		})),
+	};
 
 	const firstSection = faqs.slice(0, faqs.length - 5);
 	const secondSection = faqs.slice(faqs.length - 5);
@@ -35,6 +48,12 @@ export default function FAQs() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title="Plumbing FAQs"
+				description="Answers to common questions about plumbing, drains, sewer, water heaters, and service coverage from Puget Sound Plumbing and Heating."
+				path="/faqs"
+				jsonLd={faqJsonLd}
+			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
 					src={getCloudFrontUrl("private/pattern1.png")}
@@ -45,10 +64,10 @@ export default function FAQs() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h3 className="relative inline-block pb-2 w-fit">
+					<h1 className="relative inline-block pb-2 w-fit">
 						Frequently Asked Questions
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h3>
+					</h1>
 					<p className="relative inline-block">
 						Below are answers to the most common questions about our plumbing and heating services.
 					</p>

@@ -4,6 +4,8 @@ import ScheduleOnline from "../components/forms/ScheduleOnline";
 
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import Seo from "../components/seo/Seo";
+import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 
 import { ServiceLinks } from "../data/data";
 import NotFoundPage from "./NotFoundPage";
@@ -18,9 +20,34 @@ export default function ServiceCategoryPage() {
 
 	const categoryName = category.name;
 	const services = category ? category.submenu : [];
+	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
+	const categoryPath = category.href;
+	const categoryDescription = `Explore ${categoryName.toLowerCase()} services from Puget Sound Plumbing and Heating, including repairs, installations, and emergency support across the Seattle area.`;
+	const itemListJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		name: `${categoryName} Services`,
+		itemListElement: services.map((service, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			name: service.name,
+			url: `${siteUrl}${service.href}`,
+		})),
+	};
+	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+		{ name: "Home", path: "/" },
+		{ name: "Services", path: "/services" },
+		{ name: categoryName, path: categoryPath },
+	]);
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title={`${categoryName} Plumbing Services`}
+				description={categoryDescription}
+				path={categoryPath}
+				jsonLd={[itemListJsonLd, breadcrumbJsonLd]}
+			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
 					src={getCloudFrontUrl("private/pattern1.png")}
@@ -31,10 +58,10 @@ export default function ServiceCategoryPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h3 className="relative inline-block pb-2 w-fit">
+					<h1 className="relative inline-block pb-2 w-fit">
 						{categoryName} Services
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h3>
+					</h1>
 					<p>
 						Our licensed technicians provide reliable {categoryName.toLowerCase()} services
 						throughout the Puget Sound region. Whether you need repairs, installations, or emergency

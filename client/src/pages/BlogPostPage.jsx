@@ -4,7 +4,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
 import { BlogPostSkeleton } from "../components/ui/LoadingComponents";
+import Seo from "../components/seo/Seo";
+import { buildBreadcrumbJsonLd } from "../components/seo/schema";
+import { ServiceLinks } from "../data/data";
 import NotFoundPage from "./NotFoundPage";
+
+const KEYWORD_HINTS = {
+	drain: ["drain", "sewer", "clog", "hydro jet", "hydrojet", "back up"],
+	plumbing: ["pipe", "leak", "toilet", "faucet", "garbage disposal", "plumbing"],
+	"water-heaters": ["water heater", "hot water", "tankless"],
+	"heating-and-cooling": ["furnace", "boiler", "air conditioning", "hvac", "heating", "ac"],
+};
 
 export default function BlogPostPage() {
 	const { slug } = useParams();
@@ -111,8 +121,68 @@ export default function BlogPostPage() {
 			year: "numeric",
 		});
 
+	const postPath = `/blog/${post.slug}`;
+	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
+	const blogImage = postImageUrl || getCloudFrontUrl("public/pspah-logo.png");
+	const blogJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		headline: post.title,
+		description: post.description,
+		datePublished: post.date,
+		author: {
+			"@type": "Person",
+			name: post.author || "Puget Sound Plumbing and Heating",
+		},
+		publisher: {
+			"@type": "Organization",
+			name: "Puget Sound Plumbing and Heating",
+			logo: {
+				"@type": "ImageObject",
+				url: getCloudFrontUrl("public/pspah-logo.png"),
+			},
+		},
+		image: [blogImage],
+		mainEntityOfPage: {
+			"@type": "WebPage",
+			"@id": `${siteUrl}${postPath}`,
+		},
+	};
+
+	const blogContext = `${post.title} ${post.description} ${(post.keywords || []).join(" ")}`.toLowerCase();
+	const allServices = ServiceLinks.flatMap((category) =>
+		category.submenu.map((service) => ({
+			categoryName: category.name,
+			categorySlug: category.href.split("/").pop(),
+			...service,
+		}))
+	);
+
+	const relatedServices = allServices
+		.filter((service) => {
+			const categoryKey = service.categorySlug;
+			const hints = KEYWORD_HINTS[categoryKey] || [];
+			const serviceName = (service.name || "").toLowerCase();
+			if (blogContext.includes(serviceName)) return true;
+			return hints.some((hint) => blogContext.includes(hint));
+		})
+		.slice(0, 4);
+	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+		{ name: "Home", path: "/" },
+		{ name: "Blog", path: "/blog" },
+		{ name: post.title, path: postPath },
+	]);
+
 	return (
 		<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B] mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title={post.title}
+				description={post.description}
+				path={postPath}
+				image={blogImage}
+				type="article"
+				jsonLd={[blogJsonLd, breadcrumbJsonLd]}
+			/>
 			<img
 				src={getCloudFrontUrl("private/seattle-skyline.png")}
 				alt=""
@@ -146,7 +216,7 @@ export default function BlogPostPage() {
 
 					{/* Post Content */}
 					<div className="py-8">
-						<h3 className="text-[#0C2D70] mb-4">{post.title}</h3>
+						<h1 className="text-[#0C2D70] mb-4">{post.title}</h1>
 						<div className="text-[#949494] text-sm mb-6 flex flex-col items-start gap-2">
 							<div className="flex items-center gap-2">
 								<FaRegCalendarAlt /> {formatBlogDate(post.date)}
@@ -166,6 +236,21 @@ export default function BlogPostPage() {
 						</div>
 					</div>
 				</article>
+
+				{relatedServices.length > 0 ? (
+					<section className="mt-10 bg-[#F5F5F5] p-6">
+						<h5 className="text-[#0C2D70] mb-3">Related Services</h5>
+						<ul className="list-disc pl-6 space-y-2 text-[#2B2B2B]">
+							{relatedServices.map((service) => (
+								<li key={service.href}>
+									<a href={service.href} className="text-[#0C2D70] hover:underline">
+										{service.name}
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				) : null}
 
 				{/* Navigation Between Posts */}
 				<div className="flex justify-between items-center mt-10">

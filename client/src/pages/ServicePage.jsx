@@ -4,6 +4,8 @@ import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import Seo from "../components/seo/Seo";
+import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { ServiceLinks } from "../data/data";
 import NotFoundPage from "./NotFoundPage";
 
@@ -21,9 +23,33 @@ export default function ServicePage() {
 	const serviceName = service.name;
 	const serviceDescription = service?.description || "";
 	const serviceImageKey = service?.image ? `private/${service.image}` : null;
+ 	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
+ 	const servicePath = service.href;
+ 	const serviceImageUrl = serviceImageKey ? getCloudFrontUrl(serviceImageKey) : undefined;
+ 	const serviceJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Service",
+		name: serviceName,
+		description: serviceDescription,
+		serviceType: serviceName,
+		provider: {
+			"@type": "Plumber",
+			name: "Puget Sound Plumbing and Heating",
+			url: siteUrl,
+		},
+		areaServed: "Seattle metropolitan area",
+		url: `${siteUrl}${servicePath}`,
+		image: serviceImageUrl,
+	};
+	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+		{ name: "Home", path: "/" },
+		{ name: "Services", path: "/services" },
+		{ name: category.name, path: category.href },
+		{ name: serviceName, path: servicePath },
+	]);
 
 	const problems = service?.problems || [];
-	const phone = "(209) 938-3219";
+	const phone = "(206) 938-3219";
 	const preventionTips = service?.prevention || [
 		"Schedule annual professional inspections to catch minor wear before it leads to system failure.",
 		"Address small drips or odd noises immediately to prevent expensive emergency repairs.",
@@ -32,6 +58,13 @@ export default function ServicePage() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
+			<Seo
+				title={`${serviceName} in Seattle Area`}
+				description={serviceDescription || `Professional ${serviceName.toLowerCase()} service in the Seattle area.`}
+				path={servicePath}
+				image={serviceImageUrl}
+				jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
+			/>
 			{/* 1. Header (Pattern Background) */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<img
@@ -43,10 +76,10 @@ export default function ServicePage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
-					<h3 className="relative inline-block pb-2 w-fit tracking-tight">
+					<h1 className="relative inline-block pb-2 w-fit tracking-tight">
 						{serviceName}
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-					</h3>
+					</h1>
 					<p className="leading-relaxed">
 						{serviceDescription ||
 							`Professional ${serviceName.toLowerCase()} solutions for homeowners throughout the Greater Seattle area.`}

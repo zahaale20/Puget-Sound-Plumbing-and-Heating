@@ -5,7 +5,9 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"prebuild": "node scripts/generate-sitemap.mjs",
+		"build": "vite build && npm run seo:audit",
+		"seo:audit": "node scripts/seo-audit.mjs",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
@@ -23,6 +25,7 @@
 		"lucide-react": "^0.544.0",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
+		"react-helmet-async": "^3.0.0",
 		"react-icons": "^5.5.0",
 		"react-router-dom": "^7.9.4",
 		"tailwindcss": "^4.1.13"

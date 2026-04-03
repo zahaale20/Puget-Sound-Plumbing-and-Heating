@@ -14,10 +14,10 @@ export default function LimitedTimeOffersPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h3 className="relative inline-block pb-2 w-fit">
+					<h1 className="relative inline-block pb-2 w-fit">
 						Coupons
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h3>
+					</h1>
 					<p className="relative inline-block">
 						Save on your next service with our limited time offers!
 					</p>
