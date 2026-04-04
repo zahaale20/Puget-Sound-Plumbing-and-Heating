@@ -2,64 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-function inlineBuiltCss() {
-	return {
-		name: "inline-built-css",
-		apply: "build",
-		enforce: "post",
-		generateBundle(_, bundle) {
-			const cssAssets = new Map(
-				Object.entries(bundle)
-					.filter(
-						([fileName, output]) => output.type === "asset" && fileName.endsWith(".css")
-					)
-					.map(([fileName, output]) => [fileName, String(output.source)]),
-			);
-
-			if (cssAssets.size === 0) {
-				return;
-			}
-
-			const inlinedCssFiles = new Set();
-
-			for (const [fileName, output] of Object.entries(bundle)) {
-				if (output.type !== "asset" || !fileName.endsWith(".html")) {
-					continue;
-				}
-
-				let html = String(output.source);
-
-				for (const [cssFileName, cssSource] of cssAssets) {
-					const escapedFileName = cssFileName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					const stylesheetLinkPattern = new RegExp(
-						`<link\\s+[^>]*rel=["']stylesheet["'][^>]*href=["'](?:\\.\\/|\\/)?${escapedFileName}["'][^>]*>`,
-						"g",
-					);
-
-					if (!stylesheetLinkPattern.test(html)) {
-						continue;
-					}
-
-					html = html.replace(
-						stylesheetLinkPattern,
-						`<style data-inline-css="${cssFileName}">\n${cssSource}\n</style>`,
-					);
-					inlinedCssFiles.add(cssFileName);
-				}
-
-				output.source = html;
-			}
-
-			for (const cssFileName of inlinedCssFiles) {
-				delete bundle[cssFileName];
-			}
-		},
-	};
-}
-
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [react(), tailwindcss(), inlineBuiltCss()],
+	plugins: [react(), tailwindcss()],
 	test: {
 		globals: true,
 		environment: "jsdom",

@@ -1,5 +1,5 @@
 // Basic service worker for caching static assets only
-const CACHE_NAME = "pspah-v3";
+const CACHE_NAME = "pspah-v4";
 const CLOUDFRONT_URL = "https://d1fyhmg0o2pfye.cloudfront.net";
 const STATIC_CACHE_URLS = [
 	"/",
@@ -27,6 +27,20 @@ function isStaticAsset(url) {
 		return true;
 	}
 	return false;
+}
+
+function isCacheableAssetResponse(url, response) {
+	if (!response || !response.ok) return false;
+
+	const contentType = response.headers.get("content-type") || "";
+
+	// Prevent caching HTML fallback responses for asset requests.
+	if (url.origin === self.location.origin) {
+		if (url.pathname.endsWith(".css")) return contentType.includes("text/css");
+		if (url.pathname.endsWith(".js")) return contentType.includes("javascript");
+	}
+
+	return true;
 }
 
 // Install event - cache critical static assets
@@ -69,7 +83,7 @@ self.addEventListener("fetch", (event) => {
 				return (
 					cached ||
 					fetch(event.request).then((response) => {
-						if (response.status === 200) {
+						if (isCacheableAssetResponse(url, response)) {
 							const clone = response.clone();
 							caches.open(CACHE_NAME).then((cache) => {
 								cache.put(event.request, clone);
