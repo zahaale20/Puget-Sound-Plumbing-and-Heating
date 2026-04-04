@@ -156,6 +156,9 @@ export default function Header() {
 					<div className="lg:hidden flex items-center h-full">
 						<button
 							onClick={() => setMobileOpen((prev) => !prev)}
+							aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+							aria-expanded={mobileOpen}
+							aria-controls="mobile-navigation-menu"
 							className="text-[#0C2D70] text-2xl focus:outline-none cursor-pointer"
 						>
 							{mobileOpen ? <FaTimes /> : <FaBars />}
@@ -207,7 +210,10 @@ export default function Header() {
 
 			{/* Mobile Dropdown */}
 			{mobileOpen && (
-				<section className="absolute top-[101px] sm:top-[106px] left-0 w-full bg-white shadow-lg z-40 px-6 max-h-[calc(100vh-106px)] sm:max-h-[calc(100vh-116px)] overflow-y-auto">
+				<section
+					id="mobile-navigation-menu"
+					className="absolute top-[101px] sm:top-[106px] left-0 w-full bg-white shadow-lg z-40 px-6 max-h-[calc(100vh-106px)] sm:max-h-[calc(100vh-116px)] overflow-y-auto"
+				>
 					<ul className="flex flex-col">
 						{ServiceLinks.map((link) => (
 							<li key={link.name} className="w-full">

@@ -22,10 +22,10 @@ export default function OurServices() {
 			{/* Header Container*/}
 			<div className="flex flex-col space-y-6 text-center text-white">
 				{/* Title */}
-				<h4 className="inline-flex relative pb-2 mx-auto">
+				<h2 className="inline-flex relative pb-2 mx-auto">
 					Our Services
 					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				</h2>
 
 				{/* Description */}
 				<p className="inline-block relative leading-normal">
