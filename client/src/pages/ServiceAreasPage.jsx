@@ -1,14 +1,13 @@
 import { getCloudFrontUrl } from "../services/imageService";
 
 import ServiceAreas from "../components/sections/ServiceAreas";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function ServiceAreasPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -38,7 +37,7 @@ export default function ServiceAreasPage() {
 
 			{/* Main Content Section */}
 			<section className="relative overflow-hidden flex flex-col py-16 text-[#2B2B2B] space-y-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

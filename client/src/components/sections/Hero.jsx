@@ -4,7 +4,6 @@ import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { CompanyInfo, SocialLinks, HeroContent } from "../../data/data";
-import { ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function Hero() {
 	const navigate = useNavigate();
@@ -16,7 +15,8 @@ export default function Hero() {
 			className="relative flex flex-col items-center justify-center w-full mt-[101px] h-[calc(100vh-101px)] md:mt-[106px] md:h-[calc(100vh-106px)] lg:h-[calc(100vh-167px)] lg:mt-[167px]"
 			style={{ backgroundColor: "#0C2D70" }}
 		>
-			<ImageWithLoader
+			{/* Hero image — real <img> so fetchPriority="high" is respected */}
+			<img
 				src={getCloudFrontUrl("private/home-page-hero2-1920.webp")}
 				alt=""
 				aria-hidden="true"

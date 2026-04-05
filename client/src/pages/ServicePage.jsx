@@ -67,7 +67,7 @@ export default function ServicePage() {
 			/>
 			{/* 1. Header (Pattern Background) */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -134,7 +134,7 @@ export default function ServicePage() {
 
 			{/* 3. What to Expect (Skyline Background) */}
 			<section className="relative overflow-hidden w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -184,7 +184,7 @@ export default function ServicePage() {
 
 			{/* 4. DIY vs Pro (#F5F5F5 Background) */}
 			<section className="w-full py-16 bg-[#F5F5F5]">
-				<div className="relative max-w-7xl mx-auto px-6 w-full z-10 space-y-6">
+				<div className="relative max-w-7xl mx-auto px-6 z-10 space-y-6">
 					<div className="inline-block mx-auto w-full text-center">
 						<h4 className="text-[#0C2D70] relative pb-2 tracking-tight inline-block">
 							Should You DIY or Call a Pro?
@@ -257,7 +257,7 @@ export default function ServicePage() {
 
 			{/* 5. Prevention Tips (White Background) */}
 			<section className="flex justify-center w-full py-16 bg-white">
-				<div className="relative max-w-7xl mx-auto px-6 w-full z-10">
+				<div className="relative max-w-7xl mx-auto px-6 z-10 w-full">
 					<div className="flex flex-col gap-6">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight inline-block">
 							Prevention Tips for {serviceName}
@@ -279,7 +279,7 @@ export default function ServicePage() {
 
 			{/* 6. Schedule Online (Skyline Background) */}
 			<section className="relative overflow-hidden flex justify-center w-full py-24">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

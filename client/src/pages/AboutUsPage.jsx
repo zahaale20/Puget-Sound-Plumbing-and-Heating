@@ -4,14 +4,13 @@ import OurTeam from "../components/sections/OurTeam";
 import ServiceCategories from "../components/sections/ServiceCategories";
 import ServiceAreas from "../components/sections/ServiceAreas";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function AboutUsPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -40,7 +39,7 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -56,7 +55,7 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
-				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 mb-12">
+				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					<h4 className="text-[#0C2D70] pb-2">
 						<span className="relative inline-block">
 							Our Services
@@ -76,7 +75,7 @@ export default function AboutUsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -84,7 +83,7 @@ export default function AboutUsPage() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="relative z-10 flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 mb-12">
+				<div className="relative z-10 flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					{/* Title */}
 					<h4 className="text-[#0C2D70] pb-2">
 						<span className="relative inline-block">

@@ -26,12 +26,6 @@ export function ImageWithLoader({
 		setHasError(true);
 	};
 
-	let objectClass = "object-cover";
-	if (className.includes("object-contain")) objectClass = "object-contain";
-	if (className.includes("object-fill")) objectClass = "object-fill";
-	if (className.includes("object-none")) objectClass = "object-none";
-	if (className.includes("object-scale-down")) objectClass = "object-scale-down";
-
 	return (
 		<div className={`relative ${className}`}>
 			{isLoading && <div className="absolute inset-0 rounded-[inherit] bg-[#E3EAF4] animate-pulse" />}
@@ -43,7 +37,7 @@ export function ImageWithLoader({
 				<img
 					src={src}
 					alt={alt}
-					className={`h-full w-full rounded-[inherit] ${objectClass} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
+					className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
 					loading={loading}
 					decoding={decoding}
 					fetchPriority={fetchPriority}
@@ -447,7 +441,7 @@ export function BlogGridSkeleton({ count = 6, className = "" }) {
 export function BlogPostSkeleton({ className = "" }) {
 	return (
 		<section className={`relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px] ${className}`}>
-			<ImageWithLoader
+			<img
 				src={getCloudFrontUrl("private/seattle-skyline.png")}
 				alt=""
 				aria-hidden="true"

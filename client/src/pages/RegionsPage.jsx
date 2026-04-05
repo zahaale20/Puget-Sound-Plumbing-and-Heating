@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import NotFoundPage from "./NotFoundPage";
@@ -48,7 +47,7 @@ export default function RegionsPage() {
 				jsonLd={[regionJsonLd, breadcrumbJsonLd]}
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -122,7 +121,7 @@ export default function RegionsPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

@@ -3,7 +3,6 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { getCloudFrontUrl } from "../services/imageService";
 import { FAQsData } from "../data/data";
 import Seo from "../components/seo/Seo";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function FAQs() {
 	const [openIndex, setOpenIndex] = useState(null);
@@ -56,7 +55,7 @@ export default function FAQs() {
 				jsonLd={faqJsonLd}
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -76,7 +75,7 @@ export default function FAQs() {
 			</section>
 
 			<section className="flex justify-center w-full pt-16 bg-white text-[#2B2B2B] mb-6">
-				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
+				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full">
 					{firstSection.map((faq, index) => (
 						<FAQItem key={index} faq={faq} globalIndex={index} />
 					))}
@@ -84,7 +83,7 @@ export default function FAQs() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full pb-16 text-[#2B2B2B]">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -92,7 +91,7 @@ export default function FAQs() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
+				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full">
 					{secondSection.map((faq, index) => (
 						<FAQItem key={index} faq={faq} globalIndex={firstSection.length + index} />
 					))}

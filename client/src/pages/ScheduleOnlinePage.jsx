@@ -1,12 +1,11 @@
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function ScheduleOnlinePage() {
 	return (
 		<>
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -26,7 +25,7 @@ export default function ScheduleOnlinePage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

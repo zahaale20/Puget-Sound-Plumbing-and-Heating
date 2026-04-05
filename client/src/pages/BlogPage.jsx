@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-import { BlogGridSkeleton, ImageWithLoader } from "../components/ui/LoadingComponents";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 const sortOptions = [
 	{ name: "Most Recent", value: "dateDesc" },
@@ -179,7 +179,7 @@ export default function BlogPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -284,25 +284,8 @@ export default function BlogPage() {
 			</section>
 
 			{isLoading && (
-				<section className="relative overflow-hidden w-full pb-16 space-y-6">
-					<ImageWithLoader
-						src={getCloudFrontUrl("private/seattle-skyline.png")}
-						alt=""
-						aria-hidden="true"
-						fetchPriority="high"
-						className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
-					/>
-					<div className="relative max-w-7xl mx-auto px-6">
-						<BlogGridSkeleton count={POSTS_PER_PAGE} />
-					</div>
-					<div className="relative max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
-						<div className="inline-flex items-center bg-white border border-gray-300 shadow-lg animate-pulse">
-							<div className="h-10 w-10 border-r border-gray-300 bg-[#D9E1F0]" />
-							<div className="h-10 w-10 border-r border-gray-300 bg-[#0C2D70]" />
-							<div className="h-10 w-10 border-r border-gray-300 bg-[#D9E1F0]" />
-							<div className="h-10 w-10 bg-[#D9E1F0]" />
-						</div>
-					</div>
+				<section className="bg-white w-full pb-6">
+					<div className="max-w-7xl mx-auto px-6 text-[#0C2D70]">Loading blog posts...</div>
 				</section>
 			)}
 
@@ -314,7 +297,7 @@ export default function BlogPage() {
 
 			{!isLoading && (
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

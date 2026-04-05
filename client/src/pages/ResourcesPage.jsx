@@ -2,13 +2,12 @@ import Financing from "../components/sections/Financing.jsx";
 import DIYPlumbingPermit from "../components/forms/DIYPlumbingPermit.jsx";
 import Warranty from "../components/sections/Warranty.jsx";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function ResourcesPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -33,7 +32,7 @@ export default function ResourcesPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
