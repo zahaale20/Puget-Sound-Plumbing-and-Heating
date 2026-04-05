@@ -7,10 +7,13 @@ server/.env
 *.pyo
 *.pyd
 .pytest_cache/
+**/.coverage
+**/coverage.xml
 
 # --- React / Frontend ---
 client/node_modules/
 client/dist/
+client/coverage/
 client/.env
 client/.env.local
 .eslintcache

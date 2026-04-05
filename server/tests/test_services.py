@@ -1,4 +1,5 @@
 """Tests for services and models."""
+import asyncio
 import time
 import pytest
 from unittest.mock import MagicMock, patch
@@ -356,3 +357,116 @@ class TestServerConfig:
 
         assert "api.example.com" in allowed_hosts
         assert "staging.example.com" in allowed_hosts
+
+
+class TestNewsletterSubscriptionRoute:
+    def test_duplicate_subscription_sends_no_emails(self, monkeypatch):
+        import routes.email as mod
+        from models.requests import NewsletterRequest
+
+        confirmation_email = MagicMock()
+        company_notification = MagicMock()
+
+        class DuplicateCursor:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+            def execute(self, query, params):
+                raise Exception("duplicate key value violates unique constraint")
+
+        class DuplicateConnection:
+            def __init__(self):
+                self.rollback = MagicMock()
+                self.commit = MagicMock()
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+            def cursor(self):
+                return DuplicateCursor()
+
+        req = MagicMock()
+        req.headers.get.return_value = None
+        req.client.host = "203.0.113.10"
+
+        monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
+        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "get_db_connection", lambda: DuplicateConnection())
+        monkeypatch.setattr(mod, "_build_newsletter_unsubscribe_url", lambda email: f"https://example.com/unsub?email={email}")
+        monkeypatch.setattr(mod, "_send_newsletter_confirmation_email", confirmation_email)
+        monkeypatch.setattr(mod, "_send_newsletter_notification_email", company_notification)
+
+        result = asyncio.run(
+            mod.subscribe_newsletter(
+                NewsletterRequest(email="existing@example.com", captchaToken="token"),
+                req,
+            )
+        )
+
+        assert result["success"] is True
+        assert result["duplicate"] is True
+        assert result["emailStatus"] == "skipped"
+        confirmation_email.assert_not_called()
+        company_notification.assert_not_called()
+
+    def test_new_subscription_sends_customer_and_company_emails(self, monkeypatch):
+        import routes.email as mod
+        from models.requests import NewsletterRequest
+
+        confirmation_email = MagicMock()
+        company_notification = MagicMock()
+
+        class InsertCursor:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+            def execute(self, query, params):
+                return None
+
+        class InsertConnection:
+            def __init__(self):
+                self.rollback = MagicMock()
+                self.commit = MagicMock()
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+            def cursor(self):
+                return InsertCursor()
+
+        req = MagicMock()
+        req.headers.get.return_value = None
+        req.client.host = "203.0.113.11"
+
+        monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
+        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "get_db_connection", lambda: InsertConnection())
+        monkeypatch.setattr(mod, "_build_newsletter_unsubscribe_url", lambda email: f"https://example.com/unsub?email={email}")
+        monkeypatch.setattr(mod, "_send_newsletter_confirmation_email", confirmation_email)
+        monkeypatch.setattr(mod, "_send_newsletter_notification_email", company_notification)
+
+        result = asyncio.run(
+            mod.subscribe_newsletter(
+                NewsletterRequest(email="new@example.com", captchaToken="token"),
+                req,
+            )
+        )
+
+        assert result == {"success": True, "emailStatus": "sent"}
+        confirmation_email.assert_called_once_with(
+            "new@example.com",
+            "https://example.com/unsub?email=new@example.com",
+        )
+        company_notification.assert_called_once_with("new@example.com")

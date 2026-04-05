@@ -9,3 +9,5 @@ httpx>=0.28.1
 resend>=2.2.0
 psycopg2-binary>=2.9.9
 pytest>=8.3.0
+pytest-cov>=5.0.0
+requests>=2.32.0

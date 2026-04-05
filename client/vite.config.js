@@ -10,6 +10,16 @@ export default defineConfig({
 		environment: "jsdom",
 		setupFiles: "./src/test/setup.js",
 		css: false,
+		coverage: {
+			reporter: ["text", "lcov"],
+				include: ["src/services/formValidation.js"],
+			thresholds: {
+					lines: 90,
+					functions: 90,
+					branches: 85,
+					statements: 90,
+			},
+		},
 	},
 	build: {
 		// Enable source maps for production debugging

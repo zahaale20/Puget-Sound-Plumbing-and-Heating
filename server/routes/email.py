@@ -377,13 +377,11 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
         else:
             try:
                 _send_newsletter_confirmation_email(email, unsubscribe_url)
+                _send_newsletter_notification_email(email)
                 email_status = "sent"
             except HTTPException as email_error:
                 logger.exception("Newsletter saved but confirmation email failed: %s", email_error.detail)
                 email_status = "failed"
-
-        # Notify company (non-critical)
-        _send_newsletter_notification_email(email)
 
         if duplicate:
             return {

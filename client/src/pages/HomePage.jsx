@@ -3,6 +3,14 @@ import Hero from "../components/sections/Hero";
 import EmergencyBar from "../components/layout/EmergencyBar";
 import OurServices from "../components/sections/OurServices";
 import { getCloudFrontUrl } from "../services/imageService";
+import {
+	FormSectionSkeleton,
+	OfferCardsSkeleton,
+	PromoBarSkeleton,
+	RecentPostsSectionSkeleton,
+	ReviewSectionSkeleton,
+	TextImageSectionSkeleton,
+} from "../components/ui/LoadingComponents";
 
 const WhyChooseUs = lazy(() => import("../components/sections/WhyChooseUs"));
 const FinancingBar = lazy(() => import("../components/layout/FinancingBar"));
@@ -13,7 +21,7 @@ const CustomerReviews = lazy(() => import("../components/sections/CustomerReview
 const LimitedTimeOffers = lazy(() => import("../components/forms/LimitedTimeOffers"));
 const ScheduleOnline = lazy(() => import("../components/forms/ScheduleOnline"));
 
-function DeferredSection({ children, fallbackHeightClass = "min-h-[520px]" }) {
+function DeferredSection({ children, fallback }) {
 	const [shouldRender, setShouldRender] = useState(false);
 	const sectionRef = useRef(null);
 
@@ -39,11 +47,11 @@ function DeferredSection({ children, fallbackHeightClass = "min-h-[520px]" }) {
 	return (
 		<div ref={sectionRef}>
 			{shouldRender ? (
-				<Suspense fallback={<div className={fallbackHeightClass} aria-hidden="true" />}>
+				<Suspense fallback={fallback}>
 					{children}
 				</Suspense>
 			) : (
-				<div className={fallbackHeightClass} aria-hidden="true" />
+				fallback
 			)}
 		</div>
 	);
@@ -70,7 +78,16 @@ export default function Home() {
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[540px] w-full">
+				<DeferredSection
+					fallback={
+						<TextImageSectionSkeleton
+							className="w-full"
+							imageSide="left"
+							imageClassName="h-84 w-full max-w-[18rem]"
+							buttonClassName="h-6 w-28 ml-auto"
+						/>
+					}
+				>
 					<WhyChooseUs />
 				</DeferredSection>
 			</section>
@@ -85,18 +102,28 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[560px] w-full">
+				<DeferredSection fallback={<ReviewSectionSkeleton className="w-full py-16" />}>
 					<CustomerReviews />
 				</DeferredSection>
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[600px] w-full">
+				<DeferredSection
+					fallback={
+						<TextImageSectionSkeleton
+							className="w-full"
+							imageSide="right"
+							imageClassName="h-60 w-full max-w-[20rem]"
+							buttonClassName="h-6 w-32 ml-auto"
+							showButton
+						/>
+					}
+				>
 					<FAQs />
 				</DeferredSection>
 			</section>
 
-			<DeferredSection fallbackHeightClass="min-h-[180px] w-full">
+			<DeferredSection fallback={<PromoBarSkeleton />}>
 				<FinancingBar />
 			</DeferredSection>
 
@@ -110,13 +137,22 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[620px] w-full">
+				<DeferredSection fallback={<OfferCardsSkeleton className="w-full py-16" />}>
 					<LimitedTimeOffers />
 				</DeferredSection>
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[260px] w-full">
+				<DeferredSection
+					fallback={
+						<TextImageSectionSkeleton
+							className="w-full"
+							imageSide="left"
+							imageClassName="h-80 w-full max-w-[18rem] rounded-lg"
+							buttonClassName="h-[50px] w-full sm:w-[200px]"
+						/>
+					}
+				>
 					<CallNow />
 				</DeferredSection>
 			</section>
@@ -131,13 +167,13 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[760px] w-full">
+				<DeferredSection fallback={<FormSectionSkeleton className="w-full py-16" />}>
 					<ScheduleOnline />
 				</DeferredSection>
 			</section>
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
-				<DeferredSection fallbackHeightClass="min-h-[520px] w-full">
+				<DeferredSection fallback={<RecentPostsSectionSkeleton className="w-full" />}>
 					<RecentBlogPosts />
 				</DeferredSection>
 			</section>

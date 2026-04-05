@@ -284,9 +284,24 @@ export default function BlogPage() {
 			</section>
 
 			{isLoading && (
-				<section className="bg-white w-full pb-6">
-					<div className="max-w-7xl mx-auto px-6">
+				<section className="relative overflow-hidden w-full pb-16 space-y-6">
+					<img
+						src={getCloudFrontUrl("private/seattle-skyline.png")}
+						alt=""
+						aria-hidden="true"
+						fetchPriority="high"
+						className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+					/>
+					<div className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 						<BlogGridSkeleton count={POSTS_PER_PAGE} />
+					</div>
+					<div className="relative max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
+						<div className="inline-flex items-center bg-white border border-gray-300 shadow-lg animate-pulse">
+							<div className="h-10 w-10 border-r border-gray-300 bg-[#D9E1F0]" />
+							<div className="h-10 w-10 border-r border-gray-300 bg-[#0C2D70]" />
+							<div className="h-10 w-10 border-r border-gray-300 bg-[#D9E1F0]" />
+							<div className="h-10 w-10 bg-[#D9E1F0]" />
+						</div>
 					</div>
 				</section>
 			)}

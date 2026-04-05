@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { getCloudFrontUrl } from "../../services/imageService";
+
+function SkeletonBlock({ className = "", toneClass = "bg-[#D9E1F0]", ...props }) {
+	return <div className={`animate-pulse rounded-sm ${toneClass} ${className}`} {...props} />;
+}
 
 export function ImageWithLoader({
 	src,
@@ -23,9 +28,9 @@ export function ImageWithLoader({
 
 	return (
 		<div className={`relative ${className}`}>
-			{isLoading && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
+			{isLoading && <div className="absolute inset-0 rounded-[inherit] bg-[#E3EAF4] animate-pulse" />}
 			{hasError ? (
-				<div className="flex items-center justify-center bg-gray-50 text-gray-400 text-sm h-full">
+				<div className="flex h-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
 					Image unavailable
 				</div>
 			) : (
@@ -49,9 +54,9 @@ export function TextSkeleton({ lines = 1, className = "" }) {
 	return (
 		<div className={`space-y-2 ${className}`}>
 			{Array.from({ length: lines }).map((_, i) => (
-				<div
+				<SkeletonBlock
 					key={i}
-					className="h-4 bg-gray-50"
+					className="h-4"
 					style={{ width: i === lines - 1 ? "70%" : "100%" }}
 				/>
 			))}
@@ -63,9 +68,256 @@ export function ContentSkeleton({ className = "" }) {
 	return (
 		<div className={`animate-pulse ${className}`}>
 			<div className="space-y-4">
-				<div className="h-4 bg-gray-200 w-3/4" />
-				<div className="h-4 bg-gray-200 w-full" />
-				<div className="h-4 bg-gray-200 w-5/6" />
+				<SkeletonBlock className="h-4 w-3/4" />
+				<SkeletonBlock className="h-4 w-full" />
+				<SkeletonBlock className="h-4 w-5/6" />
+			</div>
+		</div>
+	);
+}
+
+export function TextImageSectionSkeleton({
+	className = "",
+	imageSide = "right",
+	imageClassName = "h-80 w-full max-w-[20rem] rounded-lg",
+	buttonClassName = "h-12 w-40",
+	showButton = true,
+	textToneClass = "bg-[#D9E1F0]",
+	imageToneClass = "bg-[#D3DCEB]",
+}) {
+	const imageFirst = imageSide === "left";
+
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col px-6 lg:flex-row lg:items-start lg:gap-16 ${className}`} aria-hidden="true">
+			<div className={`${imageFirst ? "order-1" : "order-2 lg:order-none"} flex justify-center self-center lg:self-end shrink-0`}>
+				<SkeletonBlock className={imageClassName} toneClass={imageToneClass} />
+			</div>
+			<div className={`${imageFirst ? "order-2" : "order-1 lg:order-none"} space-y-6 py-16 flex-1`}>
+				<SkeletonBlock className="h-8 w-56" toneClass={textToneClass} />
+				<div className="space-y-3">
+					<SkeletonBlock className="h-4 w-full" toneClass={textToneClass} />
+					<SkeletonBlock className="h-4 w-full" toneClass={textToneClass} />
+					<SkeletonBlock className="h-4 w-5/6" toneClass={textToneClass} />
+				</div>
+				{showButton ? <SkeletonBlock className={buttonClassName} toneClass={textToneClass} /> : null}
+			</div>
+		</div>
+	);
+}
+
+export function ReviewSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
+			<div className="space-y-6 text-center">
+				<SkeletonBlock className="mx-auto h-8 w-52" />
+				<div className="mx-auto max-w-3xl space-y-3">
+					<SkeletonBlock className="h-4 w-full" />
+					<SkeletonBlock className="h-4 w-4/5 mx-auto" />
+				</div>
+			</div>
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+				{Array.from({ length: 3 }).map((_, index) => (
+					<div key={index} className="flex min-h-[280px] flex-col gap-6 border border-[#DEDEDE] bg-white p-6">
+						<div className="flex gap-2">
+							{Array.from({ length: 5 }).map((__, starIndex) => (
+								<SkeletonBlock key={starIndex} className="h-5 w-5 rounded-full" toneClass="bg-[#F2C5C5]" />
+							))}
+						</div>
+						<div className="space-y-3 flex-1">
+							<SkeletonBlock className="h-4 w-full" />
+							<SkeletonBlock className="h-4 w-full" />
+							<SkeletonBlock className="h-4 w-4/5" />
+						</div>
+						<SkeletonBlock className="h-5 w-32" toneClass="bg-[#C8D7EE]" />
+					</div>
+				))}
+			</div>
+			<div className="flex justify-end">
+				<SkeletonBlock className="h-6 w-40" toneClass="bg-[#C8D7EE]" />
+			</div>
+		</div>
+	);
+}
+
+export function PromoBarSkeleton({ className = "" }) {
+	return (
+		<div className={`w-full bg-[#B32020] ${className}`} aria-hidden="true">
+			<div className="mx-auto flex w-full max-w-7xl justify-center px-6 py-2">
+				<SkeletonBlock className="h-5 w-56" toneClass="bg-white/35" />
+			</div>
+		</div>
+	);
+}
+
+export function OfferCardsSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
+			<div className="space-y-6 text-center text-white">
+				<SkeletonBlock className="mx-auto h-8 w-56" toneClass="bg-white/35" />
+				<SkeletonBlock className="mx-auto h-4 w-80 max-w-full" toneClass="bg-white/25" />
+			</div>
+			<div className="flex flex-wrap justify-center gap-6">
+				{Array.from({ length: 4 }).map((_, index) => (
+					<div key={index} className="min-w-[250px] flex-1 border-4 border-dashed border-[#B32020] bg-white p-6 shadow-lg">
+						<div className="flex flex-col items-center gap-4">
+							<SkeletonBlock className="h-12 w-12 rounded-full" toneClass="bg-[#F2C5C5]" />
+							<SkeletonBlock className="h-9 w-40" toneClass="bg-[#C8D7EE]" />
+							<SkeletonBlock className="h-4 w-44" />
+							<SkeletonBlock className="h-4 w-40" />
+							<SkeletonBlock className="h-12 w-36" toneClass="bg-[#EAB3B3]" />
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+
+export function RecentPostsSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
+			<div className="space-y-6">
+				<SkeletonBlock className="h-8 w-48" />
+				<SkeletonBlock className="h-4 w-80 max-w-full" toneClass="bg-[#E5EBF4]" />
+			</div>
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+				{Array.from({ length: 3 }).map((_, index) => (
+					<div key={index} className="flex min-h-[420px] flex-col border border-[#DEDEDE] bg-white">
+						<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
+						<div className="flex flex-1 flex-col p-6">
+							<SkeletonBlock className="h-6 w-11/12" />
+							<div className="mt-3 space-y-2">
+								<SkeletonBlock className="h-4 w-1/2" toneClass="bg-[#E5EBF4]" />
+								<SkeletonBlock className="h-4 w-1/3" toneClass="bg-[#E5EBF4]" />
+							</div>
+							<div className="mt-4 flex-1 space-y-2">
+								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								<SkeletonBlock className="h-4 w-4/5" toneClass="bg-[#E5EBF4]" />
+							</div>
+							<SkeletonBlock className="mt-6 h-5 w-32" toneClass="bg-[#C8D7EE]" />
+						</div>
+					</div>
+				))}
+			</div>
+			<div className="flex justify-end">
+				<SkeletonBlock className="h-6 w-36" toneClass="bg-[#C8D7EE]" />
+			</div>
+		</div>
+	);
+}
+
+export function FormSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 lg:flex-row ${className}`} aria-hidden="true">
+			<div className="w-full space-y-6 lg:w-1/2">
+				<div className="space-y-6">
+					<SkeletonBlock className="h-8 w-52" />
+					<SkeletonBlock className="h-4 w-72 max-w-full" />
+				</div>
+				<div className="grid grid-cols-1 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
+						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
+					</div>
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
+						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
+					</div>
+					<SkeletonBlock className="h-28 w-full" toneClass="bg-white/85" />
+					<div className="flex justify-center pt-4">
+						<SkeletonBlock className="h-12 w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
+					</div>
+				</div>
+			</div>
+			<SkeletonBlock className="h-100 w-full lg:h-auto lg:min-h-[34rem] lg:w-1/2" toneClass="bg-white/70" />
+		</div>
+	);
+}
+
+export function FooterSkeleton() {
+	return (
+		<footer className="w-full" aria-hidden="true">
+			<div className="w-full bg-white">
+				<div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-4 px-6 py-2 md:flex-row md:justify-between">
+					<SkeletonBlock className="hidden h-[60px] w-52 md:block" toneClass="bg-[#D9E1F0]" />
+					<div className="flex items-center gap-8">
+						<SkeletonBlock className="h-[55px] w-24" toneClass="bg-[#D9E1F0]" />
+						<SkeletonBlock className="h-[55px] w-36" toneClass="bg-[#D9E1F0]" />
+						<SkeletonBlock className="hidden h-[55px] w-24 sm:block" toneClass="bg-[#D9E1F0]" />
+					</div>
+				</div>
+			</div>
+			<div className="w-full bg-[#0C2D70] py-16">
+				<div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 text-white lg:gap-24">
+					<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+						<div className="space-y-4">
+							<SkeletonBlock className="h-7 w-72" toneClass="bg-white/25" />
+							<SkeletonBlock className="h-4 w-52" toneClass="bg-white/20" />
+							<div className="space-y-3 pt-2">
+								<SkeletonBlock className="h-4 w-44" toneClass="bg-white/20" />
+								<SkeletonBlock className="h-4 w-60" toneClass="bg-white/20" />
+								<SkeletonBlock className="h-4 w-40" toneClass="bg-white/20" />
+							</div>
+						</div>
+						<div className="space-y-4">
+							<SkeletonBlock className="h-7 w-40" toneClass="bg-white/25" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
+							<SkeletonBlock className="h-4 w-4/5" toneClass="bg-white/20" />
+							<div className="flex overflow-hidden shadow-lg">
+								<SkeletonBlock className="h-11 flex-[2] rounded-none" toneClass="bg-white/80" />
+								<SkeletonBlock className="h-11 flex-1 rounded-none" toneClass="bg-[#EAB3B3]" />
+							</div>
+							<SkeletonBlock className="h-3 w-48" toneClass="bg-white/15" />
+						</div>
+					</div>
+					<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<div key={index} className="space-y-4">
+								<SkeletonBlock className="h-6 w-28" toneClass="bg-white/25" />
+								<div className="space-y-3">
+									<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
+									<SkeletonBlock className="h-4 w-5/6" toneClass="bg-white/20" />
+									<SkeletonBlock className="h-4 w-2/3" toneClass="bg-white/20" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</footer>
+	);
+}
+
+export function RoutePageSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="bg-[#0C2D70] py-16 mt-[101px] md:mt-[106px] lg:mt-[167px]">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-10 w-40" toneClass="bg-white/25" />
+					<div className="space-y-3 max-w-2xl">
+						<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
+						<SkeletonBlock className="h-4 w-5/6" toneClass="bg-white/20" />
+					</div>
+				</div>
+			</div>
+			<div className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-8 w-56" />
+					<SkeletonBlock className="h-4 w-full max-w-3xl" />
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+						{Array.from({ length: 3 }).map((_, index) => (
+							<div key={index} className="border border-[#DEDEDE] bg-white p-6 shadow-lg">
+								<div className="space-y-4">
+									<SkeletonBlock className="h-48 w-full" toneClass="bg-[#D3DCEB]" />
+									<SkeletonBlock className="h-6 w-4/5" />
+									<SkeletonBlock className="h-4 w-full" />
+									<SkeletonBlock className="h-4 w-5/6" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -75,17 +327,20 @@ export function BlogGridSkeleton({ count = 6, className = "" }) {
 	return (
 		<div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
 			{Array.from({ length: count }).map((_, index) => (
-				<div key={index} className="bg-white shadow-lg overflow-hidden min-h-[450px] animate-pulse">
-					<div className="w-full h-48 bg-gray-200" />
-					<div className="p-6 space-y-3">
-						<div className="h-6 bg-gray-200 w-5/6" />
-						<div className="h-4 bg-gray-100 w-1/2" />
-						<div className="space-y-2 pt-2">
-							<div className="h-4 bg-gray-100 w-full" />
-							<div className="h-4 bg-gray-100 w-full" />
-							<div className="h-4 bg-gray-100 w-2/3" />
+				<div key={index} className="min-h-[450px] overflow-hidden bg-white shadow-lg">
+					<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
+					<div className="flex flex-1 flex-col p-6">
+						<SkeletonBlock className="h-7 w-5/6" />
+						<div className="mb-3 mt-3 space-y-2">
+							<SkeletonBlock className="h-4 w-1/2" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-1/3" toneClass="bg-[#E5EBF4]" />
 						</div>
-						<div className="h-5 bg-gray-200 w-1/3 mt-4" />
+						<div className="flex-1 space-y-2 pt-1">
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-4/5" toneClass="bg-[#E5EBF4]" />
+						</div>
+						<SkeletonBlock className="mt-6 h-5 w-32" toneClass="bg-[#C8D7EE]" />
 					</div>
 				</div>
 			))}
@@ -95,26 +350,46 @@ export function BlogGridSkeleton({ count = 6, className = "" }) {
 
 export function BlogPostSkeleton({ className = "" }) {
 	return (
-		<section className={`flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px] ${className}`}>
-			<div className="max-w-7xl mx-auto px-6 w-full animate-pulse">
-				<div className="h-6 bg-gray-200 w-36 mb-8" />
-				<article className="bg-white overflow-hidden shadow-sm">
-					<div className="w-full h-64 md:h-96 bg-gray-200" />
-					<div className="p-8 md:p-12 space-y-4">
-						<div className="h-10 bg-gray-200 w-3/4" />
-						<div className="h-4 bg-gray-100 w-1/3" />
-						<div className="space-y-3 pt-2">
-							<div className="h-4 bg-gray-100 w-full" />
-							<div className="h-4 bg-gray-100 w-full" />
-							<div className="h-4 bg-gray-100 w-11/12" />
-							<div className="h-4 bg-gray-100 w-10/12" />
-							<div className="h-4 bg-gray-100 w-4/5" />
+		<section className={`relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px] ${className}`}>
+			<img
+				src={getCloudFrontUrl("private/seattle-skyline.png")}
+				alt=""
+				aria-hidden="true"
+				fetchPriority="high"
+				className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+			/>
+			<div className="max-w-7xl mx-auto px-6 w-full">
+				<SkeletonBlock className="mb-8 h-6 w-36" toneClass="bg-[#C8D7EE]" />
+				<article className="overflow-hidden">
+					<SkeletonBlock className="h-64 w-full rounded-none md:h-96" toneClass="bg-[#D3DCEB]" />
+					<div className="space-y-6 py-8">
+						<SkeletonBlock className="h-10 w-3/4" />
+						<div className="space-y-2">
+							<SkeletonBlock className="h-4 w-1/3" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-1/4" toneClass="bg-[#E5EBF4]" />
+						</div>
+						<div className="space-y-4 pt-2">
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-6 w-52" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-10/12" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-4/5" toneClass="bg-[#E5EBF4]" />
 						</div>
 					</div>
 				</article>
+				<div className="mt-10 bg-[#F5F5F5] p-6">
+					<SkeletonBlock className="mb-3 h-6 w-40" />
+					<div className="space-y-3">
+						<SkeletonBlock className="h-4 w-44" toneClass="bg-[#E5EBF4]" />
+						<SkeletonBlock className="h-4 w-52" toneClass="bg-[#E5EBF4]" />
+						<SkeletonBlock className="h-4 w-40" toneClass="bg-[#E5EBF4]" />
+					</div>
+				</div>
 				<div className="flex justify-between items-center mt-10">
-					<div className="h-5 bg-gray-200 w-28" />
-					<div className="h-5 bg-gray-200 w-24" />
+					<SkeletonBlock className="h-5 w-28" toneClass="bg-[#C8D7EE]" />
+					<SkeletonBlock className="h-5 w-24" toneClass="bg-[#C8D7EE]" />
 				</div>
 			</div>
 		</section>

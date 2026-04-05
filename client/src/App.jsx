@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
+import { FooterSkeleton, RoutePageSkeleton } from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -37,7 +38,7 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
-	return <div className="flex-1 min-h-screen" aria-hidden="true" />;
+	return <RoutePageSkeleton />;
 }
 
 function DeferredFooter() {
@@ -66,11 +67,11 @@ function DeferredFooter() {
 	return (
 		<div ref={footerRef}>
 			{shouldRender ? (
-				<Suspense fallback={<div className="min-h-[460px]" aria-hidden="true" />}>
+				<Suspense fallback={<FooterSkeleton />}>
 					<Footer />
 				</Suspense>
 			) : (
-				<div className="min-h-[460px]" aria-hidden="true" />
+				<FooterSkeleton />
 			)}
 		</div>
 	);

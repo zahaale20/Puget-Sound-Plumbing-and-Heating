@@ -6,15 +6,20 @@ import { ImageWithLoader } from "../ui/LoadingComponents";
 
 function RecentPostCardSkeleton() {
 	return (
-		<div className="flex flex-col bg-white border-1 border-[#DEDEDE] min-h-[420px] animate-pulse">
-			<div className="w-full h-48 bg-gray-200" />
-			<div className="p-6 flex flex-col flex-1 gap-3">
-				<div className="h-6 bg-gray-200 w-11/12" />
-				<div className="h-4 bg-gray-100 w-1/2" />
-				<div className="h-4 bg-gray-100 w-1/3" />
-				<div className="h-4 bg-gray-100 w-full mt-2" />
-				<div className="h-4 bg-gray-100 w-full" />
-				<div className="h-4 bg-gray-100 w-4/5" />
+		<div className="flex min-h-[420px] flex-col border-1 border-[#DEDEDE] bg-white">
+			<div className="h-48 w-full animate-pulse bg-[#D3DCEB]" />
+			<div className="flex flex-1 flex-col p-6">
+				<div className="h-6 w-11/12 animate-pulse bg-[#D9E1F0]" />
+				<div className="mt-3 space-y-2">
+					<div className="h-4 w-1/2 animate-pulse bg-[#E5EBF4]" />
+					<div className="h-4 w-1/3 animate-pulse bg-[#E5EBF4]" />
+				</div>
+				<div className="mt-4 flex-1 space-y-2">
+					<div className="h-4 w-full animate-pulse bg-[#E5EBF4]" />
+					<div className="h-4 w-full animate-pulse bg-[#E5EBF4]" />
+					<div className="h-4 w-4/5 animate-pulse bg-[#E5EBF4]" />
+				</div>
+				<div className="mt-6 h-5 w-32 animate-pulse bg-[#C8D7EE]" />
 			</div>
 		</div>
 	);
