@@ -37,7 +37,7 @@ function DeferredSection({ children, fallbackHeightClass = "min-h-[520px]" }) {
 	}, [shouldRender]);
 
 	return (
-		<div ref={sectionRef}>
+		<div ref={sectionRef} className="w-full">
 			{shouldRender ? (
 				<Suspense fallback={<div className={fallbackHeightClass} aria-hidden="true" />}>
 					{children}
