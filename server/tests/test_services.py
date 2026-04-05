@@ -332,3 +332,27 @@ class TestEmailHelpers:
         with pytest.raises(HTTPException) as exc_info:
             _raise_internal_api_error("test context", Exception("boom"))
         assert exc_info.value.status_code == 500
+
+
+class TestServerConfig:
+    def test_build_allowed_hosts_includes_vercel_deployment_host(self, monkeypatch):
+        from main import _build_allowed_hosts
+
+        monkeypatch.setenv("VERCEL_URL", "https://puget-sound-plumbing-and-heating-gh.vercel.app")
+        monkeypatch.delenv("ALLOWED_HOSTS", raising=False)
+
+        allowed_hosts = _build_allowed_hosts()
+
+        assert "puget-sound-plumbing-and-heating-gh.vercel.app" in allowed_hosts
+        assert "*.vercel.app" in allowed_hosts
+
+    def test_build_allowed_hosts_normalizes_extra_hosts(self, monkeypatch):
+        from main import _build_allowed_hosts
+
+        monkeypatch.delenv("VERCEL_URL", raising=False)
+        monkeypatch.setenv("ALLOWED_HOSTS", " https://api.example.com:443 , staging.example.com/path ")
+
+        allowed_hosts = _build_allowed_hosts()
+
+        assert "api.example.com" in allowed_hosts
+        assert "staging.example.com" in allowed_hosts

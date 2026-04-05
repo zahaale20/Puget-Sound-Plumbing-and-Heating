@@ -22,6 +22,7 @@ export default function Hero() {
 				aria-hidden="true"
 				width="1920"
 				height="1080"
+				loading="eager"
 				decoding="async"
 				srcSet={[
 					`${getCloudFrontUrl("private/home-page-hero2-1280.webp")} 1280w`,

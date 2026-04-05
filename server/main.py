@@ -4,12 +4,60 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from urllib.parse import urlparse
 from routes import images, email
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = FastAPI(title="PSPAH Backend API")
+
+
+def _normalize_hostname(hostname: str | None) -> str | None:
+    if not hostname:
+        return None
+
+    candidate = hostname.strip()
+    if not candidate:
+        return None
+
+    if "://" in candidate:
+        candidate = urlparse(candidate).netloc
+
+    return candidate.split("/", 1)[0].split(":", 1)[0].lower() or None
+
+
+def _build_allowed_hosts() -> list[str]:
+    allowed_hosts = [
+        "localhost",
+        "127.0.0.1",
+        "pugetsoundplumbing.com",
+        "www.pugetsoundplumbing.com",
+        "cavostudio.com",
+        "www.cavostudio.com",
+    ]
+
+    vercel_host = _normalize_hostname(os.getenv("VERCEL_URL"))
+    if vercel_host:
+        allowed_hosts.append(vercel_host)
+
+    if vercel_host and vercel_host.endswith(".vercel.app"):
+        allowed_hosts.append("*.vercel.app")
+
+    configured_hosts = os.getenv("ALLOWED_HOSTS", "")
+    for host in configured_hosts.split(","):
+        normalized_host = _normalize_hostname(host)
+        if normalized_host:
+            allowed_hosts.append(normalized_host)
+
+    deduped_hosts = []
+    seen_hosts = set()
+    for host in allowed_hosts:
+        if host not in seen_hosts:
+            deduped_hosts.append(host)
+            seen_hosts.add(host)
+
+    return deduped_hosts
 
 # Setup CORS
 origins = [
@@ -38,14 +86,7 @@ app.add_middleware(
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=[
-        "localhost",
-        "127.0.0.1",
-        "pugetsoundplumbing.com",
-        "www.pugetsoundplumbing.com",
-        "cavostudio.com",
-        "www.cavostudio.com",
-    ],
+    allowed_hosts=_build_allowed_hosts(),
 )
 
 if os.getenv("ENABLE_HTTPS_REDIRECT", "false").lower() == "true":
