@@ -5,6 +5,7 @@ import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService"
 import { getCloudFrontUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { ServiceLinks } from "../data/data";
 import NotFoundPage from "./NotFoundPage";
 
@@ -209,10 +210,11 @@ export default function BlogPostPage() {
 				<article className="overflow-hidden">
 					{/* Featured Image */}
 					{postImageUrl ? (
-						<img
+						<ImageWithLoader
 							src={postImageUrl}
 							alt={post.title}
 							className="w-full h-64 md:h-96 object-cover"
+							loading="lazy"
 							decoding="async"
 						/>
 					) : (

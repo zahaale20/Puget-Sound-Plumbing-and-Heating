@@ -18,6 +18,9 @@ export default function NotFoundPage() {
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
+					loading="lazy"
+					decoding="async"
+					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover z-0"
 				/>
 
