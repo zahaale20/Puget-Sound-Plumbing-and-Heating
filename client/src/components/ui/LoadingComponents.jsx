@@ -323,6 +323,96 @@ export function RoutePageSkeleton() {
 	);
 }
 
+export function HomeRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-10 w-64" toneClass="bg-white/25" />
+					<div className="space-y-3 max-w-2xl">
+						<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
+						<SkeletonBlock className="h-4 w-5/6" toneClass="bg-white/20" />
+					</div>
+				</div>
+			</div>
+			<PromoBarSkeleton />
+			<div className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl px-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+					{Array.from({ length: 3 }).map((_, index) => (
+						<div key={index} className="border border-[#DEDEDE] bg-white p-6">
+							<div className="space-y-4">
+								<SkeletonBlock className="h-32 w-full" toneClass="bg-[#D3DCEB]" />
+								<SkeletonBlock className="h-6 w-4/5" />
+								<SkeletonBlock className="h-4 w-full" />
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export function BlogRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-10 w-40" toneClass="bg-white/25" />
+					<SkeletonBlock className="h-4 w-80 max-w-full" toneClass="bg-white/20" />
+				</div>
+			</div>
+			<div className="bg-white pt-16 pb-6">
+				<div className="mx-auto max-w-7xl px-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+					<SkeletonBlock className="h-10 w-full lg:col-span-1" />
+					<SkeletonBlock className="h-10 w-full lg:col-span-2" />
+				</div>
+			</div>
+			<div className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<BlogGridSkeleton count={6} />
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export function BlogPostRouteSkeleton() {
+	return <BlogPostSkeleton className="mt-[101px] md:mt-[106px] lg:mt-[167px]" />;
+}
+
+export function CouponsRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-10 w-56" toneClass="bg-white/25" />
+					<SkeletonBlock className="h-4 w-96 max-w-full" toneClass="bg-white/20" />
+				</div>
+			</div>
+			<div className="relative overflow-hidden bg-[#0C2D70] py-16">
+				<OfferCardsSkeleton />
+			</div>
+		</div>
+	);
+}
+
+export function ScheduleRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-10 w-56" toneClass="bg-white/25" />
+					<SkeletonBlock className="h-4 w-96 max-w-full" toneClass="bg-white/20" />
+				</div>
+			</div>
+			<div className="bg-[#F5F5F5] py-16">
+				<FormSectionSkeleton />
+			</div>
+		</div>
+	);
+}
+
 export function BlogGridSkeleton({ count = 6, className = "" }) {
 	return (
 		<div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>

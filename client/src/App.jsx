@@ -4,7 +4,15 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
-import { FooterSkeleton, RoutePageSkeleton } from "./components/ui/LoadingComponents";
+import {
+	BlogPostRouteSkeleton,
+	BlogRouteSkeleton,
+	CouponsRouteSkeleton,
+	FooterSkeleton,
+	HomeRouteSkeleton,
+	RoutePageSkeleton,
+	ScheduleRouteSkeleton,
+} from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -38,6 +46,28 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
+	const { pathname } = useLocation();
+
+	if (pathname === "/") {
+		return <HomeRouteSkeleton />;
+	}
+
+	if (pathname === "/blog") {
+		return <BlogRouteSkeleton />;
+	}
+
+	if (pathname.startsWith("/blog/")) {
+		return <BlogPostRouteSkeleton />;
+	}
+
+	if (pathname === "/coupons") {
+		return <CouponsRouteSkeleton />;
+	}
+
+	if (pathname === "/schedule-online") {
+		return <ScheduleRouteSkeleton />;
+	}
+
 	return <RoutePageSkeleton />;
 }
 
