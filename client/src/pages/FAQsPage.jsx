@@ -76,7 +76,7 @@ export default function FAQs() {
 			</section>
 
 			<section className="flex justify-center w-full pt-16 bg-white text-[#2B2B2B] mb-6">
-				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full">
+				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{firstSection.map((faq, index) => (
 						<FAQItem key={index} faq={faq} globalIndex={index} />
 					))}
@@ -92,7 +92,7 @@ export default function FAQs() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full">
+				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{secondSection.map((faq, index) => (
 						<FAQItem key={index} faq={faq} globalIndex={firstSection.length + index} />
 					))}

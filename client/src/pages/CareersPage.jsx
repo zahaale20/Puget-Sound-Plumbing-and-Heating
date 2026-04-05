@@ -7,6 +7,7 @@ import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function CareersPage() {
 	const [expandedJob, setExpandedJob] = useState(null);
+	const sectionContentClass = "w-full max-w-7xl mx-auto px-6";
 
 	const toggleJob = (index) => {
 		setExpandedJob(expandedJob === index ? null : index);
@@ -24,7 +25,7 @@ export default function CareersPage() {
 					className="absolute inset-0 w-full h-full object-cover z-0"
 				/>
 
-				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
+				<div className={`${sectionContentClass} flex flex-col gap-6 text-white`}>
 					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
 						Careers
 						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
@@ -37,19 +38,18 @@ export default function CareersPage() {
 			</section>
 
 			{/* Current Openings Section */}
-			<section className="flex justify-center w-full pt-16 bg-white">
-				<div className="flex flex-col w-full max-w-7xl px-6 gap-12 text-[#2B2B2B]">
-					<div className="flex flex-col items-center w-full">
-						<div className="w-full mb-6 text-left">
-							<h4 className="text-[#0C2D70] inline-block relative pb-2">
-								Current Openings
-								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-							</h4>
-						</div>
+			<section className="w-full pt-16 bg-white">
+				<div className={`${sectionContentClass} flex flex-col gap-6 text-[#2B2B2B]`}>
+					<div className="w-full text-left">
+						<h4 className="text-[#0C2D70] inline-block relative pb-2">
+							Current Openings
+							<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
+						</h4>
+					</div>
 
-						<div className="flex flex-col gap-4 w-full">
-							{openings.map((job, index) => (
-								<div key={index} className="bg-white border border-gray-200 overflow-hidden">
+					<div className="flex flex-col gap-4 w-full">
+						{openings.map((job, index) => (
+							<div key={index} className="bg-white border border-gray-200 overflow-hidden">
 									<button
 										onClick={() => toggleJob(index)}
 										className="w-full flex justify-between items-center p-4 border-b-4 border-transparent hover:bg-[#F5F5F5] hover:border-[#B32020] transition-colors text-left cursor-pointer"
@@ -110,9 +110,8 @@ export default function CareersPage() {
 											</div>
 										</div>
 									)}
-								</div>
-							))}
-						</div>
+							</div>
+						))}
 					</div>
 				</div>
 			</section>
@@ -127,7 +126,7 @@ export default function CareersPage() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="flex flex-col w-full max-w-7xl px-6">
+				<div className={`${sectionContentClass} flex flex-col`}>
 					<div className="w-full mb-6 text-left">
 						<h4 className="text-[#0C2D70] inline-block relative pb-2">
 							Apply Now

@@ -26,6 +26,12 @@ export function ImageWithLoader({
 		setHasError(true);
 	};
 
+	let objectClass = "object-cover";
+	if (className.includes("object-contain")) objectClass = "object-contain";
+	if (className.includes("object-fill")) objectClass = "object-fill";
+	if (className.includes("object-none")) objectClass = "object-none";
+	if (className.includes("object-scale-down")) objectClass = "object-scale-down";
+
 	return (
 		<div className={`relative ${className}`}>
 			{isLoading && <div className="absolute inset-0 rounded-[inherit] bg-[#E3EAF4] animate-pulse" />}
@@ -37,7 +43,7 @@ export function ImageWithLoader({
 				<img
 					src={src}
 					alt={alt}
-					className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
+					className={`h-full w-full rounded-[inherit] ${objectClass} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
 					loading={loading}
 					decoding={decoding}
 					fetchPriority={fetchPriority}
