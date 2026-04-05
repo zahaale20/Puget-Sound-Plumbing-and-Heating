@@ -3,7 +3,6 @@ import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser } from "react-icons
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-import { BlogPostSkeleton } from "../components/ui/LoadingComponents";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { ServiceLinks } from "../data/data";
@@ -69,7 +68,11 @@ export default function BlogPostPage() {
 	}, [postSlug]);
 
 	if (isLoading) {
-		return <BlogPostSkeleton />;
+		return (
+			<section className="flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px]">
+				<div className="max-w-7xl mx-auto px-6 w-full text-[#0C2D70]">Loading blog post...</div>
+			</section>
+		);
 	}
 
 	if (!post) return <NotFoundPage />;

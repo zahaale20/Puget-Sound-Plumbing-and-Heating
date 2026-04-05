@@ -4,15 +4,6 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
-import {
-	BlogPostRouteSkeleton,
-	BlogRouteSkeleton,
-	CouponsRouteSkeleton,
-	FooterSkeleton,
-	HomeRouteSkeleton,
-	RoutePageSkeleton,
-	ScheduleRouteSkeleton,
-} from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -46,29 +37,7 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
-	const { pathname } = useLocation();
-
-	if (pathname === "/") {
-		return <HomeRouteSkeleton />;
-	}
-
-	if (pathname === "/blog") {
-		return <BlogRouteSkeleton />;
-	}
-
-	if (pathname.startsWith("/blog/")) {
-		return <BlogPostRouteSkeleton />;
-	}
-
-	if (pathname === "/coupons") {
-		return <CouponsRouteSkeleton />;
-	}
-
-	if (pathname === "/schedule-online") {
-		return <ScheduleRouteSkeleton />;
-	}
-
-	return <RoutePageSkeleton />;
+	return <div className="flex-1 min-h-screen" aria-hidden="true" />;
 }
 
 function DeferredFooter() {
@@ -97,11 +66,11 @@ function DeferredFooter() {
 	return (
 		<div ref={footerRef}>
 			{shouldRender ? (
-				<Suspense fallback={<FooterSkeleton />}>
+				<Suspense fallback={<div className="min-h-[460px]" aria-hidden="true" />}>
 					<Footer />
 				</Suspense>
 			) : (
-				<FooterSkeleton />
+				<div className="min-h-[460px]" aria-hidden="true" />
 			)}
 		</div>
 	);
