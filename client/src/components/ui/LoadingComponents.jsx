@@ -173,6 +173,36 @@ export function OfferCardsSkeleton({ className = "" }) {
 	);
 }
 
+export function BlogPostGridSkeleton({
+	className = "",
+	cardCount = 3,
+	cardMinHeightClass = "min-h-[420px]",
+	gridClassName = "grid-cols-1 lg:grid-cols-3",
+}) {
+	return (
+		<div className={`grid w-full gap-6 ${gridClassName} ${className}`} aria-hidden="true">
+			{Array.from({ length: cardCount }).map((_, index) => (
+				<div key={index} className={`flex ${cardMinHeightClass} flex-col border border-[#DEDEDE] bg-white`}>
+					<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
+					<div className="flex flex-1 flex-col p-6">
+						<SkeletonBlock className="h-6 w-11/12" />
+						<div className="mt-3 space-y-2">
+							<SkeletonBlock className="h-4 w-1/2" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-1/3" toneClass="bg-[#E5EBF4]" />
+						</div>
+						<div className="mt-4 flex-1 space-y-2">
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-4/5" toneClass="bg-[#E5EBF4]" />
+						</div>
+						<SkeletonBlock className="mt-6 h-5 w-32" toneClass="bg-[#C8D7EE]" />
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
 export function RecentPostsSectionSkeleton({ className = "" }) {
 	return (
 		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
@@ -180,26 +210,7 @@ export function RecentPostsSectionSkeleton({ className = "" }) {
 				<SkeletonBlock className="h-8 w-48" />
 				<SkeletonBlock className="h-4 w-80 max-w-full" toneClass="bg-[#E5EBF4]" />
 			</div>
-			<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-				{Array.from({ length: 3 }).map((_, index) => (
-					<div key={index} className="flex min-h-[420px] flex-col border border-[#DEDEDE] bg-white">
-						<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
-						<div className="flex flex-1 flex-col p-6">
-							<SkeletonBlock className="h-6 w-11/12" />
-							<div className="mt-3 space-y-2">
-								<SkeletonBlock className="h-4 w-1/2" toneClass="bg-[#E5EBF4]" />
-								<SkeletonBlock className="h-4 w-1/3" toneClass="bg-[#E5EBF4]" />
-							</div>
-							<div className="mt-4 flex-1 space-y-2">
-								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
-								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
-								<SkeletonBlock className="h-4 w-4/5" toneClass="bg-[#E5EBF4]" />
-							</div>
-							<SkeletonBlock className="mt-6 h-5 w-32" toneClass="bg-[#C8D7EE]" />
-						</div>
-					</div>
-				))}
-			</div>
+			<BlogPostGridSkeleton cardCount={3} />
 			<div className="flex justify-end">
 				<SkeletonBlock className="h-6 w-36" toneClass="bg-[#C8D7EE]" />
 			</div>

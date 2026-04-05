@@ -2,28 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
-import { ImageWithLoader } from "../ui/LoadingComponents";
-
-function RecentPostCardSkeleton() {
-	return (
-		<div className="flex min-h-[420px] flex-col border-1 border-[#DEDEDE] bg-white">
-			<div className="h-48 w-full animate-pulse bg-[#D3DCEB]" />
-			<div className="flex flex-1 flex-col p-6">
-				<div className="h-6 w-11/12 animate-pulse bg-[#D9E1F0]" />
-				<div className="mt-3 space-y-2">
-					<div className="h-4 w-1/2 animate-pulse bg-[#E5EBF4]" />
-					<div className="h-4 w-1/3 animate-pulse bg-[#E5EBF4]" />
-				</div>
-				<div className="mt-4 flex-1 space-y-2">
-					<div className="h-4 w-full animate-pulse bg-[#E5EBF4]" />
-					<div className="h-4 w-full animate-pulse bg-[#E5EBF4]" />
-					<div className="h-4 w-4/5 animate-pulse bg-[#E5EBF4]" />
-				</div>
-				<div className="mt-6 h-5 w-32 animate-pulse bg-[#C8D7EE]" />
-			</div>
-		</div>
-	);
-}
+import { BlogPostGridSkeleton, ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
@@ -94,11 +73,7 @@ export default function RecentBlogPosts() {
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				{recentPosts.length === 0 && (
-					<>
-						<RecentPostCardSkeleton />
-						<RecentPostCardSkeleton />
-						<RecentPostCardSkeleton />
-					</>
+					<BlogPostGridSkeleton className="contents" cardCount={3} />
 				)}
 				{recentPosts.map((post) => (
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
