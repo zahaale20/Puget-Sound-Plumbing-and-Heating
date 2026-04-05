@@ -1,11 +1,12 @@
 import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
 import { getCloudFrontUrl } from "../services/imageService";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function LimitedTimeOffersPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -25,7 +26,7 @@ export default function LimitedTimeOffersPage() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

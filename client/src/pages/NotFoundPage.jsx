@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { getCloudFrontUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 export default function NotFoundPage() {
 	const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function NotFoundPage() {
 				noIndex
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-24">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"

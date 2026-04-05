@@ -441,7 +441,7 @@ export function BlogGridSkeleton({ count = 6, className = "" }) {
 export function BlogPostSkeleton({ className = "" }) {
 	return (
 		<section className={`relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px] ${className}`}>
-			<img
+			<ImageWithLoader
 				src={getCloudFrontUrl("private/seattle-skyline.png")}
 				alt=""
 				aria-hidden="true"

@@ -67,7 +67,7 @@ export default function ServicePage() {
 			/>
 			{/* 1. Header (Pattern Background) */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -134,7 +134,7 @@ export default function ServicePage() {
 
 			{/* 3. What to Expect (Skyline Background) */}
 			<section className="relative overflow-hidden w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -279,7 +279,7 @@ export default function ServicePage() {
 
 			{/* 6. Schedule Online (Skyline Background) */}
 			<section className="relative overflow-hidden flex justify-center w-full py-24">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

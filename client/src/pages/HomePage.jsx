@@ -3,6 +3,7 @@ import Hero from "../components/sections/Hero";
 import EmergencyBar from "../components/layout/EmergencyBar";
 import OurServices from "../components/sections/OurServices";
 import { getCloudFrontUrl } from "../services/imageService";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 const WhyChooseUs = lazy(() => import("../components/sections/WhyChooseUs"));
 const FinancingBar = lazy(() => import("../components/layout/FinancingBar"));
@@ -56,7 +57,7 @@ export default function Home() {
 			<EmergencyBar />
 
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -76,7 +77,7 @@ export default function Home() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
@@ -101,7 +102,7 @@ export default function Home() {
 			</DeferredSection>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -122,7 +123,7 @@ export default function Home() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
