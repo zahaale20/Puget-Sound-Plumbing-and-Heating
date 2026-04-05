@@ -213,7 +213,7 @@ export default function BlogPostPage() {
 						<ImageWithLoader
 							src={postImageUrl}
 							alt={post.title}
-							className="w-full h-64 md:h-96 object-cover"
+							className="block w-full h-64 md:h-96 object-cover"
 							loading="lazy"
 							decoding="async"
 						/>

@@ -30,14 +30,14 @@ export function ImageWithLoader({
 		<div className={`relative ${className}`}>
 			{isLoading && <div className="absolute inset-0 rounded-[inherit] bg-[#E3EAF4] animate-pulse" />}
 			{hasError ? (
-				<div className="flex h-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
+				<div className="flex h-full w-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
 					Image unavailable
 				</div>
 			) : (
 				<img
 					src={src}
 					alt={alt}
-					className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
+					className={`block ${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
 					loading={loading}
 					decoding={decoding}
 					fetchPriority={fetchPriority}
