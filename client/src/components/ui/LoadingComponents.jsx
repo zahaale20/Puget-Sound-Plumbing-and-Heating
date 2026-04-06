@@ -659,8 +659,8 @@ export function RoutePageSkeleton() {
 export function HomeRouteSkeleton() {
 	return (
 		<div className="flex-1" aria-hidden="true">
-			<section className="relative mt-[101px] h-[calc(100vh-101px)] bg-[#0C2D70] md:mt-[106px] md:h-[calc(100vh-106px)] lg:mt-[167px] lg:h-[calc(100vh-167px)]">
-				<SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" toneClass="bg-[#183D87]" />
+			<section className="relative mt-[101px] h-[calc(100vh-101px)] bg-[#2B2B2B] md:mt-[106px] md:h-[calc(100vh-106px)] lg:mt-[167px] lg:h-[calc(100vh-167px)]">
+				<SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" toneClass="bg-[#3A3A3A]" />
 				<div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col items-center justify-center gap-8 px-6 text-center">
 					<div className="space-y-4">
 						<SkeletonBlock className="mx-auto h-12 w-[22rem] max-w-full" toneClass="bg-white/25" />
