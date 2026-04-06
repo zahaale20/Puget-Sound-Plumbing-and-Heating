@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
@@ -54,7 +55,7 @@ export default function AreaPage() {
 			/>
 			{/* Header Section*/}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -116,7 +117,7 @@ export default function AreaPage() {
 
 			{/* Why Choose Us Section*/}
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

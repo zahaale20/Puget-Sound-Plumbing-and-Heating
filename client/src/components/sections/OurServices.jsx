@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { FaArrowRight } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { HomeServices } from "../../data/data";
@@ -44,7 +45,7 @@ export default function OurServices() {
 					>
 						{/* Single icon variant avoids large duplicate image downloads. */}
 						<div className="relative w-12 h-12 mb-6 shrink-0">
-							<img
+							<ImageWithLoader
 								src={getCloudFrontUrl(
 									optimizedIconKeyMap[service.imageColorKey] || service.imageColorKey || service.imageKey
 								)}

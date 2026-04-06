@@ -189,7 +189,7 @@ export default function BlogPostPage() {
 				type="article"
 				jsonLd={[blogJsonLd, breadcrumbJsonLd]}
 			/>
-			<img
+			<ImageWithLoader
 				src={getCloudFrontUrl("private/seattle-skyline.png")}
 				alt=""
 				aria-hidden="true"

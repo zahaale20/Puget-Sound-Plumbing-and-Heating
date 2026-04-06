@@ -77,13 +77,17 @@ export default function Footer() {
 			<div
 				className="relative flex flex-col items-center w-full py-16"
 				style={{
-					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
 					backgroundColor: "#0C2D70",
-					backgroundRepeat: "no-repeat",
-					backgroundPosition: "center",
-					backgroundSize: "cover",
 				}}
 			>
+				{patternUrl ? (
+					<ImageWithLoader
+						src={patternUrl}
+						alt=""
+						aria-hidden="true"
+						className="absolute inset-0 h-full w-full object-cover"
+					/>
+				) : null}
 				{/* Content */}
 				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">

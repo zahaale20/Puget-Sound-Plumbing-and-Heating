@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
@@ -15,7 +16,7 @@ export default function CareersPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			{/* Header Section */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -118,7 +119,7 @@ export default function CareersPage() {
 
 			{/* Application Form Section */}
 			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

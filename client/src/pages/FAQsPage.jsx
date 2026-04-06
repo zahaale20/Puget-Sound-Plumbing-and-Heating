@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getCloudFrontUrl } from "../services/imageService";
 import { FAQsData } from "../data/data";
@@ -55,7 +56,7 @@ export default function FAQs() {
 				jsonLd={faqJsonLd}
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -83,7 +84,7 @@ export default function FAQs() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full pb-16 text-[#2B2B2B]">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

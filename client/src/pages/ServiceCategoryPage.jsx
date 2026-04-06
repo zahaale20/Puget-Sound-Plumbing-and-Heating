@@ -49,7 +49,7 @@ export default function ServiceCategoryPage() {
 				jsonLd={[itemListJsonLd, breadcrumbJsonLd]}
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
@@ -75,19 +75,27 @@ export default function ServiceCategoryPage() {
 				const bgIndex = index % 3;
 
 				let sectionClass = "flex justify-center w-full py-16";
-				let sectionStyle = {};
+				let hasSkylineBackground = false;
 
 				if (bgIndex === 0) {
 					sectionClass += " bg-white";
 				} else if (bgIndex === 1) {
-					sectionClass += " bg-cover bg-bottom";
-					sectionStyle = { backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" };
+					sectionClass += " relative overflow-hidden";
+					hasSkylineBackground = true;
 				} else if (bgIndex === 2) {
 					sectionClass += " bg-[#F5F5F5]";
 				}
 
 				return (
-					<section key={index} className={sectionClass} style={sectionStyle}>
+					<section key={index} className={sectionClass}>
+						{hasSkylineBackground && skylineUrl ? (
+							<ImageWithLoader
+								src={skylineUrl}
+								alt=""
+								aria-hidden="true"
+								className="absolute inset-0 h-full w-full object-cover object-bottom"
+							/>
+						) : null}
 						<div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-6 w-full gap-16 items-center">
 							<div
 								className={`order-2 flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
@@ -124,7 +132,7 @@ export default function ServiceCategoryPage() {
 			})}
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<img
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"

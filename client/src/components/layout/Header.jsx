@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -74,7 +75,7 @@ export default function Header() {
 						onClick={() => navigate("/")}
 						className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
-						<img
+						<ImageWithLoader
 							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
