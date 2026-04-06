@@ -183,6 +183,19 @@ export default function BlogPage() {
 		</div>
 	);
 
+	const LoadingPostCard = ({ index }) => (
+		<div key={`blog-loading-card-${index}`} className="animate-pulse bg-white border border-[#DEDEDE] flex flex-col overflow-hidden min-h-[450px]">
+			<div className="w-full h-48 bg-[#E5E7EB]" />
+			<div className="p-6 flex flex-col flex-1 gap-3">
+				<div className="h-6 bg-[#E5E7EB] w-4/5" />
+				<div className="h-4 bg-[#E5E7EB] w-2/3" />
+				<div className="h-4 bg-[#E5E7EB] w-full" />
+				<div className="h-4 bg-[#E5E7EB] w-5/6" />
+				<div className="h-4 bg-[#E5E7EB] w-3/4 mt-auto" />
+			</div>
+		</div>
+	);
+
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
@@ -298,7 +311,11 @@ export default function BlogPage() {
 
 			{isLoading && (
 				<section className="bg-white w-full pb-16">
-					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">Loading blog posts...</div>
+					<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+						{Array.from({ length: POSTS_PER_PAGE }).map((_, index) => (
+							<LoadingPostCard key={index} index={index} />
+						))}
+					</div>
 				</section>
 			)}
 
