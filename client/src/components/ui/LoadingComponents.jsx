@@ -305,6 +305,133 @@ export function ReviewSectionSkeleton({ className = "" }) {
 	);
 }
 
+export function ServiceCategoryRowsSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 ${className}`} aria-hidden="true">
+			{Array.from({ length: 4 }).map((_, index) => (
+				<div key={index} className="flex flex-col gap-2">
+					<div className="flex flex-col gap-12 sm:flex-row sm:items-start">
+						<div className="hidden shrink-0 sm:block">
+							<SkeletonBlock className="h-[90px] w-[120px]" toneClass="bg-[#D3DCEB]" />
+						</div>
+						<div className="flex-1 space-y-2">
+							<SkeletonBlock className="h-7 w-52" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+						</div>
+					</div>
+					<div className="mt-1 flex justify-end">
+						<SkeletonBlock className="h-6 w-56" toneClass="bg-[#C8D7EE]" />
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
+export function ServiceAreaRowsSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 ${className}`} aria-hidden="true">
+			{Array.from({ length: 4 }).map((_, index) => (
+				<div key={index} className="flex flex-col gap-2">
+					<div className="flex flex-col gap-12 sm:flex-row sm:items-start">
+						<div className="hidden shrink-0 sm:block">
+							<SkeletonBlock className="h-[90px] w-[120px]" toneClass="bg-[#D3DCEB]" />
+						</div>
+						<div className="flex-1 space-y-2">
+							<SkeletonBlock className="h-7 w-52" />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+						</div>
+					</div>
+					<div className="mt-1 flex justify-end">
+						<SkeletonBlock className="h-6 w-60" toneClass="bg-[#C8D7EE]" />
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
+export function CallNowSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col items-start gap-16 px-6 lg:flex-row ${className}`} aria-hidden="true">
+			<div className="order-2 flex shrink-0 justify-center self-center lg:order-none lg:self-end">
+				<SkeletonBlock className="h-80 w-[22rem] rounded-lg" toneClass="bg-[#D3DCEB]" />
+			</div>
+			<div className="order-1 flex-1 space-y-6 py-16 lg:order-none">
+				<SkeletonBlock className="h-8 w-36" />
+				<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
+			</div>
+		</div>
+	);
+}
+
+export function FaqTeaserSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-col items-start gap-16 px-6 lg:flex-row ${className}`} aria-hidden="true">
+			<div className="flex-1 space-y-6 py-16">
+				<SkeletonBlock className="h-8 w-80" />
+				<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+				<div className="flex justify-end">
+					<SkeletonBlock className="h-6 w-36" toneClass="bg-[#C8D7EE]" />
+				</div>
+			</div>
+			<div className="block shrink-0 self-center pb-16 lg:pb-0">
+				<SkeletonBlock className="h-60 w-[26rem] max-w-full" toneClass="bg-[#D3DCEB]" />
+			</div>
+		</div>
+	);
+}
+
+export function FinancingSectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-row items-center gap-16 px-6 ${className}`} aria-hidden="true">
+			<div className="flex-1 space-y-6">
+				<SkeletonBlock className="h-8 w-36" />
+				<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-6 w-56" />
+				<div className="space-y-3">
+					{Array.from({ length: 4 }).map((_, index) => (
+						<SkeletonBlock key={index} className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+					))}
+				</div>
+				<SkeletonBlock className="h-6 w-52" />
+				<SkeletonBlock className="h-4 w-3/4" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
+			</div>
+			<div className="hidden shrink-0 lg:block">
+				<SkeletonBlock className="mt-4 h-[340px] w-[440px]" toneClass="bg-[#D3DCEB]" />
+			</div>
+		</div>
+	);
+}
+
+export function WarrantySectionSkeleton({ className = "" }) {
+	return (
+		<div className={`mx-auto flex w-full max-w-7xl flex-row gap-16 px-6 text-left ${className}`} aria-hidden="true">
+			<div className="hidden shrink-0 lg:block">
+				<SkeletonBlock className="mt-4 h-[340px] w-[480px]" toneClass="bg-[#D3DCEB]" />
+			</div>
+			<div className="flex-1 space-y-6">
+				<SkeletonBlock className="h-8 w-40" />
+				<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+				<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
+				<div className="space-y-3">
+					{Array.from({ length: 5 }).map((_, index) => (
+						<SkeletonBlock key={index} className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export function PromoBarSkeleton({ className = "" }) {
 	return (
 		<div className={`w-full bg-[#B32020] ${className}`} aria-hidden="true">
@@ -582,28 +709,14 @@ export function HomeRouteSkeleton() {
 				<ReviewSectionSkeleton />
 			</section>
 			<section className="bg-[#F5F5F5] py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-72" />
-					{Array.from({ length: 5 }).map((_, index) => (
-						<div key={index} className="border border-[#DEDEDE] bg-white p-4">
-							<SkeletonBlock className="h-6 w-full" />
-						</div>
-					))}
-				</div>
+				<FaqTeaserSectionSkeleton />
 			</section>
 			<PromoBarSkeleton className="bg-[#0C2D70]" />
 			<section className="bg-[#0C2D70] py-16">
 				<OfferCardsSkeleton />
 			</section>
 			<section className="bg-[#F5F5F5] py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-44" />
-					<SkeletonBlock className="h-4 w-3/4" />
-					<div className="flex gap-4">
-						<SkeletonBlock className="h-12 w-40" toneClass="bg-[#EAB3B3]" />
-						<SkeletonBlock className="h-12 w-56" toneClass="bg-[#C8D7EE]" />
-					</div>
-				</div>
+				<CallNowSectionSkeleton />
 			</section>
 			<section className="py-16">
 				<FormSectionSkeleton />
@@ -642,26 +755,16 @@ export function AboutRouteSkeleton() {
 				</div>
 			</section>
 			<section className="bg-white py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-44" />
-					<SkeletonBlock className="h-4 w-full max-w-4xl" />
-					<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-						{Array.from({ length: 4 }).map((_, index) => (
-							<SkeletonBlock key={index} className="h-52 w-full" toneClass="bg-[#D3DCEB]" />
-						))}
+				<div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6">
+					<div className="space-y-6">
+						<SkeletonBlock className="h-8 w-44" />
+						<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
 					</div>
+					<SkeletonBlock className="h-[320px] w-full rounded-none" toneClass="bg-[#D3DCEB]" />
 				</div>
 			</section>
 			<section className="py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-52" />
-					<SkeletonBlock className="h-4 w-full max-w-4xl" />
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-						{Array.from({ length: 4 }).map((_, index) => (
-							<SkeletonBlock key={index} className="h-44 w-full" toneClass="bg-[#D3DCEB]" />
-						))}
-					</div>
-				</div>
+				<ServiceAreaRowsSkeleton />
 			</section>
 		</div>
 	);
@@ -784,14 +887,10 @@ export function ResourcesRouteSkeleton() {
 		<div className="flex-1" aria-hidden="true">
 			<PatternHeaderSkeleton titleWidth="w-52" descriptionWidth="w-11/12" />
 			<section className="bg-white py-16">
-				<div className="mx-auto max-w-7xl px-6">
-					<TextImageSectionSkeleton imageSide="left" imageClassName="h-[320px] w-full max-w-[32rem] rounded-none" />
-				</div>
+				<FinancingSectionSkeleton />
 			</section>
 			<section className="py-16">
-				<div className="mx-auto max-w-7xl px-6">
-					<TextImageSectionSkeleton imageSide="right" imageClassName="h-[320px] w-full max-w-[32rem] rounded-none" />
-				</div>
+				<WarrantySectionSkeleton />
 			</section>
 			<section className="bg-[#F5F5F5] py-16">
 				<div className="mx-auto max-w-7xl px-6">
@@ -805,7 +904,7 @@ export function ResourcesRouteSkeleton() {
 export function FinancingRouteSkeleton() {
 	return (
 		<section className="py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]" aria-hidden="true">
-			<TextImageSectionSkeleton imageSide="right" imageClassName="h-[340px] w-full max-w-[36rem] rounded-none" />
+			<FinancingSectionSkeleton />
 		</section>
 	);
 }
@@ -813,7 +912,7 @@ export function FinancingRouteSkeleton() {
 export function WarrantyRouteSkeleton() {
 	return (
 		<section className="py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]" aria-hidden="true">
-			<TextImageSectionSkeleton imageSide="left" imageClassName="h-[340px] w-full max-w-[36rem] rounded-none" />
+			<WarrantySectionSkeleton />
 		</section>
 	);
 }
@@ -823,15 +922,7 @@ export function ServiceAreasRouteSkeleton() {
 		<div className="flex-1" aria-hidden="true">
 			<PatternHeaderSkeleton titleWidth="w-56" descriptionWidth="w-full" />
 			<section className="py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-56" />
-					<SkeletonBlock className="h-4 w-full max-w-4xl" />
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-						{Array.from({ length: 4 }).map((_, index) => (
-							<SkeletonBlock key={index} className="h-48 w-full" toneClass="bg-[#D3DCEB]" />
-						))}
-					</div>
-				</div>
+				<ServiceAreaRowsSkeleton />
 			</section>
 		</div>
 	);
@@ -924,20 +1015,7 @@ export function ServiceCategoriesRouteSkeleton() {
 		<div className="flex-1" aria-hidden="true">
 			<PatternHeaderSkeleton titleWidth="w-56" descriptionWidth="w-full" />
 			<section className="py-16">
-				<div className="mx-auto max-w-7xl space-y-6 px-6">
-					<SkeletonBlock className="h-8 w-56" />
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-						{Array.from({ length: 4 }).map((_, index) => (
-							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
-								<SkeletonBlock className="h-44 w-full" toneClass="bg-[#D3DCEB]" />
-								<div className="mt-3 space-y-2">
-									<SkeletonBlock className="h-5 w-3/4" />
-									<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
+				<ServiceCategoryRowsSkeleton />
 			</section>
 		</div>
 	);
