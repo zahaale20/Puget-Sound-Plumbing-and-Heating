@@ -12,24 +12,34 @@
 		overscroll-behavior: none;
 	}
 
-	img.absolute.inset-0.w-full.h-full.object-cover.z-0,
-	img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0 {
+	img.absolute.inset-0.w-full.h-full.object-cover,
+	img.absolute.inset-0.w-full.h-full.object-cover.object-bottom {
 		pointer-events: none;
 	}
 
-	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0),
-	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0),
-	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0),
-	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0) {
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover),
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom),
+	section.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover),
+	section.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover.object-bottom),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom),
+	div.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover),
+	div.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover.object-bottom) {
 		isolation: isolate;
 	}
 
-	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0) > :not(img),
-	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0)
-		> :not(img),
-	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.z-0) > :not(img),
-	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom.z-0)
-		> :not(img) {
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover) > :not(img),
+	section.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom) > :not(img),
+	section.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover)
+		> :not(div.absolute.inset-0.w-full.h-full.object-cover),
+	section.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover.object-bottom)
+		> :not(div.absolute.inset-0.w-full.h-full.object-cover.object-bottom),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover) > :not(img),
+	div.relative:has(> img.absolute.inset-0.w-full.h-full.object-cover.object-bottom) > :not(img),
+	div.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover)
+		> :not(div.absolute.inset-0.w-full.h-full.object-cover),
+	div.relative:has(> div.absolute.inset-0.w-full.h-full.object-cover.object-bottom)
+		> :not(div.absolute.inset-0.w-full.h-full.object-cover.object-bottom) {
 		position: relative;
 		z-index: 1;
 	}

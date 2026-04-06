@@ -9,6 +9,10 @@ function isEagerImage(loading, fetchPriority) {
 	return loading === "eager" || fetchPriority === "high";
 }
 
+function hasExplicitPositionClass(className = "") {
+	return /(^|\s)(static|fixed|absolute|relative|sticky)(\s|$)/.test(className);
+}
+
 function useDeferredImageLoading({ src, loading, fetchPriority, rootMargin }) {
 	const containerRef = useRef(null);
 	const eager = isEagerImage(loading, fetchPriority);
@@ -90,8 +94,25 @@ export function ImageWithLoader({
 		fetchPriority,
 		rootMargin,
 	});
+	const imageRef = useRef(null);
 	const isLoading = status === "loading";
 	const hasError = status === "failed";
+	const wrapperClassName = hasExplicitPositionClass(className)
+		? className
+		: `relative ${className}`.trim();
+
+	useEffect(() => {
+		if (!shouldRender || !isLoading) return;
+
+		const image = imageRef.current;
+		if (!image || !image.complete) return;
+
+		if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+			markLoaded();
+		} else {
+			markFailed();
+		}
+	}, [isLoading, markFailed, markLoaded, shouldRender, src]);
 
 	const handleLoad = (event) => {
 		markLoaded();
@@ -104,7 +125,7 @@ export function ImageWithLoader({
 	};
 
 	return (
-		<div ref={containerRef} className={`relative ${className}`}>
+		<div ref={containerRef} className={wrapperClassName}>
 			{!hasError && isLoading ? (
 				<div aria-hidden="true" className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
 					{loader ?? <DefaultImageLoader />}
@@ -112,6 +133,7 @@ export function ImageWithLoader({
 			) : null}
 			{shouldRender && !hasError ? (
 				<img
+					ref={imageRef}
 					src={src}
 					alt={alt}
 					className={`block ${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-200`}
