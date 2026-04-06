@@ -97,6 +97,7 @@ export default function BlogPage() {
 	};
 
 	const filtered = posts.filter((post) => matchesCategory(post) && matchesKeywords(post));
+	const hasActiveFilters = selectedCategory !== "All" || searchTerm.trim().length > 0;
 
 	const sorted = [...filtered].sort((a, b) => {
 		switch (selectedSort) {
@@ -117,6 +118,12 @@ export default function BlogPage() {
 
 	const totalPages = Math.ceil(sorted.length / POSTS_PER_PAGE);
 	const currentPagePosts = sorted.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+
+	useEffect(() => {
+		if (totalPages > 0 && currentPage > totalPages) {
+			setCurrentPage(totalPages);
+		}
+	}, [currentPage, totalPages]);
 
 	const getPageNumbers = () => {
 		if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -311,7 +318,13 @@ export default function BlogPage() {
 					))}
 				</div>
 
-				{currentPagePosts.length === 0 && !loadError && (
+				{posts.length === 0 && !loadError && (
+					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">
+						No blog posts are available right now. Please check back soon.
+					</div>
+				)}
+
+				{posts.length > 0 && currentPagePosts.length === 0 && !loadError && hasActiveFilters && (
 					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">
 						No blog posts matched your current search and filter selection.
 					</div>
