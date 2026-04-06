@@ -555,19 +555,23 @@ export function HomeRouteSkeleton() {
 			<section className="bg-[#0C2D70] py-16">
 				<div className="mx-auto max-w-7xl px-6">
 					<div className="space-y-6 text-center text-white">
-						<SkeletonBlock className="mx-auto h-8 w-52" toneClass="bg-white/25" />
-						<SkeletonBlock className="mx-auto h-4 w-3/4" toneClass="bg-white/20" />
+						<SkeletonBlock className="mx-auto h-10 w-56" toneClass="bg-white/25" />
+						<SkeletonBlock className="mx-auto h-4 w-4/5" toneClass="bg-white/20" />
 					</div>
-					<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-						{Array.from({ length: 3 }).map((_, index) => (
-							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
-								<SkeletonBlock className="h-24 w-full" toneClass="bg-[#D3DCEB]" />
-								<div className="mt-4 space-y-2">
-									<SkeletonBlock className="h-5 w-2/3" />
+					<div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						{Array.from({ length: 6 }).map((_, index) => (
+							<div key={index} className="flex h-[280px] flex-col border border-[#DEDEDE] bg-white p-6 text-left">
+								<SkeletonBlock className="h-12 w-12" toneClass="bg-[#D3DCEB]" />
+								<div className="mt-6 space-y-2">
+									<SkeletonBlock className="h-6 w-3/4" />
 									<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+									<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
 								</div>
 							</div>
 						))}
+					</div>
+					<div className="mt-6 flex justify-end">
+						<SkeletonBlock className="h-6 w-36" toneClass="bg-white/30" />
 					</div>
 				</div>
 			</section>
