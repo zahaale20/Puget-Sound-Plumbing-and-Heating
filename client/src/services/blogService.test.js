@@ -106,6 +106,29 @@ describe("blogService", () => {
 		expect(posts[0].slug).toBe("legacy");
 	});
 
+	it("treats Supabase 404 as missing table and retries candidates", async () => {
+		fromMock
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: null,
+					error: { status: 404, message: "Not Found" },
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [{ id: 3, title: "Fallback", slug: "fallback", content_json: {} }],
+					error: null,
+				})
+			);
+
+		const { fetchBlogPosts } = await importServiceFresh();
+		const posts = await fetchBlogPosts();
+
+		expect(fromMock).toHaveBeenCalledTimes(2);
+		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts"]);
+		expect(posts[0].slug).toBe("fallback");
+	});
+
 	it("falls back to legacy blog_posts table when Blog Posts exists but is empty", async () => {
 		fromMock
 			.mockReturnValueOnce(
@@ -194,5 +217,47 @@ describe("blogService", () => {
 
 		expect(views).toBe(4);
 		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts", "blog_posts"]);
+	});
+
+	it("recovers when previously resolved table starts returning 404", async () => {
+		fromMock
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: null,
+					error: { code: "42P01", message: 'relation "Blog Posts" does not exist' },
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [{ id: 4, title: "Legacy First", slug: "legacy-first", content_json: {} }],
+					error: null,
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: null,
+					error: { status: 404, message: "Not Found" },
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [{ id: 5, title: "Canonical Back", slug: "canonical-back", content_json: {} }],
+					error: null,
+				})
+			);
+
+		const { fetchBlogPosts } = await importServiceFresh();
+
+		const firstFetch = await fetchBlogPosts();
+		expect(firstFetch[0].slug).toBe("legacy-first");
+
+		const secondFetch = await fetchBlogPosts();
+		expect(secondFetch[0].slug).toBe("canonical-back");
+		expect(fromMock.mock.calls.map((call) => call[0])).toEqual([
+			"Blog Posts",
+			"blog_posts",
+			"blog_posts",
+			"Blog Posts",
+		]);
 	});
 });

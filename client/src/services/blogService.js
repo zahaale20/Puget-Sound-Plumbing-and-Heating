@@ -29,12 +29,18 @@ function isMissingRelationError(error) {
 	if (!error) return false;
 	const code = (error.code || "").toString().toUpperCase();
 	const message = (error.message || "").toString();
-	return code === "42P01" || code === "PGRST205" || /relation.+does not exist|could not find the table/i.test(message);
+	const status = Number(error.status || 0);
+	return (
+		code === "42P01" ||
+		code === "PGRST205" ||
+		status === 404 ||
+		/relation.+does not exist|could not find the table|not found/i.test(message)
+	);
 }
 
 function getTableCandidates() {
-	if (resolvedBlogTable) return [resolvedBlogTable];
-	return BLOG_TABLE_CANDIDATES;
+	if (!resolvedBlogTable) return BLOG_TABLE_CANDIDATES;
+	return [resolvedBlogTable, ...BLOG_TABLE_CANDIDATES.filter((tableName) => tableName !== resolvedBlogTable)];
 }
 
 async function selectPostsFromTable(tableName) {
