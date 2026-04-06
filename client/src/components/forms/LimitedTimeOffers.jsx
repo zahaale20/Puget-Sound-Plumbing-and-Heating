@@ -5,6 +5,7 @@ import { redeemOffer } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
+import { LoadingButtonContent } from "../ui/LoadingComponents";
 import { Coupons, CompanyInfo } from "../../data/data";
 import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
@@ -299,7 +300,11 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 													disabled={isSubmitting}
 													className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
 												>
-													{isSubmitting ? "Submitting..." : "Submit Request"}
+													<LoadingButtonContent
+														isLoading={isSubmitting}
+														idleLabel="Submit Request"
+														loadingLabel="Submitting request..."
+													/>
 												</button>
 											</>
 										)}

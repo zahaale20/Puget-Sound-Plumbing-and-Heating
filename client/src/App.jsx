@@ -4,6 +4,17 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
+import { getRouteFallbackType, ROUTE_FALLBACK_TYPES } from "./routeFallback";
+import {
+	BlogPostRouteSkeleton,
+	BlogRouteSkeleton,
+	CouponsRouteSkeleton,
+	FooterSkeleton,
+	HomeRouteSkeleton,
+	RoutePageSkeleton,
+	ScheduleRouteSkeleton,
+	ServiceRouteSkeleton,
+} from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -62,12 +73,34 @@ function DeferredFooter() {
 	return (
 		<div ref={footerRef}>
 			{shouldRender ? (
-				<Suspense fallback={null}>
+				<Suspense fallback={<FooterSkeleton />}>
 					<Footer />
 				</Suspense>
 			) : null}
 		</div>
 	);
+}
+
+function RouteSuspenseFallback() {
+	const { pathname } = useLocation();
+	const fallbackType = getRouteFallbackType(pathname);
+
+	switch (fallbackType) {
+		case ROUTE_FALLBACK_TYPES.HOME:
+			return <HomeRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.BLOG_INDEX:
+			return <BlogRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.BLOG_POST:
+			return <BlogPostRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.SCHEDULE:
+			return <ScheduleRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.COUPONS:
+			return <CouponsRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.SERVICE:
+			return <ServiceRouteSkeleton />;
+		default:
+			return <RoutePageSkeleton />;
+	}
 }
 
 function App() {
@@ -77,7 +110,7 @@ function App() {
 			<RouteSeo />
 			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
-				<Suspense fallback={null}>
+				<Suspense fallback={<RouteSuspenseFallback />}>
 					<main className="flex-1">
 						<Routes>
 							<Route path="/" element={<HomePage />} />

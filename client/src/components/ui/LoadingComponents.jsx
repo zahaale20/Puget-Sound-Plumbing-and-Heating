@@ -412,6 +412,29 @@ export function FormSectionSkeleton({ className = "" }) {
 	);
 }
 
+export function LoadingButtonContent({
+	isLoading,
+	idleLabel,
+	loadingLabel = "Submitting...",
+	className = "",
+}) {
+	return (
+		<span className={`inline-flex items-center justify-center gap-2 ${className}`} aria-live="polite">
+			{isLoading ? (
+				<>
+					<span
+						className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+						aria-hidden="true"
+					/>
+					<span>{loadingLabel}</span>
+				</>
+			) : (
+				<span>{idleLabel}</span>
+			)}
+		</span>
+	);
+}
+
 export function FooterSkeleton() {
 	return (
 		<footer className="w-full" aria-hidden="true">

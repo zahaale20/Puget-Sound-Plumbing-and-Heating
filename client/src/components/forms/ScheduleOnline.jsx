@@ -3,6 +3,7 @@ import { submitSchedule } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
+import { LoadingButtonContent } from "../ui/LoadingComponents";
 import { CompanyInfo } from "../../data/data";
 import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
@@ -209,7 +210,11 @@ export default function ScheduleOnline() {
 									disabled={loading}
 									className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
 								>
-									{loading ? "Submitting..." : "Submit Request"}
+									<LoadingButtonContent
+										isLoading={loading}
+										idleLabel="Submit Request"
+										loadingLabel="Submitting request..."
+									/>
 								</button>
 							</>
 						)}

@@ -5,6 +5,7 @@ import { submitJobApplication } from "../../services/emailService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
+import { LoadingButtonContent } from "../ui/LoadingComponents";
 import { validateName, validateEmail, validatePhone, validateRequired, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
 
@@ -209,7 +210,11 @@ export default function JobApplicationForm() {
 							disabled={isSubmitting}
 							className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:opacity-60 disabled:cursor-not-allowed"
 						>
-							{isSubmitting ? "Submitting..." : "Apply Now"}
+							<LoadingButtonContent
+								isLoading={isSubmitting}
+								idleLabel="Apply Now"
+								loadingLabel="Submitting application..."
+							/>
 						</button>
 					</>
 				)}
