@@ -3,7 +3,7 @@ import { FaArrowRight } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { ImageWithLoader, LazyBackgroundImage } from "../components/ui/LoadingComponents";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 
@@ -15,8 +15,6 @@ export default function ServiceCategoryPage() {
 	const category = ServiceLinks.find((item) => item.href.split("/").pop() === categorySlug);
 
 	if (!category) return <NotFoundPage />;
-
- 	const skylineUrl = getCloudFrontUrl("private/seattle-skyline.png");
 
 	const categoryName = category.name;
 	const services = category ? category.submenu : [];
@@ -75,20 +73,27 @@ export default function ServiceCategoryPage() {
 				const bgIndex = index % 3;
 
 				let sectionClass = "flex justify-center w-full py-16";
-				let sectionStyle = {};
+				let sectionBackground = null;
 
 				if (bgIndex === 0) {
 					sectionClass += " bg-white";
 				} else if (bgIndex === 1) {
-					sectionClass += " bg-cover bg-bottom";
-					sectionStyle = { backgroundImage: skylineUrl ? `url(${skylineUrl})` : "none" };
+					sectionClass += " relative overflow-hidden";
+					sectionBackground = (
+						<LazyBackgroundImage
+							src={getCloudFrontUrl("private/seattle-skyline.png")}
+							aria-hidden="true"
+							className="absolute inset-0 z-0 bg-bottom"
+						/>
+					);
 				} else if (bgIndex === 2) {
 					sectionClass += " bg-[#F5F5F5]";
 				}
 
 				return (
-					<section key={index} className={sectionClass} style={sectionStyle}>
-						<div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-6 w-full gap-16 items-center">
+					<section key={index} className={sectionClass}>
+						{sectionBackground}
+						<div className="relative z-10 flex flex-col lg:flex-row max-w-7xl mx-auto px-6 w-full gap-16 items-center">
 							<div
 								className={`order-2 flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
 							>

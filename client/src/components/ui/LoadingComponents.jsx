@@ -1,8 +1,73 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCloudFrontUrl } from "../../services/imageService";
 
 function SkeletonBlock({ className = "", toneClass = "bg-[#D9E1F0]", ...props }) {
 	return <div className={`animate-pulse rounded-sm ${toneClass} ${className}`} {...props} />;
+}
+
+function isEagerImage(loading, fetchPriority) {
+	return loading === "eager" || fetchPriority === "high";
+}
+
+function useDeferredImageLoading({ src, loading, fetchPriority, rootMargin }) {
+	const containerRef = useRef(null);
+	const eager = isEagerImage(loading, fetchPriority);
+	const [shouldRender, setShouldRender] = useState(() => Boolean(src) && eager);
+	const [status, setStatus] = useState(() => (src ? "loading" : "failed"));
+
+	useEffect(() => {
+		setStatus(src ? "loading" : "failed");
+		setShouldRender(Boolean(src) && eager);
+	}, [eager, src]);
+
+	useEffect(() => {
+		if (!src || shouldRender) return;
+
+		if (typeof window === "undefined" || typeof window.IntersectionObserver !== "function") {
+			setShouldRender(true);
+			return;
+		}
+
+		const target = containerRef.current;
+		if (!target) {
+			setShouldRender(true);
+			return;
+		}
+
+		const observer = new window.IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					setShouldRender(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin }
+		);
+
+		observer.observe(target);
+
+		return () => observer.disconnect();
+	}, [rootMargin, shouldRender, src]);
+
+	return {
+		containerRef,
+		shouldRender,
+		status,
+		markLoaded: () => setStatus("loaded"),
+		markFailed: () => setStatus("failed"),
+	};
+}
+
+function DefaultImageLoader() {
+	return <div className="h-full w-full rounded-[inherit] bg-[#E3EAF4] animate-pulse" />;
+}
+
+function DefaultImageError() {
+	return (
+		<div className="flex h-full w-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
+			Image unavailable
+		</div>
+	);
 }
 
 export function ImageWithLoader({
@@ -12,28 +77,40 @@ export function ImageWithLoader({
 	loading = "lazy",
 	decoding = "async",
 	fetchPriority,
+	rootMargin = "350px 0px",
+	loader,
+	error,
+	onLoad,
+	onError,
 	...props
 }) {
-	const [isLoading, setIsLoading] = useState(true);
-	const [hasError, setHasError] = useState(false);
+	const { containerRef, shouldRender, status, markLoaded, markFailed } = useDeferredImageLoading({
+		src,
+		loading,
+		fetchPriority,
+		rootMargin,
+	});
+	const isLoading = status === "loading";
+	const hasError = status === "failed";
 
-	const handleLoad = () => {
-		setIsLoading(false);
+	const handleLoad = (event) => {
+		markLoaded();
+		onLoad?.(event);
 	};
 
-	const handleError = () => {
-		setIsLoading(false);
-		setHasError(true);
+	const handleError = (event) => {
+		markFailed();
+		onError?.(event);
 	};
 
 	return (
-		<div className={`relative ${className}`}>
-			{isLoading && <div className="absolute inset-0 rounded-[inherit] bg-[#E3EAF4] animate-pulse" />}
-			{hasError ? (
-				<div className="flex h-full w-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
-					Image unavailable
+		<div ref={containerRef} className={`relative ${className}`}>
+			{!hasError && isLoading ? (
+				<div aria-hidden="true" className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{loader ?? <DefaultImageLoader />}
 				</div>
-			) : (
+			) : null}
+			{shouldRender && !hasError ? (
 				<img
 					src={src}
 					alt={alt}
@@ -45,7 +122,74 @@ export function ImageWithLoader({
 					onError={handleError}
 					{...props}
 				/>
-			)}
+			) : null}
+			{hasError ? (
+				<div className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{error ?? <DefaultImageError />}
+				</div>
+			) : null}
+		</div>
+	);
+}
+
+export function LazyBackgroundImage({
+	src,
+	className = "",
+	children,
+	loading = "lazy",
+	fetchPriority,
+	rootMargin = "350px 0px",
+	loader,
+	error,
+	backgroundPosition = "center",
+	backgroundRepeat = "no-repeat",
+	backgroundSize = "cover",
+	style,
+	...props
+}) {
+	const { containerRef, shouldRender, status, markLoaded, markFailed } = useDeferredImageLoading({
+		src,
+		loading,
+		fetchPriority,
+		rootMargin,
+	});
+
+	useEffect(() => {
+		if (!shouldRender || !src || status !== "loading") return;
+
+		const image = new window.Image();
+		image.onload = () => markLoaded();
+		image.onerror = () => markFailed();
+		image.src = src;
+
+		return () => {
+			image.onload = null;
+			image.onerror = null;
+		};
+	}, [markFailed, markLoaded, shouldRender, src, status]);
+
+	const backgroundStyle = {
+		...style,
+		backgroundColor: style?.backgroundColor,
+		backgroundImage: status === "loaded" ? `url(${src})` : "none",
+		backgroundPosition,
+		backgroundRepeat,
+		backgroundSize,
+	};
+
+	return (
+		<div ref={containerRef} className={`relative ${className}`} style={backgroundStyle} {...props}>
+			{status === "loading" ? (
+				<div aria-hidden="true" className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{loader ?? <DefaultImageLoader />}
+				</div>
+			) : null}
+			{status === "failed" ? (
+				<div className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{error ?? <DefaultImageError />}
+				</div>
+			) : null}
+			{children}
 		</div>
 	);
 }
@@ -517,7 +661,7 @@ export function BlogGridSkeleton({ count = 6, className = "" }) {
 export function BlogPostSkeleton({ className = "" }) {
 	return (
 		<section className={`relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[167px] ${className}`}>
-			<img
+			<ImageWithLoader
 				src={getCloudFrontUrl("private/seattle-skyline.png")}
 				alt=""
 				aria-hidden="true"

@@ -9,11 +9,11 @@ import {
 } from "react-icons/fa6";
 
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
-import { ImageWithLoader } from "../ui/LoadingComponents";
+import { ImageWithLoader, LazyBackgroundImage } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import { CompanyInfo, SocialLinks } from "../../data/data";
@@ -21,51 +21,12 @@ import { validateEmail } from "../../services/formValidation";
 
 export default function Footer() {
 	const navigate = useNavigate();
-	const footerMainRef = useRef(null);
-	const [patternUrl, setPatternUrl] = useState(null);
 	const [newsletterEmail, setNewsletterEmail] = useState("");
 	const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
 	const [newsletterSuccess, setNewsletterSuccess] = useState(false);
 	const [newsletterSuccessMessage, setNewsletterSuccessMessage] = useState("Thank you! We'll be in touch soon.");
 	const [newsletterResponseType, setNewsletterResponseType] = useState("success");
 	const [newsletterError, setNewsletterError] = useState(null);
-
-	useEffect(() => {
-		let didLoad = false;
-
-		const loadPattern = () => {
-			if (didLoad) return;
-			didLoad = true;
-			setPatternUrl(getCloudFrontUrl("private/pattern1-1920.webp"));
-		};
-
-		if (typeof window === "undefined") {
-			loadPattern();
-			return;
-		}
-
-		const target = footerMainRef.current;
-		if (!target || typeof window.IntersectionObserver !== "function") {
-			loadPattern();
-			return;
-		}
-
-		const observer = new window.IntersectionObserver(
-			(entries) => {
-				if (entries.some((entry) => entry.isIntersecting)) {
-					loadPattern();
-					observer.disconnect();
-				}
-			},
-			{ rootMargin: "300px 0px" }
-		);
-
-		observer.observe(target);
-
-		return () => {
-			observer.disconnect();
-		};
-	}, []);
 
 	return (
 		<footer className="w-full items-center justify-center">
@@ -117,15 +78,12 @@ export default function Footer() {
 			</div>
 
 			{/* Main Footer */}
-			<div
-				ref={footerMainRef}
+			<LazyBackgroundImage
+				src={getCloudFrontUrl("private/pattern1-1920.webp")}
 				className="relative flex flex-col items-center w-full py-16"
+				rootMargin="300px 0px"
 				style={{
-					backgroundImage: patternUrl ? `url(${patternUrl})` : "none",
 					backgroundColor: "#0C2D70",
-					backgroundRepeat: "no-repeat",
-					backgroundPosition: "center",
-					backgroundSize: "cover",
 				}}
 			>
 				{/* Content */}
@@ -147,7 +105,7 @@ export default function Footer() {
 									</a>
 								</li>
 								<li className="flex gap-2">
-									<FaLocationDot className="mt-1" />
+						</LazyBackgroundImage>
 									<a
 										href={CompanyInfo.mapsUrl}
 										className="flex flex-col hover:underline"
