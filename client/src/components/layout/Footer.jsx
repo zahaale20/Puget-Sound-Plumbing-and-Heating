@@ -79,11 +79,13 @@ export default function Footer() {
 
 			{/* Main Footer */}
 			<section className="relative overflow-hidden flex flex-col items-center w-full py-16 bg-[#0C2D70]">
-				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
 					alt=""
 					aria-hidden="true"
-					loading="lazy"
+					loading="eager"
+					decoding="sync"
+					fetchPriority="high"
 					className="absolute inset-0 w-full h-full object-cover z-0"
 				/>
 				{/* Content */}

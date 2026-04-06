@@ -84,4 +84,5 @@ FOR SELECT
 TO anon, authenticated
 USING (true);
 
+GRANT SELECT ON TABLE public."Blog Posts" TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.increment_blog_post_views(TEXT) TO anon, authenticated;
