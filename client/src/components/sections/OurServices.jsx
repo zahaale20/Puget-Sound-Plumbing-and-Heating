@@ -18,7 +18,7 @@ export default function OurServices() {
 	const navigate = useNavigate();
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
+		<div className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6 fade-in">
 			{/* Header Container*/}
 			<div className="flex flex-col space-y-6 text-center text-white">
 				{/* Title */}

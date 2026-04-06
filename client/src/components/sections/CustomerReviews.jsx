@@ -72,7 +72,7 @@ export default function CustomerReviews() {
 	}, [reviews]);
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6 space-y-6 fade-in">
+		<div className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6 fade-in">
 			{/* Header Container*/}
 			<div className="space-y-6 text-center">
 				{/* Title */}

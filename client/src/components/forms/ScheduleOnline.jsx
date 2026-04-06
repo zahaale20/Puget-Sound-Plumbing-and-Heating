@@ -92,7 +92,7 @@ export default function ScheduleOnline() {
 	};
 
 	return (
-		<div className="flex flex-col lg:flex-row w-full max-w-7xl px-6 gap-16">
+		<div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 gap-16">
 			{/* Header + Contact Form */}
 			<div className="w-full lg:w-1/2 space-y-6">
 				{/* Header */}

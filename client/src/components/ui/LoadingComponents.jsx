@@ -182,7 +182,7 @@ export function BlogPostGridSkeleton({
 	return (
 		<div className={`grid w-full gap-6 ${gridClassName} ${className}`} aria-hidden="true">
 			{Array.from({ length: cardCount }).map((_, index) => (
-				<div key={index} className={`flex ${cardMinHeightClass} flex-col border border-[#DEDEDE] bg-white`}>
+				<div key={index} className={`flex w-full ${cardMinHeightClass} flex-col border border-[#DEDEDE] bg-white`}>
 					<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
 					<div className="flex flex-1 flex-col p-6">
 						<SkeletonBlock className="h-6 w-11/12" />
