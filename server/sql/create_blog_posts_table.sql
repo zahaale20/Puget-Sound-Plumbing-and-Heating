@@ -73,3 +73,15 @@ CREATE TRIGGER trg_blog_posts_updated_at
 BEFORE UPDATE ON public."Blog Posts"
 FOR EACH ROW
 EXECUTE FUNCTION public.set_blog_posts_updated_at();
+
+-- Access policies for public blog reads and view counting from the client.
+ALTER TABLE public."Blog Posts" ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS blog_posts_read_public ON public."Blog Posts";
+CREATE POLICY blog_posts_read_public
+ON public."Blog Posts"
+FOR SELECT
+TO anon, authenticated
+USING (true);
+
+GRANT EXECUTE ON FUNCTION public.increment_blog_post_views(TEXT) TO anon, authenticated;
