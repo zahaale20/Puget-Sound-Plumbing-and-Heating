@@ -70,19 +70,33 @@ async function getPostBySlug(slug) {
 
 export async function fetchBlogPosts() {
 	let lastError = null;
+	let firstEmptyResult = null;
 
 	for (const tableName of getTableCandidates()) {
 		const { data, error } = await selectPostsFromTable(tableName);
 
 		if (!error) {
-			resolvedBlogTable = tableName;
-			return (data || []).map(mapBlogPost);
+			const posts = (data || []).map(mapBlogPost);
+			if (posts.length > 0) {
+				resolvedBlogTable = tableName;
+				return posts;
+			}
+
+			if (!firstEmptyResult) {
+				firstEmptyResult = { posts, tableName };
+			}
+			continue;
 		}
 
 		lastError = error;
 		if (!isMissingRelationError(error)) {
 			throw error;
 		}
+	}
+
+	if (firstEmptyResult) {
+		resolvedBlogTable = firstEmptyResult.tableName;
+		return firstEmptyResult.posts;
 	}
 
 	throw lastError || new Error("Unable to load blog posts from Supabase.");

@@ -106,6 +106,52 @@ describe("blogService", () => {
 		expect(posts[0].slug).toBe("legacy");
 	});
 
+	it("falls back to legacy blog_posts table when Blog Posts exists but is empty", async () => {
+		fromMock
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [],
+					error: null,
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [{ id: 2, title: "Legacy Filled", slug: "legacy-filled", content_json: {} }],
+					error: null,
+				})
+			);
+
+		const { fetchBlogPosts } = await importServiceFresh();
+		const posts = await fetchBlogPosts();
+
+		expect(fromMock).toHaveBeenCalledTimes(2);
+		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts"]);
+		expect(posts).toHaveLength(1);
+		expect(posts[0].slug).toBe("legacy-filled");
+	});
+
+	it("returns empty when all candidate tables are empty", async () => {
+		fromMock
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [],
+					error: null,
+				})
+			)
+			.mockReturnValueOnce(
+				buildFetchBuilder({
+					data: [],
+					error: null,
+				})
+			);
+
+		const { fetchBlogPosts } = await importServiceFresh();
+		const posts = await fetchBlogPosts();
+
+		expect(fromMock).toHaveBeenCalledTimes(2);
+		expect(posts).toEqual([]);
+	});
+
 	it("throws immediately for non-relation Supabase errors", async () => {
 		fromMock.mockReturnValueOnce(
 			buildFetchBuilder({
