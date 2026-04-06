@@ -312,26 +312,26 @@ export default function BlogPage() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 					{currentPagePosts.map((post) => (
 						<PostCard key={post.id} post={post} />
 					))}
 				</div>
 
 				{posts.length === 0 && !loadError && (
-					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">
+					<div className="relative z-10 max-w-7xl mx-auto px-6 text-[#2B2B2B]">
 						No blog posts are available right now. Please check back soon.
 					</div>
 				)}
 
 				{posts.length > 0 && currentPagePosts.length === 0 && !loadError && hasActiveFilters && (
-					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">
+					<div className="relative z-10 max-w-7xl mx-auto px-6 text-[#2B2B2B]">
 						No blog posts matched your current search and filter selection.
 					</div>
 				)}
 
 				{totalPages > 1 && (
-					<div className="max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
+					<div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex justify-center items-center">
 						<div className="inline-flex items-center bg-white border border-gray-300 shadow-lg">
 						<button
 							onClick={() => handlePageChange(currentPage - 1)}
