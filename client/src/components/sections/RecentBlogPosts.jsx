@@ -1,51 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { fetchBlogPosts } from "../../services/blogService";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
 	const [recentPosts, setRecentPosts] = useState([]);
-	const [shouldLoadPosts, setShouldLoadPosts] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [loadError, setLoadError] = useState("");
-	const sectionRef = useRef(null);
 
 	useEffect(() => {
-		if (shouldLoadPosts) return;
-
-		if (typeof window === "undefined" || typeof window.IntersectionObserver !== "function") {
-			setShouldLoadPosts(true);
-			return;
-		}
-
-		const node = sectionRef.current;
-		if (!node) {
-			setShouldLoadPosts(true);
-			return;
-		}
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries.some((entry) => entry.isIntersecting)) {
-					setShouldLoadPosts(true);
-					observer.disconnect();
-				}
-			},
-			{ rootMargin: "400px 0px" }
-		);
-
-		observer.observe(node);
-		return () => observer.disconnect();
-	}, [shouldLoadPosts]);
-
-	useEffect(() => {
-		if (!shouldLoadPosts) return;
 		const loadRecentPosts = async () => {
 			setIsLoading(true);
 			try {
-				const { fetchBlogPosts } = await import("../../services/blogService");
 				const allPosts = await fetchBlogPosts();
 				setRecentPosts(Array.isArray(allPosts) ? allPosts.slice(0, 3) : []);
 				setLoadError("");
@@ -59,7 +28,7 @@ export default function RecentBlogPosts() {
 		};
 
 		loadRecentPosts();
-	}, [shouldLoadPosts]);
+	}, []);
 
 	const truncateText = (text, maxLength) => {
 		const safeText = text || "";
@@ -76,7 +45,7 @@ export default function RecentBlogPosts() {
 		});
 
 	return (
-		<div ref={sectionRef} className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6 fade-in">
+		<div className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6 fade-in">
 			{/* Header Container */}
 			<div className="space-y-6">
 				<h4 className="text-[#0C2D70] inline-block relative pb-2">
