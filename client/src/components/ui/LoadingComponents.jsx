@@ -663,10 +663,10 @@ export function HomeRouteSkeleton() {
 				<SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" toneClass="bg-[#183D87]" />
 				<div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col items-center justify-center gap-8 px-6 text-center">
 					<div className="space-y-4">
-						<SkeletonBlock className="mx-auto h-12 w-[22rem] max-w-full" toneClass="bg-white/25" />
-						<SkeletonBlock className="mx-auto h-12 w-[26rem] max-w-full" toneClass="bg-white/25" />
+						<SkeletonBlock className="mx-auto h-12 w-[28rem] max-w-full" toneClass="bg-white/25" />
+						<SkeletonBlock className="mx-auto h-12 w-[28rem] max-w-full" toneClass="bg-white/25" />
 					</div>
-					<SkeletonBlock className="h-4 w-full max-w-3xl" toneClass="bg-white/20" />
+					<SkeletonBlock className="h-4 w-[20rem] max-w-full" toneClass="bg-white/20" />
 					<div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
 						<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
 						<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#C8D7EE]" />
