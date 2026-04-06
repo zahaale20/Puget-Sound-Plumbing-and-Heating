@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 
 class TestDatabaseCoverage:
-    def test_get_db_connection_yields_and_closes(self, monkeypatch):
+    def test_get_db_connection_yields_and_returns_to_pool(self, monkeypatch):
         import database
 
         connection = MagicMock()
@@ -19,20 +19,15 @@ class TestDatabaseCoverage:
         monkeypatch.setenv("SUPABASE_PORT", "5432")
         monkeypatch.setenv("SUPABASE_DBNAME", "dbname")
 
-        connect_mock = MagicMock(return_value=connection)
-        monkeypatch.setattr(database.psycopg2, "connect", connect_mock)
+        pool_mock = MagicMock()
+        pool_mock.getconn.return_value = connection
+        monkeypatch.setattr(database, "_pool", pool_mock)
 
         with database.get_db_connection() as conn:
             assert conn is connection
 
-        connection.close.assert_called_once()
-        connect_mock.assert_called_once_with(
-            user="user",
-            password="pass",
-            host="host",
-            port="5432",
-            dbname="dbname",
-        )
+        pool_mock.getconn.assert_called_once()
+        pool_mock.putconn.assert_called_once_with(connection)
 
     def test_test_db_success(self, monkeypatch):
         import database

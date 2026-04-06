@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import psycopg2.pool
 import logging
 from contextlib import contextmanager
 from dotenv import load_dotenv
@@ -7,19 +8,34 @@ from dotenv import load_dotenv
 load_dotenv()
 logger = logging.getLogger(__name__)
 
+_pool = None
+
+
+def _get_pool():
+    global _pool
+    if _pool is None:
+        _pool = psycopg2.pool.SimpleConnectionPool(
+            minconn=1,
+            maxconn=5,
+            user=os.getenv("SUPABASE_USER"),
+            password=os.getenv("SUPABASE_PASSWORD"),
+            host=os.getenv("SUPABASE_HOST"),
+            port=os.getenv("SUPABASE_PORT"),
+            dbname=os.getenv("SUPABASE_DBNAME"),
+            options="-c statement_timeout=10000",
+        )
+    return _pool
+
+
 @contextmanager
 def get_db_connection():
-    conn = psycopg2.connect(
-        user=os.getenv("SUPABASE_USER"),
-        password=os.getenv("SUPABASE_PASSWORD"),
-        host=os.getenv("SUPABASE_HOST"),
-        port=os.getenv("SUPABASE_PORT"),
-        dbname=os.getenv("SUPABASE_DBNAME")
-    )
+    pool = _get_pool()
+    conn = pool.getconn()
     try:
         yield conn
     finally:
-        conn.close()
+        pool.putconn(conn)
+
 
 def test_db():
     try:
