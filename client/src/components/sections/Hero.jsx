@@ -38,7 +38,7 @@ export default function Hero() {
 			<div className="z-0 absolute inset-0 bg-[linear-gradient(0deg,_#00000088_15%,_#ffffff22_100%)]"></div>
 
 			{/* Content Wrapper (Centered) */}
-			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl px-6 py-16 gap-8">
+			<div className="z-1 flex flex-col items-center text-center w-full max-w-7xl mx-auto px-6 py-16 gap-8">
 				{/* Title */}
 				<h1 className="uppercase leading-tight text-white text-4xl md:text-5xl lg:text-6xl font-extrabold">
 					{HeroContent.heading.split("\n").map((line, i) => (

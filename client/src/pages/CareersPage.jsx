@@ -38,7 +38,7 @@ export default function CareersPage() {
 
 			{/* Current Openings Section */}
 			<section className="flex justify-center w-full pt-16 bg-white">
-				<div className="flex flex-col w-full max-w-7xl px-6 gap-12 text-[#2B2B2B]">
+				<div className="flex flex-col w-full max-w-7xl mx-auto px-6 gap-12 text-[#2B2B2B]">
 					<div className="flex flex-col items-center w-full">
 						<div className="w-full mb-6 text-left">
 							<h4 className="text-[#0C2D70] inline-block relative pb-2">
@@ -127,7 +127,7 @@ export default function CareersPage() {
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 
-				<div className="flex flex-col w-full max-w-7xl px-6">
+				<div className="flex flex-col w-full max-w-7xl mx-auto px-6">
 					<div className="w-full mb-6 text-left">
 						<h4 className="text-[#0C2D70] inline-block relative pb-2">
 							Apply Now

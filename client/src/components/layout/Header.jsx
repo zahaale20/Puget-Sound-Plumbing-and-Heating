@@ -170,14 +170,14 @@ export default function Header() {
 
 			{/* Section Divider */}
 			<section className="hidden lg:flex w-full bg-white items-center justify-center">
-				<div className="w-full max-w-7xl px-6">
+				<div className="w-full max-w-7xl mx-auto px-6">
 					<div className="border-t border-gray-400"></div>
 				</div>
 			</section>
 
 			{/* Location + Action Buttons */}
 			<section className="flex w-full bg-white items-center justify-center">
-				<div className="hidden lg:flex justify-between items-center w-full max-w-7xl px-6 h-[50px] font-semibold">
+				<div className="hidden lg:flex justify-between items-center w-full max-w-7xl mx-auto px-6 h-[50px] font-semibold">
 					{/* Location */}
 					<a
 						href="https://www.google.com/maps/dir/47.5922432,-122.0182016/11803+Des+Moines+Memorial+Dr,+Burien,+WA+98168"

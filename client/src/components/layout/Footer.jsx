@@ -31,7 +31,7 @@ export default function Footer() {
 	return (
 		<footer className="w-full items-center justify-center">
 			<div className="w-full bg-white flex justify-center">
-				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl px-6 py-2 gap-4">
+				<div className="flex flex-col md:flex-row md:justify-between md:items-center items-center w-full max-w-7xl mx-auto px-6 py-2 gap-4">
 					{/* Logo */}
 					<button
 						onClick={() => navigate("/")}
@@ -87,7 +87,7 @@ export default function Footer() {
 				}}
 			>
 				{/* Content */}
-				<div className="flex flex-col justify-between z-10 w-full max-w-7xl px-6 gap-12 lg:gap-24 text-white">
+				<div className="flex flex-col justify-between z-10 w-full max-w-7xl mx-auto px-6 gap-12 lg:gap-24 text-white">
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
 							<h5 className="relative inline-block py-1 w-fit">
@@ -105,7 +105,7 @@ export default function Footer() {
 									</a>
 								</li>
 								<li className="flex gap-2">
-						</LazyBackgroundImage>
+									<FaLocationDot className="mt-1 shrink-0" />
 									<a
 										href={CompanyInfo.mapsUrl}
 										className="flex flex-col hover:underline"
@@ -350,7 +350,7 @@ export default function Footer() {
 						</div>
 					</div>
 				</div>
-			</div>
+			</LazyBackgroundImage>
 
 			{/* Bottom Bar */}
 			<div className="w-full h-[80px] bg-[#0C2D70] border-t border-white text-sm text-white flex items-center">

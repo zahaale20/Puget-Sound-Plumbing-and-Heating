@@ -89,7 +89,7 @@ export default function ServicePage() {
 
 			{/* 2. Warning Signs (White Background) */}
 			<section className="flex justify-center w-full py-16 bg-white">
-				<div className="flex flex-col xl:flex-row gap-6 w-full max-w-7xl px-6">
+				<div className="flex flex-col xl:flex-row gap-6 w-full max-w-7xl mx-auto px-6">
 					<div className="relative flex flex-col gap-6 w-full xl:w-[calc(50%-40px)] z-10">
 						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
 							Warning Signs for {serviceName}

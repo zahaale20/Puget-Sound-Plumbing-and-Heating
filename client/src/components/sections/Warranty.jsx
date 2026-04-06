@@ -4,7 +4,7 @@ import { WarrantyContent } from "../../data/data";
 
 export default function Warranty() {
 	return (
-		<div className="flex flex-row w-full max-w-7xl px-6 text-left text-[#2B2B2B] gap-16">
+		<div className="flex flex-row w-full max-w-7xl mx-auto px-6 text-left text-[#2B2B2B] gap-16">
 			<div className="hidden lg:block">
 				<ImageWithLoader
 					src={getCloudFrontUrl("private/warranty.png")}

@@ -88,7 +88,7 @@ export default function DIYPlumbingPermit() {
 	};
 
 	return (
-		<div className="flex flex-col w-full max-w-7xl px-6">
+		<div className="flex flex-col w-full max-w-7xl mx-auto px-6">
 			{/* Header */}
 			<div className="w-full mb-6 text-left">
 				<h4 className="text-[#0C2D70] inline-block relative pb-2 mb-6">

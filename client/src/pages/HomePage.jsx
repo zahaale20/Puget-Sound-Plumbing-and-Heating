@@ -1,15 +1,14 @@
-import WhyChooseUs from "../components/sections/WhyChooseUs";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import Hero from "../components/sections/Hero";
 import EmergencyBar from "../components/layout/EmergencyBar";
 import OurServices from "../components/sections/OurServices";
+import WhyChooseUs from "../components/sections/WhyChooseUs";
 import FinancingBar from "../components/layout/FinancingBar";
+import CustomerReviews from "../components/sections/CustomerReviews";
+import ScheduleOnline from "../components/forms/ScheduleOnline";
+import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
 import RecentBlogPosts from "../components/sections/RecentBlogPosts";
 import FAQs from "../components/sections/FAQs";
 import CallNow from "../components/sections/CallNow";
-import CustomerReviews from "../components/sections/CustomerReviews";
-import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
-import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function Home() {
@@ -19,13 +18,11 @@ export default function Home() {
 			<EmergencyBar />
 
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16">
-				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
 					alt=""
 					aria-hidden="true"
-					loading="lazy"
-					decoding="async"
-					fetchPriority="low"
+					fetchPriority="high"
 					className="absolute inset-0 w-full h-full object-cover z-0"
 				/>
 
@@ -37,15 +34,14 @@ export default function Home() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
-					loading="lazy"
-					decoding="async"
-					fetchPriority="low"
+					fetchPriority="high"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
+
 				<CustomerReviews />
 			</section>
 
@@ -56,13 +52,11 @@ export default function Home() {
 			<FinancingBar />
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+				<img
+					src={getCloudFrontUrl("private/pattern1.png")}
 					alt=""
 					aria-hidden="true"
-					loading="lazy"
-					decoding="async"
-					fetchPriority="low"
+					fetchPriority="high"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 				<LimitedTimeOffers />
@@ -73,13 +67,11 @@ export default function Home() {
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
+				<img
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
 					alt=""
 					aria-hidden="true"
-					loading="lazy"
-					decoding="async"
-					fetchPriority="low"
+					fetchPriority="high"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
 				<ScheduleOnline />
