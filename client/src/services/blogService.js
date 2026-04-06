@@ -1,10 +1,8 @@
 import { supabase } from "./supabaseClient";
 
-const BLOG_TABLE_CANDIDATES = ["Blog Posts", "blog_posts"];
+const BLOG_TABLE_NAME = "Blog Posts";
 const BLOG_SELECT_COLUMNS =
 	"id,title,slug,source_url,published_date,author,views,content_json,featured_image_s3_key,content_image_s3_keys";
-
-let resolvedBlogTable = null;
 
 function mapBlogPost(row) {
 	const content = row.content_json || {};
@@ -25,87 +23,29 @@ function mapBlogPost(row) {
 	};
 }
 
-function isMissingRelationError(error) {
-	if (!error) return false;
-	const code = (error.code || "").toString().toUpperCase();
-	const message = (error.message || "").toString();
-	const status = Number(error.status || 0);
-	return (
-		code === "42P01" ||
-		code === "PGRST205" ||
-		status === 404 ||
-		/relation.+does not exist|could not find the table|not found/i.test(message)
-	);
-}
-
-function getTableCandidates() {
-	if (!resolvedBlogTable) return BLOG_TABLE_CANDIDATES;
-	return [resolvedBlogTable, ...BLOG_TABLE_CANDIDATES.filter((tableName) => tableName !== resolvedBlogTable)];
-}
-
-async function selectPostsFromTable(tableName) {
+async function selectPosts() {
 	return supabase
-		.from(tableName)
+		.from(BLOG_TABLE_NAME)
 		.select(BLOG_SELECT_COLUMNS)
 		.order("published_date", { ascending: false, nullsFirst: false });
 }
 
 async function getPostBySlug(slug) {
-	let lastError = null;
+	const { data, error } = await supabase
+		.from(BLOG_TABLE_NAME)
+		.select("id,views")
+		.eq("slug", slug)
+		.single();
 
-	for (const tableName of getTableCandidates()) {
-		const { data, error } = await supabase
-			.from(tableName)
-			.select("id,views")
-			.eq("slug", slug)
-			.single();
-
-		if (!error && data) {
-			resolvedBlogTable = tableName;
-			return { post: data, tableName };
-		}
-
-		lastError = error;
-		if (!isMissingRelationError(error)) {
-			throw error;
-		}
-	}
-
-	throw lastError || new Error("Post not found for view increment.");
+	if (error) throw error;
+	if (!data) throw new Error("Post not found for view increment.");
+	return data;
 }
 
 export async function fetchBlogPosts() {
-	let lastError = null;
-	let firstEmptyResult = null;
-
-	for (const tableName of getTableCandidates()) {
-		const { data, error } = await selectPostsFromTable(tableName);
-
-		if (!error) {
-			const posts = (data || []).map(mapBlogPost);
-			if (posts.length > 0) {
-				resolvedBlogTable = tableName;
-				return posts;
-			}
-
-			if (!firstEmptyResult) {
-				firstEmptyResult = { posts, tableName };
-			}
-			continue;
-		}
-
-		lastError = error;
-		if (!isMissingRelationError(error)) {
-			throw error;
-		}
-	}
-
-	if (firstEmptyResult) {
-		resolvedBlogTable = firstEmptyResult.tableName;
-		return firstEmptyResult.posts;
-	}
-
-	throw lastError || new Error("Unable to load blog posts from Supabase.");
+	const { data, error } = await selectPosts();
+	if (error) throw error;
+	return (data || []).map(mapBlogPost);
 }
 
 export async function incrementBlogPostViews(slug) {
@@ -119,10 +59,10 @@ export async function incrementBlogPostViews(slug) {
 		return Number(rpcData || 0);
 	}
 
-	const { post, tableName } = await getPostBySlug(slug);
+	const post = await getPostBySlug(slug);
 	const nextViews = Number(post.views || 0) + 1;
 	const { error: updateError } = await supabase
-		.from(tableName)
+		.from(BLOG_TABLE_NAME)
 		.update({ views: nextViews })
 		.eq("id", post.id);
 

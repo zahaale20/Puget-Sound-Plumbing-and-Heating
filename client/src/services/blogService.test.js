@@ -47,7 +47,7 @@ describe("blogService", () => {
 		rpcMock.mockReset();
 	});
 
-	it("fetches blog posts from the canonical table when available", async () => {
+	it("fetches blog posts from Blog Posts table", async () => {
 		fromMock.mockReturnValueOnce(
 			buildFetchBuilder({
 				data: [
@@ -83,99 +83,18 @@ describe("blogService", () => {
 		});
 	});
 
-	it("falls back to legacy blog_posts table when Blog Posts is missing", async () => {
-		fromMock
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: null,
-					error: { code: "42P01", message: "relation \"Blog Posts\" does not exist" },
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [{ id: 1, title: "Legacy", slug: "legacy", content_json: {} }],
-					error: null,
-				})
-			);
+	it("returns empty when Blog Posts has no rows", async () => {
+		fromMock.mockReturnValueOnce(buildFetchBuilder({ data: [], error: null }));
 
 		const { fetchBlogPosts } = await importServiceFresh();
 		const posts = await fetchBlogPosts();
 
-		expect(fromMock).toHaveBeenCalledTimes(2);
-		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts"]);
-		expect(posts[0].slug).toBe("legacy");
-	});
-
-	it("treats Supabase 404 as missing table and retries candidates", async () => {
-		fromMock
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: null,
-					error: { status: 404, message: "Not Found" },
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [{ id: 3, title: "Fallback", slug: "fallback", content_json: {} }],
-					error: null,
-				})
-			);
-
-		const { fetchBlogPosts } = await importServiceFresh();
-		const posts = await fetchBlogPosts();
-
-		expect(fromMock).toHaveBeenCalledTimes(2);
-		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts"]);
-		expect(posts[0].slug).toBe("fallback");
-	});
-
-	it("falls back to legacy blog_posts table when Blog Posts exists but is empty", async () => {
-		fromMock
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [],
-					error: null,
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [{ id: 2, title: "Legacy Filled", slug: "legacy-filled", content_json: {} }],
-					error: null,
-				})
-			);
-
-		const { fetchBlogPosts } = await importServiceFresh();
-		const posts = await fetchBlogPosts();
-
-		expect(fromMock).toHaveBeenCalledTimes(2);
-		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts"]);
-		expect(posts).toHaveLength(1);
-		expect(posts[0].slug).toBe("legacy-filled");
-	});
-
-	it("returns empty when all candidate tables are empty", async () => {
-		fromMock
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [],
-					error: null,
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [],
-					error: null,
-				})
-			);
-
-		const { fetchBlogPosts } = await importServiceFresh();
-		const posts = await fetchBlogPosts();
-
-		expect(fromMock).toHaveBeenCalledTimes(2);
+		expect(fromMock).toHaveBeenCalledTimes(1);
+		expect(fromMock).toHaveBeenCalledWith("Blog Posts");
 		expect(posts).toEqual([]);
 	});
 
-	it("throws immediately for non-relation Supabase errors", async () => {
+	it("throws when Blog Posts query fails", async () => {
 		fromMock.mockReturnValueOnce(
 			buildFetchBuilder({
 				data: null,
@@ -187,6 +106,7 @@ describe("blogService", () => {
 
 		await expect(fetchBlogPosts()).rejects.toMatchObject({ code: "42501" });
 		expect(fromMock).toHaveBeenCalledTimes(1);
+		expect(fromMock).toHaveBeenCalledWith("Blog Posts");
 	});
 
 	it("increments views via RPC when available", async () => {
@@ -199,16 +119,10 @@ describe("blogService", () => {
 		expect(fromMock).not.toHaveBeenCalled();
 	});
 
-	it("falls back to table update when RPC fails and primary table is missing", async () => {
+	it("falls back to table update on Blog Posts when RPC fails", async () => {
 		rpcMock.mockResolvedValueOnce({ data: null, error: { code: "PGRST301" } });
 
 		fromMock
-			.mockReturnValueOnce(
-				buildReadBySlugBuilder({
-					data: null,
-					error: { code: "42P01", message: "relation \"Blog Posts\" does not exist" },
-				})
-			)
 			.mockReturnValueOnce(buildReadBySlugBuilder({ data: { id: 9, views: 3 }, error: null }))
 			.mockReturnValueOnce(buildUpdateByIdBuilder({ error: null }));
 
@@ -216,48 +130,6 @@ describe("blogService", () => {
 		const views = await incrementBlogPostViews("legacy-post");
 
 		expect(views).toBe(4);
-		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "blog_posts", "blog_posts"]);
-	});
-
-	it("recovers when previously resolved table starts returning 404", async () => {
-		fromMock
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: null,
-					error: { code: "42P01", message: 'relation "Blog Posts" does not exist' },
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [{ id: 4, title: "Legacy First", slug: "legacy-first", content_json: {} }],
-					error: null,
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: null,
-					error: { status: 404, message: "Not Found" },
-				})
-			)
-			.mockReturnValueOnce(
-				buildFetchBuilder({
-					data: [{ id: 5, title: "Canonical Back", slug: "canonical-back", content_json: {} }],
-					error: null,
-				})
-			);
-
-		const { fetchBlogPosts } = await importServiceFresh();
-
-		const firstFetch = await fetchBlogPosts();
-		expect(firstFetch[0].slug).toBe("legacy-first");
-
-		const secondFetch = await fetchBlogPosts();
-		expect(secondFetch[0].slug).toBe("canonical-back");
-		expect(fromMock.mock.calls.map((call) => call[0])).toEqual([
-			"Blog Posts",
-			"blog_posts",
-			"blog_posts",
-			"Blog Posts",
-		]);
+		expect(fromMock.mock.calls.map((call) => call[0])).toEqual(["Blog Posts", "Blog Posts"]);
 	});
 });
