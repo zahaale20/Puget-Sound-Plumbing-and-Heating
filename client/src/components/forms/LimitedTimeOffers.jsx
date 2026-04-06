@@ -159,7 +159,6 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 							<form
 								onSubmit={async (e) => {
 									e.preventDefault();
-									if (isSubmitting) return;
 									const { isValid } = validateAll(formData);
 									if (!isValid) return;
 
@@ -282,7 +281,20 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									</div>
 
 									{/* Submit */}
-											<div className="flex flex-col justify-center mt-4 gap-3">
+									<div className="flex justify-center mt-4">
+										{submitSuccess ? (
+											<FormResponseMessage
+											type={submitResponseType}
+												message={submitSuccessMessage}
+												className="w-full text-center"
+											/>
+										) : (
+											<>
+												<FormResponseMessage
+													type="error"
+													message={submitError}
+													className="w-full text-center mb-2"
+												/>
 												<button
 													type="submit"
 													disabled={isSubmitting}
@@ -294,12 +306,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 														loadingLabel="Submitting request..."
 													/>
 												</button>
-												<FormResponseMessage
-													type={submitSuccess ? submitResponseType : "error"}
-													message={submitSuccess ? submitSuccessMessage : submitError}
-													className="w-full text-center"
-												/>
-											</div>
+											</>
+										)}
+									</div>
 								</form>
 						</div>
 					</div>,

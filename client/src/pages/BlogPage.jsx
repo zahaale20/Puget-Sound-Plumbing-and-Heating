@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader, LazyBackgroundImage } from "../components/ui/LoadingComponents";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { PageTitle } from "../components/ui/UnderlinedHeading";
 
 const sortOptions = [
@@ -199,18 +199,19 @@ export default function BlogPage() {
 
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			<section className="w-full bg-[#0C2D70]">
-				<LazyBackgroundImage
+			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
-					className="overflow-hidden flex w-full py-16"
-					loading="eager"
+					alt=""
+					aria-hidden="true"
 					fetchPriority="high"
-				>
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
+
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<PageTitle>Blog</PageTitle>
 					<p>Read the latest tips, how-tos, and insights in the plumbing world.</p>
 				</div>
-				</LazyBackgroundImage>
 			</section>
 
 			<section className="w-full bg-white pt-16 mb-6 text-[#2B2B2B]">

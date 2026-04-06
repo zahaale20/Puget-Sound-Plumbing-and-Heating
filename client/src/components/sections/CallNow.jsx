@@ -12,7 +12,7 @@ export default function CallNow() {
 				<ImageWithLoader
 					src={getCloudFrontUrl("private/woman-calling.png")}
 					alt="Woman Calling Plumbers"
-					className="h-80 w-full max-w-[22rem] object-cover rounded-lg"
+					className="w-auto h-80 object-cover rounded-lg"
 					loading="lazy"
 				/>
 			</div>

@@ -2,19 +2,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-	BlogPostGridSkeleton,
-	FormSectionSkeleton,
-	ImageWithLoader,
-	LazyBackgroundImage,
-	LEGACY_ROUTE_SKELETON_EXPORTS,
-	LOADING_FIDELITY_PROFILES,
-	LoadingButtonContent,
-	OfferCardsSkeleton,
-	PromoBarSkeleton,
-	ServiceRouteSkeleton,
-	SHARED_LOADING_CONTRACT,
-} from "./LoadingComponents";
+import { ImageWithLoader, LazyBackgroundImage } from "./LoadingComponents";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -116,21 +104,6 @@ describe("ImageWithLoader", () => {
 
 		expect(container.textContent).toContain("Image unavailable");
 	});
-
-	it("hides decorative failure placeholders from assistive technology", () => {
-		renderComponent(
-			<ImageWithLoader src="/broken.jpg" alt="" aria-hidden="true" loading="eager" className="h-24 w-24" />
-		);
-
-		const image = container.querySelector('img[src="/broken.jpg"]');
-
-		act(() => {
-			image.dispatchEvent(new Event("error"));
-		});
-
-		expect(container.textContent).not.toContain("Image unavailable");
-		expect(container.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
-	});
 });
 
 describe("LazyBackgroundImage", () => {
@@ -144,7 +117,6 @@ describe("LazyBackgroundImage", () => {
 		const wrapper = container.firstChild;
 
 		expect(wrapper).toHaveStyle({ backgroundImage: "none" });
-		expect(container.textContent).toContain("Content");
 		expect(observerInstances).toHaveLength(1);
 
 		act(() => {
@@ -156,94 +128,5 @@ describe("LazyBackgroundImage", () => {
 		});
 
 		expect(wrapper.style.backgroundImage).toContain("/background.jpg");
-	});
-
-	it("keeps children visible and suppresses decorative error text when the background fails", async () => {
-		renderComponent(
-			<LazyBackgroundImage src="/fail-background.jpg" className="h-24 w-24">
-				<div>Content</div>
-			</LazyBackgroundImage>
-		);
-
-		act(() => {
-			observerInstances[0].trigger(true);
-		});
-
-		await act(async () => {
-			await Promise.resolve();
-		});
-
-		expect(container.textContent).toContain("Content");
-		expect(container.textContent).not.toContain("Image unavailable");
-	});
-});
-
-describe("shared loading contract", () => {
-	it("keeps route-sized skeletons out of the shared primitive contract", () => {
-		const sharedExports = Object.values(SHARED_LOADING_CONTRACT).flat();
-
-		expect(sharedExports).toContain("ImageWithLoader");
-		expect(sharedExports).toContain("BlogPostGridSkeleton");
-		expect(sharedExports).toContain("LoadingButtonContent");
-
-		for (const legacyExport of LEGACY_ROUTE_SKELETON_EXPORTS) {
-			expect(sharedExports).not.toContain(legacyExport);
-		}
-	});
-
-	it("marks shared fidelity-sensitive skeletons with profile identifiers", () => {
-		renderComponent(
-			<>
-				<PromoBarSkeleton />
-				<OfferCardsSkeleton theme="light" />
-				<BlogPostGridSkeleton cardCount={2} />
-				<FormSectionSkeleton />
-			</>
-		);
-
-		const profileNames = Array.from(container.querySelectorAll("[data-fidelity-profile]")).map((element) =>
-			element.getAttribute("data-fidelity-profile")
-		);
-
-		expect(profileNames).toEqual(expect.arrayContaining(["promo-bar", "offer-cards", "blog-post-grid", "form-section"]));
-	});
-
-	it("uses orientation metadata to keep promo and warning-sign placeholders in their final stacking direction", () => {
-		renderComponent(
-			<>
-				<OfferCardsSkeleton theme="light" />
-				<ServiceRouteSkeleton />
-			</>
-		);
-
-		const offerCardBody = container.querySelector('[data-fidelity-profile="offer-card-body"]');
-		const warningList = container.querySelector('[data-fidelity-profile="warning-sign-list"]');
-
-		expect(offerCardBody).toHaveAttribute("data-fidelity-orientation", LOADING_FIDELITY_PROFILES.offerCards.orientation);
-		expect(offerCardBody).toHaveClass("flex-col");
-		expect(warningList).toHaveAttribute("data-fidelity-orientation", LOADING_FIDELITY_PROFILES.warningSignList.orientation);
-		expect(warningList).toHaveClass("flex-col");
-		expect(warningList).not.toHaveClass("grid-cols-2");
-	});
-});
-
-describe("LoadingButtonContent", () => {
-	it("preserves the idle label while exposing a local busy-state announcement", () => {
-		renderComponent(
-			<button type="button">
-				<LoadingButtonContent
-					isLoading
-					idleLabel="Submit Request"
-					loadingLabel="Submitting request..."
-				/>
-			</button>
-		);
-
-		const content = container.querySelector("span[aria-busy]");
-
-		expect(content).toHaveAttribute("aria-busy", "true");
-		expect(content).toHaveTextContent("Submit Request");
-		expect(content.querySelector(".sr-only")).toHaveTextContent("Submitting request...");
-		expect(content.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
 	});
 });

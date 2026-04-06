@@ -66,16 +66,7 @@ function DefaultImageLoader() {
 	return <div className="h-full w-full rounded-[inherit] bg-[#E3EAF4] animate-pulse" />;
 }
 
-
-function isDecorativeMedia(alt, ariaHidden) {
-	return alt === "" || ariaHidden === true || ariaHidden === "true";
-}
-
-function DefaultImageError({ decorative = false }) {
-	if (decorative) {
-		return <div className="h-full w-full rounded-[inherit] bg-[#E3EAF4]" aria-hidden="true" />;
-	}
-
+function DefaultImageError() {
 	return (
 		<div className="flex h-full w-full items-center justify-center rounded-[inherit] border border-[#DEDEDE] bg-[#F5F5F5] px-4 text-center text-sm text-[#6B7280]">
 			Image unavailable
@@ -97,7 +88,6 @@ export function ImageWithLoader({
 	onError,
 	...props
 }) {
-	const decorative = isDecorativeMedia(alt, props["aria-hidden"]);
 	const { containerRef, shouldRender, status, markLoaded, markFailed } = useDeferredImageLoading({
 		src,
 		loading,
@@ -156,11 +146,8 @@ export function ImageWithLoader({
 				/>
 			) : null}
 			{hasError ? (
-				<div
-					className="absolute inset-0 rounded-[inherit] transition-opacity duration-300"
-					aria-hidden={decorative ? "true" : undefined}
-				>
-					{error ?? <DefaultImageError decorative={decorative} />}
+				<div className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{error ?? <DefaultImageError />}
 				</div>
 			) : null}
 		</div>
@@ -182,7 +169,6 @@ export function LazyBackgroundImage({
 	style,
 	...props
 }) {
-	const decorative = true;
 	const { containerRef, shouldRender, status, markLoaded, markFailed } = useDeferredImageLoading({
 		src,
 		loading,
@@ -221,8 +207,8 @@ export function LazyBackgroundImage({
 				</div>
 			) : null}
 			{status === "failed" ? (
-				<div className="absolute inset-0 rounded-[inherit] transition-opacity duration-300" aria-hidden="true">
-					{error ?? <DefaultImageError decorative={decorative} />}
+				<div className="absolute inset-0 rounded-[inherit] transition-opacity duration-300">
+					{error ?? <DefaultImageError />}
 				</div>
 			) : null}
 			{children}
@@ -256,122 +242,6 @@ export function ContentSkeleton({ className = "" }) {
 	);
 }
 
-export const SHARED_LOADING_CONTRACT = Object.freeze({
-	media: ["ImageWithLoader", "LazyBackgroundImage"],
-	collection: [
-		"TextImageSectionSkeleton",
-		"ServiceCategoryRowsSkeleton",
-		"ServiceAreaRowsSkeleton",
-		"OfferCardsSkeleton",
-		"BlogPostGridSkeleton",
-		"RecentPostsSectionSkeleton",
-		"FormSectionSkeleton",
-	],
-	action: ["LoadingButtonContent"],
-	shell: ["FooterSkeleton", "BlogPostSkeleton"],
-});
-
-export const LEGACY_ROUTE_SKELETON_EXPORTS = Object.freeze([
-	"RoutePageSkeleton",
-	"HomeRouteSkeleton",
-	"AboutRouteSkeleton",
-	"BlogRouteSkeleton",
-	"BlogPostRouteSkeleton",
-	"CareersRouteSkeleton",
-	"CouponsRouteSkeleton",
-	"ScheduleRouteSkeleton",
-	"ReviewsRouteSkeleton",
-	"FAQsRouteSkeleton",
-	"ResourcesRouteSkeleton",
-	"FinancingRouteSkeleton",
-	"WarrantyRouteSkeleton",
-	"ServiceAreasRouteSkeleton",
-	"RegionsRouteSkeleton",
-	"AreaRouteSkeleton",
-	"ServiceCategoriesRouteSkeleton",
-	"ServiceCategoryRouteSkeleton",
-	"ServiceRouteSkeleton",
-	"NotFoundRouteSkeleton",
-]);
-
-export const LOADING_FIDELITY_PROFILES = Object.freeze({
-	promoBar: {
-		root: "w-full bg-[#B32020]",
-		inner: "mx-auto flex w-full max-w-7xl justify-center px-6 py-2",
-		orientation: "row",
-	},
-	textImageSection: {
-		root: "mx-auto flex w-full max-w-7xl flex-col px-6 lg:flex-row lg:items-start lg:gap-16",
-		mediaWrapper: "flex justify-center self-center shrink-0 lg:self-end",
-		contentWrapper: "flex-1 space-y-6 py-16",
-	},
-	serviceRows: {
-		root: "mx-auto flex w-full max-w-7xl flex-col gap-16 px-6",
-		row: "flex flex-col gap-2",
-		body: "flex flex-col gap-12 sm:flex-row sm:items-start",
-		mediaWrapper: "hidden shrink-0 sm:block",
-		mediaBlock: "h-[90px] w-[120px]",
-		textStack: "flex-1 space-y-2",
-		descriptionTone: "bg-[#E5EBF4]",
-		ctaRow: "mt-1 flex justify-end",
-	},
-	offerCards: {
-		root: "mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6",
-		header: "space-y-6 text-center",
-		grid: "flex flex-wrap justify-center gap-6",
-		card: "min-w-[250px] flex-1 border-4 border-dashed border-[#B32020] bg-white p-6 shadow-lg",
-		cardBody: "items-center gap-4",
-		orientation: "column",
-	},
-	blogPostGrid: {
-		grid: "grid w-full gap-6 grid-cols-1 lg:grid-cols-3",
-		card: "flex w-full flex-col border border-[#DEDEDE] bg-white",
-		body: "flex flex-1 flex-col p-6",
-	},
-	recentPostsSection: {
-		root: "mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6",
-		header: "space-y-6",
-		footer: "flex justify-end",
-	},
-	formSection: {
-		root: "mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 lg:flex-row",
-		contentColumn: "w-full space-y-6 lg:w-1/2",
-		fieldGrid: "grid grid-cols-1 gap-4",
-		pairedFieldGrid: "grid grid-cols-1 gap-4 md:grid-cols-2",
-		submitRow: "flex justify-center pt-4",
-		buttonWidth: "h-12 w-full sm:w-[200px]",
-		aside: "h-100 w-full lg:h-auto lg:min-h-[34rem] lg:w-1/2",
-	},
-	warningSignList: {
-		orientation: "column",
-		group: "space-y-4",
-		item: "flex items-start gap-3 border border-[#DEDEDE] bg-[#F5F5F5] p-4",
-	},
-});
-
-const ORIENTATION_CLASSNAMES = {
-	column: "flex flex-col",
-	row: "flex flex-row items-center",
-	grid: "grid grid-cols-1 sm:grid-cols-2",
-};
-
-function OrientationPlaceholderGroup({
-	orientation = "column",
-	className = "",
-	children,
-	profileName,
-}) {
-	return (
-		<div
-			className={`${ORIENTATION_CLASSNAMES[orientation] ?? ORIENTATION_CLASSNAMES.column} ${className}`.trim()}
-			data-fidelity-orientation={orientation}
-			data-fidelity-profile={profileName}
-		>
-			{children}
-		</div>
-	);
-}
-
 export function TextImageSectionSkeleton({
 	className = "",
 	imageSide = "right",
@@ -382,18 +252,13 @@ export function TextImageSectionSkeleton({
 	imageToneClass = "bg-[#D3DCEB]",
 }) {
 	const imageFirst = imageSide === "left";
-	const profile = LOADING_FIDELITY_PROFILES.textImageSection;
 
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="text-image-section"
-		>
-			<div className={`${imageFirst ? "order-1" : "order-2 lg:order-none"} ${profile.mediaWrapper}`}>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col px-6 lg:flex-row lg:items-start lg:gap-16 ${className}`} aria-hidden="true">
+			<div className={`${imageFirst ? "order-1" : "order-2 lg:order-none"} flex justify-center self-center lg:self-end shrink-0`}>
 				<SkeletonBlock className={imageClassName} toneClass={imageToneClass} />
 			</div>
-			<div className={`${imageFirst ? "order-2" : "order-1 lg:order-none"} ${profile.contentWrapper}`}>
+			<div className={`${imageFirst ? "order-2" : "order-1 lg:order-none"} space-y-6 py-16 flex-1`}>
 				<SkeletonBlock className="h-8 w-56" toneClass={textToneClass} />
 				<div className="space-y-3">
 					<SkeletonBlock className="h-4 w-full" toneClass={textToneClass} />
@@ -441,27 +306,21 @@ export function ReviewSectionSkeleton({ className = "" }) {
 }
 
 export function ServiceCategoryRowsSkeleton({ className = "" }) {
-	const profile = LOADING_FIDELITY_PROFILES.serviceRows;
-
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="service-category-rows"
-		>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 ${className}`} aria-hidden="true">
 			{Array.from({ length: 4 }).map((_, index) => (
-				<div key={index} className={profile.row}>
-					<div className={profile.body}>
-						<div className={profile.mediaWrapper}>
-							<SkeletonBlock className={profile.mediaBlock} toneClass="bg-[#D3DCEB]" />
+				<div key={index} className="flex flex-col gap-2">
+					<div className="flex flex-col gap-12 sm:flex-row sm:items-start">
+						<div className="hidden shrink-0 sm:block">
+							<SkeletonBlock className="h-[90px] w-[120px]" toneClass="bg-[#D3DCEB]" />
 						</div>
-						<div className={profile.textStack}>
+						<div className="flex-1 space-y-2">
 							<SkeletonBlock className="h-7 w-52" />
-							<SkeletonBlock className="h-4 w-full" toneClass={profile.descriptionTone} />
-							<SkeletonBlock className="h-4 w-11/12" toneClass={profile.descriptionTone} />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
 						</div>
 					</div>
-					<div className={profile.ctaRow}>
+					<div className="mt-1 flex justify-end">
 						<SkeletonBlock className="h-6 w-56" toneClass="bg-[#C8D7EE]" />
 					</div>
 				</div>
@@ -471,27 +330,21 @@ export function ServiceCategoryRowsSkeleton({ className = "" }) {
 }
 
 export function ServiceAreaRowsSkeleton({ className = "" }) {
-	const profile = LOADING_FIDELITY_PROFILES.serviceRows;
-
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="service-area-rows"
-		>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 ${className}`} aria-hidden="true">
 			{Array.from({ length: 4 }).map((_, index) => (
-				<div key={index} className={profile.row}>
-					<div className={profile.body}>
-						<div className={profile.mediaWrapper}>
-							<SkeletonBlock className={profile.mediaBlock} toneClass="bg-[#D3DCEB]" />
+				<div key={index} className="flex flex-col gap-2">
+					<div className="flex flex-col gap-12 sm:flex-row sm:items-start">
+						<div className="hidden shrink-0 sm:block">
+							<SkeletonBlock className="h-[90px] w-[120px]" toneClass="bg-[#D3DCEB]" />
 						</div>
-						<div className={profile.textStack}>
+						<div className="flex-1 space-y-2">
 							<SkeletonBlock className="h-7 w-52" />
-							<SkeletonBlock className="h-4 w-full" toneClass={profile.descriptionTone} />
-							<SkeletonBlock className="h-4 w-11/12" toneClass={profile.descriptionTone} />
+							<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+							<SkeletonBlock className="h-4 w-11/12" toneClass="bg-[#E5EBF4]" />
 						</div>
 					</div>
-					<div className={profile.ctaRow}>
+					<div className="mt-1 flex justify-end">
 						<SkeletonBlock className="h-6 w-60" toneClass="bg-[#C8D7EE]" />
 					</div>
 				</div>
@@ -580,11 +433,9 @@ export function WarrantySectionSkeleton({ className = "" }) {
 }
 
 export function PromoBarSkeleton({ className = "" }) {
-	const profile = LOADING_FIDELITY_PROFILES.promoBar;
-
 	return (
-		<div className={`${profile.root} ${className}`} aria-hidden="true" data-fidelity-profile="promo-bar">
-			<div className={profile.inner} data-fidelity-orientation={profile.orientation}>
+		<div className={`w-full bg-[#B32020] ${className}`} aria-hidden="true">
+			<div className="mx-auto flex w-full max-w-7xl justify-center px-6 py-2">
 				<SkeletonBlock className="h-5 w-56" toneClass="bg-white/35" />
 			</div>
 		</div>
@@ -593,32 +444,22 @@ export function PromoBarSkeleton({ className = "" }) {
 
 export function OfferCardsSkeleton({ className = "", theme = "dark" }) {
 	const isDark = theme === "dark";
-	const profile = LOADING_FIDELITY_PROFILES.offerCards;
-
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="offer-cards"
-		>
-			<div className={profile.header}>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
+			<div className="space-y-6 text-center">
 				<SkeletonBlock className="mx-auto h-8 w-56" toneClass={isDark ? "bg-white/35" : "bg-[#C8D7EE]"} />
 				<SkeletonBlock className="mx-auto h-4 w-80 max-w-full" toneClass={isDark ? "bg-white/25" : "bg-[#D3DCEB]"} />
 			</div>
-			<div className={profile.grid}>
+			<div className="flex flex-wrap justify-center gap-6">
 				{Array.from({ length: 4 }).map((_, index) => (
-					<div key={index} className={profile.card}>
-						<OrientationPlaceholderGroup
-							orientation={profile.orientation}
-							className={profile.cardBody}
-							profileName="offer-card-body"
-						>
+					<div key={index} className="min-w-[250px] flex-1 border-4 border-dashed border-[#B32020] bg-white p-6 shadow-lg">
+						<div className="flex flex-col items-center gap-4">
 							<SkeletonBlock className="h-12 w-12 rounded-full" toneClass="bg-[#F2C5C5]" />
 							<SkeletonBlock className="h-9 w-40" toneClass="bg-[#C8D7EE]" />
 							<SkeletonBlock className="h-4 w-44" />
 							<SkeletonBlock className="h-4 w-40" />
 							<SkeletonBlock className="h-12 w-36" toneClass="bg-[#EAB3B3]" />
-						</OrientationPlaceholderGroup>
+						</div>
 					</div>
 				))}
 			</div>
@@ -632,18 +473,12 @@ export function BlogPostGridSkeleton({
 	cardMinHeightClass = "min-h-[420px]",
 	gridClassName = "grid-cols-1 lg:grid-cols-3",
 }) {
-	const profile = LOADING_FIDELITY_PROFILES.blogPostGrid;
-
 	return (
-		<div
-			className={`${profile.grid} ${gridClassName} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="blog-post-grid"
-		>
+		<div className={`grid w-full gap-6 ${gridClassName} ${className}`} aria-hidden="true">
 			{Array.from({ length: cardCount }).map((_, index) => (
-				<div key={index} className={`${profile.card} ${cardMinHeightClass}`}>
+				<div key={index} className={`flex w-full ${cardMinHeightClass} flex-col border border-[#DEDEDE] bg-white`}>
 					<SkeletonBlock className="h-48 w-full rounded-none" toneClass="bg-[#D3DCEB]" />
-					<div className={profile.body}>
+					<div className="flex flex-1 flex-col p-6">
 						<SkeletonBlock className="h-6 w-11/12" />
 						<div className="mt-3 space-y-2">
 							<SkeletonBlock className="h-4 w-1/2" toneClass="bg-[#E5EBF4]" />
@@ -663,20 +498,14 @@ export function BlogPostGridSkeleton({
 }
 
 export function RecentPostsSectionSkeleton({ className = "" }) {
-	const profile = LOADING_FIDELITY_PROFILES.recentPostsSection;
-
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="recent-posts-section"
-		>
-			<div className={profile.header}>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col space-y-6 px-6 ${className}`} aria-hidden="true">
+			<div className="space-y-6">
 				<SkeletonBlock className="h-8 w-48" />
 				<SkeletonBlock className="h-4 w-80 max-w-full" toneClass="bg-[#E5EBF4]" />
 			</div>
 			<BlogPostGridSkeleton cardCount={3} />
-			<div className={profile.footer}>
+			<div className="flex justify-end">
 				<SkeletonBlock className="h-6 w-36" toneClass="bg-[#C8D7EE]" />
 			</div>
 		</div>
@@ -684,35 +513,29 @@ export function RecentPostsSectionSkeleton({ className = "" }) {
 }
 
 export function FormSectionSkeleton({ className = "" }) {
-	const profile = LOADING_FIDELITY_PROFILES.formSection;
-
 	return (
-		<div
-			className={`${profile.root} ${className}`}
-			aria-hidden="true"
-			data-fidelity-profile="form-section"
-		>
-			<div className={profile.contentColumn}>
+		<div className={`mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 lg:flex-row ${className}`} aria-hidden="true">
+			<div className="w-full space-y-6 lg:w-1/2">
 				<div className="space-y-6">
 					<SkeletonBlock className="h-8 w-52" />
 					<SkeletonBlock className="h-4 w-72 max-w-full" />
 				</div>
-				<div className={profile.fieldGrid}>
-					<div className={profile.pairedFieldGrid}>
+				<div className="grid grid-cols-1 gap-4">
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
 						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
 					</div>
-					<div className={profile.pairedFieldGrid}>
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
 						<SkeletonBlock className="h-12 w-full" toneClass="bg-white/85" />
 					</div>
 					<SkeletonBlock className="h-28 w-full" toneClass="bg-white/85" />
-					<div className={profile.submitRow}>
-						<SkeletonBlock className={profile.buttonWidth} toneClass="bg-[#EAB3B3]" />
+					<div className="flex justify-center pt-4">
+						<SkeletonBlock className="h-12 w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
 					</div>
 				</div>
 			</div>
-			<SkeletonBlock className={profile.aside} toneClass="bg-white/70" />
+			<SkeletonBlock className="h-100 w-full lg:h-auto lg:min-h-[34rem] lg:w-1/2" toneClass="bg-white/70" />
 		</div>
 	);
 }
@@ -724,20 +547,18 @@ export function LoadingButtonContent({
 	className = "",
 }) {
 	return (
-		<span
-			className={`inline-flex items-center justify-center gap-2 ${className}`}
-			aria-live="polite"
-			aria-atomic="true"
-			aria-busy={isLoading}
-		>
+		<span className={`inline-flex items-center justify-center gap-2 ${className}`} aria-live="polite">
 			{isLoading ? (
-				<span
-					className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
-					aria-hidden="true"
-				/>
-			) : null}
-			<span>{idleLabel}</span>
-			{isLoading ? <span className="sr-only">{loadingLabel}</span> : null}
+				<>
+					<span
+						className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+						aria-hidden="true"
+					/>
+					<span>{loadingLabel}</span>
+				</>
+			) : (
+				<span>{idleLabel}</span>
+			)}
 		</span>
 	);
 }
@@ -795,9 +616,6 @@ export function FooterSkeleton() {
 		</footer>
 	);
 }
-
-// Legacy route-sized skeleton exports are intentionally isolated below and are
-// not part of the shared primitive contract consumed by component-level loaders.
 
 function PatternHeaderSkeleton({ titleWidth = "w-56", descriptionWidth = "w-full" }) {
 	return (
@@ -1241,8 +1059,6 @@ export function NotFoundRouteSkeleton() {
 }
 
 export function ServiceRouteSkeleton() {
-	const warningProfile = LOADING_FIDELITY_PROFILES.warningSignList;
-
 	return (
 		<div className="flex-1" aria-hidden="true">
 			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] relative overflow-hidden bg-[#0C2D70] py-16">
@@ -1263,13 +1079,9 @@ export function ServiceRouteSkeleton() {
 							<SkeletonBlock className="h-4 w-full" />
 							<SkeletonBlock className="h-4 w-5/6" />
 						</div>
-						<OrientationPlaceholderGroup
-							orientation={warningProfile.orientation}
-							className={warningProfile.group}
-							profileName="warning-sign-list"
-						>
+						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 							{Array.from({ length: 4 }).map((_, index) => (
-								<div key={index} className={warningProfile.item}>
+								<div key={index} className="flex items-start gap-3 border border-[#DEDEDE] bg-[#F5F5F5] p-4">
 									<SkeletonBlock className="mt-1 h-5 w-5 rounded-full" toneClass="bg-[#EAB3B3]" />
 									<div className="flex-1 space-y-2">
 										<SkeletonBlock className="h-4 w-3/4" />
@@ -1277,7 +1089,7 @@ export function ServiceRouteSkeleton() {
 									</div>
 								</div>
 							))}
-						</OrientationPlaceholderGroup>
+						</div>
 					</div>
 					<SkeletonBlock className="h-[320px] w-full rounded-none lg:h-[380px] lg:max-w-[38rem]" toneClass="bg-[#D3DCEB]" />
 				</div>

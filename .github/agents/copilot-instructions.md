@@ -3,32 +3,26 @@
 **Last updated**: 2026-04-05
 
 ## Active Technologies
+- JavaScript ES modules on React 19.1.1 + React Router DOM 7.12.x, Vite 7, Tailwind 4, react-helmet-async, react-icons, Vitest, jsdom ((feature-dir-override))
+- N/A for this feature; UI state only, while existing media and blog data continue to use current client services ((feature-dir-override))
 
-- JavaScript ES modules on React 19.1.1
-- React Router DOM 7.12.x, Vite 7, Tailwind 4
-- react-helmet-async and react-icons
-- Vitest with jsdom for frontend regression coverage
+- ((feature-dir-override))
 
 ## Project Structure
 
-- `client/`: React/Vite frontend where the loading rearchitecture will land
-- `server/`: Python backend, out of scope for this feature
-- `.github/modernize/features/component-progressive-loading-ui/`: planning artifacts for the progressive loading upgrade
+backend/
+frontend/
+tests/
 
 ## Commands
 
-- `cd client && npm test`
-- `cd client && npm run test:coverage`
-- `cd client && npm run build`
+# Add commands for 
 
 ## Conventions
 
-- Preserve route SEO metadata, semantic headings, and accessibility behavior during loading changes.
-- Keep route-level fallback minimal; loading ownership belongs to the unresolved component, media region, collection, or action.
-- Reuse and extend `client/src/components/ui/LoadingComponents.jsx` before adding new loader patterns.
-- Preserve current eager-versus-lazy media intent and loading visual language while fixing fidelity mismatches.
+: Follow standard conventions
 
 ## Recent Changes
+- (feature-dir-override): Added JavaScript ES modules on React 19.1.1 + React Router DOM 7.12.x, Vite 7, Tailwind 4, react-helmet-async, react-icons, Vitest, jsdom
 
-- Generated planning artifacts for `component-progressive-loading-ui` under `.github/modernize/features/component-progressive-loading-ui/`.
-- Captured implementation phases for route fallback minimization, shared loading primitives, component integration, fidelity alignment, and testing or validation.
+- (feature-dir-override): Added

@@ -13,7 +13,7 @@ import { useState } from "react";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
-import { ImageWithLoader, LazyBackgroundImage, LoadingButtonContent } from "../ui/LoadingComponents";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import { CompanyInfo, SocialLinks } from "../../data/data";
@@ -35,12 +35,12 @@ export default function Footer() {
 					{/* Logo */}
 					<button
 						onClick={() => navigate("/")}
-						className="hidden md:flex md:flex-none h-[50px] w-[204px] md:h-[60px] md:w-[244px] lg:h-[65px] lg:w-[260px] cursor-pointer"
+						className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<ImageWithLoader
 							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
-							className="h-full w-full object-contain"
+							className="h-full w-auto object-contain"
 							width={340}
 							height={100}
 							fetchPriority="high"
@@ -52,7 +52,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getCloudFrontUrl("private/google-reviews-190.webp")}
 							alt="Google Reviews"
-							className="h-[55px] w-[95px] object-contain"
+							className="h-[55px] object-contain"
 							loading="lazy"
 							width={95}
 							height={55}
@@ -60,7 +60,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getCloudFrontUrl("private/bbb-accredited-business-295.webp")}
 							alt="BBB Accredited Business"
-							className="h-[55px] w-[148px] object-contain"
+							className="h-[55px] object-contain"
 							loading="lazy"
 							width={148}
 							height={55}
@@ -68,7 +68,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getCloudFrontUrl("private/year-20-anniversary.png")}
 							alt="20 Year Anniversary"
-							className="hidden sm:block h-[55px] w-[110px] object-contain"
+							className="hidden sm:block h-[55px] object-contain"
 							loading="lazy"
 							width={110}
 							height={55}
@@ -78,13 +78,16 @@ export default function Footer() {
 			</div>
 
 			{/* Main Footer */}
-			<section className="w-full bg-[#0C2D70]">
-				<LazyBackgroundImage
+			<section className="relative overflow-hidden flex flex-col items-center w-full py-16 bg-[#0C2D70]">
+				<img
 					src={getCloudFrontUrl("private/pattern1.png")}
-					className="overflow-hidden flex flex-col items-center w-full py-16"
+					alt=""
+					aria-hidden="true"
 					loading="eager"
+					decoding="sync"
 					fetchPriority="high"
-				>
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 				{/* Content */}
 				<div className="relative z-10 flex flex-col justify-between w-full max-w-7xl mx-auto px-6 gap-12 lg:gap-24 text-white">
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
@@ -131,10 +134,17 @@ export default function Footer() {
 								</p>
 							</div>
 
-							<form
+							{newsletterSuccess ? (
+								<FormResponseMessage
+									type={newsletterResponseType}
+									message={newsletterSuccessMessage}
+									className="mb-4"
+								/>
+							) : (
+								<>
+									<form
 										onSubmit={async (e) => {
 											e.preventDefault();
-										if (newsletterSubmitting) return;
 											const emailError = validateEmail(newsletterEmail);
 											if (emailError) {
 												setNewsletterError(emailError);
@@ -188,20 +198,13 @@ export default function Footer() {
 												disabled={newsletterSubmitting}
 												className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
 											>
-												<LoadingButtonContent
-													isLoading={newsletterSubmitting}
-													idleLabel="Join Now"
-													loadingLabel="Joining newsletter..."
-													className="text-sm uppercase"
-												/>
+												{newsletterSubmitting ? "..." : "Join Now"}
 											</button>
 										</div>
 									</form>
-									<FormResponseMessage
-										type={newsletterSuccess ? newsletterResponseType : "error"}
-										message={newsletterSuccess ? newsletterSuccessMessage : newsletterError}
-										className="mt-3 mb-3"
-									/>
+									<FormResponseMessage type="error" message={newsletterError} className="mt-3 mb-3" />
+								</>
+							)}
 							<p className="text-[10px] text-white/70 uppercase tracking-widest">
 								* We respect your privacy and never spam.
 							</p>
@@ -349,7 +352,6 @@ export default function Footer() {
 						</div>
 					</div>
 				</div>
-				</LazyBackgroundImage>
 			</section>
 
 			{/* Bottom Bar */}

@@ -3,7 +3,7 @@ import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
-import { ImageWithLoader, LazyBackgroundImage } from "../components/ui/LoadingComponents";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
@@ -67,13 +67,15 @@ export default function ServicePage() {
 				jsonLd={[serviceJsonLd, breadcrumbJsonLd]}
 			/>
 			{/* 1. Header (Pattern Background) */}
-			<section className="w-full bg-[#0C2D70]">
-				<LazyBackgroundImage
+			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
-					className="overflow-hidden flex w-full py-16"
-					loading="eager"
+					alt=""
+					aria-hidden="true"
 					fetchPriority="high"
-				>
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
+
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
 					<PageTitle className="tracking-tight">{serviceName}</PageTitle>
 					<p className="leading-relaxed">
@@ -81,7 +83,6 @@ export default function ServicePage() {
 							`Professional ${serviceName.toLowerCase()} solutions for homeowners throughout the Greater Seattle area.`}
 					</p>
 				</div>
-				</LazyBackgroundImage>
 			</section>
 
 			{/* 2. Warning Signs (White Background) */}
@@ -129,13 +130,15 @@ export default function ServicePage() {
 			</section>
 
 			{/* 3. What to Expect (Skyline Background) */}
-			<section className="w-full">
-				<LazyBackgroundImage
+			<section className="relative overflow-hidden w-full py-16">
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
-					className="overflow-hidden w-full py-16"
-					loading="lazy"
-					backgroundPosition="center bottom"
-				>
+					alt=""
+					aria-hidden="true"
+					fetchPriority="high"
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
+
 				<div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
 					<SectionTitle as="h4" className="tracking-tight">
 						What To Expect From Our {serviceName} Service
@@ -173,7 +176,6 @@ export default function ServicePage() {
 						))}
 					</div>
 				</div>
-				</LazyBackgroundImage>
 			</section>
 
 			{/* 4. DIY vs Pro (#F5F5F5 Background) */}
@@ -270,17 +272,17 @@ export default function ServicePage() {
 			</section>
 
 			{/* 6. Schedule Online (Skyline Background) */}
-			<section className="w-full">
-				<LazyBackgroundImage
+			<section className="relative overflow-hidden flex justify-center w-full py-24">
+				<ImageWithLoader
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
-					className="overflow-hidden flex justify-center w-full py-24"
+					alt=""
+					aria-hidden="true"
 					loading="lazy"
-					backgroundPosition="center bottom"
-				>
+					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+				/>
 				<div className="relative z-10 w-full flex justify-center">
 					<ScheduleOnline />
 				</div>
-				</LazyBackgroundImage>
 			</section>
 		</div>
 	);

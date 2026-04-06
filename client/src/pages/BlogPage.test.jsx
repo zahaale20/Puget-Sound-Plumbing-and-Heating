@@ -17,11 +17,6 @@ vi.mock("../components/ui/LoadingComponents", () => ({
 	ImageWithLoader: ({ src, alt, className = "", ...props }) => (
 		<img src={src} alt={alt} className={className} {...props} />
 	),
-	LazyBackgroundImage: ({ children, className = "", ...props }) => (
-		<div className={className} {...props}>
-			{children}
-		</div>
-	),
 }));
 
 const { fetchBlogPosts } = await import("../services/blogService");
