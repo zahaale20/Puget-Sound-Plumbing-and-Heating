@@ -289,6 +289,12 @@ export default function BlogPage() {
 				</section>
 			)}
 
+			{isLoading && (
+				<section className="bg-white w-full pb-16">
+					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">Loading blog posts...</div>
+				</section>
+			)}
+
 			{!isLoading && (
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
 				<ImageWithLoader
@@ -304,6 +310,12 @@ export default function BlogPage() {
 						<PostCard key={post.id} post={post} />
 					))}
 				</div>
+
+				{currentPagePosts.length === 0 && !loadError && (
+					<div className="max-w-7xl mx-auto px-6 text-[#2B2B2B]">
+						No blog posts matched your current search and filter selection.
+					</div>
+				)}
 
 				{totalPages > 1 && (
 					<div className="max-w-7xl mx-auto px-6 w-full flex justify-center items-center">

@@ -13,7 +13,7 @@ import { useState } from "react";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
-import { ImageWithLoader, LazyBackgroundImage } from "../ui/LoadingComponents";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import { CompanyInfo, SocialLinks } from "../../data/data";
@@ -78,16 +78,16 @@ export default function Footer() {
 			</div>
 
 			{/* Main Footer */}
-			<LazyBackgroundImage
-				src={getCloudFrontUrl("private/pattern1-1920.webp")}
-				className="relative flex flex-col items-center w-full py-16"
-				rootMargin="300px 0px"
-				style={{
-					backgroundColor: "#0C2D70",
-				}}
-			>
+			<section className="relative overflow-hidden flex flex-col items-center w-full py-16 bg-[#0C2D70]">
+				<ImageWithLoader
+					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					alt=""
+					aria-hidden="true"
+					loading="lazy"
+					className="absolute inset-0 w-full h-full object-cover z-0"
+				/>
 				{/* Content */}
-				<div className="flex flex-col justify-between z-10 w-full max-w-7xl mx-auto px-6 gap-12 lg:gap-24 text-white">
+				<div className="relative z-10 flex flex-col justify-between w-full max-w-7xl mx-auto px-6 gap-12 lg:gap-24 text-white">
 					<div className="grid grid-cols-1 lg:grid-cols-2 lg:basis-2/5 gap-8">
 						<div className="flex flex-col gap-4">
 							<h5 className="relative inline-block py-1 w-fit">
@@ -350,7 +350,7 @@ export default function Footer() {
 						</div>
 					</div>
 				</div>
-			</LazyBackgroundImage>
+			</section>
 
 			{/* Bottom Bar */}
 			<div className="w-full h-[80px] bg-[#0C2D70] border-t border-white text-sm text-white flex items-center">
