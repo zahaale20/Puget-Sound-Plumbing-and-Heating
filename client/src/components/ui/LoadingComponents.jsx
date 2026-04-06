@@ -424,6 +424,71 @@ export function ScheduleRouteSkeleton() {
 	);
 }
 
+export function ServiceRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] relative overflow-hidden bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6 text-white">
+					<SkeletonBlock className="h-10 w-56" toneClass="bg-white/25" />
+					<div className="max-w-3xl space-y-3">
+						<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
+						<SkeletonBlock className="h-4 w-11/12" toneClass="bg-white/20" />
+					</div>
+				</div>
+			</div>
+			<div className="bg-white py-16">
+				<div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 lg:flex-row lg:items-center lg:gap-16">
+					<div className="flex-1 space-y-6">
+						<SkeletonBlock className="h-8 w-64" />
+						<div className="space-y-3">
+							<SkeletonBlock className="h-4 w-full" />
+							<SkeletonBlock className="h-4 w-full" />
+							<SkeletonBlock className="h-4 w-5/6" />
+						</div>
+						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+							{Array.from({ length: 4 }).map((_, index) => (
+								<div key={index} className="flex items-start gap-3 border border-[#DEDEDE] bg-[#F5F5F5] p-4">
+									<SkeletonBlock className="mt-1 h-5 w-5 rounded-full" toneClass="bg-[#EAB3B3]" />
+									<div className="flex-1 space-y-2">
+										<SkeletonBlock className="h-4 w-3/4" />
+										<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+					<SkeletonBlock className="h-[320px] w-full rounded-none lg:h-[380px] lg:max-w-[38rem]" toneClass="bg-[#D3DCEB]" />
+				</div>
+			</div>
+			<div className="relative overflow-hidden bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl px-6 space-y-6">
+					<SkeletonBlock className="h-8 w-72" />
+					<SkeletonBlock className="h-4 w-full max-w-3xl" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
+								<div className="space-y-4">
+									<div className="flex items-center gap-3">
+										<SkeletonBlock className="h-8 w-8 rounded-full" toneClass="bg-[#C8D7EE]" />
+										<SkeletonBlock className="h-5 w-32" />
+									</div>
+									<SkeletonBlock className="h-4 w-full" />
+									<SkeletonBlock className="h-4 w-5/6" toneClass="bg-[#E5EBF4]" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+			<div className="relative overflow-hidden bg-white py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<FormSectionSkeleton />
+				</div>
+			</div>
+		</div>
+	);
+}
+
 export function BlogGridSkeleton({ count = 6, className = "" }) {
 	return (
 		<div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>

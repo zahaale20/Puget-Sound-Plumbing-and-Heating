@@ -12,7 +12,9 @@ import {
 	HomeRouteSkeleton,
 	RoutePageSkeleton,
 	ScheduleRouteSkeleton,
+	ServiceRouteSkeleton,
 } from "./components/ui/LoadingComponents";
+import { getRouteFallbackType, ROUTE_FALLBACK_TYPES } from "./routeFallback";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -47,25 +49,30 @@ function ScrollToTop() {
 
 function RouteFallback() {
 	const { pathname } = useLocation();
+	const fallbackType = getRouteFallbackType(pathname);
 
-	if (pathname === "/") {
+	if (fallbackType === ROUTE_FALLBACK_TYPES.HOME) {
 		return <HomeRouteSkeleton />;
 	}
 
-	if (pathname === "/blog") {
+	if (fallbackType === ROUTE_FALLBACK_TYPES.BLOG_INDEX) {
 		return <BlogRouteSkeleton />;
 	}
 
-	if (pathname.startsWith("/blog/")) {
+	if (fallbackType === ROUTE_FALLBACK_TYPES.BLOG_POST) {
 		return <BlogPostRouteSkeleton />;
 	}
 
-	if (pathname === "/schedule-online") {
+	if (fallbackType === ROUTE_FALLBACK_TYPES.SCHEDULE) {
 		return <ScheduleRouteSkeleton />;
 	}
 
-	if (pathname === "/coupons") {
+	if (fallbackType === ROUTE_FALLBACK_TYPES.COUPONS) {
 		return <CouponsRouteSkeleton />;
+	}
+
+	if (fallbackType === ROUTE_FALLBACK_TYPES.SERVICE) {
+		return <ServiceRouteSkeleton />;
 	}
 
 	return <RoutePageSkeleton />;

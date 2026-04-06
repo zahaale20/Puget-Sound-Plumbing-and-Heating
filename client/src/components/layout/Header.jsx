@@ -13,7 +13,6 @@ import {
 import { CompanyLinks, ServiceLinks, CompanyInfo } from "../../data/data";
 
 import { getCloudFrontUrl } from "../../services/imageService";
-import LiveChatButton from "../ui/LiveChatButton";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -191,9 +190,6 @@ export default function Header() {
 
 					{/* Action Buttons */}
 					<div className="flex flex-row gap-2 items-center">
-						<LiveChatButton
-							className="flex items-center gap-2 px-3 py-2 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#14805e] hover:bg-[#0f5c43]"
-						/>
 						<button
 							onClick={() => navigate("/schedule-online")}
 							className="flex items-center gap-2 px-3 py-2 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515]"
@@ -280,10 +276,6 @@ export default function Header() {
 
 						{/* Mobile Buttons */}
 						<li className="flex flex-col gap-3 mt-4 w-full pb-4">
-							<LiveChatButton
-								onAfterClick={() => setMobileOpen(false)}
-								className="flex items-center justify-center gap-2 py-3 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 bg-[#14805e] hover:bg-[#0f5c43]"
-							/>
 							<button
 								onClick={() => navigate("/schedule-online")}
 								className="flex items-center justify-center gap-2 py-3 text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 bg-[#B32020] hover:bg-[#7a1515]"
