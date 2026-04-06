@@ -1,53 +1,15 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import WhyChooseUs from "../components/sections/WhyChooseUs";
 import Hero from "../components/sections/Hero";
 import EmergencyBar from "../components/layout/EmergencyBar";
 import OurServices from "../components/sections/OurServices";
+import FinancingBar from "../components/layout/FinancingBar";
+import RecentBlogPosts from "../components/sections/RecentBlogPosts";
+import FAQs from "../components/sections/FAQs";
+import CallNow from "../components/sections/CallNow";
+import CustomerReviews from "../components/sections/CustomerReviews";
+import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
+import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
-
-const WhyChooseUs = lazy(() => import("../components/sections/WhyChooseUs"));
-const FinancingBar = lazy(() => import("../components/layout/FinancingBar"));
-const RecentBlogPosts = lazy(() => import("../components/sections/RecentBlogPosts"));
-const FAQs = lazy(() => import("../components/sections/FAQs"));
-const CallNow = lazy(() => import("../components/sections/CallNow"));
-const CustomerReviews = lazy(() => import("../components/sections/CustomerReviews"));
-const LimitedTimeOffers = lazy(() => import("../components/forms/LimitedTimeOffers"));
-const ScheduleOnline = lazy(() => import("../components/forms/ScheduleOnline"));
-
-function DeferredSection({ children, fallbackHeightClass = "min-h-[520px]" }) {
-	const [shouldRender, setShouldRender] = useState(false);
-	const sectionRef = useRef(null);
-
-	useEffect(() => {
-		if (shouldRender) return;
-		const node = sectionRef.current;
-		if (!node) return;
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries.some((entry) => entry.isIntersecting)) {
-					setShouldRender(true);
-					observer.disconnect();
-				}
-			},
-			{ rootMargin: "350px 0px" }
-		);
-
-		observer.observe(node);
-		return () => observer.disconnect();
-	}, [shouldRender]);
-
-	return (
-		<div ref={sectionRef} className="w-full">
-			{shouldRender ? (
-				<Suspense fallback={<div className={fallbackHeightClass} aria-hidden="true" />}>
-					{children}
-				</Suspense>
-			) : (
-				<div className={fallbackHeightClass} aria-hidden="true" />
-			)}
-		</div>
-	);
-}
 
 export default function Home() {
 	return (
@@ -70,9 +32,7 @@ export default function Home() {
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[540px] w-full">
-					<WhyChooseUs />
-				</DeferredSection>
+				<WhyChooseUs />
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
@@ -85,20 +45,14 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[560px] w-full">
-					<CustomerReviews />
-				</DeferredSection>
+				<CustomerReviews />
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[600px] w-full">
-					<FAQs />
-				</DeferredSection>
+				<FAQs />
 			</section>
 
-			<DeferredSection fallbackHeightClass="min-h-[180px] w-full">
-				<FinancingBar />
-			</DeferredSection>
+			<FinancingBar />
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<img
@@ -110,15 +64,11 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[620px] w-full">
-					<LimitedTimeOffers />
-				</DeferredSection>
+				<LimitedTimeOffers />
 			</section>
 
 			<section className="flex flex-col w-full bg-[#F5F5F5]">
-				<DeferredSection fallbackHeightClass="min-h-[260px] w-full">
-					<CallNow />
-				</DeferredSection>
+				<CallNow />
 			</section>
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
@@ -131,15 +81,11 @@ export default function Home() {
 					fetchPriority="low"
 					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
 				/>
-				<DeferredSection fallbackHeightClass="min-h-[760px] w-full">
-					<ScheduleOnline />
-				</DeferredSection>
+				<ScheduleOnline />
 			</section>
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
-				<DeferredSection fallbackHeightClass="min-h-[520px] w-full">
-					<RecentBlogPosts />
-				</DeferredSection>
+				<RecentBlogPosts />
 			</section>
 		</div>
 	);

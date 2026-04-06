@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
-import { BlogPostGridSkeleton, ImageWithLoader } from "../ui/LoadingComponents";
+import { ImageWithLoader } from "../ui/LoadingComponents";
 
 export default function RecentBlogPosts() {
 	const navigate = useNavigate();
@@ -72,9 +72,6 @@ export default function RecentBlogPosts() {
 
 			{/* Blog Posts Grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{recentPosts.length === 0 && (
-					<BlogPostGridSkeleton className="contents" cardCount={3} />
-				)}
 				{recentPosts.map((post) => (
 					<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 						{/* Image */}

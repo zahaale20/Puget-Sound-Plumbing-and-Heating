@@ -4,17 +4,6 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
-import {
-	BlogPostRouteSkeleton,
-	BlogRouteSkeleton,
-	CouponsRouteSkeleton,
-	FooterSkeleton,
-	HomeRouteSkeleton,
-	RoutePageSkeleton,
-	ScheduleRouteSkeleton,
-	ServiceRouteSkeleton,
-} from "./components/ui/LoadingComponents";
-import { getRouteFallbackType, ROUTE_FALLBACK_TYPES } from "./routeFallback";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -47,37 +36,6 @@ function ScrollToTop() {
 	return null;
 }
 
-function RouteFallback() {
-	const { pathname } = useLocation();
-	const fallbackType = getRouteFallbackType(pathname);
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.HOME) {
-		return <HomeRouteSkeleton />;
-	}
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.BLOG_INDEX) {
-		return <BlogRouteSkeleton />;
-	}
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.BLOG_POST) {
-		return <BlogPostRouteSkeleton />;
-	}
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.SCHEDULE) {
-		return <ScheduleRouteSkeleton />;
-	}
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.COUPONS) {
-		return <CouponsRouteSkeleton />;
-	}
-
-	if (fallbackType === ROUTE_FALLBACK_TYPES.SERVICE) {
-		return <ServiceRouteSkeleton />;
-	}
-
-	return <RoutePageSkeleton />;
-}
-
 function DeferredFooter() {
 	const [shouldRender, setShouldRender] = useState(false);
 	const footerRef = useRef(null);
@@ -104,12 +62,10 @@ function DeferredFooter() {
 	return (
 		<div ref={footerRef}>
 			{shouldRender ? (
-				<Suspense fallback={<FooterSkeleton />}>
+				<Suspense fallback={null}>
 					<Footer />
 				</Suspense>
-			) : (
-				<FooterSkeleton />
-			)}
+			) : null}
 		</div>
 	);
 }
@@ -121,7 +77,7 @@ function App() {
 			<RouteSeo />
 			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
-				<Suspense fallback={<RouteFallback />}>
+				<Suspense fallback={null}>
 					<main className="flex-1">
 						<Routes>
 							<Route path="/" element={<HomePage />} />

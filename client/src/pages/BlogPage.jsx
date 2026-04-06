@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
 import { getCloudFrontUrl } from "../services/imageService";
-import { BlogPostGridSkeleton, ImageWithLoader } from "../components/ui/LoadingComponents";
+import { ImageWithLoader } from "../components/ui/LoadingComponents";
 
 const sortOptions = [
 	{ name: "Most Recent", value: "dateDesc" },
@@ -282,18 +282,6 @@ export default function BlogPage() {
 					</div>
 				</div>
 			</section>
-
-			{isLoading && (
-				<section className="bg-white w-full pb-6">
-					<div className="max-w-7xl mx-auto px-6">
-						<BlogPostGridSkeleton
-							cardCount={6}
-							cardMinHeightClass="min-h-[450px]"
-							gridClassName="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-						/>
-					</div>
-				</section>
-			)}
 
 			{loadError && !isLoading && (
 				<section className="bg-white w-full pb-6">
