@@ -1071,8 +1071,8 @@ export function ServiceRouteSkeleton() {
 				</div>
 			</div>
 			<div className="bg-white py-16">
-				<div className="mx-auto flex max-w-7xl flex-col gap-6 px-6">
-					<div className="space-y-6">
+				<div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 xl:flex-row">
+					<div className="flex-1 space-y-6 w-full xl:w-[calc(50%-40px)]">
 						<SkeletonBlock className="h-8 w-64" />
 						<div className="space-y-3">
 							<SkeletonBlock className="h-4 w-full" />
@@ -1088,7 +1088,7 @@ export function ServiceRouteSkeleton() {
 							))}
 						</div>
 					</div>
-					<SkeletonBlock className="h-[380px] w-full" toneClass="bg-[#D3DCEB]" />
+					<SkeletonBlock className="h-[380px] w-full xl:w-[calc(50%+40px)]" toneClass="bg-[#D3DCEB]" />
 				</div>
 			</div>
 			<div className="relative overflow-hidden bg-[#F5F5F5] py-16">
