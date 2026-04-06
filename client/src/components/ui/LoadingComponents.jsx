@@ -489,19 +489,25 @@ export function FooterSkeleton() {
 	);
 }
 
+function PatternHeaderSkeleton({ titleWidth = "w-56", descriptionWidth = "w-full" }) {
+	return (
+		<section className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
+			<div className="mx-auto max-w-7xl px-6 space-y-6 text-white">
+				<SkeletonBlock className={`h-10 ${titleWidth}`} toneClass="bg-white/25" />
+				<div className="max-w-4xl space-y-3">
+					<SkeletonBlock className={`h-4 ${descriptionWidth}`} toneClass="bg-white/20" />
+					<SkeletonBlock className="h-4 w-11/12" toneClass="bg-white/20" />
+				</div>
+			</div>
+		</section>
+	);
+}
+
 export function RoutePageSkeleton() {
 	return (
 		<div className="flex-1" aria-hidden="true">
-			<div className="bg-[#0C2D70] py-16 mt-[101px] md:mt-[106px] lg:mt-[167px]">
-				<div className="mx-auto max-w-7xl px-6 space-y-6">
-					<SkeletonBlock className="h-10 w-40" toneClass="bg-white/25" />
-					<div className="space-y-3 max-w-2xl">
-						<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
-						<SkeletonBlock className="h-4 w-5/6" toneClass="bg-white/20" />
-					</div>
-				</div>
-			</div>
-			<div className="bg-[#F5F5F5] py-16">
+			<PatternHeaderSkeleton titleWidth="w-40" descriptionWidth="w-4/5" />
+			<section className="bg-[#F5F5F5] py-16">
 				<div className="mx-auto max-w-7xl px-6 space-y-6">
 					<SkeletonBlock className="h-8 w-56" />
 					<SkeletonBlock className="h-4 w-full max-w-3xl" />
@@ -518,7 +524,7 @@ export function RoutePageSkeleton() {
 						))}
 					</div>
 				</div>
-			</div>
+			</section>
 		</div>
 	);
 }
@@ -526,29 +532,133 @@ export function RoutePageSkeleton() {
 export function HomeRouteSkeleton() {
 	return (
 		<div className="flex-1" aria-hidden="true">
-			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
-				<div className="mx-auto max-w-7xl px-6 space-y-6">
-					<SkeletonBlock className="h-10 w-64" toneClass="bg-white/25" />
-					<div className="space-y-3 max-w-2xl">
-						<SkeletonBlock className="h-4 w-full" toneClass="bg-white/20" />
-						<SkeletonBlock className="h-4 w-5/6" toneClass="bg-white/20" />
+			<section className="relative mt-[101px] h-[calc(100vh-101px)] bg-[#0C2D70] md:mt-[106px] md:h-[calc(100vh-106px)] lg:mt-[167px] lg:h-[calc(100vh-167px)]">
+				<SkeletonBlock className="absolute inset-0 h-full w-full rounded-none" toneClass="bg-[#183D87]" />
+				<div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col items-center justify-center gap-8 px-6 text-center">
+					<div className="space-y-4">
+						<SkeletonBlock className="mx-auto h-12 w-[22rem] max-w-full" toneClass="bg-white/25" />
+						<SkeletonBlock className="mx-auto h-12 w-[26rem] max-w-full" toneClass="bg-white/25" />
+					</div>
+					<SkeletonBlock className="h-4 w-full max-w-3xl" toneClass="bg-white/20" />
+					<div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+						<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#EAB3B3]" />
+						<SkeletonBlock className="h-[50px] w-full sm:w-[200px]" toneClass="bg-[#C8D7EE]" />
 					</div>
 				</div>
-			</div>
+				<div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-6">
+					{Array.from({ length: 4 }).map((_, index) => (
+						<SkeletonBlock key={index} className="h-6 w-6 rounded-full" toneClass="bg-white/30" />
+					))}
+				</div>
+			</section>
 			<PromoBarSkeleton />
-			<div className="bg-[#F5F5F5] py-16">
-				<div className="mx-auto max-w-7xl px-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-					{Array.from({ length: 3 }).map((_, index) => (
-						<div key={index} className="border border-[#DEDEDE] bg-white p-6">
-							<div className="space-y-4">
-								<SkeletonBlock className="h-32 w-full" toneClass="bg-[#D3DCEB]" />
-								<SkeletonBlock className="h-6 w-4/5" />
-								<SkeletonBlock className="h-4 w-full" />
+			<section className="bg-[#0C2D70] py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<div className="space-y-6 text-center text-white">
+						<SkeletonBlock className="mx-auto h-8 w-52" toneClass="bg-white/25" />
+						<SkeletonBlock className="mx-auto h-4 w-3/4" toneClass="bg-white/20" />
+					</div>
+					<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+						{Array.from({ length: 3 }).map((_, index) => (
+							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
+								<SkeletonBlock className="h-24 w-full" toneClass="bg-[#D3DCEB]" />
+								<div className="mt-4 space-y-2">
+									<SkeletonBlock className="h-5 w-2/3" />
+									<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								</div>
 							</div>
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<TextImageSectionSkeleton imageSide="right" imageClassName="h-[340px] w-full max-w-[38rem] rounded-none" />
+			</section>
+			<section className="py-16">
+				<ReviewSectionSkeleton />
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-72" />
+					{Array.from({ length: 5 }).map((_, index) => (
+						<div key={index} className="border border-[#DEDEDE] bg-white p-4">
+							<SkeletonBlock className="h-6 w-full" />
 						</div>
 					))}
 				</div>
-			</div>
+			</section>
+			<PromoBarSkeleton className="bg-[#0C2D70]" />
+			<section className="bg-[#0C2D70] py-16">
+				<OfferCardsSkeleton />
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-44" />
+					<SkeletonBlock className="h-4 w-3/4" />
+					<div className="flex gap-4">
+						<SkeletonBlock className="h-12 w-40" toneClass="bg-[#EAB3B3]" />
+						<SkeletonBlock className="h-12 w-56" toneClass="bg-[#C8D7EE]" />
+					</div>
+				</div>
+			</section>
+			<section className="py-16">
+				<FormSectionSkeleton />
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<RecentPostsSectionSkeleton />
+			</section>
+		</div>
+	);
+}
+
+export function AboutRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-44" descriptionWidth="w-11/12" />
+			<section className="bg-white py-16">
+				<TextImageSectionSkeleton imageSide="right" imageClassName="h-[320px] w-full max-w-[30rem] rounded-none" />
+			</section>
+			<section className="py-16">
+				<TextImageSectionSkeleton imageSide="left" imageClassName="h-[320px] w-full max-w-[30rem] rounded-none" />
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-44" />
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+						{Array.from({ length: 3 }).map((_, index) => (
+							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
+								<SkeletonBlock className="h-56 w-full" toneClass="bg-[#D3DCEB]" />
+								<div className="mt-4 space-y-2">
+									<SkeletonBlock className="h-5 w-2/3" />
+									<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-44" />
+					<SkeletonBlock className="h-4 w-full max-w-4xl" />
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-52 w-full" toneClass="bg-[#D3DCEB]" />
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-52" />
+					<SkeletonBlock className="h-4 w-full max-w-4xl" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-44 w-full" toneClass="bg-[#D3DCEB]" />
+						))}
+					</div>
+				</div>
+			</section>
 		</div>
 	);
 }
@@ -581,6 +691,29 @@ export function BlogPostRouteSkeleton() {
 	return <BlogPostSkeleton className="mt-[101px] md:mt-[106px] lg:mt-[167px]" />;
 }
 
+export function CareersRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-44" descriptionWidth="w-3/4" />
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-52" />
+					{Array.from({ length: 4 }).map((_, index) => (
+						<div key={index} className="border border-[#DEDEDE] bg-white p-4">
+							<SkeletonBlock className="h-7 w-full" />
+						</div>
+					))}
+				</div>
+			</section>
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<FormSectionSkeleton />
+				</div>
+			</section>
+		</div>
+	);
+}
+
 export function CouponsRouteSkeleton() {
 	return (
 		<div className="flex-1" aria-hidden="true">
@@ -600,15 +733,244 @@ export function CouponsRouteSkeleton() {
 export function ScheduleRouteSkeleton() {
 	return (
 		<div className="flex-1" aria-hidden="true">
-			<div className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-16">
-				<div className="mx-auto max-w-7xl px-6 space-y-6">
-					<SkeletonBlock className="h-10 w-56" toneClass="bg-white/25" />
-					<SkeletonBlock className="h-4 w-96 max-w-full" toneClass="bg-white/20" />
-				</div>
-			</div>
-			<div className="bg-[#F5F5F5] py-16">
+			<PatternHeaderSkeleton titleWidth="w-56" descriptionWidth="w-3/4" />
+			<section className="py-16">
 				<FormSectionSkeleton />
-			</div>
+			</section>
+		</div>
+	);
+}
+
+export function ReviewsRouteSkeleton() {
+	return (
+		<section className="py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]" aria-hidden="true">
+			<ReviewSectionSkeleton />
+		</section>
+	);
+}
+
+export function FAQsRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-80" descriptionWidth="w-2/3" />
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					{Array.from({ length: 6 }).map((_, index) => (
+						<div key={index} className="border border-[#DEDEDE] bg-white p-4">
+							<SkeletonBlock className="h-6 w-full" />
+						</div>
+					))}
+				</div>
+			</section>
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					{Array.from({ length: 5 }).map((_, index) => (
+						<div key={index} className="border border-[#DEDEDE] bg-white p-4">
+							<SkeletonBlock className="h-6 w-full" />
+						</div>
+					))}
+				</div>
+			</section>
+		</div>
+	);
+}
+
+export function ResourcesRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-52" descriptionWidth="w-11/12" />
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<TextImageSectionSkeleton imageSide="left" imageClassName="h-[320px] w-full max-w-[32rem] rounded-none" />
+				</div>
+			</section>
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<TextImageSectionSkeleton imageSide="right" imageClassName="h-[320px] w-full max-w-[32rem] rounded-none" />
+				</div>
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl px-6">
+					<FormSectionSkeleton />
+				</div>
+			</section>
+		</div>
+	);
+}
+
+export function FinancingRouteSkeleton() {
+	return (
+		<section className="py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]" aria-hidden="true">
+			<TextImageSectionSkeleton imageSide="right" imageClassName="h-[340px] w-full max-w-[36rem] rounded-none" />
+		</section>
+	);
+}
+
+export function WarrantyRouteSkeleton() {
+	return (
+		<section className="py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]" aria-hidden="true">
+			<TextImageSectionSkeleton imageSide="left" imageClassName="h-[340px] w-full max-w-[36rem] rounded-none" />
+		</section>
+	);
+}
+
+export function ServiceAreasRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-56" descriptionWidth="w-full" />
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-56" />
+					<SkeletonBlock className="h-4 w-full max-w-4xl" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-48 w-full" toneClass="bg-[#D3DCEB]" />
+						))}
+					</div>
+				</div>
+			</section>
+		</div>
+	);
+}
+
+export function RegionsRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-80" descriptionWidth="w-full" />
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-72" />
+					<SkeletonBlock className="h-4 w-3/4" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<div key={index} className="space-y-3">
+								<SkeletonBlock className="h-5 w-2/3" />
+								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								<SkeletonBlock className="h-4 w-5/6" toneClass="bg-[#E5EBF4]" />
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-72" />
+					<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+						{Array.from({ length: 12 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="py-16">
+				<FormSectionSkeleton />
+			</section>
+		</div>
+	);
+}
+
+export function AreaRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-[24rem] max-w-full" descriptionWidth="w-full" />
+			<section className="bg-white py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-72" />
+					<SkeletonBlock className="h-4 w-3/4" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<div key={index} className="space-y-3">
+								<SkeletonBlock className="h-5 w-2/3" />
+								<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								<SkeletonBlock className="h-4 w-5/6" toneClass="bg-[#E5EBF4]" />
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-[24rem] max-w-full" />
+					<div className="space-y-3">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="bg-[#F5F5F5] py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-64" />
+					<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+						{Array.from({ length: 12 }).map((_, index) => (
+							<SkeletonBlock key={index} className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+						))}
+					</div>
+				</div>
+			</section>
+			<section className="py-16">
+				<FormSectionSkeleton />
+			</section>
+		</div>
+	);
+}
+
+export function ServiceCategoriesRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-56" descriptionWidth="w-full" />
+			<section className="py-16">
+				<div className="mx-auto max-w-7xl space-y-6 px-6">
+					<SkeletonBlock className="h-8 w-56" />
+					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+						{Array.from({ length: 4 }).map((_, index) => (
+							<div key={index} className="border border-[#DEDEDE] bg-white p-6">
+								<SkeletonBlock className="h-44 w-full" toneClass="bg-[#D3DCEB]" />
+								<div className="mt-3 space-y-2">
+									<SkeletonBlock className="h-5 w-3/4" />
+									<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+		</div>
+	);
+}
+
+export function ServiceCategoryRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<PatternHeaderSkeleton titleWidth="w-72" descriptionWidth="w-full" />
+			<section className="bg-white py-16">
+				{Array.from({ length: 3 }).map((_, index) => (
+					<div key={index} className="mx-auto max-w-7xl px-6 pb-12 last:pb-0">
+						<TextImageSectionSkeleton
+							imageSide={index % 2 === 0 ? "left" : "right"}
+							imageClassName="h-72 w-full max-w-[34rem] rounded-none"
+						/>
+					</div>
+				))}
+			</section>
+			<section className="py-16">
+				<FormSectionSkeleton />
+			</section>
+		</div>
+	);
+}
+
+export function NotFoundRouteSkeleton() {
+	return (
+		<div className="flex-1" aria-hidden="true">
+			<section className="mt-[101px] md:mt-[106px] lg:mt-[167px] bg-[#0C2D70] py-24">
+				<div className="mx-auto flex max-w-xl flex-col items-center gap-6 px-6 text-center">
+					<SkeletonBlock className="h-20 w-32" toneClass="bg-white/25" />
+					<SkeletonBlock className="h-10 w-56" toneClass="bg-white/25" />
+					<SkeletonBlock className="h-4 w-3/4" toneClass="bg-white/20" />
+					<SkeletonBlock className="h-[50px] w-[200px]" toneClass="bg-[#EAB3B3]" />
+				</div>
+			</section>
 		</div>
 	);
 }

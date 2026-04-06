@@ -6,14 +6,27 @@ import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
 import { getRouteFallbackType, ROUTE_FALLBACK_TYPES } from "./routeFallback";
 import {
+	AboutRouteSkeleton,
+	AreaRouteSkeleton,
 	BlogPostRouteSkeleton,
 	BlogRouteSkeleton,
+	CareersRouteSkeleton,
 	CouponsRouteSkeleton,
+	FAQsRouteSkeleton,
+	FinancingRouteSkeleton,
 	FooterSkeleton,
 	HomeRouteSkeleton,
+	NotFoundRouteSkeleton,
+	RegionsRouteSkeleton,
+	ResourcesRouteSkeleton,
 	RoutePageSkeleton,
+	ReviewsRouteSkeleton,
 	ScheduleRouteSkeleton,
+	ServiceAreasRouteSkeleton,
+	ServiceCategoriesRouteSkeleton,
+	ServiceCategoryRouteSkeleton,
 	ServiceRouteSkeleton,
+	WarrantyRouteSkeleton,
 } from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
@@ -88,6 +101,8 @@ function RouteSuspenseFallback() {
 	switch (fallbackType) {
 		case ROUTE_FALLBACK_TYPES.HOME:
 			return <HomeRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.ABOUT:
+			return <AboutRouteSkeleton />;
 		case ROUTE_FALLBACK_TYPES.BLOG_INDEX:
 			return <BlogRouteSkeleton />;
 		case ROUTE_FALLBACK_TYPES.BLOG_POST:
@@ -96,8 +111,32 @@ function RouteSuspenseFallback() {
 			return <ScheduleRouteSkeleton />;
 		case ROUTE_FALLBACK_TYPES.COUPONS:
 			return <CouponsRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.CAREERS:
+			return <CareersRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.RESOURCES:
+			return <ResourcesRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.FAQS:
+			return <FAQsRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.FINANCING:
+			return <FinancingRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.WARRANTY:
+			return <WarrantyRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.REVIEWS:
+			return <ReviewsRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.SERVICE_AREAS:
+			return <ServiceAreasRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.REGION:
+			return <RegionsRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.AREA:
+			return <AreaRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.SERVICE_CATEGORIES:
+			return <ServiceCategoriesRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.SERVICE_CATEGORY:
+			return <ServiceCategoryRouteSkeleton />;
 		case ROUTE_FALLBACK_TYPES.SERVICE:
 			return <ServiceRouteSkeleton />;
+		case ROUTE_FALLBACK_TYPES.NOT_FOUND:
+			return <NotFoundRouteSkeleton />;
 		default:
 			return <RoutePageSkeleton />;
 	}
