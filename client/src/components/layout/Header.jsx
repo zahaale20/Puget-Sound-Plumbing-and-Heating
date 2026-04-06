@@ -73,12 +73,12 @@ export default function Header() {
 					{/* Logo */}
 					<button
 						onClick={() => navigate("/")}
-						className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
+						className="flex-none h-[50px] w-[204px] md:h-[60px] md:w-[244px] lg:h-[65px] lg:w-[260px] cursor-pointer"
 					>
 						<ImageWithLoader
 							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
-							className="h-full w-auto object-contain"
+							className="h-full w-full object-contain"
 							width="340"
 							height="100"
 							decoding="async"

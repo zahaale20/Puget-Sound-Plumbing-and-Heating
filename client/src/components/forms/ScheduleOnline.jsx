@@ -42,6 +42,7 @@ export default function ScheduleOnline() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		if (loading) return;
 		const { isValid } = validateAll(formData);
 		if (!isValid) return;
 

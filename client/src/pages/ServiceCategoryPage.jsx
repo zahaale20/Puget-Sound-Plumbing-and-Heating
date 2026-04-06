@@ -98,7 +98,7 @@ export default function ServiceCategoryPage() {
 								<ImageWithLoader
 									src={getCloudFrontUrl("private/" + service.image)}
 									alt={service.name}
-									className="w-[600px] h-72 object-cover"
+									className="h-72 w-full max-w-[600px] object-cover"
 									loading="lazy"
 								/>
 							</div>

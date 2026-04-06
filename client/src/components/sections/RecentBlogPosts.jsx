@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
-import { ImageWithLoader } from "../ui/LoadingComponents";
+import { BlogPostGridSkeleton, ImageWithLoader } from "../ui/LoadingComponents";
 import { SectionTitle } from "../ui/UnderlinedHeading";
 import { fetchBlogPosts } from "../../services/blogService";
 
@@ -56,20 +56,11 @@ export default function RecentBlogPosts() {
 			</div>
 
 			{/* Blog Posts Grid */}
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				{isLoading
-					? Array.from({ length: 3 }).map((_, index) => (
-						<div key={`loading-card-${index}`} className="animate-pulse bg-white border border-[#DEDEDE]">
-							<div className="w-full h-48 bg-[#E5E7EB]" />
-							<div className="p-6 space-y-3">
-								<div className="h-5 bg-[#E5E7EB] w-4/5" />
-								<div className="h-4 bg-[#E5E7EB] w-2/3" />
-								<div className="h-4 bg-[#E5E7EB] w-full" />
-								<div className="h-4 bg-[#E5E7EB] w-5/6" />
-							</div>
-						</div>
-					))
-					: recentPosts.map((post) => (
+			{isLoading ? (
+				<BlogPostGridSkeleton cardCount={3} />
+			) : (
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					{recentPosts.map((post) => (
 						<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 							{/* Image */}
 							<ImageWithLoader
@@ -100,7 +91,8 @@ export default function RecentBlogPosts() {
 							</div>
 						</div>
 					))}
-			</div>
+				</div>
+			)}
 
 			{!isLoading && recentPosts.length === 0 ? (
 				<div className={`text-sm ${loadError ? "text-[#B32020]" : "text-[#2B2B2B]"}`}>

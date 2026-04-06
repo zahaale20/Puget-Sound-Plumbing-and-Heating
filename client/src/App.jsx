@@ -4,30 +4,8 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
-import { getRouteFallbackType, ROUTE_FALLBACK_TYPES } from "./routeFallback";
-import {
-	AboutRouteSkeleton,
-	AreaRouteSkeleton,
-	BlogPostRouteSkeleton,
-	BlogRouteSkeleton,
-	CareersRouteSkeleton,
-	CouponsRouteSkeleton,
-	FAQsRouteSkeleton,
-	FinancingRouteSkeleton,
-	FooterSkeleton,
-	HomeRouteSkeleton,
-	NotFoundRouteSkeleton,
-	RegionsRouteSkeleton,
-	ResourcesRouteSkeleton,
-	RoutePageSkeleton,
-	ReviewsRouteSkeleton,
-	ScheduleRouteSkeleton,
-	ServiceAreasRouteSkeleton,
-	ServiceCategoriesRouteSkeleton,
-	ServiceCategoryRouteSkeleton,
-	ServiceRouteSkeleton,
-	WarrantyRouteSkeleton,
-} from "./components/ui/LoadingComponents";
+import { getRouteFallbackPolicy } from "./routeFallback";
+import { FooterSkeleton } from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -96,50 +74,27 @@ function DeferredFooter() {
 
 function RouteSuspenseFallback() {
 	const { pathname } = useLocation();
-	const fallbackType = getRouteFallbackType(pathname);
+	const fallbackPolicy = getRouteFallbackPolicy(pathname);
 
-	switch (fallbackType) {
-		case ROUTE_FALLBACK_TYPES.HOME:
-			return <HomeRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.ABOUT:
-			return <AboutRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.BLOG_INDEX:
-			return <BlogRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.BLOG_POST:
-			return <BlogPostRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.SCHEDULE:
-			return <ScheduleRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.COUPONS:
-			return <CouponsRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.CAREERS:
-			return <CareersRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.RESOURCES:
-			return <ResourcesRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.FAQS:
-			return <FAQsRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.FINANCING:
-			return <FinancingRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.WARRANTY:
-			return <WarrantyRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.REVIEWS:
-			return <ReviewsRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.SERVICE_AREAS:
-			return <ServiceAreasRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.REGION:
-			return <RegionsRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.AREA:
-			return <AreaRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.SERVICE_CATEGORIES:
-			return <ServiceCategoriesRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.SERVICE_CATEGORY:
-			return <ServiceCategoryRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.SERVICE:
-			return <ServiceRouteSkeleton />;
-		case ROUTE_FALLBACK_TYPES.NOT_FOUND:
-			return <NotFoundRouteSkeleton />;
-		default:
-			return <RoutePageSkeleton />;
-	}
+	return (
+		<div
+			className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 py-6 text-[#0C2D70]"
+			data-testid="route-shell-loading"
+			role="status"
+			aria-live="polite"
+			aria-busy="true"
+		>
+			<span className="sr-only">{fallbackPolicy.announcement}</span>
+			<span className="relative h-2 w-2 shrink-0" aria-hidden="true">
+				<span className="absolute inset-0 animate-ping rounded-full bg-[#B32020]/45" />
+				<span className="relative block h-2 w-2 rounded-full bg-[#B32020]" />
+			</span>
+			<div className="h-1 flex-1 overflow-hidden rounded-full bg-[#D9E1F0]" aria-hidden="true">
+				<div className="h-full w-1/3 animate-pulse rounded-full bg-[#0C2D70]" />
+			</div>
+			<span className="shrink-0 text-sm font-medium">{fallbackPolicy.loadingLabel}</span>
+		</div>
+	);
 }
 
 function App() {
@@ -149,8 +104,8 @@ function App() {
 			<RouteSeo />
 			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
 				<Header />
-				<Suspense fallback={<RouteSuspenseFallback />}>
-					<main className="flex-1">
+				<main className="flex-1">
+					<Suspense fallback={<RouteSuspenseFallback />}>
 						<Routes>
 							<Route path="/" element={<HomePage />} />
 
@@ -178,8 +133,8 @@ function App() {
 
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
-					</main>
-				</Suspense>
+					</Suspense>
+				</main>
 				<DeferredFooter />
 			</div>
 		</BrowserRouter>

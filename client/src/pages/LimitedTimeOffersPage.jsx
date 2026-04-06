@@ -1,38 +1,36 @@
 import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
-import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { LazyBackgroundImage } from "../components/ui/LoadingComponents";
 import { PageTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function LimitedTimeOffersPage() {
 	return (
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
-			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
-				<ImageWithLoader
+			<section className="w-full bg-[#0C2D70]">
+				<LazyBackgroundImage
 					src={getCloudFrontUrl("private/pattern1-1920.webp")}
-					alt=""
-					aria-hidden="true"
+					className="overflow-hidden flex w-full py-16"
+					loading="eager"
 					fetchPriority="high"
-					className="absolute inset-0 w-full h-full object-cover z-0"
-				/>
-
+				>
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					<PageTitle>Coupons</PageTitle>
 					<p className="relative inline-block">
 						Save on your next service with our limited time offers!
 					</p>
 				</div>
+				</LazyBackgroundImage>
 			</section>
 
-			<section className="relative overflow-hidden flex justify-center w-full py-16">
-				<ImageWithLoader
+			<section className="w-full">
+				<LazyBackgroundImage
 					src={getCloudFrontUrl("private/seattle-skyline.png")}
-					alt=""
-					aria-hidden="true"
-					fetchPriority="high"
-					className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
-				/>
-
+					className="overflow-hidden flex justify-center w-full py-16"
+					loading="lazy"
+					backgroundPosition="center bottom"
+				>
 				<LimitedTimeOffers textColor="text-[#0C2D70]" />
+				</LazyBackgroundImage>
 			</section>
 		</div>
 	);
