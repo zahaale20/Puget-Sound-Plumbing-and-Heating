@@ -1,5 +1,6 @@
 import ServiceCategories from "../components/sections/ServiceCategories";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { PageTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ServiceCategoriesPage() {
@@ -18,10 +19,7 @@ export default function ServiceCategoriesPage() {
 				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Our Services
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Our Services</PageTitle>
 
 					{/* Description */}
 					<p>

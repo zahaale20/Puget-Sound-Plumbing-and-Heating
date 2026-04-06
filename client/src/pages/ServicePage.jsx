@@ -4,6 +4,7 @@ import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { ServiceLinks } from "../data/data";
@@ -76,10 +77,7 @@ export default function ServicePage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white text-center md:text-left">
-					<h1 className="relative inline-block pb-2 w-fit tracking-tight text-2xl md:text-3xl font-semibold">
-						{serviceName}
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-					</h1>
+					<PageTitle className="tracking-tight">{serviceName}</PageTitle>
 					<p className="leading-relaxed">
 						{serviceDescription ||
 							`Professional ${serviceName.toLowerCase()} solutions for homeowners throughout the Greater Seattle area.`}
@@ -91,10 +89,9 @@ export default function ServicePage() {
 			<section className="flex justify-center w-full py-16 bg-white">
 				<div className="flex flex-col xl:flex-row gap-6 w-full max-w-7xl mx-auto px-6">
 					<div className="relative flex flex-col gap-6 w-full xl:w-[calc(50%-40px)] z-10">
-						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
+						<SectionTitle as="h4" className="tracking-tight">
 							Warning Signs for {serviceName}
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-						</h4>
+						</SectionTitle>
 
 						<p className="text-[#2B2B2B] leading-relaxed">
 							Identifying these red flags early helps homeowners prevent catastrophic damage:
@@ -143,10 +140,9 @@ export default function ServicePage() {
 				/>
 
 				<div className="relative flex flex-col max-w-7xl mx-auto px-6 gap-6 w-full z-10">
-					<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight">
+					<SectionTitle as="h4" className="tracking-tight">
 						What To Expect From Our {serviceName} Service
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h4>
+					</SectionTitle>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 						{[
 							{
@@ -186,10 +182,9 @@ export default function ServicePage() {
 			<section className="w-full py-16 bg-[#F5F5F5]">
 				<div className="relative max-w-7xl mx-auto px-6 z-10 space-y-6">
 					<div className="inline-block mx-auto w-full text-center">
-						<h4 className="text-[#0C2D70] relative pb-2 tracking-tight inline-block">
+						<SectionTitle as="h4" className="tracking-tight" centered>
 							Should You DIY or Call a Pro?
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-						</h4>
+						</SectionTitle>
 					</div>
 
 					<div className="flex flex-col gap-6 text-[#2B2B2B] leading-relaxed pb-2">
@@ -259,10 +254,9 @@ export default function ServicePage() {
 			<section className="flex justify-center w-full py-16 bg-white">
 				<div className="relative max-w-7xl mx-auto px-6 z-10 w-full">
 					<div className="flex flex-col gap-6">
-						<h4 className="text-[#0C2D70] relative pb-2 w-fit tracking-tight inline-block">
+						<SectionTitle as="h4" className="tracking-tight">
 							Prevention Tips for {serviceName}
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-						</h4>
+						</SectionTitle>
 						<ul className="flex flex-col gap-6">
 							{preventionTips.map((tip, i) => (
 								<li key={i} className="flex items-start gap-4">

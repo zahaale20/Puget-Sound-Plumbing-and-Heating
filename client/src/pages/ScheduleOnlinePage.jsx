@@ -1,5 +1,6 @@
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { PageTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ScheduleOnlinePage() {
@@ -15,10 +16,7 @@ export default function ScheduleOnlinePage() {
 				/>
 
 				<div className="relative z-10 flex flex-col max-w-7xl mx-auto px-6 w-full gap-4 text-white text-center md:text-left">
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Schedule Online
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Schedule Online</PageTitle>
 					<p className="max-w-3xl text-white/90">
 						Send us your details and our team will contact you to confirm your appointment.
 					</p>

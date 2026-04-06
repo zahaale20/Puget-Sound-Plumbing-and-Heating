@@ -5,6 +5,7 @@ import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import NotFoundPage from "./NotFoundPage";
 
 export default function RegionsPage() {
@@ -57,10 +58,7 @@ export default function RegionsPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Professional Plumbers in {regionName}
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Professional Plumbers in {regionName}</PageTitle>
 					<p className="relative inline-block">
 						Residents and businesses across {regionName} rely on Puget Sound Plumbing & Heating for
 						licensed, 24/7 plumbing, drain cleaning, water heater repair, and emergency services.
@@ -72,10 +70,7 @@ export default function RegionsPage() {
 
 			<section className="flex justify-center w-full py-16">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 bg-white">
-					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-						Plumbing Services in {regionName}
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h4>
+					<SectionTitle as="h4">Plumbing Services in {regionName}</SectionTitle>
 					<p className="text-[#2B2B2B]">
 						We offer a complete range of plumbing and heating solutions in {regionName}, including:
 					</p>
@@ -100,11 +95,9 @@ export default function RegionsPage() {
 
 			<section className="flex justify-center w-full bg-[#F5F5F5] py-16">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
-					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-						{regionName} {regionName.toLowerCase() === "seattle" ? "Neighborhoods" : "Cities"} We
-						Serve
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h4>
+					<SectionTitle as="h4">
+						{regionName} {regionName.toLowerCase() === "seattle" ? "Neighborhoods" : "Cities"} We Serve
+					</SectionTitle>
 					<p className="text-[#2B2B2B]">
 						We proudly serve every corner of {regionName}. Click below to explore plumbing services
 						tailored to your neighborhood:

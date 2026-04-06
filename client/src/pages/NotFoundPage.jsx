@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
+import { PageTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 
@@ -28,10 +29,7 @@ export default function NotFoundPage() {
 				<div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto px-6 gap-6">
 					<p className="text-8xl font-bold text-white">404</p>
 
-					<h1 className="text-white relative inline-block pb-2 text-2xl md:text-3xl font-semibold">
-						Page Not Found
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-					</h1>
+					<PageTitle centered>Page Not Found</PageTitle>
 
 					<p className="text-white/80">
 						The page you're looking for doesn't exist or may have been moved.

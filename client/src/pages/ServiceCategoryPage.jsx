@@ -4,6 +4,7 @@ import ScheduleOnline from "../components/forms/ScheduleOnline";
 
 import { getCloudFrontUrl } from "../services/imageService";
 import { ImageWithLoader, LazyBackgroundImage } from "../components/ui/LoadingComponents";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 
@@ -56,10 +57,7 @@ export default function ServiceCategoryPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						{categoryName} Services
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>{categoryName} Services</PageTitle>
 					<p>
 						Our licensed technicians provide reliable {categoryName.toLowerCase()} services
 						throughout the Puget Sound region. Whether you need repairs, installations, or emergency
@@ -108,10 +106,7 @@ export default function ServiceCategoryPage() {
 							<div
 								className={`order-1 flex flex-col gap-6 ${index % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}
 							>
-								<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-									{service.name}
-									<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-								</h4>
+								<SectionTitle as="h4">{service.name}</SectionTitle>
 
 								<p className="text-[#2B2B2B] max-w-xl">{service.description}</p>
 

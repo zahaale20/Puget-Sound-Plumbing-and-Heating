@@ -2,6 +2,7 @@ import Financing from "../components/sections/Financing.jsx";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import DIYPlumbingPermit from "../components/forms/DIYPlumbingPermit.jsx";
 import Warranty from "../components/sections/Warranty.jsx";
+import { PageTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function ResourcesPage() {
@@ -17,10 +18,7 @@ export default function ResourcesPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Resources
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Resources</PageTitle>
 					<p className="relative inline-block">
 						Explore essential homeowner resources, including answers to common plumbing questions,
 						financing options, and warranty details.
