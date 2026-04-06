@@ -1071,27 +1071,24 @@ export function ServiceRouteSkeleton() {
 				</div>
 			</div>
 			<div className="bg-white py-16">
-				<div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 lg:flex-row lg:items-center lg:gap-16">
-					<div className="flex-1 space-y-6">
+				<div className="mx-auto flex max-w-7xl flex-col gap-6 px-6">
+					<div className="space-y-6">
 						<SkeletonBlock className="h-8 w-64" />
 						<div className="space-y-3">
 							<SkeletonBlock className="h-4 w-full" />
 							<SkeletonBlock className="h-4 w-full" />
 							<SkeletonBlock className="h-4 w-5/6" />
 						</div>
-						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+						<div className="space-y-6">
 							{Array.from({ length: 4 }).map((_, index) => (
-								<div key={index} className="flex items-start gap-3 border border-[#DEDEDE] bg-[#F5F5F5] p-4">
-									<SkeletonBlock className="mt-1 h-5 w-5 rounded-full" toneClass="bg-[#EAB3B3]" />
-									<div className="flex-1 space-y-2">
-										<SkeletonBlock className="h-4 w-3/4" />
-										<SkeletonBlock className="h-4 w-full" toneClass="bg-[#E5EBF4]" />
-									</div>
+								<div key={index} className="flex items-start gap-4">
+									<SkeletonBlock className="mt-1 h-5 w-5 flex-shrink-0" toneClass="bg-[#EAB3B3]" />
+									<SkeletonBlock className="h-4 flex-1" />
 								</div>
 							))}
 						</div>
 					</div>
-					<SkeletonBlock className="h-[320px] w-full rounded-none lg:h-[380px] lg:max-w-[38rem]" toneClass="bg-[#D3DCEB]" />
+					<SkeletonBlock className="h-[380px] w-full" toneClass="bg-[#D3DCEB]" />
 				</div>
 			</div>
 			<div className="relative overflow-hidden bg-[#F5F5F5] py-16">
