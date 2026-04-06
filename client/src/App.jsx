@@ -4,6 +4,15 @@ import { useLocation } from "react-router-dom";
 
 import Header from "./components/layout/Header";
 import RouteSeo from "./components/seo/RouteSeo";
+import {
+	BlogPostRouteSkeleton,
+	BlogRouteSkeleton,
+	CouponsRouteSkeleton,
+	FooterSkeleton,
+	HomeRouteSkeleton,
+	RoutePageSkeleton,
+	ScheduleRouteSkeleton,
+} from "./components/ui/LoadingComponents";
 const Footer = lazy(() => import("./components/layout/Footer"));
 
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -37,7 +46,29 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
-	return <div className="flex-1 min-h-screen" aria-hidden="true" />;
+	const { pathname } = useLocation();
+
+	if (pathname === "/") {
+		return <HomeRouteSkeleton />;
+	}
+
+	if (pathname === "/blog") {
+		return <BlogRouteSkeleton />;
+	}
+
+	if (pathname.startsWith("/blog/")) {
+		return <BlogPostRouteSkeleton />;
+	}
+
+	if (pathname === "/schedule-online") {
+		return <ScheduleRouteSkeleton />;
+	}
+
+	if (pathname === "/coupons") {
+		return <CouponsRouteSkeleton />;
+	}
+
+	return <RoutePageSkeleton />;
 }
 
 function DeferredFooter() {
@@ -66,11 +97,11 @@ function DeferredFooter() {
 	return (
 		<div ref={footerRef}>
 			{shouldRender ? (
-				<Suspense fallback={<div className="min-h-[460px]" aria-hidden="true" />}>
+				<Suspense fallback={<FooterSkeleton />}>
 					<Footer />
 				</Suspense>
 			) : (
-				<div className="min-h-[460px]" aria-hidden="true" />
+				<FooterSkeleton />
 			)}
 		</div>
 	);
@@ -85,33 +116,33 @@ function App() {
 				<Header />
 				<Suspense fallback={<RouteFallback />}>
 					<main className="flex-1">
-					<Routes>
-						<Route path="/" element={<HomePage />} />
+						<Routes>
+							<Route path="/" element={<HomePage />} />
 
-						<Route path="/schedule-online" element={<ScheduleOnlinePage />} />
+							<Route path="/schedule-online" element={<ScheduleOnlinePage />} />
 
-						<Route path="/blog" element={<BlogPage />} />
-						<Route path="/blog/:slug" element={<BlogPostPage />} />
-						<Route path="/careers" element={<CareersPage />} />
-						<Route path="/coupons" element={<LimitedTimeOffersPage />} />
-						<Route path="/resources" element={<ResourcesPage />} />
-						<Route path="/about-us" element={<AboutUsPage />} />
-						<Route path="/financing" element={<FinancingPage />} />
-						<Route path="/warranty" element={<WarrantyPage />} />
-						<Route path="/reviews" element={<CustomerReviewsPage />} />
+							<Route path="/blog" element={<BlogPage />} />
+							<Route path="/blog/:slug" element={<BlogPostPage />} />
+							<Route path="/careers" element={<CareersPage />} />
+							<Route path="/coupons" element={<LimitedTimeOffersPage />} />
+							<Route path="/resources" element={<ResourcesPage />} />
+							<Route path="/about-us" element={<AboutUsPage />} />
+							<Route path="/financing" element={<FinancingPage />} />
+							<Route path="/warranty" element={<WarrantyPage />} />
+							<Route path="/reviews" element={<CustomerReviewsPage />} />
 
-						<Route path="/faqs" element={<FAQsPage />} />
+							<Route path="/faqs" element={<FAQsPage />} />
 
-						<Route path="/service-areas" element={<ServiceAreasPage />} />
-						<Route path="/service-areas/:regionSlug" element={<RegionsPage />} />
-						<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
+							<Route path="/service-areas" element={<ServiceAreasPage />} />
+							<Route path="/service-areas/:regionSlug" element={<RegionsPage />} />
+							<Route path="/service-areas/:regionSlug/:areaSlug" element={<AreaPage />} />
 
-						<Route path="/services" element={<ServiceCategoriesPage />} />
-						<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
-						<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
+							<Route path="/services" element={<ServiceCategoriesPage />} />
+							<Route path="/services/:categorySlug" element={<ServiceCategoryPage />} />
+							<Route path="/services/:categorySlug/:serviceSlug" element={<ServicePage />} />
 
-						<Route path="*" element={<NotFoundPage />} />
-					</Routes>
+							<Route path="*" element={<NotFoundPage />} />
+						</Routes>
 					</main>
 				</Suspense>
 				<DeferredFooter />
