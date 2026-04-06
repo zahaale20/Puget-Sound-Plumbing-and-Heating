@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from urllib.parse import urlparse
-from routes import images, email
+from routes import images, email, blog
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -107,6 +107,7 @@ async def add_security_headers(request: Request, call_next):
 # "Plug in" the routers
 app.include_router(images.router)
 app.include_router(email.router)
+app.include_router(blog.router)
 # app.include_router(leads.router) # Uncomment once leads.py is built
 
 @app.get("/")

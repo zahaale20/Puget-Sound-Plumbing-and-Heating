@@ -87,8 +87,8 @@ export default function ServicePage() {
 
 			{/* 2. Warning Signs (White Background) */}
 			<section className="flex justify-center w-full py-16 bg-white">
-				<div className="flex flex-col xl:flex-row gap-6 w-full max-w-7xl mx-auto px-6">
-					<div className="relative flex flex-col gap-6 w-full xl:w-[calc(50%-40px)] z-10">
+				<div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl mx-auto px-6">
+					<div className="relative flex flex-col gap-6 w-full lg:w-[calc(50%-40px)] z-10">
 						<SectionTitle as="h4" className="tracking-tight">
 							Warning Signs for {serviceName}
 						</SectionTitle>
@@ -116,7 +116,7 @@ export default function ServicePage() {
 						</ul>
 					</div>
 
-					<div className="relative h-[380px] w-full xl:w-[calc(50%+40px)] overflow-hidden">
+					<div className="relative h-[380px] w-full lg:w-[calc(50%+40px)] overflow-hidden">
 						{serviceImageKey && (
 							<ImageWithLoader
 								src={getCloudFrontUrl(serviceImageKey)}

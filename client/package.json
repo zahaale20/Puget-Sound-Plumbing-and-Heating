@@ -22,7 +22,6 @@
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^7.1.0",
 		"@hcaptcha/react-hcaptcha": "^2.0.2",
-		"@supabase/supabase-js": "^2.101.1",
 		"@tailwindcss/vite": "^4.1.13",
 		"@vercel/analytics": "^2.0.1",
 		"@vercel/speed-insights": "^2.0.0",

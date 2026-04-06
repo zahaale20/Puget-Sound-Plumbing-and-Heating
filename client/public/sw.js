@@ -7,11 +7,7 @@ const STATIC_CACHE_URLS = [
 ];
 
 // URLs/origins that must never be cached (API calls, dynamic data)
-const BYPASS_CACHE_ORIGINS = [
-	"supabase.co",
-	"supabase.in",
-	"supabase.io",
-];
+const BYPASS_CACHE_ORIGINS = [];
 
 function isApiRequest(url) {
 	return BYPASS_CACHE_ORIGINS.some((origin) => url.hostname.includes(origin));

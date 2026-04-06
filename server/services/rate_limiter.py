@@ -21,6 +21,7 @@ RATE_LIMITS = {
     "verify-captcha": (20, 3600),  # 20 requests per hour
     "unsubscribe": (10, 3600),  # 10 requests per hour
     "images": (100, 3600),  # 100 requests per hour
+    "blog-views": (30, 3600),  # 30 view increments per hour
 }
 
 

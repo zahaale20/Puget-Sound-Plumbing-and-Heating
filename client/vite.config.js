@@ -34,7 +34,6 @@ export default defineConfig({
 					if (id.includes("react-router")) return "router-vendor";
 					if (id.includes("react-icons") || id.includes("lucide-react")) return "icons-vendor";
 					if (id.includes("framer-motion")) return "motion-vendor";
-					if (id.includes("@supabase")) return "supabase-vendor";
 				},
 			},
 		},
