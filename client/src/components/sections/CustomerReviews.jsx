@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { FaStar, FaArrowRight } from "react-icons/fa";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CustomerReviewsData, CompanyInfo } from "../../data/data";
 
 const MAX_REVIEW_CHARACTERS = 280;
@@ -76,10 +77,7 @@ export default function CustomerReviews() {
 			{/* Header Container*/}
 			<div className="space-y-6 text-center">
 				{/* Title */}
-				<h4 className="text-[#0C2D70] inline-block relative pb-2">
-					Customer Reviews
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4" centered>Customer Reviews</SectionTitle>
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">

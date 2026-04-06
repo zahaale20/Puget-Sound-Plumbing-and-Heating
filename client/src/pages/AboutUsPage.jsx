@@ -4,6 +4,7 @@ import OurHistory from "../components/sections/OurHistory";
 import OurTeam from "../components/sections/OurTeam";
 import ServiceCategories from "../components/sections/ServiceCategories";
 import ServiceAreas from "../components/sections/ServiceAreas";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../services/imageService";
 
 export default function AboutUsPage() {
@@ -22,10 +23,7 @@ export default function AboutUsPage() {
 				{/* Header Content Container */}
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						About Us
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>About Us</PageTitle>
 
 					{/* Description */}
 					<p className="relative inline-block">
@@ -57,12 +55,7 @@ export default function AboutUsPage() {
 
 			<section className="relative overflow-hidden flex flex-col justify-center w-full py-16 text-[#2B2B2B]">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
-					<h4 className="text-[#0C2D70] pb-2">
-						<span className="relative inline-block">
-							Our Services
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-						</span>
-					</h4>
+					<SectionTitle as="h4">Our Services</SectionTitle>
 
 					<p className="text-[#2B2B2B]">
 						Your home deserves work done right. We deliver professional plumbing and heating
@@ -86,12 +79,7 @@ export default function AboutUsPage() {
 
 				<div className="relative z-10 flex flex-col max-w-7xl mx-auto px-6 gap-6 mb-12">
 					{/* Title */}
-					<h4 className="text-[#0C2D70] pb-2">
-						<span className="relative inline-block">
-							Service Areas
-							<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] w-full"></span>
-						</span>
-					</h4>
+					<SectionTitle as="h4">Service Areas</SectionTitle>
 
 					{/* Description */}
 					<p className="text-[#2B2B2B]">

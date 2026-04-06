@@ -6,6 +6,7 @@ import { ServiceLinks, ServiceAreaLinks } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import NotFoundPage from "./NotFoundPage";
 
 export default function AreaPage() {
@@ -65,10 +66,7 @@ export default function AreaPage() {
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
 					{/* Title */}
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Professional Plumbers in {areaName}
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Professional Plumbers in {areaName}</PageTitle>
 
 					{/* Description */}
 					<p className="relative inline-block">
@@ -84,10 +82,7 @@ export default function AreaPage() {
 			<section className="flex justify-center w-full py-16">
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 bg-white">
 					{/* Title */}
-					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-						Plumbing Services in {areaName}
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h4>
+					<SectionTitle as="h4">Plumbing Services in {areaName}</SectionTitle>
 
 					{/* Description */}
 					<p className="text-[#2B2B2B]">
@@ -127,10 +122,7 @@ export default function AreaPage() {
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6">
 					{/* Title */}
-					<h4 className="text-[#0C2D70] relative pb-2 w-fit">
-						Why {areaName} Residents Trust Puget Sound Plumbing
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h4>
+					<SectionTitle as="h4">Why {areaName} Residents Trust Puget Sound Plumbing</SectionTitle>
 
 					{/* Reasons */}
 					<ul className="pl-0 space-y-4 text-[#2B2B2B]" role="list">

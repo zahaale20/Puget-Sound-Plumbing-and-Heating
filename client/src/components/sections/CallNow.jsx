@@ -1,6 +1,7 @@
 import { FaPhone } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CompanyInfo, CallNowContent } from "../../data/data";
 
 export default function CallNow() {
@@ -19,10 +20,7 @@ export default function CallNow() {
 			{/* Header Container */}
 			<div className="order-1 lg:order-none space-y-6 py-16">
 				{/* Title */}
-				<h4 className="text-[#0C2D70] inline-block relative pb-2">
-					Call Now
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4">Call Now</SectionTitle>
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">

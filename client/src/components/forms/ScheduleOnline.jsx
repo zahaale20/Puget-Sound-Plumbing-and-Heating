@@ -4,6 +4,7 @@ import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
 import { LoadingButtonContent } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CompanyInfo } from "../../data/data";
 import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
@@ -99,10 +100,7 @@ export default function ScheduleOnline() {
 				{/* Header */}
 				<div className="space-y-6">
 					{/* Title */}
-					<h4 className="text-[#0C2D70] inline-block relative pb-2">
-						Schedule Online
-						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h4>
+					<SectionTitle as="h4">Schedule Online</SectionTitle>
 
 					{/* Description */}
 					<p className="text-[#2B2B2B]">We'll reach out to schedule your appointment.</p>

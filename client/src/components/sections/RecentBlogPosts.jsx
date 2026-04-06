@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { fetchBlogPosts } from "../../services/blogService";
 
 export default function RecentBlogPosts() {
@@ -48,10 +49,7 @@ export default function RecentBlogPosts() {
 		<div className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6 fade-in">
 			{/* Header Container */}
 			<div className="space-y-6">
-				<h4 className="text-[#0C2D70] inline-block relative pb-2">
-					Recent Blog Posts
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4">Recent Blog Posts</SectionTitle>
 				<p className="text-[#2B2B2B]">
 					Read the latest tips, how-tos, and the insights in the plumbing world.
 				</p>

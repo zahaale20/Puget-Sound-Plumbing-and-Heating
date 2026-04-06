@@ -6,6 +6,7 @@ import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
 import { LoadingButtonContent } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { Coupons, CompanyInfo } from "../../data/data";
 import { validateName, validateEmail, validatePhone, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
@@ -66,10 +67,9 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 				{/* Header */}
 				<div className={`space-y-6 text-center ${textColor}`}>
 					{/* Title */}
-					<h4 className="inline-block relative pb-2 text-inherit">
+					<SectionTitle as="h4" textColorClass="text-inherit" centered>
 						Limited Time Offers
-						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h4>
+					</SectionTitle>
 
 					{/* Description */}
 					<p className="text-inherit">

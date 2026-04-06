@@ -1,5 +1,6 @@
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { WarrantyContent } from "../../data/data";
 
 export default function Warranty() {
@@ -17,10 +18,7 @@ export default function Warranty() {
 			<div className="flex flex-col">
 				{/* Header */}
 				<div className="w-full mb-6">
-					<h4 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
-						Warranty
-						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h4>
+					<SectionTitle as="h4" className="mb-6">Warranty</SectionTitle>
 					<p>
 						{WarrantyContent.description}
 					</p>

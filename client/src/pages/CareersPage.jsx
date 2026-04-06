@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
 import { getCloudFrontUrl } from "../services/imageService";
 import JobApplicationForm from "../components/forms/JobApplicationForm";
+import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 
 export default function CareersPage() {
 	const [expandedJob, setExpandedJob] = useState(null);
@@ -25,10 +26,7 @@ export default function CareersPage() {
 				/>
 
 				<div className="flex flex-col max-w-7xl mx-auto px-6 w-full gap-6 text-white">
-					<h1 className="relative inline-block pb-2 w-fit text-2xl md:text-3xl font-semibold">
-						Careers
-						<span className="absolute left-0 bottom-0 h-[3px] bg-[#B32020] rounded-full w-full"></span>
-					</h1>
+					<PageTitle>Careers</PageTitle>
 					<p className="relative inline-block">
 						Ready for your next step? We're hiring experienced plumbers to join our high-performing
 						residential team.
@@ -41,10 +39,7 @@ export default function CareersPage() {
 				<div className="flex flex-col w-full max-w-7xl mx-auto px-6 gap-12 text-[#2B2B2B]">
 					<div className="flex flex-col items-center w-full">
 						<div className="w-full mb-6 text-left">
-							<h4 className="text-[#0C2D70] inline-block relative pb-2">
-								Current Openings
-								<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-							</h4>
+							<SectionTitle as="h4">Current Openings</SectionTitle>
 						</div>
 
 						<div className="flex flex-col gap-4 w-full">
@@ -129,10 +124,7 @@ export default function CareersPage() {
 
 				<div className="flex flex-col w-full max-w-7xl mx-auto px-6">
 					<div className="w-full mb-6 text-left">
-						<h4 className="text-[#0C2D70] inline-block relative pb-2">
-							Apply Now
-							<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-						</h4>
+						<SectionTitle as="h4">Apply Now</SectionTitle>
 					</div>
 
 					<JobApplicationForm />

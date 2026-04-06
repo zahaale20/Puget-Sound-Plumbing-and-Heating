@@ -2,6 +2,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 
 export default function FAQS() {
 	return (
@@ -9,10 +10,7 @@ export default function FAQS() {
 			{/* Header Container */}
 			<div className="space-y-6 py-16">
 				{/* Title */}
-				<h4 className="text-[#0C2D70] inline-block relative pb-2">
-					Frequently Asked Questions
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4">Frequently Asked Questions</SectionTitle>
 
 				{/* Description */}
 				<p className="text-[#2B2B2B]">

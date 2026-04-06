@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { FaArrowRight } from "react-icons/fa";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { HomeServices } from "../../data/data";
 
@@ -23,10 +24,9 @@ export default function OurServices() {
 			{/* Header Container*/}
 			<div className="flex flex-col space-y-6 text-center text-white">
 				{/* Title */}
-				<h2 className="inline-flex relative pb-2 mx-auto">
+				<SectionTitle as="h2" textColorClass="text-white" centered>
 					Our Services
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h2>
+				</SectionTitle>
 
 				{/* Description */}
 				<p className="inline-block relative leading-normal">

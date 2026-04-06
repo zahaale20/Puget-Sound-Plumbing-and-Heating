@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { TeamMembers as TeamMembersData } from "../../data/data";
 
 export default function TeamMembers() {
@@ -16,10 +17,7 @@ export default function TeamMembers() {
 		<div className="flex flex-col w-full max-w-7xl mx-auto px-6 space-y-6">
 			{/* Header Container */}
 			<div className="space-y-6 text-left">
-				<h4 className="text-[#0C2D70] inline-block relative pb-2">
-					Meet Our Team
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4">Meet Our Team</SectionTitle>
 
 				<p className="text-[#2B2B2B]">
 					Get to know the experienced professionals who keep your plumbing running smoothly.

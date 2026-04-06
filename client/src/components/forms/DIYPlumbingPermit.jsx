@@ -4,6 +4,7 @@ import { getHCaptchaToken } from "../../services/hcaptchaService";
 import FormResponseMessage from "../ui/FormResponseMessage";
 import FieldError from "../ui/FieldError";
 import { LoadingButtonContent } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { validateName, validateEmail, validatePhone, validateRequired, formatPhone } from "../../services/formValidation";
 import useFormValidation from "../../hooks/useFormValidation";
 
@@ -92,10 +93,7 @@ export default function DIYPlumbingPermit() {
 		<div className="flex flex-col w-full max-w-7xl mx-auto px-6">
 			{/* Header */}
 			<div className="w-full mb-6 text-left">
-				<h4 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
-					DIY – Plumbing Permit
-					<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-				</h4>
+				<SectionTitle as="h4" className="mb-6">DIY – Plumbing Permit</SectionTitle>
 				<p className="text-[#2B2B2B]">
 					If you’re a homeowner planning plumbing updates or installations, fill out the form below
 					to request permit assistance. We’ll help ensure your project meets local code

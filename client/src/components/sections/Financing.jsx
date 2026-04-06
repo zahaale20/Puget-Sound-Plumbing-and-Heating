@@ -1,5 +1,6 @@
 import { getCloudFrontUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
+import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CompanyInfo, FinancingContent } from "../../data/data";
 
 export default function Financing() {
@@ -7,10 +8,7 @@ export default function Financing() {
 		<div className="flex flex-row w-full max-w-7xl px-6 mx-auto gap-16 items-center">
 			<div className="flex flex-col">
 				<div className="w-full mb-6">
-					<h4 className="text-[#0C2D70] inline-block relative pb-2 mb-6">
-						Financing
-						<span className="absolute left-0 bottom-0 w-full h-[3px] bg-[#B32020] rounded-full"></span>
-					</h4>
+					<SectionTitle as="h4" className="mb-6">Financing</SectionTitle>
 					<p className="mb-4">
 						{FinancingContent.description}
 					</p>
