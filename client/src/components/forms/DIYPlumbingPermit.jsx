@@ -106,10 +106,11 @@ export default function DIYPlumbingPermit() {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{/* First Name */}
 					<div>
-						<label className="text-[#2B2B2B]">
+						<label htmlFor="diy-firstName" className="text-[#2B2B2B]">
 							First Name <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
+							id="diy-firstName"
 							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.firstName && fieldErrors.firstName ? "border-red-500" : "border-gray-300"}`}
 							type="text"
 							name="firstName"
@@ -122,10 +123,11 @@ export default function DIYPlumbingPermit() {
 
 					{/* Last Name */}
 					<div>
-						<label className="text-[#2B2B2B]">
+						<label htmlFor="diy-lastName" className="text-[#2B2B2B]">
 							Last Name <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
+							id="diy-lastName"
 							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.lastName && fieldErrors.lastName ? "border-red-500" : "border-gray-300"}`}
 							type="text"
 							name="lastName"
@@ -140,10 +142,11 @@ export default function DIYPlumbingPermit() {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{/* Email */}
 					<div>
-						<label className="text-[#2B2B2B]">
+						<label htmlFor="diy-email" className="text-[#2B2B2B]">
 							Email <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
+							id="diy-email"
 							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.email && fieldErrors.email ? "border-red-500" : "border-gray-300"}`}
 							type="email"
 							name="email"
@@ -156,10 +159,11 @@ export default function DIYPlumbingPermit() {
 
 					{/* Phone */}
 					<div>
-						<label className="text-[#2B2B2B]">
+						<label htmlFor="diy-phone" className="text-[#2B2B2B]">
 							Phone <span className="text-[#B32020] italic">*</span>
 						</label>
 						<input
+							id="diy-phone"
 							className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.phone && fieldErrors.phone ? "border-red-500" : "border-gray-300"}`}
 							type="tel"
 							name="phone"
@@ -173,10 +177,11 @@ export default function DIYPlumbingPermit() {
 
 				{/* Address */}
 				<div>
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="diy-address" className="text-[#2B2B2B]">
 						Property Address <span className="text-[#B32020] italic">*</span>
 					</label>
 					<input
+						id="diy-address"
 						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.address && fieldErrors.address ? "border-red-500" : "border-gray-300"}`}
 						type="text"
 						name="address"
@@ -190,8 +195,9 @@ export default function DIYPlumbingPermit() {
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 					{/* City */}
 					<div>
-						<label className="text-[#2B2B2B]">City</label>
+						<label htmlFor="diy-city" className="text-[#2B2B2B]">City</label>
 						<input
+							id="diy-city"
 							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
 							type="text"
 							name="city"
@@ -202,8 +208,9 @@ export default function DIYPlumbingPermit() {
 
 					{/* State */}
 					<div>
-						<label className="text-[#2B2B2B]">State</label>
+						<label htmlFor="diy-state" className="text-[#2B2B2B]">State</label>
 						<input
+							id="diy-state"
 							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
 							type="text"
 							name="state"
@@ -214,8 +221,9 @@ export default function DIYPlumbingPermit() {
 
 					{/* Zip Code */}
 					<div>
-						<label className="text-[#2B2B2B]">Zip Code</label>
+						<label htmlFor="diy-zipCode" className="text-[#2B2B2B]">Zip Code</label>
 						<input
+							id="diy-zipCode"
 							className="w-full border border-gray-300 px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70]"
 							type="text"
 							name="zipCode"
@@ -227,8 +235,9 @@ export default function DIYPlumbingPermit() {
 
 				{/* Project Description */}
 				<div>
-					<label className="text-[#2B2B2B]">Project Description</label>
+					<label htmlFor="diy-projectDescription" className="text-[#2B2B2B]">Project Description</label>
 					<textarea
+						id="diy-projectDescription"
 						name="projectDescription"
 						rows="4"
 						value={formData.projectDescription}
@@ -239,8 +248,9 @@ export default function DIYPlumbingPermit() {
 
 				{/* Inspection */}
 				<div>
-					<label className="text-[#2B2B2B]">Do you need an inspection?</label>
+					<label htmlFor="diy-inspection" className="text-[#2B2B2B]">Do you need an inspection?</label>
 					<select
+						id="diy-inspection"
 						name="inspection"
 						value={formData.inspection}
 						onChange={handleChange}

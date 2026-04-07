@@ -84,10 +84,11 @@ export default function JobApplicationForm() {
 		<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left" noValidate>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="job-firstName" className="text-[#2B2B2B]">
 						First Name <span className="text-[#B32020] font-normal italic">*</span>
 					</label>
 					<input
+						id="job-firstName"
 						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.firstName && fieldErrors.firstName ? "border-red-500" : "border-gray-300"}`}
 						type="text"
 						name="firstName"
@@ -98,10 +99,11 @@ export default function JobApplicationForm() {
 					<FieldError error={fieldErrors.firstName} touched={touched.firstName} />
 				</div>
 				<div>
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="job-lastName" className="text-[#2B2B2B]">
 						Last Name <span className="text-[#B32020] font-normal italic">*</span>
 					</label>
 					<input
+						id="job-lastName"
 						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.lastName && fieldErrors.lastName ? "border-red-500" : "border-gray-300"}`}
 						type="text"
 						name="lastName"
@@ -115,10 +117,11 @@ export default function JobApplicationForm() {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="job-phone" className="text-[#2B2B2B]">
 						Phone <span className="text-[#B32020] italic">*</span>
 					</label>
 					<input
+						id="job-phone"
 						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.phone && fieldErrors.phone ? "border-red-500" : "border-gray-300"}`}
 						type="tel"
 						name="phone"
@@ -129,10 +132,11 @@ export default function JobApplicationForm() {
 					<FieldError error={fieldErrors.phone} touched={touched.phone} />
 				</div>
 				<div>
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="job-email" className="text-[#2B2B2B]">
 						Email <span className="text-[#B32020] italic">*</span>
 					</label>
 					<input
+						id="job-email"
 						className={`w-full border px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#0C2D70] ${touched.email && fieldErrors.email ? "border-red-500" : "border-gray-300"}`}
 						type="email"
 						name="email"
@@ -146,7 +150,7 @@ export default function JobApplicationForm() {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="relative">
-					<label className="text-[#2B2B2B]">
+					<label htmlFor="job-position" className="text-[#2B2B2B]">
 						Position <span className="text-[#B32020] italic">*</span>
 					</label>
 					<div
@@ -179,8 +183,9 @@ export default function JobApplicationForm() {
 					<FieldError error={fieldErrors.position} touched={touched.position} />
 				</div>
 				<div>
-					<label className="text-[#2B2B2B]">Resume</label>
+					<label htmlFor="job-resume" className="text-[#2B2B2B]">Resume</label>
 					<input
+						id="job-resume"
 						type="file"
 						name="resume"
 						required

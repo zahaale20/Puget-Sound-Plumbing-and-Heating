@@ -206,10 +206,11 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									{/* First + Last Name */}
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 										<div>
-											<label className="text-[#2B2B2B]">
-												First Name <span className="text-[#B32020] italic">*</span>
-											</label>
-											<input
+										<label htmlFor="offer-firstName" className="text-[#2B2B2B]">
+											First Name <span className="text-[#B32020] italic">*</span>
+										</label>
+										<input
+											id="offer-firstName"
 												type="text"
 												name="firstName"
 												value={formData.firstName}
@@ -224,10 +225,11 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 										</div>
 
 										<div>
-											<label className="text-[#2B2B2B]">
-												Last Name <span className="text-[#B32020] italic">*</span>
-											</label>
-											<input
+										<label htmlFor="offer-lastName" className="text-[#2B2B2B]">
+											Last Name <span className="text-[#B32020] italic">*</span>
+										</label>
+										<input
+											id="offer-lastName"
 												type="text"
 												name="lastName"
 												value={formData.lastName}
@@ -244,10 +246,11 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 
 									{/* Email + Phone */}
 									<div>
-										<label className="text-[#2B2B2B]">
+										<label htmlFor="offer-email" className="text-[#2B2B2B]">
 											Email <span className="text-[#B32020] italic">*</span>
 										</label>
 										<input
+											id="offer-email"
 											type="email"
 											name="email"
 											value={formData.email}
@@ -262,10 +265,11 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 									</div>
 
 									<div>
-										<label className="text-[#2B2B2B]">
+										<label htmlFor="offer-phone" className="text-[#2B2B2B]">
 											Phone <span className="text-[#B32020] italic">*</span>
 										</label>
 										<input
+											id="offer-phone"
 											type="tel"
 											name="phone"
 											value={formData.phone}

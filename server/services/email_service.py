@@ -12,9 +12,10 @@ logger = logging.getLogger(__name__)
 resend.api_key = os.getenv("RESEND_API_KEY")
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "alexthebestest@gmail.com").replace("\r", "").replace("\n", "").strip()
-LOGO_URL = os.getenv(
-    "LOGO_URL",
-    "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png",
+_SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID", "hyxqrhttputdkefadnrf")
+LOGO_URL = (
+    f"https://{_SUPABASE_PROJECT_ID}.supabase.co"
+    "/storage/v1/object/public/assets/logo/pspah-logo.png"
 )
 COMPANY_NAME = "Puget Sound Plumbing and Heating"
 COMPANY_PHONE = "(206) 938-3219"
