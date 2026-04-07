@@ -40,7 +40,7 @@ class _InsertConnection:
 
 class TestCaptchaEndpoint:
     def test_verify_captcha_rate_limited(self, monkeypatch):
-        import routes.email as mod
+        import routes.captcha as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (False, "Too many requests"))
 
@@ -52,10 +52,10 @@ class TestCaptchaEndpoint:
 
 class TestSendEmailEndpoint:
     def test_send_email_captcha_failure_returns_403(self, monkeypatch):
-        import routes.email as mod
+        import routes.schedule as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: False)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: False)
 
         response = _client().post(
             "/api/send-email",
@@ -70,11 +70,11 @@ class TestSendEmailEndpoint:
         assert response.json()["detail"] == "Security verification failed. Please try again."
 
     def test_send_email_unexpected_error_returns_500(self, monkeypatch):
-        import routes.email as mod
+        import routes.schedule as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
-        monkeypatch.setattr(mod, "_send_followup_email", MagicMock(side_effect=Exception("email service down")))
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "send_followup", MagicMock(side_effect=Exception("email service down")))
 
         response = _client().post(
             "/api/send-email",
@@ -91,10 +91,10 @@ class TestSendEmailEndpoint:
 
 class TestScheduleEndpoint:
     def test_schedule_db_error_returns_500(self, monkeypatch):
-        import routes.email as mod
+        import routes.schedule as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", MagicMock(side_effect=Exception("db down")))
 
         response = _client().post(
@@ -115,7 +115,7 @@ class TestScheduleEndpoint:
 
 class TestNewsletterEndpoint:
     def test_newsletter_rate_limit_returns_429(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (False, "Rate limit exceeded"))
 
@@ -128,19 +128,19 @@ class TestNewsletterEndpoint:
         assert response.json()["detail"] == "Rate limit exceeded"
 
     def test_newsletter_confirmation_email_failure_returns_failed_status(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
-        monkeypatch.setattr(mod, "_build_newsletter_unsubscribe_url", lambda email: "https://example.com/unsub")
+        monkeypatch.setattr(mod, "build_unsubscribe_url", lambda email: "https://example.com/unsub")
         monkeypatch.setattr(
             mod,
-            "_send_newsletter_confirmation_email",
+            "send_newsletter_confirmation",
             MagicMock(side_effect=HTTPException(status_code=500, detail="provider failed")),
         )
         notify_company = MagicMock()
-        monkeypatch.setattr(mod, "_send_newsletter_notification_email", notify_company)
+        monkeypatch.setattr(mod, "send_newsletter_notification", notify_company)
 
         response = _client().post(
             "/api/newsletter",

@@ -43,7 +43,7 @@ class _DeleteConnection:
 
 class TestUnsubscribeEndpoint:
     def test_unsubscribe_rate_limited_returns_429(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (False, "Too many unsubscribe requests"))
 
@@ -53,7 +53,7 @@ class TestUnsubscribeEndpoint:
         assert response.json()["detail"] == "Too many unsubscribe requests"
 
     def test_unsubscribe_missing_token_returns_400(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
 
@@ -63,7 +63,7 @@ class TestUnsubscribeEndpoint:
         assert response.json()["detail"] == "Unsubscribe token is required."
 
     def test_unsubscribe_invalid_token_returns_400(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
 
@@ -73,19 +73,19 @@ class TestUnsubscribeEndpoint:
         assert response.json()["detail"] == "Invalid unsubscribe link."
 
     def test_unsubscribe_success_still_returns_html_if_confirmation_email_fails(self, monkeypatch):
-        import routes.email as mod
+        import routes.newsletter as mod
 
-        token = mod._generate_newsletter_unsubscribe_token("user@example.com")
+        token = mod.generate_unsubscribe_token("user@example.com")
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
         monkeypatch.setattr(mod, "get_db_connection", lambda: _DeleteConnection(deleted_rows=1))
         monkeypatch.setattr(
             mod,
-            "_send_newsletter_unsubscribe_confirmation_email",
+            "send_newsletter_unsubscribe_confirmation",
             MagicMock(side_effect=HTTPException(status_code=500, detail="mail down")),
         )
         notify_company = MagicMock()
-        monkeypatch.setattr(mod, "_send_newsletter_unsubscribe_notification_email", notify_company)
+        monkeypatch.setattr(mod, "send_newsletter_unsubscribe_notification", notify_company)
 
         response = _client().get(f"/api/newsletter/unsubscribe?email=user@example.com&token={token}")
 

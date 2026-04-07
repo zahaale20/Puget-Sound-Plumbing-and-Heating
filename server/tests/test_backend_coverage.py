@@ -103,24 +103,24 @@ class TestMainCoverage:
 
 class TestImagesCoverage:
     def test_get_client_ip_prefers_forwarded_header_when_enabled(self, monkeypatch):
-        import routes.images as images
+        import dependencies
 
-        monkeypatch.setattr(images, "TRUST_PROXY_HEADERS", True)
+        monkeypatch.setattr(dependencies, "TRUST_PROXY_HEADERS", True)
         req = MagicMock()
         req.headers.get.return_value = "203.0.113.10, 198.51.100.2"
         req.client.host = "10.0.0.1"
 
-        assert images._get_client_ip(req) == "203.0.113.10"
+        assert dependencies.get_client_ip(req) == "203.0.113.10"
 
     def test_get_client_ip_falls_back_to_default(self, monkeypatch):
-        import routes.images as images
+        import dependencies
 
-        monkeypatch.setattr(images, "TRUST_PROXY_HEADERS", False)
+        monkeypatch.setattr(dependencies, "TRUST_PROXY_HEADERS", False)
         req = MagicMock()
         req.headers.get.return_value = None
         req.client = None
 
-        assert images._get_client_ip(req) == "0.0.0.0"
+        assert dependencies.get_client_ip(req) == "0.0.0.0"
 
     def test_get_image_url_rate_limited(self, monkeypatch):
         import routes.images as images

@@ -68,7 +68,7 @@ class _DuplicateInsertConnection:
 
 class TestJobApplicationEndpoint:
     def test_job_application_rate_limit_returns_429(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (False, "Too many applications"))
 
@@ -87,10 +87,10 @@ class TestJobApplicationEndpoint:
         assert response.json()["detail"] == "Too many applications"
 
     def test_job_application_captcha_failure_returns_403(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: False)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: False)
 
         response = _client().post(
             "/api/job-application",
@@ -108,13 +108,13 @@ class TestJobApplicationEndpoint:
         assert response.json()["detail"] == "Security verification failed. Please try again."
 
     def test_job_application_duplicate_returns_skipped(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _DuplicateInsertConnection())
-        send_job_email = MagicMock()
-        monkeypatch.setattr(mod, "_send_job_application_email", send_job_email)
+        send_confirm = MagicMock()
+        monkeypatch.setattr(mod, "send_job_application_confirmation", send_confirm)
 
         response = _client().post(
             "/api/job-application",
@@ -131,17 +131,17 @@ class TestJobApplicationEndpoint:
         assert response.status_code == 200
         assert response.json()["duplicate"] is True
         assert response.json()["emailStatus"] == "skipped"
-        send_job_email.assert_not_called()
+        send_confirm.assert_not_called()
 
     def test_job_application_email_failure_returns_failed_status(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
         monkeypatch.setattr(
             mod,
-            "_send_job_application_email",
+            "send_job_application_confirmation",
             MagicMock(side_effect=HTTPException(status_code=500, detail="mail provider down")),
         )
 
@@ -165,10 +165,10 @@ class TestJobApplicationEndpoint:
         }
 
     def test_job_application_resume_invalid_extension_returns_internal_error(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
 
         response = _client().post(
@@ -188,10 +188,10 @@ class TestJobApplicationEndpoint:
         assert response.json()["detail"] == "An unexpected error occurred. Please try again."
 
     def test_job_application_resume_too_large_returns_internal_error(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
         monkeypatch.setattr(mod, "MAX_RESUME_SIZE_BYTES", 4)
 
@@ -212,14 +212,16 @@ class TestJobApplicationEndpoint:
         assert response.json()["detail"] == "An unexpected error occurred. Please try again."
 
     def test_job_application_resume_upload_fail_still_succeeds(self, monkeypatch):
-        import routes.email as mod
+        import routes.careers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
         monkeypatch.setattr(mod.storage_service, "upload_resume", lambda data, filename: None)
-        send_job_email = MagicMock()
-        monkeypatch.setattr(mod, "_send_job_application_email", send_job_email)
+        send_confirm = MagicMock()
+        send_notify = MagicMock()
+        monkeypatch.setattr(mod, "send_job_application_confirmation", send_confirm)
+        monkeypatch.setattr(mod, "send_job_application_notification", send_notify)
 
         response = _client().post(
             "/api/job-application",
@@ -236,28 +238,29 @@ class TestJobApplicationEndpoint:
 
         assert response.status_code == 200
         assert response.json() == {"success": True, "emailStatus": "sent"}
-        send_job_email.assert_called_once()
+        send_confirm.assert_called_once()
+        send_notify.assert_called_once()
 
 
 class TestResumeValidationHelper:
     def test_validate_resume_upload_empty_file_raises_400(self):
-        import routes.email as mod
+        import routes.careers as mod
 
         resume = SimpleNamespace(filename="resume.pdf", content_type="application/pdf")
 
         with pytest.raises(HTTPException) as exc_info:
-            mod._validate_resume_upload(resume, b"")
+            mod.validate_resume_upload(resume, b"")
 
         assert exc_info.value.status_code == 400
         assert exc_info.value.detail == "Uploaded resume is empty"
 
     def test_validate_resume_upload_unsupported_content_type_raises_400(self):
-        import routes.email as mod
+        import routes.careers as mod
 
         resume = SimpleNamespace(filename="resume.pdf", content_type="image/png")
 
         with pytest.raises(HTTPException) as exc_info:
-            mod._validate_resume_upload(resume, b"pdf-bytes")
+            mod.validate_resume_upload(resume, b"pdf-bytes")
 
         assert exc_info.value.status_code == 400
         assert exc_info.value.detail == "Unsupported resume content type"

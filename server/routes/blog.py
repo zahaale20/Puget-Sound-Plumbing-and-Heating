@@ -4,21 +4,12 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from database import get_db_connection
 from services.rate_limiter import check_rate_limit
+from dependencies import get_client_ip
 
 router = APIRouter(prefix="/api/blog", tags=["Blog"])
 logger = logging.getLogger(__name__)
-TRUST_PROXY_HEADERS = os.getenv("TRUST_PROXY_HEADERS", "false").lower() == "true"
 
 BLOG_CACHE_MAX_AGE = int(os.getenv("BLOG_CACHE_MAX_AGE", "300"))
-
-
-def _get_client_ip(request: Request) -> str:
-    forwarded = request.headers.get("x-forwarded-for") if TRUST_PROXY_HEADERS else None
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    if request.client:
-        return request.client.host
-    return "0.0.0.0"
 
 
 def _row_to_post(row: tuple) -> dict:
@@ -99,7 +90,7 @@ async def get_blog_post(slug: str):
 @router.post("/{slug}/views")
 async def increment_views(slug: str, req: Request):
     """Increment the view count for a blog post. Rate-limited."""
-    client_ip = _get_client_ip(req)
+    client_ip = get_client_ip(req)
     is_allowed, msg = check_rate_limit(client_ip, "blog-views")
     if not is_allowed:
         raise HTTPException(status_code=429, detail=msg)

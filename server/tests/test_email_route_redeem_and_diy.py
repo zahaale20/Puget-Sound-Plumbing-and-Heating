@@ -73,10 +73,10 @@ class _DuplicateCheckConnection:
 
 class TestRedeemOfferEndpoint:
     def test_redeem_offer_captcha_failure_returns_403(self, monkeypatch):
-        import routes.email as mod
+        import routes.offers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: False)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: False)
 
         response = _client().post(
             "/api/redeem-offer",
@@ -95,13 +95,13 @@ class TestRedeemOfferEndpoint:
         assert response.json()["detail"] == "Security verification failed. Please try again."
 
     def test_redeem_offer_duplicate_short_circuits(self, monkeypatch):
-        import routes.email as mod
+        import routes.offers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _DuplicateCheckConnection(duplicate_exists=True))
         send_coupon = MagicMock()
-        monkeypatch.setattr(mod, "_send_coupon_confirmation_email", send_coupon)
+        monkeypatch.setattr(mod, "send_coupon_confirmation", send_coupon)
 
         response = _client().post(
             "/api/redeem-offer",
@@ -122,14 +122,14 @@ class TestRedeemOfferEndpoint:
         send_coupon.assert_not_called()
 
     def test_redeem_offer_coupon_email_http_error_propagates(self, monkeypatch):
-        import routes.email as mod
+        import routes.offers as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _DuplicateCheckConnection(duplicate_exists=False))
         monkeypatch.setattr(
             mod,
-            "_send_coupon_confirmation_email",
+            "send_coupon_confirmation",
             MagicMock(side_effect=HTTPException(status_code=502, detail="email provider error")),
         )
 
@@ -152,10 +152,10 @@ class TestRedeemOfferEndpoint:
 
 class TestDiyPermitEndpoint:
     def test_diy_permit_captcha_failure_returns_403(self, monkeypatch):
-        import routes.email as mod
+        import routes.diy_permit as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: False)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: False)
 
         response = _client().post(
             "/api/diy-permit",
@@ -173,14 +173,14 @@ class TestDiyPermitEndpoint:
         assert response.json()["detail"] == "Security verification failed. Please try again."
 
     def test_diy_permit_confirmation_email_failure_returns_failed_status(self, monkeypatch):
-        import routes.email as mod
+        import routes.diy_permit as mod
 
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
-        monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
+        monkeypatch.setattr(mod, "verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
         monkeypatch.setattr(
             mod,
-            "_send_diy_permit_email",
+            "send_diy_permit_confirmation",
             MagicMock(side_effect=HTTPException(status_code=500, detail="smtp unavailable")),
         )
 

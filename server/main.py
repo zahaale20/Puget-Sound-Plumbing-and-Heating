@@ -1,11 +1,14 @@
 import os
+import logging
+import time
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from urllib.parse import urlparse
-from routes import images, email, blog
+from routes import images, blog, captcha, schedule, newsletter, offers, diy_permit, careers
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -60,7 +63,7 @@ def _build_allowed_hosts() -> list[str]:
     return deduped_hosts
 
 # Setup CORS
-origins = [
+_DEFAULT_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:5174",
@@ -75,6 +78,14 @@ origins = [
     "https://cavostudio.com",
     "https://www.cavostudio.com",
 ]
+
+def _build_cors_origins() -> list[str]:
+    env_origins = os.getenv("CORS_ORIGINS")
+    if env_origins:
+        return [o.strip() for o in env_origins.split(",") if o.strip()]
+    return list(_DEFAULT_ORIGINS)
+
+origins = _build_cors_origins()
 
 app.add_middleware(
     CORSMiddleware,
@@ -104,15 +115,40 @@ async def add_security_headers(request: Request, call_next):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 
+
+_request_logger = logging.getLogger("pspah.requests")
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    duration_ms = (time.perf_counter() - start) * 1000
+    _request_logger.info(
+        "%s %s %s %.1fms",
+        request.method, request.url.path, response.status_code, duration_ms,
+    )
+    return response
+
 # "Plug in" the routers
 app.include_router(images.router)
-app.include_router(email.router)
 app.include_router(blog.router)
-# app.include_router(leads.router) # Uncomment once leads.py is built
+app.include_router(captcha.router)
+app.include_router(schedule.router)
+app.include_router(newsletter.router)
+app.include_router(offers.router)
+app.include_router(diy_permit.router)
+app.include_router(careers.router)
 
 @app.get("/")
 async def root():
     return {"status": "PSPAH API is running"}
+
+@app.get("/health")
+async def health():
+    from database import test_db
+    if test_db():
+        return {"status": "healthy", "database": "connected"}
+    return JSONResponse(status_code=503, content={"status": "unhealthy", "database": "disconnected"})
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
