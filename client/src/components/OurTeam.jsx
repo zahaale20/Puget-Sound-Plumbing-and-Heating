@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import { ImageWithLoader } from "./ui/LoadingComponents";
 import { TeamMembers as TeamMembersData } from "../data/data";
 
@@ -7,7 +7,7 @@ export default function TeamMembers() {
 	const [defaultProfilePic, setDefaultProfilePic] = useState(null);
 
 	useEffect(() => {
-		setDefaultProfilePic(getCloudFrontUrl("private/default-profile-pic.png"));
+		setDefaultProfilePic(getImageUrl("site/default-profile-pic.webp"));
 	}, []);
 
 	const team = TeamMembersData;

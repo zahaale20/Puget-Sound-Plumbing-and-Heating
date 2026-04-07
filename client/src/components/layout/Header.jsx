@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { CompanyLinks, ServiceLinks, CompanyInfo } from "../../data/data";
 
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -76,7 +76,7 @@ export default function Header() {
 						className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<ImageWithLoader
-							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
+							src={getImageUrl("logo/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
 							width="340"

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { FaChevronDown } from "react-icons/fa";
 import { openings } from "../data/data";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import JobApplicationForm from "../components/forms/JobApplicationForm";
 import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 
@@ -18,7 +18,7 @@ export default function CareersPage() {
 			{/* Header Section */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -115,7 +115,7 @@ export default function CareersPage() {
 			{/* Application Form Section */}
 			<section className="relative overflow-hidden flex justify-center w-full py-16 text-[#2B2B2B]">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

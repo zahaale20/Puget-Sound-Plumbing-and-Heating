@@ -24,20 +24,15 @@ class StorageService:
     ASSETS_BUCKET = "assets"
     RESUMES_BUCKET = "resumes"
 
-    # Map legacy S3 prefixes to folder paths inside the assets bucket
-    _PREFIX_TO_FOLDER = {
-        "private/": "site/",
-        "public/": "logo/",
-    }
-
-    ALLOWED_IMAGE_PREFIXES = ("public/", "private/", "blog/", "site/", "logo/")
+    ALLOWED_IMAGE_PREFIXES = ("blog/", "site/", "logo/")
 
     def __init__(self):
-        self.supabase_url = os.getenv("SUPABASE_URL")
+        project_id = os.getenv("SUPABASE_PROJECT_ID")
+        self.supabase_url = f"https://{project_id}.supabase.co" if project_id else None
         self.supabase_service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
         if not self.supabase_url:
-            logger.error("SUPABASE_URL is missing from environment variables")
+            logger.error("SUPABASE_PROJECT_ID is missing from environment variables")
 
     def _storage_public_url(self, bucket: str, path: str) -> str:
         """Build the public URL for a Supabase Storage object."""
@@ -45,10 +40,7 @@ class StorageService:
         return f"{self.supabase_url}/storage/v1/object/public/{bucket}/{quote(clean, safe='/-_.~')}"
 
     def get_image_url(self, object_name: str):
-        """Resolve an image key to a Supabase Storage public URL.
-
-        Handles both legacy keys ('private/hero.webp') and new keys ('site/hero.webp').
-        """
+        """Resolve an image key to a Supabase Storage public URL."""
         if not self.supabase_url:
             return None
 
@@ -59,13 +51,6 @@ class StorageService:
         if not any(clean_name.startswith(p) for p in self.ALLOWED_IMAGE_PREFIXES):
             return None
 
-        # Rewrite legacy prefixes to new folder paths
-        for prefix, folder in self._PREFIX_TO_FOLDER.items():
-            if clean_name.startswith(prefix):
-                obj_path = clean_name[len(prefix):]
-                return self._storage_public_url(self.ASSETS_BUCKET, f"{folder}{obj_path}")
-
-        # Keys already in new format (blog/*, site/*, logo/*)
         return self._storage_public_url(self.ASSETS_BUCKET, clean_name)
 
     @staticmethod
@@ -114,9 +99,3 @@ class StorageService:
         except Exception as e:
             logger.exception("Failed to upload resume: %s", str(e))
             return None
-
-
-# ── Backward-compatible alias ────────────────────────────────────────────────
-# Routes import S3Service by name; this keeps them working without touching
-# every import site in one go.
-S3Service = StorageService

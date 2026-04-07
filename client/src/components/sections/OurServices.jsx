@@ -2,18 +2,18 @@ import { useNavigate } from "react-router-dom";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { FaArrowRight } from "react-icons/fa";
 import { SectionTitle } from "../ui/UnderlinedHeading";
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { HomeServices } from "../../data/data";
 
 const services = HomeServices;
 
 const optimizedIconKeyMap = {
-	"private/water-heaters-color.png": "private/water-heaters-color-96.webp",
-	"private/faucet-repair-color.png": "private/faucet-repair-color-96.webp",
-	"private/toilet-repair-color.png": "private/toilet-repair-color-96.webp",
-	"private/garbage-disposal-color.png": "private/garbage-disposal-color-96.webp",
-	"private/water-filtration-color.png": "private/water-filtration-color-96.webp",
-	"private/plumbing-repair-color.png": "private/plumbing-repair-color-96.webp",
+	"site/water-heaters-color.webp": "site/water-heaters-color-96.webp",
+	"site/faucet-repair-color.webp": "site/faucet-repair-color-96.webp",
+	"site/toilet-repair-color.webp": "site/toilet-repair-color-96.webp",
+	"site/garbage-disposal-color.webp": "site/garbage-disposal-color-96.webp",
+	"site/water-filtration-color.webp": "site/water-filtration-color-96.webp",
+	"site/plumbing-repair-color.webp": "site/plumbing-repair-color-96.webp",
 };
 
 export default function OurServices() {
@@ -46,7 +46,7 @@ export default function OurServices() {
 						{/* Single icon variant avoids large duplicate image downloads. */}
 						<div className="relative w-12 h-12 mb-6 shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl(
+								src={getImageUrl(
 									optimizedIconKeyMap[service.imageColorKey] || service.imageColorKey || service.imageKey
 								)}
 								alt={service.title}

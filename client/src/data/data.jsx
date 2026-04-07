@@ -62,7 +62,7 @@ export const ServiceLinks = [
 			{
 				name: "Emergency Plumbing",
 				href: "/services/plumbing/emergency",
-				image: "plumbing-emergency-plumbing.png",
+				image: "plumbing-emergency-plumbing.webp",
 				description:
 					"When plumbing emergencies strike, our Seattle-based emergency plumbing services provide fast, reliable solutions. From burst pipes and overflowing toilets to major leaks, our experienced technicians respond quickly to prevent water damage and restore your home's plumbing system. We combine advanced tools with expert knowledge to ensure every emergency is handled safely and efficiently, giving homeowners peace of mind when they need it most.",
 				problems: [
@@ -84,7 +84,7 @@ export const ServiceLinks = [
 			{
 				name: "Plumbing Repairs",
 				href: "/services/plumbing/plumbing-repairs",
-				image: "plumbing-plumbing-repairs.png",
+				image: "plumbing-plumbing-repairs.webp",
 				description:
 					"Our professional plumbing repair services in Seattle ensure your pipes and fixtures work efficiently and reliably. We handle leaky pipes, low water pressure, noisy plumbing, and hidden water damage, providing accurate diagnostics and long-lasting solutions. Our team prioritizes transparent pricing and quality workmanship to deliver dependable repairs that maintain your home's plumbing integrity and protect your investment.",
 				problems: [
@@ -106,7 +106,7 @@ export const ServiceLinks = [
 			{
 				name: "Faucets",
 				href: "/services/plumbing/faucets",
-				image: "plumbing-faucets.png",
+				image: "plumbing-faucets.webp",
 				description:
 					"Enhance your home's water efficiency with our faucet repair and installation services. Our Seattle plumbing team fixes dripping faucets, low-pressure fixtures, and outdated designs while offering high-quality replacements. Each installation is performed with attention to detail, ensuring optimal water flow, durability, and aesthetic appeal for your kitchen and bathroom faucets.",
 				problems: [
@@ -128,7 +128,7 @@ export const ServiceLinks = [
 			{
 				name: "Toilets",
 				href: "/services/plumbing/toilets",
-				image: "plumbing-toilets.png",
+				image: "plumbing-toilets.webp",
 				description:
 					"Keep your toilets functioning properly with expert repair and replacement services. We specialize in troubleshooting running toilets, clearing stubborn clogs, and installing modern, high-efficiency models. Our technicians ensure every unit is securely mounted and leak-free, providing reliable performance and helping you reduce unnecessary water waste in your home.",
 				problems: [
@@ -150,7 +150,7 @@ export const ServiceLinks = [
 			{
 				name: "Garbage Disposal",
 				href: "/services/plumbing/garbage-disposal",
-				image: "plumbing-garbage-disposal.png",
+				image: "plumbing-garbage-disposal.webp",
 				description:
 					"Maintain a smooth-running kitchen with our professional garbage disposal repair and installation services. Whether your unit is jammed, leaking, or making unusual noises, our team can quickly diagnose the issue and restore function. We provide high-quality replacement units that offer quiet operation and powerful grinding capabilities, ensuring your kitchen cleanup remains hassle-free.",
 				problems: [
@@ -172,7 +172,7 @@ export const ServiceLinks = [
 			{
 				name: "Water Filtration Systems",
 				href: "/services/plumbing/water-filtration-systems",
-				image: "plumbing-water-filtration-systems.png",
+				image: "plumbing-water-filtration-systems.webp",
 				description:
 					"Improve your home's water quality with professional water filtration system installation tailored for Seattle's specific water conditions. We offer whole-home solutions that remove chlorine, sediment, and heavy metals, protecting your family's health and extending the life of your appliances. Our team helps you select and maintain the perfect system to ensure clean, great-tasting water from every tap.",
 				problems: [
@@ -194,7 +194,7 @@ export const ServiceLinks = [
 			{
 				name: "Gas Line Services",
 				href: "/services/plumbing/gas",
-				image: "plumbing-gas-line-services.png",
+				image: "plumbing-gas-line-services.webp",
 				description:
 					"Ensure your home's gas lines are safe and fully compliant with our professional gas line services. We specialize in leak detection, line repairs, and new installations for stoves, dryers, and outdoor appliances. Our licensed technicians prioritize safety above all else, providing secure connections and emergency shut-off solutions to protect your property and family from potential hazards.",
 				problems: [
@@ -216,7 +216,7 @@ export const ServiceLinks = [
 			{
 				name: "Leak Detection",
 				href: "/services/plumbing/leak",
-				image: "plumbing-leak-detection.png",
+				image: "plumbing-leak-detection.webp",
 				description:
 					"Protect your home from the devastating effects of water damage with our professional leak detection services. Using advanced thermal imaging and acoustic tools, we locate hidden leaks behind walls, under foundations, and within your main water lines. Our non-invasive techniques allow us to find the source of the problem quickly, saving you money on repairs and preventing long-term structural issues.",
 				problems: [
@@ -238,7 +238,7 @@ export const ServiceLinks = [
 			{
 				name: "Water Services Repair and Install",
 				href: "/services/plumbing/water-services",
-				image: "plumbing-water-services-repair-and-install.png",
+				image: "plumbing-water-services-repair-and-install.webp",
 				description:
 					"Maintain steady water pressure and a consistent supply with our comprehensive water service solutions. We handle everything from main line repairs in your yard to replacing outdated lead and galvanized service pipes. Our team ensures your home's connection to the municipal supply is robust, code-compliant, and optimized for maximum flow and long-term reliability.",
 				problems: [
@@ -266,7 +266,7 @@ export const ServiceLinks = [
 			{
 				name: "Drain Cleaning",
 				href: "/services/drain-and-sewer/cleaning",
-				image: "drain-and-sewer-drain-cleaning.png",
+				image: "drain-and-sewer-drain-cleaning.webp",
 				description:
 					"Keep your home flowing smoothly with our professional drain cleaning services. We use safe and effective methods to clear clogs in sinks, tubs, and showers, removing buildup that causes slow drainage and foul odors. Our technicians provide deep cleaning that goes beyond a simple plunge, restoring full flow to your plumbing system and helping to prevent future blockages before they start.",
 				problems: [
@@ -288,7 +288,7 @@ export const ServiceLinks = [
 			{
 				name: "Sewer Inspection",
 				href: "/services/drain-and-sewer/inspection",
-				image: "drain-and-sewer-sewer-inspection.png",
+				image: "drain-and-sewer-sewer-inspection.webp",
 				description:
 					"Identify and resolve sewer issues before they become major disasters with our advanced camera inspections. We provide high-definition video scopes that allow us to see exactly what is happening inside your underground pipes, from tree root intrusion to structural cracks. This detailed reporting is essential for home buyers and homeowners looking for an accurate diagnosis without the need for initial digging.",
 				problems: [
@@ -310,7 +310,7 @@ export const ServiceLinks = [
 			{
 				name: "Sewer Repair and Install",
 				href: "/services/drain-and-sewer/repair",
-				image: "drain-and-sewer-sewer-repair-and-install.png",
+				image: "drain-and-sewer-sewer-repair-and-install.webp",
 				description:
 					"Maintain a reliable waste management system with our professional sewer repair and installation services. Whether you are dealing with a collapsed line, root damage, or the need for a new installation for a home addition, our team provides durable, code-compliant solutions. We utilize both traditional and modern techniques to ensure your sewer system is restored to peak performance with as little disruption as possible.",
 				problems: [
@@ -332,7 +332,7 @@ export const ServiceLinks = [
 			{
 				name: "Hydro Jetting",
 				href: "/services/drain-and-sewer/hydrojetting",
-				image: "drain-and-sewer-hydro-jetting.png",
+				image: "drain-and-sewer-hydro-jetting.webp",
 				description:
 					"Clear the toughest blockages and heavy buildup with our high-pressure hydro jetting services. This advanced technique uses concentrated water streams to scour the inside of your pipes, removing grease, scale, and stubborn tree roots that traditional snaking can't touch. It is the ultimate solution for restoring your sewer and drain lines to like-new condition, ensuring long-term flow and preventing future backups.",
 				problems: [
@@ -354,7 +354,7 @@ export const ServiceLinks = [
 			{
 				name: "No Dig and Trenchless",
 				href: "/services/drain-and-sewer/trenchless",
-				image: "drain-and-sewer-no-dig-and-trenchless.png",
+				image: "drain-and-sewer-no-dig-and-trenchless.webp",
 				description:
 					"Repair or replace your sewer lines without the need for costly and destructive digging. Our trenchless technology allows us to reline or burst old pipes from small access points, preserving your landscaping, driveway, and mature trees. These modern 'no-dig' solutions offer the same durability as traditional methods but with significantly less mess and faster completion times for Seattle homeowners.",
 				problems: [
@@ -376,7 +376,7 @@ export const ServiceLinks = [
 			{
 				name: "Sewer and Drain Pump",
 				href: "/services/drain-and-sewer/pump",
-				image: "drain-and-sewer-sewer-and-drain-pump.png",
+				image: "drain-and-sewer-sewer-and-drain-pump.webp",
 				description:
 					"Ensure proper wastewater management and protect your basement from flooding with our pump installation and repair services. We specialize in sump pumps and sewage ejector systems that keep your home dry and functional, especially in low-lying areas. Our team provides reliable repairs, battery backup installations, and regular maintenance to ensure your pumps are always ready for Seattle's wettest seasons.",
 				problems: [
@@ -404,7 +404,7 @@ export const ServiceLinks = [
 			{
 				name: "Tankless Water Heaters",
 				href: "/services/water-heaters/tankless",
-				image: "water-heaters-tankless-water-heaters.png",
+				image: "water-heaters-tankless-water-heaters.webp",
 				description:
 					"Enjoy endless hot water and improved energy efficiency with a professionally installed tankless water heater. These on-demand systems eliminate the need for a large storage tank, providing hot water only when you need it and saving valuable space in your home. Our team handles everything from new installations and gas line upgrades to annual descaling maintenance, ensuring your system runs perfectly for years to come.",
 				problems: [
@@ -426,7 +426,7 @@ export const ServiceLinks = [
 			{
 				name: "Gas Water Heaters",
 				href: "/services/water-heaters/gas",
-				image: "water-heaters-gas-water-heaters.png",
+				image: "water-heaters-gas-water-heaters.webp",
 				description:
 					"Our gas water heater services provide fast recovery times and dependable hot water for your entire household. We specialize in the repair and installation of both standard and high-efficiency gas units, addressing common issues like pilot light failure, leaking tanks, and sediment buildup. Our licensed technicians prioritize safe venting and gas connection standards to ensure your home remains comfortable and hazard-free.",
 				problems: [
@@ -448,7 +448,7 @@ export const ServiceLinks = [
 			{
 				name: "Electric Water Heaters",
 				href: "/services/water-heaters/electric",
-				image: "water-heaters-electric-water-heaters.png",
+				image: "water-heaters-electric-water-heaters.webp",
 				description:
 					"Enjoy quiet, dependable hot water with our professional electric water heater services. We handle heating element replacements, thermostat repairs, and complete system upgrades, including modern heat pump hybrid models. Our team ensures your electric water heater is optimized for performance and safety, providing a consistent supply of hot water while helping you manage your home's energy consumption effectively.",
 				problems: [
@@ -476,7 +476,7 @@ export const ServiceLinks = [
 			{
 				name: "Furnace Install and Repair",
 				href: "/services/heating-and-cooling/furnace",
-				image: "heating-and-cooling-furnace-install-and-repair.png",
+				image: "heating-and-cooling-furnace-install-and-repair.webp",
 				description:
 					"Stay warm and comfortable during Seattle's coldest months with our expert furnace installation and repair services. We work with gas and electric furnaces, providing thorough diagnostics to fix issues like cold airflow, short-cycling, and unusual noises. Our team also specializes in installing high-efficiency heating systems that provide consistent warmth throughout your home while reducing your monthly utility costs.",
 				problems: [
@@ -498,7 +498,7 @@ export const ServiceLinks = [
 			{
 				name: "Boiler Install and Repair",
 				href: "/services/heating-and-cooling/boiler",
-				image: "heating-and-cooling-boiler-install-and-repair.png",
+				image: "heating-and-cooling-boiler-install-and-repair.webp",
 				description:
 					"Ensure your home's radiant or hydronic heating system is operating at peak efficiency with our professional boiler services. We specialize in troubleshooting uneven heating, pressure loss, and noisy operation for all types of boiler systems. Whether you need a simple repair or a complete upgrade to a modern, high-efficiency combi-boiler, our technicians deliver precise workmanship for long-lasting comfort and reliability.",
 				problems: [
@@ -520,7 +520,7 @@ export const ServiceLinks = [
 			{
 				name: "Air Conditioning",
 				href: "/services/heating-and-cooling/ac",
-				image: "heating-and-cooling-air-conditioning.png",
+				image: "heating-and-cooling-air-conditioning.webp",
 				description:
 					"Stay cool and comfortable during Seattle's warmer summers with our professional air conditioning repair and installation services. From central AC units to modern ductless mini-splits, our technicians provide efficient cooling solutions designed for long-term performance. We handle everything from refrigerant recharges and thermostat issues to complete system replacements, ensuring your home remains an oasis of comfort regardless of the temperature outside.",
 				problems: [
@@ -1001,48 +1001,48 @@ export const FAQsData = [
 
 export const HomeServices = [
 	{
-		imageKey: "private/water-heaters.png",
-		imageColorKey: "private/water-heaters-color.png",
+		imageKey: "site/water-heaters.webp",
+		imageColorKey: "site/water-heaters-color.webp",
 		title: "Water Heaters",
 		description:
 			"Expert installation, maintenance, and repair for tank and tankless water heaters. We ensure reliable, energy-efficient hot water tailored to your home.",
 		path: "/services/water-heaters",
 	},
 	{
-		imageKey: "private/faucet-repair.png",
-		imageColorKey: "private/faucet-repair-color.png",
+		imageKey: "site/faucet-repair.webp",
+		imageColorKey: "site/faucet-repair-color.webp",
 		title: "Faucets",
 		description:
 			"Professional faucet repair and replacement for kitchens, bathrooms, and utility sinks. We stop leaks, upgrade fixtures, and improve water efficiency.",
 		path: "/services/plumbing/faucets",
 	},
 	{
-		imageKey: "private/toilet-repair.png",
-		imageColorKey: "private/toilet-repair-color.png",
+		imageKey: "site/toilet-repair.webp",
+		imageColorKey: "site/toilet-repair-color.webp",
 		title: "Toilets",
 		description:
 			"Fast, reliable toilet repair and replacement for leaks, clogs, and running issues. We restore efficiency and install water-saving models.",
 		path: "/services/plumbing/toilets",
 	},
 	{
-		imageKey: "private/garbage-disposal.png",
-		imageColorKey: "private/garbage-disposal-color.png",
+		imageKey: "site/garbage-disposal.webp",
+		imageColorKey: "site/garbage-disposal-color.webp",
 		title: "Garbage Disposal",
 		description:
 			"From jams to full replacements, we install and repair garbage disposals for quiet, efficient operation and long-lasting performance.",
 		path: "/services/plumbing/garbage-disposal",
 	},
 	{
-		imageKey: "private/water-filtration.png",
-		imageColorKey: "private/water-filtration-color.png",
+		imageKey: "site/water-filtration.webp",
+		imageColorKey: "site/water-filtration-color.webp",
 		title: "Water Filtration Systems",
 		description:
 			"Expert filtration installation and maintenance that removes contaminants, improves taste, and protects your plumbing and appliances.",
 		path: "/services/plumbing/water-filtration-systems",
 	},
 	{
-		imageKey: "private/plumbing-repair.png",
-		imageColorKey: "private/plumbing-repair-color.png",
+		imageKey: "site/plumbing-repair.webp",
+		imageColorKey: "site/plumbing-repair-color.webp",
 		title: "Plumbing Repairs",
 		description:
 			"Comprehensive repair for leaks, burst pipes, and low water pressure. Fast, affordable service to keep your plumbing system running perfectly.",

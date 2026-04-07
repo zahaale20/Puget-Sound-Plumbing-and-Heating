@@ -3,7 +3,7 @@ import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { FaCheck } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 import { ServiceLinks, ServiceAreaLinks } from "../data/data";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
@@ -57,7 +57,7 @@ export default function AreaPage() {
 			{/* Header Section*/}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -113,7 +113,7 @@ export default function AreaPage() {
 			{/* Why Choose Us Section*/}
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

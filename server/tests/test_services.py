@@ -69,61 +69,61 @@ class TestRateLimiter:
 
 class TestStorageService:
     def test_get_image_url(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
-        url = svc.get_image_url("public/hero.jpg")
-        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.jpg"
+        url = svc.get_image_url("logo/hero.webp")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.webp"
 
     def test_get_image_url_strips_leading_slash(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
-        url = svc.get_image_url("/public/hero.jpg")
-        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.jpg"
+        url = svc.get_image_url("/logo/hero.webp")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.webp"
 
-    def test_get_image_url_private_prefix(self):
-        from services.s3_service import StorageService
+    def test_get_image_url_site_prefix(self):
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
-        url = svc.get_image_url("private/banner.webp")
+        url = svc.get_image_url("site/banner.webp")
         assert url == "https://example.supabase.co/storage/v1/object/public/assets/site/banner.webp"
 
     def test_get_image_url_blog_key(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
-        url = svc.get_image_url("blog/my-post.jpg")
-        assert url == "https://example.supabase.co/storage/v1/object/public/assets/blog/my-post.jpg"
+        url = svc.get_image_url("blog/my-post.webp")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/blog/my-post.webp"
 
     def test_get_image_url_none_when_no_supabase_url(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = None
-        assert svc.get_image_url("public/hero.jpg") is None
+        assert svc.get_image_url("logo/hero.webp") is None
 
     def test_get_image_url_rejects_disallowed_prefix(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
         assert svc.get_image_url("resumes/secret.pdf") is None
 
     def test_get_image_url_rejects_path_traversal(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
-        assert svc.get_image_url("public/../etc/passwd") is None
+        assert svc.get_image_url("site/../etc/passwd") is None
 
     def test_upload_resume_no_credentials(self):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = None
         svc.supabase_service_key = None
         assert svc.upload_resume(b"data", "resume.pdf") is None
 
-    @patch("services.s3_service.httpx.post")
+    @patch("services.storage_service.httpx.post")
     def test_upload_resume_success(self, mock_post):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         mock_resp = MagicMock()
         mock_resp.status_code = 200
         mock_post.return_value = mock_resp
@@ -139,9 +139,9 @@ class TestStorageService:
         call_kwargs = mock_post.call_args
         assert call_kwargs[1]["headers"]["Content-Type"] == "application/pdf"
 
-    @patch("services.s3_service.httpx.post")
+    @patch("services.storage_service.httpx.post")
     def test_upload_resume_non_pdf(self, mock_post):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         mock_resp = MagicMock()
         mock_resp.status_code = 200
         mock_post.return_value = mock_resp
@@ -159,9 +159,9 @@ class TestStorageService:
             == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
 
-    @patch("services.s3_service.httpx.post")
+    @patch("services.storage_service.httpx.post")
     def test_upload_resume_api_error(self, mock_post):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         mock_resp = MagicMock()
         mock_resp.status_code = 500
         mock_resp.text = "Internal error"
@@ -173,9 +173,9 @@ class TestStorageService:
 
         assert svc.upload_resume(b"data", "resume.pdf") is None
 
-    @patch("services.s3_service.httpx.post", side_effect=Exception("Network error"))
+    @patch("services.storage_service.httpx.post", side_effect=Exception("Network error"))
     def test_upload_resume_network_error(self, mock_post):
-        from services.s3_service import StorageService
+        from services.storage_service import StorageService
         svc = StorageService.__new__(StorageService)
         svc.supabase_url = "https://example.supabase.co"
         svc.supabase_service_key = "test-key"

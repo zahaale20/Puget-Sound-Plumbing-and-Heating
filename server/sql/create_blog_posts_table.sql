@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS public."Blog Posts" (
     author TEXT NOT NULL DEFAULT 'Puget Sound Plumbing',
     views BIGINT NOT NULL DEFAULT 0 CHECK (views >= 0),
     content_json JSONB NOT NULL DEFAULT '{}'::jsonb,
-    featured_image_s3_key TEXT,
-    content_image_s3_keys JSONB NOT NULL DEFAULT '[]'::jsonb,
+    featured_image_key TEXT,
+    content_image_keys JSONB NOT NULL DEFAULT '[]'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { ServiceAreaDescriptions } from "../../data/data";
 
@@ -13,7 +13,7 @@ export default function ServiceAreas() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/city-of-seattle.png")}
+								src={getImageUrl("site/city-of-seattle.webp")}
 								alt="City of Seattle"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -42,7 +42,7 @@ export default function ServiceAreas() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/king-county.png")}
+								src={getImageUrl("site/king-county.webp")}
 								alt="King County"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -71,7 +71,7 @@ export default function ServiceAreas() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/pierce-county.png")}
+								src={getImageUrl("site/pierce-county.webp")}
 								alt="Pierce County"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -100,7 +100,7 @@ export default function ServiceAreas() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/snohomish-county.png")}
+								src={getImageUrl("site/snohomish-county.webp")}
 								alt="Snohomish County"
 								className="h-[90px] object-contain"
 								loading="lazy"

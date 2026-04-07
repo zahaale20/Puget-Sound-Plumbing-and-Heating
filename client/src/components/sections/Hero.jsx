@@ -3,7 +3,7 @@ import { ImageWithLoader } from "../ui/LoadingComponents";
 import { useLocation } from "react-router-dom";
 import { FaPhone, FaRegCalendarAlt } from "react-icons/fa";
 import { FaFacebookF, FaInstagram, FaYoutube, FaXTwitter } from "react-icons/fa6";
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { CompanyInfo, SocialLinks, HeroContent } from "../../data/data";
 
 export default function Hero() {
@@ -18,7 +18,7 @@ export default function Hero() {
 		>
 			{/* Hero image — real <ImageWithLoader> so fetchPriority="high" is respected */}
 			<ImageWithLoader
-				src={getCloudFrontUrl("private/home-page-hero2-1920.webp")}
+				src={getImageUrl("site/home-page-hero2-1920.webp")}
 				alt=""
 				aria-hidden="true"
 				width="1920"
@@ -26,8 +26,8 @@ export default function Hero() {
 				loading="eager"
 				decoding="async"
 				srcSet={[
-					`${getCloudFrontUrl("private/home-page-hero2-1280.webp")} 1280w`,
-					`${getCloudFrontUrl("private/home-page-hero2-1920.webp")} 1920w`,
+					`${getImageUrl("site/home-page-hero2-1280.webp")} 1280w`,
+					`${getImageUrl("site/home-page-hero2-1920.webp")} 1920w`,
 				].join(", ")}
 				sizes="100vw"
 				fetchPriority={shouldPrioritizeHeroImage ? "high" : "auto"}

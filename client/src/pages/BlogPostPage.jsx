@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { FaRegCalendarAlt, FaArrowLeft, FaArrowRight, FaUser } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlogPosts, incrementBlogPostViews } from "../services/blogService";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { BlogPostSkeleton, ImageWithLoader } from "../components/ui/LoadingComponents";
@@ -43,7 +43,7 @@ export default function BlogPostPage() {
 	const [postImageUrl, setPostImageUrl] = useState(null);
 
 	useEffect(() => {
-		if (post) setPostImageUrl(getCloudFrontUrl(post.featuredImageKey));
+		if (post) setPostImageUrl(getImageUrl(post.featuredImageKey));
 	}, [post]);
 
 	const postSlug = post?.slug;
@@ -125,7 +125,7 @@ export default function BlogPostPage() {
 
 	const postPath = `/blog/${post.slug}`;
 	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
-	const blogImage = postImageUrl || getCloudFrontUrl("public/pspah-logo-340.webp");
+	const blogImage = postImageUrl || getImageUrl("logo/pspah-logo-340.webp");
 	const blogJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
@@ -141,7 +141,7 @@ export default function BlogPostPage() {
 			name: "Puget Sound Plumbing and Heating",
 			logo: {
 				"@type": "ImageObject",
-				url: getCloudFrontUrl("public/pspah-logo-340.webp"),
+				url: getImageUrl("logo/pspah-logo-340.webp"),
 			},
 		},
 		image: [blogImage],
@@ -186,7 +186,7 @@ export default function BlogPostPage() {
 				jsonLd={[blogJsonLd, breadcrumbJsonLd]}
 			/>
 			<ImageWithLoader
-				src={getCloudFrontUrl("private/seattle-skyline.png")}
+				src={getImageUrl("site/seattle-skyline.webp")}
 				alt=""
 				aria-hidden="true"
 				fetchPriority="high"

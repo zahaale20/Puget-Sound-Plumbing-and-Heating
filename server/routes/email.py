@@ -13,7 +13,7 @@ from typing import Optional
 from urllib.parse import quote
 import resend
 from database import get_db_connection
-from services.s3_service import S3Service
+from services.storage_service import StorageService
 from services.rate_limiter import check_rate_limit
 from models.requests import EmailRequest, ScheduleRequest, NewsletterRequest, RedeemOfferRequest, DiyPermitRequest
 
@@ -22,7 +22,7 @@ resend.api_key = os.getenv("RESEND_API_KEY")
 logger = logging.getLogger(__name__)
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "alexthebestest@gmail.com").replace("\r", "").replace("\n", "").strip()
-s3_service = S3Service()
+storage_service = StorageService()
 HCAPTCHA_SECRET_KEY = os.getenv("HCAPTCHA_SECRET_KEY")
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
@@ -471,7 +471,7 @@ async def unsubscribe_newsletter(email: str, token: Optional[str] = None, req: R
 </head>
 <body>
 <div class="card">
-  <img src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png" alt="Puget Sound Plumbing and Heating"/>
+  <img src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png" alt="Puget Sound Plumbing and Heating"/>
   <div class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
   <h1>You've Been Unsubscribed</h1>
   <p>You will no longer receive newsletter emails from us. If this was a mistake, you can subscribe again on our website.</p>
@@ -719,14 +719,14 @@ async def submit_job_application(
 
         resume_bytes = None
         resume_filename = None
-        resume_s3_key = None
+        resume_storage_key = None
         if resume:
             resume_bytes = await resume.read()
             resume_filename = _validate_resume_upload(resume, resume_bytes)
-            # Upload resume to resumes/ prefix in the main S3 bucket
-            resume_s3_key = s3_service.upload_resume(resume_bytes, resume_filename)
-            if not resume_s3_key:
-                logger.warning(f"Failed to upload resume {resume_filename} to S3, will attach to email anyway")
+            # Upload resume to Supabase Storage resumes bucket
+            resume_storage_key = storage_service.upload_resume(resume_bytes, resume_filename)
+            if not resume_storage_key:
+                logger.warning(f"Failed to upload resume {resume_filename} to storage, will attach to email anyway")
 
         try:
             _send_job_application_email(
@@ -776,7 +776,7 @@ def _send_followup_email(email: str, firstName: str):
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -912,7 +912,7 @@ def _send_schedule_notification_email(email: str, firstName: str, lastName: str,
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1004,7 +1004,7 @@ def _send_newsletter_confirmation_email(email: str, unsubscribe_url: str):
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1132,7 +1132,7 @@ def _send_newsletter_unsubscribe_confirmation_email(email: str):
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1222,7 +1222,7 @@ def _send_newsletter_notification_email(email: str):
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1298,7 +1298,7 @@ def _send_newsletter_unsubscribe_notification_email(email: str):
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1385,7 +1385,7 @@ def _send_coupon_confirmation_email(
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1534,7 +1534,7 @@ def _send_coupon_redemption_notification_email(
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1658,7 +1658,7 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1785,7 +1785,7 @@ def _send_diy_permit_email(email: str, firstName: str, lastName: str, phone: str
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -1906,7 +1906,7 @@ def _send_job_application_email(
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"
@@ -2031,7 +2031,7 @@ def _send_job_application_email(
                         <tr>
                             <td style="padding:40px 40px 32px;text-align:center;">
                             <img
-                                src="https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo.png"
+                                src="https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png"
                                 alt="Puget Sound Plumbing and Heating"
                                 width="300"
                                 style="display:block;margin:0 auto;"

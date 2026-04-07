@@ -17,7 +17,7 @@ export default function RouteSeo() {
 			name: "Puget Sound Plumbing and Heating",
 			url: SITE_URL,
 			telephone: CompanyInfo.phoneTel.replace("tel:", ""),
-			image: "https://d1fyhmg0o2pfye.cloudfront.net/public/pspah-logo-340.webp",
+			image: "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo-340.webp",
 			address: {
 				"@type": "PostalAddress",
 				streetAddress: CompanyInfo.address,

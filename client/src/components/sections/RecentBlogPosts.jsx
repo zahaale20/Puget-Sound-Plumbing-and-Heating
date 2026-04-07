@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaUser } from "react-icons/fa";
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { SectionTitle } from "../ui/UnderlinedHeading";
 import { fetchBlogPosts } from "../../services/blogService";
@@ -73,7 +73,7 @@ export default function RecentBlogPosts() {
 						<div key={post.id} className="flex flex-col text-left bg-white border-1 border-[#DEDEDE]">
 							{/* Image */}
 							<ImageWithLoader
-								src={getCloudFrontUrl(post.featuredImageKey)}
+								src={getImageUrl(post.featuredImageKey)}
 								alt={post.title}
 								className="w-full h-48 object-cover"
 								loading="lazy"

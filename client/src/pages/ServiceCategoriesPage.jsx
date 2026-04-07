@@ -1,7 +1,7 @@
 import ServiceCategories from "../components/sections/ServiceCategories";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { PageTitle } from "../components/ui/UnderlinedHeading";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 
 export default function ServiceCategoriesPage() {
 	return (
@@ -9,7 +9,7 @@ export default function ServiceCategoriesPage() {
 			{/* Header Section */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -34,7 +34,7 @@ export default function ServiceCategoriesPage() {
 			{/* Main Content Section */}
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

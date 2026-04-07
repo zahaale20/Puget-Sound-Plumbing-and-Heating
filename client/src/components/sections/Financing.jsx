@@ -1,4 +1,4 @@
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CompanyInfo, FinancingContent } from "../../data/data";
@@ -44,7 +44,7 @@ export default function Financing() {
 
 			<div className="hidden lg:block">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/easy-financing-available.png")}
+					src={getImageUrl("site/easy-financing-available.webp")}
 					alt="Easy Financing Available"
 					className="mt-4 w-110 h-auto object-cover"
 					loading="lazy"

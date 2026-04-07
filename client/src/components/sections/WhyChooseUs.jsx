@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { SectionTitle } from "../ui/UnderlinedHeading";
 import { WhyChooseUsContent } from "../../data/data";
@@ -11,7 +11,7 @@ export default function WhyChooseUs() {
 			{/* Image */}
 			<div className="order-2 lg:order-none block self-center lg:self-end shrink-0">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/plumbing-bros.png")}
+					src={getImageUrl("site/plumbing-bros.webp")}
 					alt="Plumber Bros"
 					className="w-auto h-84 object-cover"
 					loading="lazy"

@@ -9,7 +9,7 @@ import LimitedTimeOffers from "../components/forms/LimitedTimeOffers";
 import RecentBlogPosts from "../components/sections/RecentBlogPosts";
 import FAQs from "../components/sections/FAQs";
 import CallNow from "../components/sections/CallNow";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 
 export default function Home() {
 	return (
@@ -19,7 +19,7 @@ export default function Home() {
 
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -35,7 +35,7 @@ export default function Home() {
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -53,7 +53,7 @@ export default function Home() {
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -68,7 +68,7 @@ export default function Home() {
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<img
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

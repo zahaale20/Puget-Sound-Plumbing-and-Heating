@@ -14,10 +14,11 @@ _pool = None
 def _get_pool():
     global _pool
     if _pool is None:
+        project_id = os.getenv("SUPABASE_PROJECT_ID")
         _pool = psycopg2.pool.SimpleConnectionPool(
             minconn=1,
             maxconn=5,
-            user=os.getenv("SUPABASE_USER"),
+            user=f"postgres.{project_id}" if project_id else None,
             password=os.getenv("SUPABASE_PASSWORD"),
             host=os.getenv("SUPABASE_HOST"),
             port=os.getenv("SUPABASE_PORT"),

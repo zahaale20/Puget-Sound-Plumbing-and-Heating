@@ -1,13 +1,13 @@
 import CustomerReviews from "../components/sections/CustomerReviews";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 
 export default function CustomerReviewsPage() {
 	return (
 		<section className="relative overflow-hidden flex justify-center w-full py-16 mt-[101px] md:mt-[106px] lg:mt-[166px]">
 			<h1 className="sr-only">Customer Reviews</h1>
 			<ImageWithLoader
-				src={getCloudFrontUrl("private/seattle-skyline.png")}
+				src={getImageUrl("site/seattle-skyline.webp")}
 				alt=""
 				aria-hidden="true"
 				fetchPriority="high"

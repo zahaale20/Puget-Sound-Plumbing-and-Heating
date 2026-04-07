@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt, FaArrowRight, FaSearch, FaChevronDown, FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { fetchBlogPosts } from "../services/blogService";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { PageTitle } from "../components/ui/UnderlinedHeading";
 
@@ -159,7 +159,7 @@ export default function BlogPage() {
 	const PostCard = ({ post }) => (
 		<div className="bg-white shadow-lg flex flex-col overflow-hidden min-h-[450px]">
 			<ImageWithLoader
-				src={getCloudFrontUrl(post.featuredImageKey)}
+				src={getImageUrl(post.featuredImageKey)}
 				alt={post.title}
 				className="w-full h-48 object-cover"
 				loading="lazy"
@@ -201,7 +201,7 @@ export default function BlogPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -320,7 +320,7 @@ export default function BlogPage() {
 			{!isLoading && (
 			<section className="relative overflow-hidden w-full pb-16 space-y-6">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

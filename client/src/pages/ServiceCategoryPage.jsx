@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import ScheduleOnline from "../components/forms/ScheduleOnline";
 
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import { ImageWithLoader, LazyBackgroundImage } from "../components/ui/LoadingComponents";
 import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import Seo from "../components/seo/Seo";
@@ -49,7 +49,7 @@ export default function ServiceCategoryPage() {
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -79,7 +79,7 @@ export default function ServiceCategoryPage() {
 					sectionClass += " relative overflow-hidden";
 					sectionBackground = (
 						<LazyBackgroundImage
-							src={getCloudFrontUrl("private/seattle-skyline.png")}
+							src={getImageUrl("site/seattle-skyline.webp")}
 							aria-hidden="true"
 							className="absolute inset-0 z-0 bg-bottom"
 						/>
@@ -96,7 +96,7 @@ export default function ServiceCategoryPage() {
 								className={`order-2 flex justify-center shrink-0 ${index % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}
 							>
 								<ImageWithLoader
-									src={getCloudFrontUrl("private/" + service.image)}
+									src={getImageUrl("site/" + service.image)}
 									alt={service.name}
 									className="w-[600px] h-72 object-cover"
 									loading="lazy"
@@ -125,7 +125,7 @@ export default function ServiceCategoryPage() {
 
 			<section className="relative overflow-hidden flex justify-center w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

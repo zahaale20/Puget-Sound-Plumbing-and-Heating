@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { getHCaptchaToken } from "../../services/hcaptchaService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { subscribeNewsletter } from "../../services/emailService";
@@ -38,7 +38,7 @@ export default function Footer() {
 						className="hidden md:flex md:flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<ImageWithLoader
-							src={getCloudFrontUrl("public/pspah-logo-340.webp")}
+							src={getImageUrl("logo/pspah-logo-340.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
 							width={340}
@@ -50,7 +50,7 @@ export default function Footer() {
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
 						<ImageWithLoader
-							src={getCloudFrontUrl("private/google-reviews-190.webp")}
+							src={getImageUrl("site/google-reviews-190.webp")}
 							alt="Google Reviews"
 							className="h-[55px] object-contain"
 							loading="lazy"
@@ -58,7 +58,7 @@ export default function Footer() {
 							height={55}
 						/>
 						<ImageWithLoader
-							src={getCloudFrontUrl("private/bbb-accredited-business-295.webp")}
+							src={getImageUrl("site/bbb-accredited-business-295.webp")}
 							alt="BBB Accredited Business"
 							className="h-[55px] object-contain"
 							loading="lazy"
@@ -66,7 +66,7 @@ export default function Footer() {
 							height={55}
 						/>
 						<ImageWithLoader
-							src={getCloudFrontUrl("private/year-20-anniversary.png")}
+							src={getImageUrl("site/year-20-anniversary.webp")}
 							alt="20 Year Anniversary"
 							className="hidden sm:block h-[55px] object-contain"
 							loading="lazy"
@@ -80,7 +80,7 @@ export default function Footer() {
 			{/* Main Footer */}
 			<section className="relative overflow-hidden flex flex-col items-center w-full py-16 bg-[#0C2D70]">
 				<img
-					src={getCloudFrontUrl("private/pattern1.png")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					loading="eager"

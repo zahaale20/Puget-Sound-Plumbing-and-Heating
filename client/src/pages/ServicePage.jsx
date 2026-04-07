@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 
 import ScheduleOnline from "../components/forms/ScheduleOnline";
-import { getCloudFrontUrl } from "../services/imageService";
+import { getImageUrl } from "../services/imageService";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
 import { PageTitle, SectionTitle } from "../components/ui/UnderlinedHeading";
 import Seo from "../components/seo/Seo";
@@ -23,10 +23,10 @@ export default function ServicePage() {
 
 	const serviceName = service.name;
 	const serviceDescription = service?.description || "";
-	const serviceImageKey = service?.image ? `private/${service.image}` : null;
+	const serviceImageKey = service?.image ? `site/${service.image}` : null;
  	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
  	const servicePath = service.href;
- 	const serviceImageUrl = serviceImageKey ? getCloudFrontUrl(serviceImageKey) : undefined;
+ 	const serviceImageUrl = serviceImageKey ? getImageUrl(serviceImageKey) : undefined;
  	const serviceJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "Service",
@@ -69,7 +69,7 @@ export default function ServicePage() {
 			{/* 1. Header (Pattern Background) */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1-1920.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -119,7 +119,7 @@ export default function ServicePage() {
 					<div className="relative h-[380px] w-full lg:w-[calc(50%+40px)] overflow-hidden">
 						{serviceImageKey && (
 							<ImageWithLoader
-								src={getCloudFrontUrl(serviceImageKey)}
+								src={getImageUrl(serviceImageKey)}
 								alt={serviceName}
 								className="w-full h-full object-cover"
 								loading="lazy"
@@ -132,7 +132,7 @@ export default function ServicePage() {
 			{/* 3. What to Expect (Skyline Background) */}
 			<section className="relative overflow-hidden w-full py-16">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"
@@ -274,7 +274,7 @@ export default function ServicePage() {
 			{/* 6. Schedule Online (Skyline Background) */}
 			<section className="relative overflow-hidden flex justify-center w-full py-24">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/seattle-skyline.png")}
+					src={getImageUrl("site/seattle-skyline.webp")}
 					alt=""
 					aria-hidden="true"
 					loading="lazy"

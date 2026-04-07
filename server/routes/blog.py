@@ -25,7 +25,7 @@ def _row_to_post(row: tuple) -> dict:
     """Map a DB row to the blog post shape the client expects."""
     (
         id_, title, slug, source_url, published_date, author,
-        views, content_json, featured_image_s3_key, content_image_s3_keys,
+        views, content_json, featured_image_key, content_image_keys,
     ) = row
     content = content_json or {}
     return {
@@ -39,8 +39,8 @@ def _row_to_post(row: tuple) -> dict:
         "description": content.get("description") or "",
         "keywords": content.get("categories") if isinstance(content.get("categories"), list) else [],
         "sections": content.get("sections") if isinstance(content.get("sections"), list) else [],
-        "featuredImageKey": featured_image_s3_key or "",
-        "contentImageKeys": content_image_s3_keys if isinstance(content_image_s3_keys, list) else [],
+        "featuredImageKey": featured_image_key or "",
+        "contentImageKeys": content_image_keys if isinstance(content_image_keys, list) else [],
         "sourceUrl": source_url or "",
     }
 
@@ -54,7 +54,7 @@ async def list_blog_posts():
                 cur.execute(
                     """
                     SELECT id, title, slug, source_url, published_date, author,
-                           views, content_json, featured_image_s3_key, content_image_s3_keys
+                           views, content_json, featured_image_key, content_image_keys
                     FROM public."Blog Posts"
                     ORDER BY published_date DESC NULLS LAST
                     """
@@ -79,7 +79,7 @@ async def get_blog_post(slug: str):
                 cur.execute(
                     """
                     SELECT id, title, slug, source_url, published_date, author,
-                           views, content_json, featured_image_s3_key, content_image_s3_keys
+                           views, content_json, featured_image_key, content_image_keys
                     FROM public."Blog Posts"
                     WHERE slug = %s
                     """,

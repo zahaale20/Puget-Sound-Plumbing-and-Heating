@@ -13,7 +13,7 @@ class TestDatabaseCoverage:
 
         connection = MagicMock()
 
-        monkeypatch.setenv("SUPABASE_USER", "user")
+        monkeypatch.setenv("SUPABASE_PROJECT_ID", "testproject")
         monkeypatch.setenv("SUPABASE_PASSWORD", "pass")
         monkeypatch.setenv("SUPABASE_HOST", "host")
         monkeypatch.setenv("SUPABASE_PORT", "5432")
@@ -140,10 +140,10 @@ class TestImagesCoverage:
         import routes.images as images
         from fastapi import HTTPException
 
-        monkeypatch.setattr(images.s3_service, "supabase_url", None)
+        monkeypatch.setattr(images.storage_service, "supabase_url", None)
 
         with pytest.raises(HTTPException) as exc_info:
-            asyncio.run(images.get_image_url("public/hero.jpg", req=None))
+            asyncio.run(images.get_image_url("logo/hero.webp", req=None))
 
         assert exc_info.value.status_code == 404
 
@@ -151,8 +151,8 @@ class TestImagesCoverage:
         import routes.images as images
         from fastapi import HTTPException
 
-        monkeypatch.setattr(images.s3_service, "supabase_url", "https://example.supabase.co")
-        monkeypatch.setattr(images.s3_service, "get_image_url", lambda image_name: None)
+        monkeypatch.setattr(images.storage_service, "supabase_url", "https://example.supabase.co")
+        monkeypatch.setattr(images.storage_service, "get_image_url", lambda image_name: None)
 
         with pytest.raises(HTTPException) as exc_info:
             asyncio.run(images.get_image_url("invalid/path.jpg", req=None))
@@ -162,13 +162,13 @@ class TestImagesCoverage:
     def test_get_image_url_success(self, monkeypatch):
         import routes.images as images
 
-        monkeypatch.setattr(images.s3_service, "supabase_url", "https://example.supabase.co")
+        monkeypatch.setattr(images.storage_service, "supabase_url", "https://example.supabase.co")
         monkeypatch.setattr(
-            images.s3_service,
+            images.storage_service,
             "get_image_url",
             lambda image_name: f"https://example.supabase.co/storage/v1/object/public/assets/logo/{image_name}",
         )
 
-        response = asyncio.run(images.get_image_url("public/hero.jpg", req=None))
+        response = asyncio.run(images.get_image_url("logo/hero.webp", req=None))
 
-        assert response == {"url": "https://example.supabase.co/storage/v1/object/public/assets/logo/public/hero.jpg"}
+        assert response == {"url": "https://example.supabase.co/storage/v1/object/public/assets/logo/logo/hero.webp"}

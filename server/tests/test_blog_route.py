@@ -19,8 +19,8 @@ def _sample_row():
         "PSPAH",                    # author
         12,                         # views
         {"description": "Tips", "categories": ["Plumbing"], "sections": ["A"]},  # content_json
-        "blog-posts-images/1.jpg",  # featured_image_s3_key
-        ["blog-posts-images/2.jpg"],  # content_image_s3_keys
+        "blog/winterization-1.webp",  # featured_image_key
+        ["blog/winterization-2.webp"],  # content_image_keys
     )
 
 

@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 
 import { ServiceLinks, ServiceCategoryDescriptions } from "../../data/data";
@@ -14,7 +14,7 @@ export default function ServiceCategories() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/plumbing-repair-color.png")}
+								src={getImageUrl("site/plumbing-repair-color.webp")}
 								alt="Plumbing Services"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -43,7 +43,7 @@ export default function ServiceCategories() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/drain-and-sewer-color.png")}
+								src={getImageUrl("site/drain-and-sewer-color.webp")}
 								alt="Drain and Sewer Services"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -72,7 +72,7 @@ export default function ServiceCategories() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/water-heaters-color.png")}
+								src={getImageUrl("site/water-heaters-color.webp")}
 								alt="Water Heater Services"
 								className="h-[90px] object-contain"
 								loading="lazy"
@@ -101,7 +101,7 @@ export default function ServiceCategories() {
 					<div className="flex flex-col sm:flex-row sm:items-start gap-12">
 						<div className="hidden sm:block flex-shrink-0">
 							<ImageWithLoader
-								src={getCloudFrontUrl("private/heating-and-cooling-color.png")}
+								src={getImageUrl("site/heating-and-cooling-color.webp")}
 								alt="Heating and Cooling Services"
 								className="h-[90px] object-contain"
 								loading="lazy"

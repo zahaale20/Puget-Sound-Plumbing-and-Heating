@@ -1,5 +1,5 @@
 import { FaPhone } from "react-icons/fa";
-import { getCloudFrontUrl } from "../../services/imageService";
+import { getImageUrl } from "../../services/imageService";
 import { ImageWithLoader } from "../ui/LoadingComponents";
 import { SectionTitle } from "../ui/UnderlinedHeading";
 import { CompanyInfo, CallNowContent } from "../../data/data";
@@ -10,7 +10,7 @@ export default function CallNow() {
 			{/* Image */}
 			<div className="order-2 lg:order-none block self-center lg:self-end shrink-0">
 				<ImageWithLoader
-					src={getCloudFrontUrl("private/woman-calling.png")}
+					src={getImageUrl("site/woman-calling.webp")}
 					alt="Woman Calling Plumbers"
 					className="w-auto h-80 object-cover rounded-lg"
 					loading="lazy"

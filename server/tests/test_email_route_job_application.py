@@ -217,7 +217,7 @@ class TestJobApplicationEndpoint:
         monkeypatch.setattr(mod, "check_rate_limit", lambda ip, endpoint: (True, None))
         monkeypatch.setattr(mod, "_verify_captcha", lambda token: True)
         monkeypatch.setattr(mod, "get_db_connection", lambda: _InsertConnection())
-        monkeypatch.setattr(mod.s3_service, "upload_resume", lambda data, filename: None)
+        monkeypatch.setattr(mod.storage_service, "upload_resume", lambda data, filename: None)
         send_job_email = MagicMock()
         monkeypatch.setattr(mod, "_send_job_application_email", send_job_email)
 
