@@ -255,6 +255,8 @@ def _send_notification(
     *, subject: str, title: str, rows: list[tuple[str, str]], label: str, extra: str = ""
 ):
     """Helper for company notification emails (title + data table)."""
+    if not COMPANY_EMAIL:
+        raise RuntimeError("COMPANY_EMAIL environment variable is not set")
     content = (
         '<tr><td style="padding:36px 40px 28px;">'
         f'<h2 style="margin:0 0 20px;font-size:18px;font-weight:700;color:#0C2D70;">'

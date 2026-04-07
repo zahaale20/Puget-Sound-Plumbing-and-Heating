@@ -6,33 +6,10 @@ from services.captcha_service import verify_captcha
 from services.email_service import send_followup, send_schedule_notification
 from database import get_db_connection
 from utils import normalize_email, normalize_text, is_duplicate_error, duplicate_response, raise_internal_error
-from models.requests import EmailRequest, ScheduleRequest
+from models.requests import ScheduleRequest
 
 router = APIRouter(prefix="/api", tags=["schedule"])
 logger = logging.getLogger(__name__)
-
-
-@router.post("/send-email")
-async def send_email(request: EmailRequest, req: Request):
-    """Send a professional follow-up email to schedule online requests"""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "send-email")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
-
-    if not verify_captcha(request.captchaToken):
-        raise HTTPException(
-            status_code=403,
-            detail="Security verification failed. Please try again.",
-        )
-
-    try:
-        email = normalize_email(request.email)
-        first_name = normalize_text(request.firstName)
-        send_followup(email, first_name)
-        return {"success": True, "emailStatus": "sent", "message": "Email sent successfully"}
-    except Exception as e:
-        raise_internal_error("send_email failed", e)
 
 
 @router.post("/schedule")

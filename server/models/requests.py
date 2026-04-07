@@ -6,12 +6,6 @@ class RequestModel(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
 
-class EmailRequest(RequestModel):
-    email: str = Field(min_length=5, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-    firstName: str = Field(min_length=1, max_length=80)
-    captchaToken: Optional[str] = Field(default=None, min_length=1, max_length=4096)
-
-
 class ScheduleRequest(RequestModel):
     firstName: str = Field(min_length=1, max_length=80)
     lastName: str = Field(min_length=1, max_length=80)

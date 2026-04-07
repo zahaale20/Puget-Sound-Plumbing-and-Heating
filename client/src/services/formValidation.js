@@ -18,7 +18,7 @@ export function formatPhone(value) {
 /**
  * Strip formatting from phone to get raw digits.
  */
-export function stripPhone(value) {
+function stripPhone(value) {
 	return value.replace(/\D/g, "");
 }
 
@@ -50,11 +50,6 @@ export function validatePhone(value) {
 
 export function validateRequired(value, label = "This field") {
 	if (!value.trim()) return `${label} is required.`;
-	return "";
-}
-
-export function validateMinLength(value, min, label = "This field") {
-	if (value.trim().length < min) return `${label} must be at least ${min} characters.`;
 	return "";
 }
 

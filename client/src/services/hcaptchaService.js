@@ -115,29 +115,4 @@ export const getHCaptchaToken = async () => {
 	}
 };
 
-/**
- * Verify token on backend
- * @param {string} token - The hCaptcha token
- * @returns {Promise<object>} Verification result
- */
-export const verifyCaptchaToken = async (token) => {
-	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_API_BASE_URL}/api/verify-captcha`,
-			{
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ token }),
-			}
-		);
 
-		if (!response.ok) {
-			throw new Error("Captcha verification failed");
-		}
-
-		return await response.json();
-	} catch (error) {
-		console.error("Captcha verification error:", error);
-		return { success: false };
-	}
-};

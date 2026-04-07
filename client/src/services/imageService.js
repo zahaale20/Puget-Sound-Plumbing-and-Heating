@@ -14,22 +14,3 @@ export function getImageUrl(imageKey) {
 	const cleanKey = imageKey.startsWith("/") ? imageKey.slice(1) : imageKey;
 	return `${BASE_URL}/${cleanKey}`;
 }
-
-// Generate responsive image sources for different sizes
-export const getResponsiveImageUrls = (imageKey, sizes = [400, 800, 1200]) => {
-	if (!imageKey) return [];
-	const url = getImageUrl(imageKey);
-	return sizes.map((size) => ({ src: url, width: size }));
-};
-
-// Generate WebP and fallback URLs
-export const getOptimizedImageUrls = (imageKey) => {
-	if (!imageKey) return { webp: "", fallback: "" };
-	const url = getImageUrl(imageKey);
-	return { webp: url, fallback: url };
-};
-
-// Keep this alias for compatibility
-export const getSignedUrl = async (imageKey) => {
-	return getImageUrl(imageKey);
-};
