@@ -3,7 +3,7 @@ const CACHE_NAME = "pspah-v5";
 const SUPABASE_STORAGE_URL = "https://hyxqrhttputdkefadnrf.supabase.co";
 const STATIC_CACHE_URLS = [
 	"/",
-	`${SUPABASE_STORAGE_URL}/storage/v1/object/public/assets/logo/pspah-logo-340.webp`,
+	`${SUPABASE_STORAGE_URL}/storage/v1/object/public/assets/logo/pspah-logo-680.webp`,
 ];
 
 // URLs/origins that must never be cached (API calls, dynamic data)

@@ -76,7 +76,7 @@ export default function Header() {
 						className="flex-none h-[50px] md:h-[60px] lg:h-[65px] cursor-pointer"
 					>
 						<ImageWithLoader
-							src={getImageUrl("logo/pspah-logo-340.webp")}
+							src={getImageUrl("logo/pspah-logo-680.webp")}
 							alt="Puget Sound Plumbing and Heating Logo"
 							className="h-full w-auto object-contain"
 							width="340"
