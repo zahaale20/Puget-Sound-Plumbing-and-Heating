@@ -28,8 +28,6 @@ logger = logging.getLogger(__name__)
 
 NEWSLETTER_UNSUBSCRIBE_SECRET = (
     os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
-    or os.getenv("RESEND_API_KEY")
-    or os.getenv("SUPABASE_PASSWORD")
     or secrets.token_urlsafe(32)
 )
 

@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 resend.api_key = os.getenv("RESEND_API_KEY")
 EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
-COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "alexthebestest@gmail.com").replace("\r", "").replace("\n", "").strip()
+COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "").replace("\r", "").replace("\n", "").strip()
+if not COMPANY_EMAIL:
+    logger.warning("COMPANY_EMAIL is not set — company notification emails will fail")
 _SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID", "hyxqrhttputdkefadnrf")
 LOGO_URL = (
     f"https://{_SUPABASE_PROJECT_ID}.supabase.co"
