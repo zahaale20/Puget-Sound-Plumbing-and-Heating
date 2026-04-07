@@ -125,7 +125,7 @@ export default function BlogPostPage() {
 
 	const postPath = `/blog/${post.slug}`;
 	const siteUrl = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
-	const blogImage = postImageUrl || getImageUrl("logo/pspah-logo-680.webp");
+	const blogImage = postImageUrl || getImageUrl("logo/pspah-logo.webp");
 	const blogJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
@@ -141,7 +141,7 @@ export default function BlogPostPage() {
 			name: "Puget Sound Plumbing and Heating",
 			logo: {
 				"@type": "ImageObject",
-				url: getImageUrl("logo/pspah-logo-680.webp"),
+				url: getImageUrl("logo/pspah-logo.webp"),
 			},
 		},
 		image: [blogImage],
