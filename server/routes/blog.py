@@ -12,6 +12,47 @@ logger = logging.getLogger(__name__)
 BLOG_CACHE_MAX_AGE = int(os.getenv("BLOG_CACHE_MAX_AGE", "300"))
 
 
+@router.get("/debug")
+async def debug_blog():
+    """Temporary diagnostic endpoint – remove after debugging."""
+    import traceback
+    diagnostics = {}
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                # 1. Check if table exists
+                cur.execute(
+                    """SELECT table_name FROM information_schema.tables
+                       WHERE table_schema = 'public' AND table_name ILIKE '%blog%'"""
+                )
+                diagnostics["tables_matching_blog"] = [r[0] for r in cur.fetchall()]
+
+                # 2. Get column names from the table
+                cur.execute(
+                    """SELECT column_name, data_type FROM information_schema.columns
+                       WHERE table_schema = 'public' AND table_name = 'Blog Posts'
+                       ORDER BY ordinal_position"""
+                )
+                diagnostics["columns"] = [
+                    {"name": r[0], "type": r[1]} for r in cur.fetchall()
+                ]
+
+                # 3. Try the actual query
+                cur.execute(
+                    """SELECT id, title, slug, source_url, published_date, author,
+                              views, content_json, featured_image_key, content_image_keys
+                       FROM public."Blog Posts" LIMIT 1"""
+                )
+                diagnostics["query_ok"] = True
+                diagnostics["sample_row_columns"] = (
+                    [desc[0] for desc in cur.description] if cur.description else []
+                )
+    except Exception as e:
+        diagnostics["error"] = str(e)
+        diagnostics["traceback"] = traceback.format_exc()
+    return diagnostics
+
+
 def _row_to_post(row: tuple) -> dict:
     """Map a DB row to the blog post shape the client expects."""
     (
