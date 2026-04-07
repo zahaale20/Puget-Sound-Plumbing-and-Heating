@@ -240,20 +240,6 @@ export default function BlogPostPage() {
 					</div>
 				</article>
 
-				{relatedServices.length > 0 ? (
-					<section className="mt-10 bg-[#F5F5F5] p-6">
-						<h5 className="text-[#0C2D70] mb-3">Related Services</h5>
-						<ul className="list-disc pl-6 space-y-2 text-[#2B2B2B]">
-							{relatedServices.map((service) => (
-								<li key={service.href}>
-									<a href={service.href} className="text-[#0C2D70] hover:underline">
-										{service.name}
-									</a>
-								</li>
-							))}
-						</ul>
-					</section>
-				) : null}
 
 				{/* Navigation Between Posts */}
 				<div className="flex justify-between items-center mt-10">
