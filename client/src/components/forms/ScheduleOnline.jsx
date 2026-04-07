@@ -211,7 +211,7 @@ export default function ScheduleOnline() {
 								<button
 									type="submit"
 									disabled={loading}
-									className="flex items-center justify-center w-full sm:w-[200px] h-[50px] gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
+									className="flex items-center justify-center w-full sm:w-auto h-[50px] px-8 gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
 								>
 									<LoadingButtonContent
 										isLoading={loading}
