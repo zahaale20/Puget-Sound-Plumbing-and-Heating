@@ -69,7 +69,7 @@ export default function ServicePage() {
 			{/* 1. Header (Pattern Background) */}
 			<section className="relative overflow-hidden bg-[#0C2D70] relative flex w-full py-16">
 				<ImageWithLoader
-					src={getImageUrl("site/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

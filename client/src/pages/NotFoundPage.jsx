@@ -17,7 +17,7 @@ export default function NotFoundPage() {
 			/>
 			<section className="relative overflow-hidden bg-[#0C2D70] flex justify-center w-full py-24">
 				<ImageWithLoader
-					src={getImageUrl("site/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					loading="lazy"

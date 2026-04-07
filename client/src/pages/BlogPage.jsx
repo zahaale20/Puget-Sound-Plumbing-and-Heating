@@ -201,7 +201,7 @@ export default function BlogPage() {
 		<div className="mt-[101px] md:mt-[106px] lg:mt-[167px]">
 			<section className="relative overflow-hidden bg-[#0C2D70] flex w-full py-16">
 				<ImageWithLoader
-					src={getImageUrl("site/pattern1-1920.webp")}
+					src={getImageUrl("site/pattern1.webp")}
 					alt=""
 					aria-hidden="true"
 					fetchPriority="high"

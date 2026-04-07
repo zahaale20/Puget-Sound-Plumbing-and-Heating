@@ -29,7 +29,7 @@ export default function Footer() {
 	const [newsletterError, setNewsletterError] = useState(null);
 
 	useEffect(() => {
-		setPatternUrl(getImageUrl("site/pattern1-1920.webp"));
+		setPatternUrl(getImageUrl("site/pattern1.webp"));
 	}, []);
 
 	return (
