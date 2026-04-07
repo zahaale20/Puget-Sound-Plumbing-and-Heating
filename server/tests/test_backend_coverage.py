@@ -136,11 +136,11 @@ class TestImagesCoverage:
 
         assert exc_info.value.status_code == 429
 
-    def test_get_image_url_missing_cloudfront(self, monkeypatch):
+    def test_get_image_url_missing_supabase_url(self, monkeypatch):
         import routes.images as images
         from fastapi import HTTPException
 
-        monkeypatch.setattr(images.s3_service, "cloudfront_url", None)
+        monkeypatch.setattr(images.s3_service, "supabase_url", None)
 
         with pytest.raises(HTTPException) as exc_info:
             asyncio.run(images.get_image_url("public/hero.jpg", req=None))
@@ -151,7 +151,7 @@ class TestImagesCoverage:
         import routes.images as images
         from fastapi import HTTPException
 
-        monkeypatch.setattr(images.s3_service, "cloudfront_url", "https://cdn.example.com")
+        monkeypatch.setattr(images.s3_service, "supabase_url", "https://example.supabase.co")
         monkeypatch.setattr(images.s3_service, "get_image_url", lambda image_name: None)
 
         with pytest.raises(HTTPException) as exc_info:
@@ -162,13 +162,13 @@ class TestImagesCoverage:
     def test_get_image_url_success(self, monkeypatch):
         import routes.images as images
 
-        monkeypatch.setattr(images.s3_service, "cloudfront_url", "https://cdn.example.com")
+        monkeypatch.setattr(images.s3_service, "supabase_url", "https://example.supabase.co")
         monkeypatch.setattr(
             images.s3_service,
             "get_image_url",
-            lambda image_name: f"https://cdn.example.com/{image_name}",
+            lambda image_name: f"https://example.supabase.co/storage/v1/object/public/assets/logo/{image_name}",
         )
 
         response = asyncio.run(images.get_image_url("public/hero.jpg", req=None))
 
-        assert response == {"url": "https://cdn.example.com/public/hero.jpg"}
+        assert response == {"url": "https://example.supabase.co/storage/v1/object/public/assets/logo/public/hero.jpg"}

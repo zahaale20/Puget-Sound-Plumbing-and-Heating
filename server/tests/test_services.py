@@ -64,70 +64,122 @@ class TestRateLimiter:
 
 
 # ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║  S3Service                                                              ║
+# ║  StorageService (Supabase Storage)                                      ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
-class TestS3Service:
+class TestStorageService:
     def test_get_image_url(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.cloudfront_url = "https://cdn.example.com"
-        svc.allowed_image_prefixes = ("public/", "private/", "blog-posts-images/")
-        assert svc.get_image_url("public/hero.jpg") == "https://cdn.example.com/public/hero.jpg"
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        url = svc.get_image_url("public/hero.jpg")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.jpg"
 
     def test_get_image_url_strips_leading_slash(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.cloudfront_url = "https://cdn.example.com"
-        svc.allowed_image_prefixes = ("public/", "private/", "blog-posts-images/")
-        assert svc.get_image_url("/public/hero.jpg") == "https://cdn.example.com/public/hero.jpg"
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        url = svc.get_image_url("/public/hero.jpg")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/logo/hero.jpg"
 
-    def test_get_image_url_none_when_no_cloudfront(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.cloudfront_url = None
-        assert svc.get_image_url("hero.jpg") is None
+    def test_get_image_url_private_prefix(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        url = svc.get_image_url("private/banner.webp")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/site/banner.webp"
 
-    def test_upload_resume_no_client(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.s3_client = None
+    def test_get_image_url_blog_key(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        url = svc.get_image_url("blog/my-post.jpg")
+        assert url == "https://example.supabase.co/storage/v1/object/public/assets/blog/my-post.jpg"
+
+    def test_get_image_url_none_when_no_supabase_url(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = None
+        assert svc.get_image_url("public/hero.jpg") is None
+
+    def test_get_image_url_rejects_disallowed_prefix(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        assert svc.get_image_url("resumes/secret.pdf") is None
+
+    def test_get_image_url_rejects_path_traversal(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        assert svc.get_image_url("public/../etc/passwd") is None
+
+    def test_upload_resume_no_credentials(self):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = None
+        svc.supabase_service_key = None
         assert svc.upload_resume(b"data", "resume.pdf") is None
 
-    def test_upload_resume_success(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.s3_client = MagicMock()
-        svc.bucket = "bucket"
+    @patch("services.s3_service.httpx.post")
+    def test_upload_resume_success(self, mock_post):
+        from services.s3_service import StorageService
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_post.return_value = mock_resp
+
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        svc.supabase_service_key = "test-key"
+
         result = svc.upload_resume(b"pdf-data", "resume.pdf")
         assert result.startswith("resumes/")
         assert result.endswith("-resume.pdf")
-        svc.s3_client.put_object.assert_called_once()
-        call_kwargs = svc.s3_client.put_object.call_args[1]
-        assert call_kwargs["ContentType"] == "application/pdf"
-        assert call_kwargs["Bucket"] == "bucket"
-        assert call_kwargs["Key"] == result
+        mock_post.assert_called_once()
+        call_kwargs = mock_post.call_args
+        assert call_kwargs[1]["headers"]["Content-Type"] == "application/pdf"
 
-    def test_upload_resume_non_pdf(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.s3_client = MagicMock()
-        svc.bucket = "bucket"
+    @patch("services.s3_service.httpx.post")
+    def test_upload_resume_non_pdf(self, mock_post):
+        from services.s3_service import StorageService
+        mock_resp = MagicMock()
+        mock_resp.status_code = 200
+        mock_post.return_value = mock_resp
+
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        svc.supabase_service_key = "test-key"
+
         result = svc.upload_resume(b"doc-data", "resume.docx")
         assert result.startswith("resumes/")
         assert result.endswith("-resume.docx")
-        call_kwargs = svc.s3_client.put_object.call_args[1]
+        call_kwargs = mock_post.call_args
         assert (
-            call_kwargs["ContentType"]
+            call_kwargs[1]["headers"]["Content-Type"]
             == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
 
-    def test_upload_resume_s3_error(self):
-        from services.s3_service import S3Service
-        svc = S3Service.__new__(S3Service)
-        svc.s3_client = MagicMock()
-        svc.bucket = "bucket"
-        svc.s3_client.put_object.side_effect = Exception("S3 error")
+    @patch("services.s3_service.httpx.post")
+    def test_upload_resume_api_error(self, mock_post):
+        from services.s3_service import StorageService
+        mock_resp = MagicMock()
+        mock_resp.status_code = 500
+        mock_resp.text = "Internal error"
+        mock_post.return_value = mock_resp
+
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        svc.supabase_service_key = "test-key"
+
+        assert svc.upload_resume(b"data", "resume.pdf") is None
+
+    @patch("services.s3_service.httpx.post", side_effect=Exception("Network error"))
+    def test_upload_resume_network_error(self, mock_post):
+        from services.s3_service import StorageService
+        svc = StorageService.__new__(StorageService)
+        svc.supabase_url = "https://example.supabase.co"
+        svc.supabase_service_key = "test-key"
+
         assert svc.upload_resume(b"data", "resume.pdf") is None
 
 

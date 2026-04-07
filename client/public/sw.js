@@ -1,9 +1,9 @@
 // Basic service worker for caching static assets only
-const CACHE_NAME = "pspah-v4";
-const CLOUDFRONT_URL = "https://d1fyhmg0o2pfye.cloudfront.net";
+const CACHE_NAME = "pspah-v5";
+const SUPABASE_STORAGE_URL = "https://hyxqrhttputdkefadnrf.supabase.co";
 const STATIC_CACHE_URLS = [
 	"/",
-	`${CLOUDFRONT_URL}/public/pspah-logo-340.webp`,
+	`${SUPABASE_STORAGE_URL}/storage/v1/object/public/assets/logo/pspah-logo-340.webp`,
 ];
 
 // URLs/origins that must never be cached (API calls, dynamic data)
@@ -18,8 +18,8 @@ function isStaticAsset(url) {
 	if (url.origin === self.location.origin) {
 		return /\.(js|css|woff2?|ttf|eot|png|jpg|jpeg|webp|gif|svg|ico)(\?.*)?$/.test(url.pathname);
 	}
-	// CloudFront images (cache these, they are content-addressed)
-	if (url.hostname === new URL(CLOUDFRONT_URL).hostname) {
+	// Supabase Storage images (cache these, they are content-addressed)
+	if (url.hostname === new URL(SUPABASE_STORAGE_URL).hostname) {
 		return true;
 	}
 	return false;

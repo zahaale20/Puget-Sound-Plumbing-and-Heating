@@ -25,8 +25,8 @@ async def get_image_url(image_name: str, req: Request = None):
         if not is_allowed:
             raise HTTPException(status_code=429, detail=rate_limit_msg)
 
-    if not s3_service.cloudfront_url:
-        raise HTTPException(status_code=404, detail="CloudFront URL configuration missing")
+    if not s3_service.supabase_url:
+        raise HTTPException(status_code=404, detail="Storage URL configuration missing")
 
     url = s3_service.get_image_url(image_name)
     if not url:

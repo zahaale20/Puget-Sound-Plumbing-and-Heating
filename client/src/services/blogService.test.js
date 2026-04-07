@@ -26,8 +26,8 @@ describe("blogService", () => {
 				description: "Tips",
 				keywords: ["Plumbing"],
 				sections: ["A"],
-				featuredImageKey: "blog-posts-images/1.jpg",
-				contentImageKeys: ["blog-posts-images/2.jpg"],
+				featuredImageKey: "blog/1.jpg",
+				contentImageKeys: ["blog/2.jpg"],
 				sourceUrl: "https://example.com/post",
 			},
 		];

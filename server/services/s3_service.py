@@ -1,64 +1,72 @@
 import os
-import boto3
 import logging
 import re
 import uuid
+import httpx
 from urllib.parse import quote
 from dotenv import load_dotenv
 
 load_dotenv()
 logger = logging.getLogger(__name__)
 
-class S3Service:
-    # S3 prefix conventions (folders inside the single bucket):
-    #   private/            – private site images (served via CloudFront)
-    #   public/             – public site assets
-    #   resumes/            – uploaded applicant resumes
-    #   blog-posts-images/  – scraped blog post images
-    RESUMES_PREFIX = "resumes/"
-    BLOG_POSTS_PREFIX = "blog-posts-images/"
+
+class StorageService:
+    """Supabase Storage client for file uploads and public URL generation.
+
+    Single public bucket layout:
+      assets/site/       – site UI images
+      assets/logo/       – logos
+      assets/blog/       – blog featured & content images
+    Private bucket:
+      resumes/           – applicant resumes
+    """
+
+    ASSETS_BUCKET = "assets"
+    RESUMES_BUCKET = "resumes"
+
+    # Map legacy S3 prefixes to folder paths inside the assets bucket
+    _PREFIX_TO_FOLDER = {
+        "private/": "site/",
+        "public/": "logo/",
+    }
+
+    ALLOWED_IMAGE_PREFIXES = ("public/", "private/", "blog/", "site/", "logo/")
 
     def __init__(self):
-        self.cloudfront_url = os.getenv("CLOUDFRONT_URL")
-        self.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
-        self.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-        self.aws_region = os.getenv("AWS_REGION", "us-west-2")
-        self.bucket = os.getenv("S3_BUCKET_NAME", "pspah-bucket")
-        self.allowed_image_prefixes = tuple(
-            prefix.strip().lstrip("/")
-            for prefix in os.getenv(
-                "ALLOWED_IMAGE_PREFIXES",
-                "public/,private/,blog-posts-images/",
-            ).split(",")
-            if prefix.strip()
-        )
-        
-        if not self.cloudfront_url:
-            print("ERROR: CLOUDFRONT_URL is missing from environment variables!")
-        
-        self.s3_client = None
-        if self.aws_access_key_id and self.aws_secret_access_key:
-            self.s3_client = boto3.client(
-                "s3",
-                aws_access_key_id=self.aws_access_key_id,
-                aws_secret_access_key=self.aws_secret_access_key,
-                region_name=self.aws_region,
-            )
+        self.supabase_url = os.getenv("SUPABASE_URL")
+        self.supabase_service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+
+        if not self.supabase_url:
+            logger.error("SUPABASE_URL is missing from environment variables")
+
+    def _storage_public_url(self, bucket: str, path: str) -> str:
+        """Build the public URL for a Supabase Storage object."""
+        clean = path.strip().lstrip("/")
+        return f"{self.supabase_url}/storage/v1/object/public/{bucket}/{quote(clean, safe='/-_.~')}"
 
     def get_image_url(self, object_name: str):
-        # Simply point the user to the CloudFront Edge location
-        # This makes the loading near-instant for Seattle users
-        if not self.cloudfront_url:
+        """Resolve an image key to a Supabase Storage public URL.
+
+        Handles both legacy keys ('private/hero.webp') and new keys ('site/hero.webp').
+        """
+        if not self.supabase_url:
             return None
 
         clean_name = (object_name or "").strip().lstrip("/")
         if not clean_name or ".." in clean_name or "\\" in clean_name:
             return None
 
-        if not any(clean_name.startswith(prefix) for prefix in self.allowed_image_prefixes):
+        if not any(clean_name.startswith(p) for p in self.ALLOWED_IMAGE_PREFIXES):
             return None
 
-        return f"{self.cloudfront_url}/{quote(clean_name, safe='/-_.~')}"
+        # Rewrite legacy prefixes to new folder paths
+        for prefix, folder in self._PREFIX_TO_FOLDER.items():
+            if clean_name.startswith(prefix):
+                obj_path = clean_name[len(prefix):]
+                return self._storage_public_url(self.ASSETS_BUCKET, f"{folder}{obj_path}")
+
+        # Keys already in new format (blog/*, site/*, logo/*)
+        return self._storage_public_url(self.ASSETS_BUCKET, clean_name)
 
     @staticmethod
     def _safe_filename(filename: str) -> str:
@@ -66,13 +74,13 @@ class S3Service:
         filename = re.sub(r"[^a-zA-Z0-9._-]", "_", filename)
         filename = filename.strip("._")
         return filename or "resume.pdf"
-    
+
     def upload_resume(self, resume_bytes: bytes, resume_filename: str) -> str:
-        """Upload resume to the resumes/ prefix in the main S3 bucket."""
-        if not self.s3_client:
-            logger.error("S3 client not initialized for resume upload")
+        """Upload a resume to the Supabase 'resumes' bucket."""
+        if not self.supabase_url or not self.supabase_service_key:
+            logger.error("Supabase Storage not configured for resume upload")
             return None
-        
+
         try:
             safe_filename = self._safe_filename(resume_filename)
             extension = os.path.splitext(safe_filename)[1].lower()
@@ -82,16 +90,33 @@ class S3Service:
                 ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             }.get(extension, "application/octet-stream")
 
-            s3_key = f"{self.RESUMES_PREFIX}{uuid.uuid4().hex}-{safe_filename}"
-            self.s3_client.put_object(
-                Bucket=self.bucket,
-                Key=s3_key,
-                Body=resume_bytes,
-                ContentType=content_type,
-                ServerSideEncryption="AES256",
+            obj_path = f"{uuid.uuid4().hex}-{safe_filename}"
+            url = f"{self.supabase_url}/storage/v1/object/{self.RESUMES_BUCKET}/{obj_path}"
+
+            resp = httpx.post(
+                url,
+                content=resume_bytes,
+                headers={
+                    "apikey": self.supabase_service_key,
+                    "Authorization": f"Bearer {self.supabase_service_key}",
+                    "Content-Type": content_type,
+                },
+                timeout=15.0,
             )
-            logger.info(f"Resume uploaded to S3: {self.bucket}/{s3_key}")
-            return s3_key
+
+            if resp.status_code not in (200, 201):
+                logger.error("Supabase Storage upload failed (%d): %s", resp.status_code, resp.text[:300])
+                return None
+
+            storage_key = f"{self.RESUMES_BUCKET}/{obj_path}"
+            logger.info("Resume uploaded to Supabase Storage: %s", storage_key)
+            return storage_key
         except Exception as e:
-            logger.exception(f"Failed to upload resume to S3: {str(e)}")
+            logger.exception("Failed to upload resume: %s", str(e))
             return None
+
+
+# ── Backward-compatible alias ────────────────────────────────────────────────
+# Routes import S3Service by name; this keeps them working without touching
+# every import site in one go.
+S3Service = StorageService
