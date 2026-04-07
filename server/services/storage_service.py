@@ -29,7 +29,6 @@ class StorageService:
     def __init__(self):
         project_id = os.getenv("SUPABASE_PROJECT_ID")
         self.supabase_url = f"https://{project_id}.supabase.co" if project_id else None
-        self.supabase_service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
         if not self.supabase_url:
             logger.error("SUPABASE_PROJECT_ID is missing from environment variables")

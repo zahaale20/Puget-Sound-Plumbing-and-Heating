@@ -14,17 +14,26 @@ _pool = None
 def _get_pool():
     global _pool
     if _pool is None:
-        project_id = os.getenv("SUPABASE_PROJECT_ID")
-        _pool = psycopg2.pool.SimpleConnectionPool(
-            minconn=1,
-            maxconn=5,
-            user=f"postgres.{project_id}" if project_id else None,
-            password=os.getenv("SUPABASE_PASSWORD"),
-            host=os.getenv("SUPABASE_HOST"),
-            port=os.getenv("SUPABASE_PORT"),
-            dbname=os.getenv("SUPABASE_DBNAME"),
-            options="-c statement_timeout=10000",
-        )
+        dsn = os.getenv("DATABASE_URL")
+        if dsn:
+            _pool = psycopg2.pool.SimpleConnectionPool(
+                minconn=1,
+                maxconn=5,
+                dsn=dsn,
+                options="-c statement_timeout=10000",
+            )
+        else:
+            project_id = os.getenv("SUPABASE_PROJECT_ID")
+            _pool = psycopg2.pool.SimpleConnectionPool(
+                minconn=1,
+                maxconn=5,
+                user=f"postgres.{project_id}" if project_id else None,
+                password=os.getenv("SUPABASE_PASSWORD"),
+                host=os.getenv("SUPABASE_HOST"),
+                port=os.getenv("SUPABASE_PORT"),
+                dbname=os.getenv("SUPABASE_DBNAME"),
+                options="-c statement_timeout=10000",
+            )
     return _pool
 
 
