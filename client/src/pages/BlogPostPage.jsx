@@ -244,9 +244,9 @@ export default function BlogPostPage() {
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 							{post.sections.map((section, index) => (
-								<div key={`${section.heading}-${index}`} className="space-y-3">
+								<div key={`${section.heading}-${index}`} className="space-y-6">
 									{section.heading ? (
-										<h2 className="text-[#0C2D70] text-lg md:text-xl font-semibold">{section.heading}</h2>
+										<h3 className="text-[#0C2D70]">{section.heading}</h3>
 									) : null}
 									{(section.content || []).map((item, itemIndex) =>
 										renderContentItem(item, `${index}-content-${itemIndex}`)
