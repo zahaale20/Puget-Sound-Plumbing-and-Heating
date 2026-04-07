@@ -29,9 +29,12 @@ class StorageService:
     def __init__(self):
         project_id = os.getenv("SUPABASE_PROJECT_ID")
         self.supabase_url = f"https://{project_id}.supabase.co" if project_id else None
+        self.supabase_secret_key = os.getenv("SUPABASE_SECRET_KEY")
 
         if not self.supabase_url:
             logger.error("SUPABASE_PROJECT_ID is missing from environment variables")
+        if not self.supabase_secret_key:
+            logger.error("SUPABASE_SECRET_KEY is missing from environment variables")
 
     def _storage_public_url(self, bucket: str, path: str) -> str:
         """Build the public URL for a Supabase Storage object."""
@@ -61,7 +64,7 @@ class StorageService:
 
     def upload_resume(self, resume_bytes: bytes, resume_filename: str) -> str:
         """Upload a resume to the Supabase 'resumes' bucket."""
-        if not self.supabase_url or not self.supabase_service_key:
+        if not self.supabase_url or not self.supabase_secret_key:
             logger.error("Supabase Storage not configured for resume upload")
             return None
 
@@ -81,8 +84,8 @@ class StorageService:
                 url,
                 content=resume_bytes,
                 headers={
-                    "apikey": self.supabase_service_key,
-                    "Authorization": f"Bearer {self.supabase_service_key}",
+                    "apikey": self.supabase_secret_key,
+                    "Authorization": f"Bearer {self.supabase_secret_key}",
                     "Content-Type": content_type,
                 },
                 timeout=15.0,
