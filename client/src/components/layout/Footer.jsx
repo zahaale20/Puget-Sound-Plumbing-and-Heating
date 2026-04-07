@@ -52,7 +52,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getImageUrl("site/google-reviews.webp")}
 							alt="Google Reviews"
-							className="h-[55px] object-contain"
+							className="min-h-[55px] h-[55px] object-contain"
 							loading="lazy"
 							width={95}
 							height={55}
@@ -60,7 +60,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getImageUrl("site/bbb-accredited-business.webp")}
 							alt="BBB Accredited Business"
-							className="h-[55px] object-contain"
+							className="min-h-[55px] h-[55px] object-contain"
 							loading="lazy"
 							width={148}
 							height={55}
@@ -68,7 +68,7 @@ export default function Footer() {
 						<ImageWithLoader
 							src={getImageUrl("site/year-20-anniversary.webp")}
 							alt="20 Year Anniversary"
-							className="hidden sm:block h-[55px] object-contain"
+							className="hidden sm:block min-h-[55px] h-[55px] object-contain"
 							loading="lazy"
 							width={110}
 							height={55}
