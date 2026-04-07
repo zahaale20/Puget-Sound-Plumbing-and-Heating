@@ -258,7 +258,7 @@ export default function LimitedTimeOffers({ textColor = "text-white" }) {
 												<button
 													type="submit"
 													disabled={isSubmitting}
-													className="bg-[#B32020] text-white w-full py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
+													className="bg-[#B32020] text-white w-full px-8 py-3 font-semibold hover:bg-[#7a1515] transition disabled:opacity-60 disabled:cursor-not-allowed"
 												>
 													{isSubmitting ? "Submitting..." : "Submit Request"}
 												</button>
