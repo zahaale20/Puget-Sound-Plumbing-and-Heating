@@ -74,6 +74,19 @@ export default function BlogPostPage() {
 
 	if (!post) return <NotFoundPage />;
 
+	const renderTextWithBold = (text) => {
+		const colonIdx = text.indexOf(":");
+		if (colonIdx > 0 && colonIdx < 80 && colonIdx < text.length - 1) {
+			return (
+				<>
+					<strong>{text.slice(0, colonIdx + 1)}</strong>{" "}
+					{text.slice(colonIdx + 1).trimStart()}
+				</>
+			);
+		}
+		return text;
+	};
+
 	const renderContentItem = (item, key) => {
 		if (typeof item === "string") {
 			return <p key={key}>{item}</p>;
@@ -81,9 +94,11 @@ export default function BlogPostPage() {
 
 		if (Array.isArray(item)) {
 			return (
-				<ul key={key} className="list-disc pl-6 space-y-1">
+				<ul key={key} className="list-disc pl-6 space-y-2">
 					{item.map((entry, entryIndex) => (
-						<li key={`${key}-li-${entryIndex}`}>{entry}</li>
+						<li key={`${key}-li-${entryIndex}`}>
+							{typeof entry === "string" ? renderTextWithBold(entry) : entry}
+						</li>
 					))}
 				</ul>
 			);
@@ -229,8 +244,10 @@ export default function BlogPostPage() {
 						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
 							<p>{post.description}</p>
 							{post.sections.map((section, index) => (
-								<div key={`${section.heading}-${index}`} className="space-y-2">
-									{section.heading ? <h5 className="text-[#0C2D70]">{section.heading}</h5> : null}
+								<div key={`${section.heading}-${index}`} className="space-y-3">
+									{section.heading ? (
+										<h2 className="text-[#0C2D70] text-lg md:text-xl font-semibold">{section.heading}</h2>
+									) : null}
 									{(section.content || []).map((item, itemIndex) =>
 										renderContentItem(item, `${index}-content-${itemIndex}`)
 									)}
