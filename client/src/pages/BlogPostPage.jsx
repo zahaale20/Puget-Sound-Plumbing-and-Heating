@@ -241,12 +241,12 @@ export default function BlogPostPage() {
 							</div>
 							<span className="flex items-center gap-2"><FaUser /> {post.author}</span>
 						</div>
-						<div className="text-[#2B2B2B] leading-relaxed space-y-4">
+						<div className="text-[#2B2B2B] leading-relaxed space-y-10">
 							<p>{post.description}</p>
 							{post.sections.map((section, index) => (
-								<div key={`${section.heading}-${index}`} className="space-y-6">
+								<div key={`${section.heading}-${index}`} className="space-y-4">
 									{section.heading ? (
-										<h5 className="text-[#0C2D70]">{section.heading}</h5>
+										<h6 className="text-[#0C2D70]">{section.heading}</h6>
 									) : null}
 									{(section.content || []).map((item, itemIndex) =>
 										renderContentItem(item, `${index}-content-${itemIndex}`)
