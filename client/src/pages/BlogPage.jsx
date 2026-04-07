@@ -166,7 +166,7 @@ export default function BlogPage() {
 			/>
 			<div className="p-6 flex flex-col flex-1">
 				<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
-				<div className="text-sm text-[#949494] mb-2 flex flex-col items-start gap-1">
+				<div className="text-sm text-[#767676] mb-2 flex flex-col items-start gap-1">
 					<div className="flex items-center gap-1">
 						<FaRegCalendarAlt />
 						<span>{formatBlogDate(post.date)}</span>

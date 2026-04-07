@@ -34,7 +34,7 @@ export default function WhyChooseUs() {
 						href="/about-us"
 						className="text-[#0C2D70] font-semibold flex items-center gap-2 hover:underline"
 					>
-						Learn More
+						Learn more about our team
 						<FaArrowRight />
 					</a>
 				</div>

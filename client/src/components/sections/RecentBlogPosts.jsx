@@ -82,7 +82,7 @@ export default function RecentBlogPosts() {
 							{/* Content Container */}
 							<div className="p-6 flex flex-col flex-1">
 								<h5 className="text-[#0C2D70] mb-2">{post.title}</h5>
-								<div className="text-[#949494] text-sm mb-2 flex flex-col items-start gap-1">
+								<div className="text-[#767676] text-sm mb-2 flex flex-col items-start gap-1">
 									<div className="flex items-center gap-2">
 										<FaRegCalendarAlt /> <span>{formatBlogDate(post.date)}</span>
 									</div>

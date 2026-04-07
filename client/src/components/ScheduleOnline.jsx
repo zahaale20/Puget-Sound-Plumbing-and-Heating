@@ -93,10 +93,11 @@ export default function ScheduleOnline() {
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{/* First Name */}
 						<div>
-							<label className="text-[#2B2B2B]">
+							<label htmlFor="schedule-firstName" className="text-[#2B2B2B]">
 								First Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
 							<input
+								id="schedule-firstName"
 								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="firstName"
@@ -108,10 +109,11 @@ export default function ScheduleOnline() {
 
 						{/* Last Name */}
 						<div>
-							<label className="text-[#2B2B2B]">
+							<label htmlFor="schedule-lastName" className="text-[#2B2B2B]">
 								Last Name <span className="text-[#B32020] font-normal italic">*</span>
 							</label>
 							<input
+								id="schedule-lastName"
 								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="text"
 								name="lastName"
@@ -125,10 +127,11 @@ export default function ScheduleOnline() {
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{/* Phone */}
 						<div>
-							<label className="text-[#2B2B2B]">
+							<label htmlFor="schedule-phone" className="text-[#2B2B2B]">
 								Phone <span className="text-[#B32020] italic">*</span>
 							</label>
 							<input
+								id="schedule-phone"
 								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="tel"
 								name="phone"
@@ -140,10 +143,11 @@ export default function ScheduleOnline() {
 
 						{/* Email */}
 						<div>
-							<label className="text-[#2B2B2B]">
+							<label htmlFor="schedule-email" className="text-[#2B2B2B]">
 								Email <span className="text-[#B32020] italic">*</span>
 							</label>
 							<input
+								id="schedule-email"
 								className="w-full border-1 border-[#DEDEDE] px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 								type="email"
 								name="email"
@@ -156,8 +160,9 @@ export default function ScheduleOnline() {
 
 					{/* Message */}
 					<div>
-						<label className="text-[#2B2B2B]">Message</label>
+						<label htmlFor="schedule-message" className="text-[#2B2B2B]">Message</label>
 						<textarea
+							id="schedule-message"
 							name="message"
 							rows="4"
 							value={formData.message}

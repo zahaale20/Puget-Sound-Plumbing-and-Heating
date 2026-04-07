@@ -235,7 +235,7 @@ export default function BlogPostPage() {
 					{/* Post Content */}
 					<div className="py-8">
 						<h1 className="text-[#0C2D70] mb-4 text-2xl md:text-3xl font-semibold">{post.title}</h1>
-						<div className="text-[#949494] text-sm mb-6 flex flex-col items-start gap-2">
+						<div className="text-[#767676] text-sm mb-6 flex flex-col items-start gap-2">
 							<div className="flex items-center gap-2">
 								<FaRegCalendarAlt /> {formatBlogDate(post.date)}
 							</div>
