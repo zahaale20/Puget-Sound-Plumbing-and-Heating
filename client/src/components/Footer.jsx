@@ -52,13 +52,13 @@ export default function Footer() {
 					{/* Right-side Badges */}
 					<div className="flex flex-row items-center gap-8 justify-center md:justify-start w-full md:w-auto">
 						<ImageWithLoader
-							src={getImageUrl("site/google-reviews-190.webp")}
+							src={getImageUrl("site/google-reviews.webp")}
 							alt="Google Reviews"
 							className="h-[55px] object-contain"
 							loading="lazy"
 						/>
 						<ImageWithLoader
-							src={getImageUrl("site/bbb-accredited-business-295.webp")}
+							src={getImageUrl("site/bbb-accredited-business.webp")}
 							alt="BBB Accredited Business"
 							className="h-[55px] object-contain"
 							loading="lazy"
