@@ -14,7 +14,7 @@ EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "alexthebestest@gmail.com").replace("\r", "").replace("\n", "").strip()
 LOGO_URL = os.getenv(
     "LOGO_URL",
-    "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.png",
+    "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo-340.webp",
 )
 COMPANY_NAME = "Puget Sound Plumbing and Heating"
 COMPANY_PHONE = "(206) 938-3219"
