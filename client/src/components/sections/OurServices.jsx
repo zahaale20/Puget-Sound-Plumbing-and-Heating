@@ -24,7 +24,7 @@ export default function OurServices() {
 			{/* Header Container*/}
 			<div className="flex flex-col space-y-6 text-center text-white">
 				{/* Title */}
-				<SectionTitle as="h2" textColorClass="text-white" centered>
+				<SectionTitle as="h4" textColorClass="text-white" centered>
 					Our Services
 				</SectionTitle>
 
