@@ -6,15 +6,7 @@ import { getImageUrl } from "../services/imageService";
 import Seo from "../components/seo/Seo";
 import { buildBreadcrumbJsonLd } from "../components/seo/schema";
 import { BlogPostSkeleton, ImageWithLoader } from "../components/ui/LoadingComponents";
-import { ServiceLinks } from "../data/data";
 import NotFoundPage from "./NotFoundPage";
-
-const KEYWORD_HINTS = {
-	drain: ["drain", "sewer", "clog", "hydro jet", "hydrojet", "back up"],
-	plumbing: ["pipe", "leak", "toilet", "faucet", "garbage disposal", "plumbing"],
-	"water-heaters": ["water heater", "hot water", "tankless"],
-	"heating-and-cooling": ["furnace", "boiler", "air conditioning", "hvac", "heating", "ac"],
-};
 
 export default function BlogPostPage() {
 	const { slug } = useParams();
@@ -166,24 +158,6 @@ export default function BlogPostPage() {
 		},
 	};
 
-	const blogContext = `${post.title} ${post.description} ${(post.keywords || []).join(" ")}`.toLowerCase();
-	const allServices = ServiceLinks.flatMap((category) =>
-		category.submenu.map((service) => ({
-			categoryName: category.name,
-			categorySlug: category.href.split("/").pop(),
-			...service,
-		}))
-	);
-
-	const relatedServices = allServices
-		.filter((service) => {
-			const categoryKey = service.categorySlug;
-			const hints = KEYWORD_HINTS[categoryKey] || [];
-			const serviceName = (service.name || "").toLowerCase();
-			if (blogContext.includes(serviceName)) return true;
-			return hints.some((hint) => blogContext.includes(hint));
-		})
-		.slice(0, 4);
 	const breadcrumbJsonLd = buildBreadcrumbJsonLd([
 		{ name: "Home", path: "/" },
 		{ name: "Blog", path: "/blog" },
