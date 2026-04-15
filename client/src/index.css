@@ -2,13 +2,13 @@
 
 @layer base {
 	html {
-		overflow-x: hidden;
+		overflow-x: clip;
 		overscroll-behavior: none;
 	}
 
 	body {
 		font-family: "Open Sans", sans-serif;
-		overflow-x: hidden;
+		overflow-x: clip;
 		overscroll-behavior: none;
 	}
 

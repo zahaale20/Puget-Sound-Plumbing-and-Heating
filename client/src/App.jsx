@@ -147,7 +147,7 @@ function App() {
 		<BrowserRouter>
 			<ScrollToTop />
 			<RouteSeo />
-			<div className="flex flex-col min-h-screen mx-auto overflow-x-hidden">
+			<div className="flex flex-col min-h-screen mx-auto overflow-x-clip">
 				<Header />
 				<Suspense fallback={<RouteSuspenseFallback />}>
 					<main className="flex-1">
