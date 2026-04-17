@@ -1,9 +1,8 @@
 import re
 import logging
 import secrets
-from fastapi import APIRouter, HTTPException, Request
-from dependencies import get_client_ip
-from services.rate_limiter import check_rate_limit
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from dependencies import require_rate_limit
 from services.captcha_service import verify_captcha
 from services.email_service import send_coupon_confirmation, send_coupon_notification
 from database import get_db_connection
@@ -12,6 +11,14 @@ from models.requests import RedeemOfferRequest
 
 router = APIRouter(prefix="/api", tags=["offers"])
 logger = logging.getLogger(__name__)
+
+
+def _safe_send_coupon_notification(*args, **kwargs) -> None:
+    """Best-effort company notification; never propagates errors."""
+    try:
+        send_coupon_notification(*args, **kwargs)
+    except Exception:
+        logger.exception("Background send_coupon_notification failed")
 
 
 def generate_coupon_id(coupon_discount: str) -> str:
@@ -27,14 +34,9 @@ def generate_coupon_id(coupon_discount: str) -> str:
     return f"PSPAH-{abs(hash(coupon_discount)) % 10000:04d}-{suffix}"
 
 
-@router.post("/redeem-offer")
-async def redeem_offer(request: RedeemOfferRequest, req: Request):
+@router.post("/redeem-offer", dependencies=[Depends(require_rate_limit("redeem-offer"))])
+async def redeem_offer(request: RedeemOfferRequest, req: Request, background_tasks: BackgroundTasks):
     """Send coupon confirmation, persist redemption, then notify company."""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "redeem-offer")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
-
     if not verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
@@ -100,8 +102,9 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request):
                     raise
             conn.commit()
 
-        # 3) Notify the company (non-critical)
-        send_coupon_notification(
+        # 3) Notify the company (non-critical, off the request critical path)
+        background_tasks.add_task(
+            _safe_send_coupon_notification,
             email, first_name, last_name, phone, coupon_id,
             request.couponDiscount, request.couponCondition,
         )

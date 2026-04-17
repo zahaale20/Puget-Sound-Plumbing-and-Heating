@@ -1,7 +1,6 @@
 import logging
-from fastapi import APIRouter, HTTPException, Request
-from dependencies import get_client_ip
-from services.rate_limiter import check_rate_limit
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from dependencies import require_rate_limit
 from services.captcha_service import verify_captcha
 from services.email_service import send_followup, send_schedule_notification
 from database import get_db_connection
@@ -12,14 +11,17 @@ router = APIRouter(prefix="/api", tags=["schedule"])
 logger = logging.getLogger(__name__)
 
 
-@router.post("/schedule")
-async def schedule_online(request: ScheduleRequest, req: Request):
-    """Insert schedule request into DB and send follow-up email"""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "schedule")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
+def _safe_send_schedule_notification(*args, **kwargs) -> None:
+    """Best-effort company notification; never propagates errors."""
+    try:
+        send_schedule_notification(*args, **kwargs)
+    except Exception:
+        logger.exception("Background send_schedule_notification failed")
 
+
+@router.post("/schedule", dependencies=[Depends(require_rate_limit("schedule"))])
+async def schedule_online(request: ScheduleRequest, req: Request, background_tasks: BackgroundTasks):
+    """Insert schedule request into DB and send follow-up email"""
     if not verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
@@ -63,8 +65,11 @@ async def schedule_online(request: ScheduleRequest, req: Request):
             )
             email_status = "failed"
 
-        # Notify company (non-critical)
-        send_schedule_notification(email, first_name, last_name, phone, message)
+        # Notify company (non-critical, off the request critical path).
+        background_tasks.add_task(
+            _safe_send_schedule_notification,
+            email, first_name, last_name, phone, message,
+        )
 
         if email_status == "sent":
             return {"success": True, "emailStatus": "sent"}

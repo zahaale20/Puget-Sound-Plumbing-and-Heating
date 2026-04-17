@@ -51,13 +51,11 @@ createRoot(document.getElementById("root")).render(
 // Register service worker for caching
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
 	window.addEventListener("load", () => {
-		navigator.serviceWorker
-			.register("/sw.js")
-			.then((registration) => {
-				console.log("SW registered: ", registration);
-			})
-			.catch((registrationError) => {
-				console.log("SW registration failed: ", registrationError);
-			});
+		navigator.serviceWorker.register("/sw.js").catch((registrationError) => {
+			// Surface SW failures to the browser console (kept as console.warn rather
+			// than console.log so it isn't dropped by typical prod log filters) and
+			// degrade gracefully — the app works without offline caching.
+			console.warn("SW registration failed:", registrationError);
+		});
 	});
 }

@@ -100,7 +100,10 @@ app.add_middleware(
     allowed_hosts=_build_allowed_hosts(),
 )
 
-if os.getenv("ENABLE_HTTPS_REDIRECT", "false").lower() == "true":
+# HTTPS redirect is on by default in production. Vercel terminates TLS at the
+# edge, so this is mostly a defense-in-depth measure for any non-edge deploy.
+# Set ENABLE_HTTPS_REDIRECT=false to opt out (e.g. for local HTTP dev).
+if os.getenv("ENABLE_HTTPS_REDIRECT", "true").lower() == "true":
     app.add_middleware(HTTPSRedirectMiddleware)
 
 

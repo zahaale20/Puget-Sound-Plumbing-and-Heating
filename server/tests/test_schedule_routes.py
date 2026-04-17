@@ -19,7 +19,7 @@ class TestScheduleEndpoint:
         mock_cursor = MagicMock()
         with (
             patch("routes.schedule.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("routes.schedule.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.schedule.verify_captcha", return_value=True),
             patch("routes.schedule.send_followup"),
             patch("routes.schedule.send_schedule_notification"),
@@ -36,7 +36,7 @@ class TestScheduleEndpoint:
         assert resp.json()["success"] is True
 
     def test_rate_limited(self, client):
-        with patch("routes.schedule.check_rate_limit", return_value=(False, "Too many")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(False, "Too many", 3600)):
             resp = client.post("/api/schedule", json={
                 "firstName": "John",
                 "lastName": "Doe",
@@ -48,7 +48,7 @@ class TestScheduleEndpoint:
 
     def test_captcha_failed(self, client):
         with (
-            patch("routes.schedule.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.schedule.verify_captcha", return_value=False),
         ):
             resp = client.post("/api/schedule", json={
@@ -65,7 +65,7 @@ class TestScheduleEndpoint:
         mock_cursor.execute.side_effect = Exception("unique constraint violated")
         with (
             patch("routes.schedule.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("routes.schedule.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.schedule.verify_captcha", return_value=True),
         ):
             resp = client.post("/api/schedule", json={
@@ -83,7 +83,7 @@ class TestScheduleEndpoint:
         mock_cursor = MagicMock()
         with (
             patch("routes.schedule.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("routes.schedule.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.schedule.verify_captcha", return_value=True),
             patch("routes.schedule.send_followup", side_effect=HTTPException(500, "email err")),
             patch("routes.schedule.send_schedule_notification"),
@@ -99,7 +99,7 @@ class TestScheduleEndpoint:
         assert resp.json()["emailStatus"] == "failed"
 
     def test_validation_error(self, client):
-        with patch("routes.schedule.check_rate_limit", return_value=(True, "OK")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)):
             resp = client.post("/api/schedule", json={
                 "firstName": "",
                 "lastName": "",

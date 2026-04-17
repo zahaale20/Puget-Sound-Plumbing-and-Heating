@@ -1,15 +1,18 @@
 import os
 import logging
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 from database import get_db_connection
-from services.rate_limiter import check_rate_limit
-from dependencies import get_client_ip
+from dependencies import require_rate_limit
 
 router = APIRouter(prefix="/api/blog", tags=["Blog"])
 logger = logging.getLogger(__name__)
 
 BLOG_CACHE_MAX_AGE = int(os.getenv("BLOG_CACHE_MAX_AGE", "300"))
+# Hard ceiling on a single blog list response. Page size is bounded so the
+# endpoint cannot return an arbitrarily large payload as the table grows.
+BLOG_LIST_DEFAULT_LIMIT = 100
+BLOG_LIST_MAX_LIMIT = 200
 
 
 def _row_to_post(row: tuple) -> dict:
@@ -37,8 +40,16 @@ def _row_to_post(row: tuple) -> dict:
 
 
 @router.get("")
-async def list_blog_posts():
-    """Return all blog posts ordered by published_date descending."""
+async def list_blog_posts(
+    limit: int = Query(BLOG_LIST_DEFAULT_LIMIT, ge=1, le=BLOG_LIST_MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+):
+    """Return blog posts ordered by published_date descending.
+
+    Bounded by `limit` (default 100, max 200) and offset for pagination.
+    Defaults preserve the existing client behaviour of "give me everything"
+    for the typical case where the blog has < 100 posts.
+    """
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
@@ -48,7 +59,9 @@ async def list_blog_posts():
                            views, content_json, featured_image_s3_key, content_image_s3_keys
                     FROM public."Blog Posts"
                     ORDER BY published_date DESC NULLS LAST
-                    """
+                    LIMIT %s OFFSET %s
+                    """,
+                    (limit, offset),
                 )
                 rows = cur.fetchall()
         posts = [_row_to_post(row) for row in rows]
@@ -87,14 +100,9 @@ async def get_blog_post(slug: str):
         raise HTTPException(status_code=500, detail="Failed to load blog post")
 
 
-@router.post("/{slug}/views")
+@router.post("/{slug}/views", dependencies=[Depends(require_rate_limit("blog-views"))])
 async def increment_views(slug: str, req: Request):
     """Increment the view count for a blog post. Rate-limited."""
-    client_ip = get_client_ip(req)
-    is_allowed, msg = check_rate_limit(client_ip, "blog-views")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=msg)
-
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:

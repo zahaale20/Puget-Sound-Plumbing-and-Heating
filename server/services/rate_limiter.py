@@ -4,6 +4,7 @@ Uses Supabase PostgreSQL for persistent, cross-instance rate limiting.
 """
 
 import logging
+import math
 import random
 from typing import Tuple
 
@@ -18,7 +19,6 @@ RATE_LIMITS = {
     "redeem-offer": (10, 3600),   # 10 requests per hour
     "diy-permit": (10, 3600),     # 10 requests per hour
     "job-application": (5, 3600), # 5 requests per hour
-    "send-email": (10, 3600),     # 10 requests per hour
     "verify-captcha": (20, 3600), # 20 requests per hour
     "unsubscribe": (10, 3600),    # 10 requests per hour
     "images": (100, 3600),        # 100 requests per hour
@@ -40,22 +40,23 @@ DO UPDATE SET
         THEN NOW()
         ELSE rate_limits.window_start
     END
-RETURNING request_count
+RETURNING request_count,
+        EXTRACT(EPOCH FROM (window_start + MAKE_INTERVAL(secs => %s) - NOW()))::int AS retry_after
 """
 
 _CLEANUP_SQL = "DELETE FROM rate_limits WHERE window_start < NOW() - INTERVAL '24 hours'"
 
 
-def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str]:
+def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str, int]:
     """
     Check if request exceeds rate limit for given IP and endpoint.
     Uses an atomic upsert on the rate_limits table.
 
     Returns:
-        Tuple[bool, str]: (is_allowed, message)
+        Tuple[bool, str, int]: (is_allowed, message, retry_after_seconds)
     """
     if endpoint not in RATE_LIMITS:
-        return True, "Endpoint not rate limited"
+        return True, "Endpoint not rate limited", 0
 
     max_requests, window_seconds = RATE_LIMITS[endpoint]
 
@@ -64,9 +65,11 @@ def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str]:
             with conn.cursor() as cur:
                 cur.execute(
                     _UPSERT_SQL,
-                    (ip_address, endpoint, window_seconds, window_seconds),
+                    (ip_address, endpoint, window_seconds, window_seconds, window_seconds),
                 )
-                count = cur.fetchone()[0]
+                row = cur.fetchone()
+                count = row[0]
+                retry_after = max(0, row[1]) if row[1] is not None else window_seconds
             conn.commit()
 
         # Probabilistic cleanup of expired records (1% chance per check)
@@ -74,12 +77,16 @@ def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str]:
             _cleanup_expired()
 
         if count > max_requests:
-            return False, f"Rate limit exceeded. Maximum {max_requests} requests per hour."
-        return True, "OK"
+            logger.warning(
+                "Rate limit hit: ip=%s endpoint=%s count=%d limit=%d",
+                ip_address, endpoint, count, max_requests,
+            )
+            return False, f"Rate limit exceeded. Maximum {max_requests} requests per hour.", retry_after
+        return True, "OK", 0
     except Exception as e:
         # Fail open — don't block requests if the rate limiter is broken
         logger.warning("Rate limit check failed, allowing request: %s", str(e))
-        return True, "OK"
+        return True, "OK", 0
 
 
 def _cleanup_expired():

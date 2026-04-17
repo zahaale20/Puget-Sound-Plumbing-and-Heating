@@ -86,14 +86,14 @@ class TestIncrementViews:
         mock_cursor.fetchone.return_value = (11,)
         with (
             patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("routes.blog.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
         ):
             resp = client.post("/api/blog/test-slug/views")
         assert resp.status_code == 200
         assert resp.json()["views"] == 11
 
     def test_rate_limited(self, client):
-        with patch("routes.blog.check_rate_limit", return_value=(False, "Too many")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(False, "Too many", 3600)):
             resp = client.post("/api/blog/test-slug/views")
         assert resp.status_code == 429
 
@@ -102,7 +102,7 @@ class TestIncrementViews:
         mock_cursor.fetchone.return_value = None
         with (
             patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("routes.blog.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
         ):
             resp = client.post("/api/blog/no-slug/views")
         assert resp.status_code == 404

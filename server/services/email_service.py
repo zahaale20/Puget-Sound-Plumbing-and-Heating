@@ -14,11 +14,16 @@ EMAIL_FROM = os.getenv("RESEND_FROM_EMAIL", "noreply@cavostudio.com")
 COMPANY_EMAIL = os.getenv("COMPANY_EMAIL", "").replace("\r", "").replace("\n", "").strip()
 if not COMPANY_EMAIL:
     logger.warning("COMPANY_EMAIL is not set — company notification emails will fail")
-_SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID", "hyxqrhttputdkefadnrf")
+_SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID")
+if not _SUPABASE_PROJECT_ID:
+    logger.warning(
+        "SUPABASE_PROJECT_ID is not set — email logo URL will be missing. "
+        "Set SUPABASE_PROJECT_ID in the server environment."
+    )
 LOGO_URL = (
     f"https://{_SUPABASE_PROJECT_ID}.supabase.co"
     "/storage/v1/object/public/assets/logo/pspah-logo.png"
-)
+) if _SUPABASE_PROJECT_ID else ""
 COMPANY_NAME = "Puget Sound Plumbing and Heating"
 COMPANY_PHONE = "(206) 938-3219"
 COMPANY_PHONE_HREF = "tel:+12069383219"

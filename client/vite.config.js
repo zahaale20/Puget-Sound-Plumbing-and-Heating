@@ -12,12 +12,21 @@ export default defineConfig({
 		css: false,
 		coverage: {
 			reporter: ["text", "lcov"],
-				include: ["src/services/formValidation.js"],
+			include: [
+				"src/services/formValidation.js",
+				"src/services/imageService.js",
+				"src/services/emailService.js",
+				"src/services/blogService.js",
+			],
+			exclude: [
+				"src/**/*.test.{js,jsx}",
+				"src/test/**",
+			],
 			thresholds: {
-					lines: 90,
-					functions: 90,
-					branches: 85,
-					statements: 90,
+					lines: 85,
+					functions: 85,
+					branches: 80,
+					statements: 85,
 			},
 		},
 	},

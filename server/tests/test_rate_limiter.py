@@ -13,13 +13,14 @@ class TestRateLimitConfig:
 
 class TestCheckRateLimit:
     def test_unknown_endpoint_allowed(self):
-        allowed, msg = check_rate_limit("1.2.3.4", "unknown-endpoint")
+        allowed, msg, retry_after = check_rate_limit("1.2.3.4", "unknown-endpoint")
         assert allowed is True
+        assert retry_after == 0
 
     def test_allowed_under_limit(self):
         mock_conn = MagicMock()
         mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = (1,)
+        mock_cursor.fetchone.return_value = (1, 3500)
         mock_conn.cursor.return_value.__enter__ = MagicMock(return_value=mock_cursor)
         mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
 
@@ -30,13 +31,14 @@ class TestCheckRateLimit:
         with patch("services.rate_limiter.get_db_connection", _ctx), \
              patch("services.rate_limiter.random") as mock_random:
             mock_random.random.return_value = 0.5  # no cleanup
-            allowed, msg = check_rate_limit("1.2.3.4", "schedule")
+            allowed, msg, retry_after = check_rate_limit("1.2.3.4", "schedule")
         assert allowed is True
+        assert retry_after == 0
 
     def test_blocked_over_limit(self):
         mock_conn = MagicMock()
         mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = (9999,)
+        mock_cursor.fetchone.return_value = (9999, 1800)
         mock_conn.cursor.return_value.__enter__ = MagicMock(return_value=mock_cursor)
         mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
 
@@ -47,11 +49,12 @@ class TestCheckRateLimit:
         with patch("services.rate_limiter.get_db_connection", _ctx), \
              patch("services.rate_limiter.random") as mock_random:
             mock_random.random.return_value = 0.5
-            allowed, msg = check_rate_limit("1.2.3.4", "schedule")
+            allowed, msg, retry_after = check_rate_limit("1.2.3.4", "schedule")
         assert allowed is False
         assert "Rate limit exceeded" in msg
+        assert retry_after == 1800
 
     def test_db_failure_fails_open(self):
         with patch("services.rate_limiter.get_db_connection", side_effect=Exception("db down")):
-            allowed, msg = check_rate_limit("1.2.3.4", "schedule")
+            allowed, msg, retry_after = check_rate_limit("1.2.3.4", "schedule")
         assert allowed is True

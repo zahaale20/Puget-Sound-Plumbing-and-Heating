@@ -2,9 +2,8 @@ import os
 import re
 import logging
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Request, UploadFile, File, Form
-from dependencies import get_client_ip
-from services.rate_limiter import check_rate_limit
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, UploadFile, File, Form
+from dependencies import require_rate_limit
 from services.captcha_service import verify_captcha
 from services.email_service import send_job_application_confirmation, send_job_application_notification
 from services.storage_service import StorageService
@@ -15,6 +14,14 @@ router = APIRouter(prefix="/api", tags=["careers"])
 logger = logging.getLogger(__name__)
 
 storage_service = StorageService()
+
+
+def _safe_send_job_application_notification(*args, **kwargs) -> None:
+    """Best-effort company notification; never propagates errors."""
+    try:
+        send_job_application_notification(*args, **kwargs)
+    except Exception:
+        logger.exception("Background send_job_application_notification failed")
 
 MAX_RESUME_SIZE_BYTES = int(os.getenv("MAX_RESUME_SIZE_BYTES", str(5 * 1024 * 1024)))
 ALLOWED_RESUME_EXTENSIONS = {".pdf", ".doc", ".docx"}
@@ -52,7 +59,7 @@ def validate_resume_upload(resume: UploadFile, resume_bytes: bytes) -> str:
     return safe_filename
 
 
-@router.post("/job-application")
+@router.post("/job-application", dependencies=[Depends(require_rate_limit("job-application"))])
 async def submit_job_application(
     firstName: str = Form(...),
     lastName: str = Form(...),
@@ -64,14 +71,10 @@ async def submit_job_application(
     additionalInfo: str = Form(""),
     captchaToken: Optional[str] = Form(None),
     resume: Optional[UploadFile] = File(None),
+    background_tasks: BackgroundTasks = None,
     req: Request = None,
 ):
     """Insert job application into DB, email resume to company, send confirmation to applicant"""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "job-application")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
-
     if not verify_captcha(captchaToken):
         raise HTTPException(
             status_code=403,
@@ -120,10 +123,17 @@ async def submit_job_application(
 
         try:
             send_job_application_confirmation(norm_email, norm_first, norm_position)
-            send_job_application_notification(
-                norm_email, norm_first, norm_last, norm_position,
-                resume_bytes, resume_filename,
-            )
+            if background_tasks is not None:
+                background_tasks.add_task(
+                    _safe_send_job_application_notification,
+                    norm_email, norm_first, norm_last, norm_position,
+                    resume_bytes, resume_filename,
+                )
+            else:
+                _safe_send_job_application_notification(
+                    norm_email, norm_first, norm_last, norm_position,
+                    resume_bytes, resume_filename,
+                )
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception(

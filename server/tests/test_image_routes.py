@@ -4,7 +4,7 @@ from unittest.mock import patch
 class TestGetImageUrl:
     def test_valid_image(self, client):
         with (
-            patch("routes.images.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.images.storage_service") as mock_svc,
         ):
             mock_svc.supabase_url = "https://test.supabase.co"
@@ -15,7 +15,7 @@ class TestGetImageUrl:
 
     def test_invalid_image_path(self, client):
         with (
-            patch("routes.images.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.images.storage_service") as mock_svc,
         ):
             mock_svc.supabase_url = "https://test.supabase.co"
@@ -25,7 +25,7 @@ class TestGetImageUrl:
 
     def test_no_storage_url(self, client):
         with (
-            patch("routes.images.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.images.storage_service") as mock_svc,
         ):
             mock_svc.supabase_url = None
@@ -33,6 +33,6 @@ class TestGetImageUrl:
         assert resp.status_code == 404
 
     def test_rate_limited(self, client):
-        with patch("routes.images.check_rate_limit", return_value=(False, "Limited")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(False, "Limited", 3600)):
             resp = client.get("/api/images/blog/img.webp")
         assert resp.status_code == 429

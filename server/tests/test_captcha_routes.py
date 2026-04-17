@@ -7,7 +7,7 @@ class TestVerifyCaptcha:
         mock_resp.json.return_value = {"success": True}
         mock_resp.raise_for_status = MagicMock()
         with (
-            patch("routes.captcha.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.captcha.HCAPTCHA_SECRET_KEY", "secret"),
             patch("routes.captcha.requests.post", return_value=mock_resp),
         ):
@@ -16,13 +16,13 @@ class TestVerifyCaptcha:
         assert resp.json()["success"] is True
 
     def test_missing_token(self, client):
-        with patch("routes.captcha.check_rate_limit", return_value=(True, "OK")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)):
             resp = client.post("/api/verify-captcha", json={})
         assert resp.status_code == 400
 
     def test_no_secret_key_allows(self, client):
         with (
-            patch("routes.captcha.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.captcha.HCAPTCHA_SECRET_KEY", None),
         ):
             resp = client.post("/api/verify-captcha", json={"token": "tok"})
@@ -33,7 +33,7 @@ class TestVerifyCaptcha:
         mock_resp.json.return_value = {"success": False}
         mock_resp.raise_for_status = MagicMock()
         with (
-            patch("routes.captcha.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.captcha.HCAPTCHA_SECRET_KEY", "secret"),
             patch("routes.captcha.requests.post", return_value=mock_resp),
         ):
@@ -41,14 +41,14 @@ class TestVerifyCaptcha:
         assert resp.status_code == 403
 
     def test_rate_limited(self, client):
-        with patch("routes.captcha.check_rate_limit", return_value=(False, "Limited")):
+        with patch("services.rate_limiter.check_rate_limit", return_value=(False, "Limited", 3600)):
             resp = client.post("/api/verify-captcha", json={"token": "tok"})
         assert resp.status_code == 429
 
     def test_api_error(self, client):
         import requests as req_lib
         with (
-            patch("routes.captcha.check_rate_limit", return_value=(True, "OK")),
+            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
             patch("routes.captcha.HCAPTCHA_SECRET_KEY", "secret"),
             patch("routes.captcha.requests.post", side_effect=req_lib.RequestException("timeout")),
         ):

@@ -1,9 +1,8 @@
 import os
 import logging
 import requests
-from fastapi import APIRouter, HTTPException, Request
-from dependencies import get_client_ip
-from services.rate_limiter import check_rate_limit
+from fastapi import APIRouter, Depends, HTTPException, Request
+from dependencies import require_rate_limit
 
 router = APIRouter(prefix="/api", tags=["captcha"])
 logger = logging.getLogger(__name__)
@@ -11,14 +10,9 @@ logger = logging.getLogger(__name__)
 HCAPTCHA_SECRET_KEY = os.getenv("HCAPTCHA_SECRET_KEY")
 
 
-@router.post("/verify-captcha")
+@router.post("/verify-captcha", dependencies=[Depends(require_rate_limit("verify-captcha"))])
 async def verify_captcha(request: dict, req: Request):
     """Verify hCaptcha token from frontend"""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "verify-captcha")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
-
     token = request.get("token")
     if not token:
         raise HTTPException(status_code=400, detail="Token is required")

@@ -6,11 +6,10 @@ import secrets
 from typing import Optional
 from urllib.parse import quote
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
-from dependencies import get_client_ip
-from services.rate_limiter import check_rate_limit
+from dependencies import require_rate_limit
 from services.captcha_service import verify_captcha
 from services.email_service import (
     send_newsletter_confirmation,
@@ -26,13 +25,39 @@ from models.requests import NewsletterRequest
 router = APIRouter(prefix="/api", tags=["newsletter"])
 logger = logging.getLogger(__name__)
 
-NEWSLETTER_UNSUBSCRIBE_SECRET = (
-    os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
-    or secrets.token_urlsafe(32)
-)
 
-if not os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET"):
-    logger.warning("NEWSLETTER_UNSUBSCRIBE_SECRET not set explicitly; using fallback secret source")
+def _safe_send_newsletter_notification(email: str) -> None:
+    """Best-effort company notification; never propagates errors."""
+    try:
+        send_newsletter_notification(email)
+    except Exception:
+        logger.exception("Background send_newsletter_notification failed")
+
+
+def _safe_send_newsletter_unsubscribe_notification(email: str) -> None:
+    """Best-effort company unsubscribe notification; never propagates errors."""
+    try:
+        send_newsletter_unsubscribe_notification(email)
+    except Exception:
+        logger.exception("Background send_newsletter_unsubscribe_notification failed")
+
+_NEWSLETTER_SECRET_ENV = os.getenv("NEWSLETTER_UNSUBSCRIBE_SECRET")
+if _NEWSLETTER_SECRET_ENV:
+    NEWSLETTER_UNSUBSCRIBE_SECRET = _NEWSLETTER_SECRET_ENV
+elif os.getenv("VERCEL") or os.getenv("PROD") or os.getenv("ENV", "").lower() in {"prod", "production"}:
+    # Hard-fail in production: a per-process random secret would silently
+    # invalidate every previously issued unsubscribe link on each redeploy.
+    raise RuntimeError(
+        "NEWSLETTER_UNSUBSCRIBE_SECRET must be set in production. "
+        "Generate one with `python -c 'import secrets; print(secrets.token_urlsafe(32))'` "
+        "and configure it as an environment variable."
+    )
+else:
+    NEWSLETTER_UNSUBSCRIBE_SECRET = secrets.token_urlsafe(32)
+    logger.warning(
+        "NEWSLETTER_UNSUBSCRIBE_SECRET not set; generated an ephemeral dev secret. "
+        "Unsubscribe links will be invalidated on every restart."
+    )
 
 
 def generate_unsubscribe_token(email: str) -> str:
@@ -72,14 +97,9 @@ def build_unsubscribe_url(email: str) -> str:
     )
 
 
-@router.post("/newsletter")
-async def subscribe_newsletter(request: NewsletterRequest, req: Request):
+@router.post("/newsletter", dependencies=[Depends(require_rate_limit("newsletter"))])
+async def subscribe_newsletter(request: NewsletterRequest, req: Request, background_tasks: BackgroundTasks):
     """Save newsletter subscription email to DB and send confirmation email"""
-    client_ip = get_client_ip(req)
-    is_allowed, rate_limit_msg = check_rate_limit(client_ip, "newsletter")
-    if not is_allowed:
-        raise HTTPException(status_code=429, detail=rate_limit_msg)
-
     if not verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
@@ -111,7 +131,7 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
         else:
             try:
                 send_newsletter_confirmation(email, unsubscribe_url)
-                send_newsletter_notification(email)
+                background_tasks.add_task(_safe_send_newsletter_notification, email)
                 email_status = "sent"
             except HTTPException as email_error:
                 logger.exception(
@@ -139,17 +159,14 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request):
         raise_internal_error("subscribe_newsletter failed", e)
 
 
-@router.get("/newsletter/unsubscribe")
+@router.get("/newsletter/unsubscribe", dependencies=[Depends(require_rate_limit("unsubscribe"))])
 async def unsubscribe_newsletter(
-    email: str, token: Optional[str] = None, req: Request = None
+    email: str,
+    background_tasks: BackgroundTasks,
+    token: Optional[str] = None,
+    req: Request = None,
 ):
     """One-click unsubscribe endpoint that removes user from mailing list."""
-    if req:
-        client_ip = get_client_ip(req)
-        is_allowed, rate_limit_msg = check_rate_limit(client_ip, "unsubscribe")
-        if not is_allowed:
-            raise HTTPException(status_code=429, detail=rate_limit_msg)
-
     normalized_email = normalize_email(email)
     if token is None or not token.strip():
         raise HTTPException(status_code=400, detail="Unsubscribe token is required.")
@@ -177,8 +194,8 @@ async def unsubscribe_newsletter(
                     email_error.detail,
                 )
 
-            # Notify company (non-critical)
-            send_newsletter_unsubscribe_notification(normalized_email)
+            # Notify company (non-critical, off the request critical path)
+            background_tasks.add_task(_safe_send_newsletter_unsubscribe_notification, normalized_email)
 
         return HTMLResponse(content=_UNSUBSCRIBE_PAGE, status_code=200)
     except Exception as e:
