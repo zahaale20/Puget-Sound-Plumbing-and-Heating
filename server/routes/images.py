@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from services.storage_service import StorageService
+from typing import Any
+
 from dependencies import require_rate_limit
+from services.storage_service import StorageService
 
 router = APIRouter(prefix="/api/images", tags=["Images"])
 storage_service = StorageService()
 
 
 @router.get("/{image_name:path}", dependencies=[Depends(require_rate_limit("images"))])
-async def get_image_url(image_name: str, req: Request = None):
+async def get_image_url(image_name: str, req: Request) -> dict[str, Any]:
     if not storage_service.supabase_url:
         raise HTTPException(status_code=404, detail="Storage URL configuration missing")
 

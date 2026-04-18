@@ -1,15 +1,16 @@
 import pytest
 from pydantic import ValidationError
+
 from models.requests import (
-    ScheduleRequest,
+    DiyPermitRequest,
     NewsletterRequest,
     RedeemOfferRequest,
-    DiyPermitRequest,
+    ScheduleRequest,
 )
 
 
 class TestScheduleRequest:
-    def test_valid_request(self):
+    def test_valid_request(self) -> None:
         req = ScheduleRequest(
             firstName="John",
             lastName="Doe",
@@ -20,7 +21,7 @@ class TestScheduleRequest:
         assert req.firstName == "John"
         assert req.email == "john@example.com"
 
-    def test_minimal_fields(self):
+    def test_minimal_fields(self) -> None:
         req = ScheduleRequest(
             firstName="J",
             lastName="D",
@@ -29,7 +30,7 @@ class TestScheduleRequest:
         )
         assert req.message == ""
 
-    def test_invalid_email_rejected(self):
+    def test_invalid_email_rejected(self) -> None:
         with pytest.raises(ValidationError):
             ScheduleRequest(
                 firstName="John",
@@ -38,7 +39,7 @@ class TestScheduleRequest:
                 email="not-an-email",
             )
 
-    def test_empty_first_name_rejected(self):
+    def test_empty_first_name_rejected(self) -> None:
         with pytest.raises(ValidationError):
             ScheduleRequest(
                 firstName="",
@@ -47,7 +48,7 @@ class TestScheduleRequest:
                 email="john@example.com",
             )
 
-    def test_phone_too_short_rejected(self):
+    def test_phone_too_short_rejected(self) -> None:
         with pytest.raises(ValidationError):
             ScheduleRequest(
                 firstName="John",
@@ -56,9 +57,9 @@ class TestScheduleRequest:
                 email="john@example.com",
             )
 
-    def test_extra_fields_rejected(self):
+    def test_extra_fields_rejected(self) -> None:
         with pytest.raises(ValidationError):
-            ScheduleRequest(
+            ScheduleRequest(  # type: ignore[call-arg]
                 firstName="John",
                 lastName="Doe",
                 phone="2065551234",
@@ -68,22 +69,22 @@ class TestScheduleRequest:
 
 
 class TestNewsletterRequest:
-    def test_valid(self):
+    def test_valid(self) -> None:
         req = NewsletterRequest(email="user@example.com")
         assert req.email == "user@example.com"
         assert req.captchaToken is None
 
-    def test_invalid_email(self):
+    def test_invalid_email(self) -> None:
         with pytest.raises(ValidationError):
             NewsletterRequest(email="bad")
 
-    def test_with_captcha_token(self):
+    def test_with_captcha_token(self) -> None:
         req = NewsletterRequest(email="user@test.com", captchaToken="tok123")
         assert req.captchaToken == "tok123"
 
 
 class TestRedeemOfferRequest:
-    def test_valid(self):
+    def test_valid(self) -> None:
         req = RedeemOfferRequest(
             firstName="Jane",
             lastName="Doe",
@@ -94,9 +95,9 @@ class TestRedeemOfferRequest:
         )
         assert req.couponDiscount == "$50 Off"
 
-    def test_missing_coupon_fields(self):
+    def test_missing_coupon_fields(self) -> None:
         with pytest.raises(ValidationError):
-            RedeemOfferRequest(
+            RedeemOfferRequest(  # type: ignore[call-arg]
                 firstName="Jane",
                 lastName="Doe",
                 phone="2065559999",
@@ -105,7 +106,7 @@ class TestRedeemOfferRequest:
 
 
 class TestDiyPermitRequest:
-    def test_valid_full(self):
+    def test_valid_full(self) -> None:
         req = DiyPermitRequest(
             firstName="Bob",
             lastName="Smith",
@@ -120,7 +121,7 @@ class TestDiyPermitRequest:
         )
         assert req.inspection == "yes"
 
-    def test_defaults(self):
+    def test_defaults(self) -> None:
         req = DiyPermitRequest(
             firstName="Bob",
             lastName="Smith",
@@ -134,7 +135,7 @@ class TestDiyPermitRequest:
         assert req.projectDescription == ""
         assert req.inspection == "unsure"
 
-    def test_invalid_inspection_rejected(self):
+    def test_invalid_inspection_rejected(self) -> None:
         with pytest.raises(ValidationError):
             DiyPermitRequest(
                 firstName="Bob",

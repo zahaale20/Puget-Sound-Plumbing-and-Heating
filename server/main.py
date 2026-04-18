@@ -1,19 +1,45 @@
-import os
 import logging
+import os
 import time
+from collections.abc import AsyncIterator, Callable
+from contextlib import asynccontextmanager
+from typing import Any
+from urllib.parse import urlparse
+
 import uvicorn
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from urllib.parse import urlparse
-from routes import images, blog, captcha, schedule, newsletter, offers, diy_permit, careers
-from dotenv import load_dotenv
+from fastapi.responses import JSONResponse
+
+from observability import (
+    configure_logging,
+    http_requests_in_flight,
+    init_sentry,
+    is_metrics_enabled,
+    new_request_id,
+    record_request_metrics,
+    request_id_var,
+)
+from routes import blog, captcha, careers, diy_permit, images, newsletter, offers, schedule
 
 load_dotenv()
+configure_logging()
+init_sentry()
 
-app = FastAPI(title="PSPAH Backend API")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    try:
+        yield
+    finally:
+        from database import close_pool
+        await close_pool()
+
+
+app = FastAPI(title="PSPAH Backend API", lifespan=lifespan)
 
 
 def _normalize_hostname(hostname: str | None) -> str | None:
@@ -72,7 +98,6 @@ _DEFAULT_ORIGINS = [
     "http://127.0.0.1:8001",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "http://pugetsoundplumbing.com",
     "https://pugetsoundplumbing.com",
     "https://www.pugetsoundplumbing.com",
     "https://cavostudio.com",
@@ -108,7 +133,7 @@ if os.getenv("ENABLE_HTTPS_REDIRECT", "true").lower() == "true":
 
 
 @app.middleware("http")
-async def add_security_headers(request: Request, call_next):
+async def add_security_headers(request: Request, call_next: Callable[..., Any]) -> Response:
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
@@ -121,15 +146,48 @@ async def add_security_headers(request: Request, call_next):
 
 _request_logger = logging.getLogger("pspah.requests")
 
+
 @app.middleware("http")
-async def log_requests(request: Request, call_next):
+async def request_id_middleware(request: Request, call_next: Callable[..., Any]) -> Response:
+    """Attach an X-Request-ID for cross-system correlation.
+
+    Honours an inbound `X-Request-ID` header (e.g. from a CDN) so traces stay
+    consistent across systems; falls back to a freshly generated id otherwise.
+    The id is stashed in a contextvar so the structured-log formatter picks it
+    up automatically for every log line emitted during the request.
+    """
+    inbound = request.headers.get("x-request-id", "").strip()
+    rid = inbound if 8 <= len(inbound) <= 64 else new_request_id()
+    token = request_id_var.set(rid)
+    try:
+        response = await call_next(request)
+    finally:
+        request_id_var.reset(token)
+    response.headers["X-Request-ID"] = rid
+    return response
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next: Callable[..., Any]) -> Response:
     start = time.perf_counter()
-    response = await call_next(request)
-    duration_ms = (time.perf_counter() - start) * 1000
+    if http_requests_in_flight is not None:
+        http_requests_in_flight.inc()
+    try:
+        response = await call_next(request)
+    finally:
+        if http_requests_in_flight is not None:
+            http_requests_in_flight.dec()
+    duration_s = time.perf_counter() - start
     _request_logger.info(
-        "%s %s %s %.1fms",
-        request.method, request.url.path, response.status_code, duration_ms,
+        "http_request",
+        extra={
+            "method": request.method,
+            "path": request.url.path,
+            "status": response.status_code,
+            "duration_ms": round(duration_s * 1000, 1),
+        },
     )
+    record_request_metrics(request.method, request.url.path, response.status_code, duration_s)
     return response
 
 # "Plug in" the routers
@@ -143,15 +201,71 @@ app.include_router(diy_permit.router)
 app.include_router(careers.router)
 
 @app.get("/")
-async def root():
+async def root() -> dict[str, str]:
     return {"status": "PSPAH API is running"}
 
-@app.get("/health")
-async def health():
+
+# ---------------------------------------------------------------------------
+# Health endpoints
+# ---------------------------------------------------------------------------
+# /health/live  — liveness: is the process up and able to serve traffic?
+#                 Lightweight; no external checks.  Restart if this fails.
+# /health/ready — readiness: are dependencies (DB) reachable?
+#                 Remove from load-balancer rotation if this fails.
+# /health       — retained for backwards compatibility; equivalent to /health/ready.
+# ---------------------------------------------------------------------------
+
+@app.get("/health/live", tags=["health"])
+async def health_live() -> dict[str, str]:
+    """Liveness probe — no I/O, always succeeds while the process is alive."""
+    return {"status": "alive"}
+
+
+@app.get("/health/ready", tags=["health"], response_model=None)
+async def health_ready() -> dict[str, str] | JSONResponse:
+    """Readiness probe — succeeds only when the database is reachable."""
     from database import test_db
-    if test_db():
+    if await test_db():
+        return {"status": "ready", "database": "connected"}
+    return JSONResponse(status_code=503, content={"status": "not_ready", "database": "disconnected"})
+
+
+@app.get("/health", tags=["health"], response_model=None)
+async def health() -> dict[str, str] | JSONResponse:
+    """Backwards-compatible health check — delegates to the readiness probe."""
+    from database import test_db
+    if await test_db():
         return {"status": "healthy", "database": "connected"}
     return JSONResponse(status_code=503, content={"status": "unhealthy", "database": "disconnected"})
 
+
+# ---------------------------------------------------------------------------
+# Prometheus metrics endpoint
+# ---------------------------------------------------------------------------
+# Enabled only when ENABLE_METRICS=true.  Optionally gated behind a bearer
+# token (METRICS_TOKEN) to prevent public scraping of operational data.
+# ---------------------------------------------------------------------------
+
+@app.get("/metrics", tags=["observability"], include_in_schema=False, response_model=None)
+async def prometheus_metrics(request: Request) -> JSONResponse | Response:
+    """Expose Prometheus metrics if ENABLE_METRICS=true."""
+    if not is_metrics_enabled():
+        return JSONResponse(status_code=404, content={"detail": "Metrics not enabled"})
+
+    # Optional bearer-token gate
+    metrics_token = os.getenv("METRICS_TOKEN", "").strip()
+    if metrics_token:
+        auth_header = request.headers.get("Authorization", "")
+        if not auth_header.startswith("Bearer ") or auth_header[7:] != metrics_token:
+            return JSONResponse(status_code=401, content={"detail": "Unauthorized"})
+
+    try:
+        from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+        from starlette.responses import Response
+        return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    except ImportError:
+        return JSONResponse(status_code=503, content={"detail": "prometheus_client not installed"})
+
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)  # nosec B104 - local dev only

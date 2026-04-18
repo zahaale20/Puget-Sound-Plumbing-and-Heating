@@ -1,7 +1,10 @@
-import os
 import logging
+import os
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
+
 from database import get_db_connection
 from dependencies import require_rate_limit
 
@@ -39,11 +42,11 @@ def _row_to_post(row: tuple) -> dict:
     }
 
 
-@router.get("")
+@router.get("", response_model=None)
 async def list_blog_posts(
     limit: int = Query(BLOG_LIST_DEFAULT_LIMIT, ge=1, le=BLOG_LIST_MAX_LIMIT),
     offset: int = Query(0, ge=0),
-):
+) -> dict[str, Any] | JSONResponse:
     """Return blog posts ordered by published_date descending.
 
     Bounded by `limit` (default 100, max 200) and offset for pagination.
@@ -51,9 +54,9 @@ async def list_blog_posts(
     for the typical case where the blog has < 100 posts.
     """
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     """
                     SELECT id, title, slug, source_url, published_date, author,
                            views, content_json, featured_image_s3_key, content_image_s3_keys
@@ -63,7 +66,7 @@ async def list_blog_posts(
                     """,
                     (limit, offset),
                 )
-                rows = cur.fetchall()
+                rows = await cur.fetchall()
         posts = [_row_to_post(row) for row in rows]
         return JSONResponse(
             content=posts,
@@ -71,16 +74,16 @@ async def list_blog_posts(
         )
     except Exception as e:
         logger.exception("Failed to fetch blog posts: %s", str(e))
-        raise HTTPException(status_code=500, detail="Failed to load blog posts")
+        raise HTTPException(status_code=500, detail="Failed to load blog posts") from e
 
 
 @router.get("/{slug}")
-async def get_blog_post(slug: str):
+async def get_blog_post(slug: str) -> dict[str, Any]:
     """Return a single blog post by slug."""
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     """
                     SELECT id, title, slug, source_url, published_date, author,
                            views, content_json, featured_image_s3_key, content_image_s3_keys
@@ -89,7 +92,7 @@ async def get_blog_post(slug: str):
                     """,
                     (slug,),
                 )
-                row = cur.fetchone()
+                row = await cur.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Blog post not found")
         return _row_to_post(row)
@@ -97,16 +100,16 @@ async def get_blog_post(slug: str):
         raise
     except Exception as e:
         logger.exception("Failed to fetch blog post '%s': %s", slug, str(e))
-        raise HTTPException(status_code=500, detail="Failed to load blog post")
+        raise HTTPException(status_code=500, detail="Failed to load blog post") from e
 
 
 @router.post("/{slug}/views", dependencies=[Depends(require_rate_limit("blog-views"))])
-async def increment_views(slug: str, req: Request):
+async def increment_views(slug: str, req: Request) -> dict[str, Any]:
     """Increment the view count for a blog post. Rate-limited."""
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     """
                     UPDATE public."Blog Posts"
                     SET views = views + 1
@@ -115,13 +118,13 @@ async def increment_views(slug: str, req: Request):
                     """,
                     (slug,),
                 )
-                result = cur.fetchone()
+                result = await cur.fetchone()
                 if not result:
                     raise HTTPException(status_code=404, detail="Blog post not found")
-                conn.commit()
+            await conn.commit()
         return {"views": result[0]}
     except HTTPException:
         raise
     except Exception as e:
         logger.exception("Failed to increment views for '%s': %s", slug, str(e))
-        raise HTTPException(status_code=500, detail="Failed to update views")
+        raise HTTPException(status_code=500, detail="Failed to update views") from e

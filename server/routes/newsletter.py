@@ -1,43 +1,43 @@
-import os
 import hashlib
 import hmac
 import logging
+import os
 import secrets
-from typing import Optional
+from typing import Any
 from urllib.parse import quote
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
+from database import get_db_connection
 from dependencies import require_rate_limit
+from models.requests import NewsletterRequest
 from services.captcha_service import verify_captcha
 from services.email_service import (
-    send_newsletter_confirmation,
-    send_newsletter_unsubscribe_confirmation,
-    send_newsletter_notification,
-    send_newsletter_unsubscribe_notification,
     LOGO_URL,
+    send_newsletter_confirmation,
+    send_newsletter_notification,
+    send_newsletter_unsubscribe_confirmation,
+    send_newsletter_unsubscribe_notification,
 )
-from database import get_db_connection
-from utils import normalize_email, is_duplicate_error, raise_internal_error
-from models.requests import NewsletterRequest
+from utils import is_duplicate_error, normalize_email, raise_internal_error
 
 router = APIRouter(prefix="/api", tags=["newsletter"])
 logger = logging.getLogger(__name__)
 
 
-def _safe_send_newsletter_notification(email: str) -> None:
+async def _safe_send_newsletter_notification(email: str) -> None:
     """Best-effort company notification; never propagates errors."""
     try:
-        send_newsletter_notification(email)
+        await send_newsletter_notification(email)
     except Exception:
         logger.exception("Background send_newsletter_notification failed")
 
 
-def _safe_send_newsletter_unsubscribe_notification(email: str) -> None:
+async def _safe_send_newsletter_unsubscribe_notification(email: str) -> None:
     """Best-effort company unsubscribe notification; never propagates errors."""
     try:
-        send_newsletter_unsubscribe_notification(email)
+        await send_newsletter_unsubscribe_notification(email)
     except Exception:
         logger.exception("Background send_newsletter_unsubscribe_notification failed")
 
@@ -98,9 +98,9 @@ def build_unsubscribe_url(email: str) -> str:
 
 
 @router.post("/newsletter", dependencies=[Depends(require_rate_limit("newsletter"))])
-async def subscribe_newsletter(request: NewsletterRequest, req: Request, background_tasks: BackgroundTasks):
+async def subscribe_newsletter(request: NewsletterRequest, req: Request, background_tasks: BackgroundTasks) -> dict[str, Any]:
     """Save newsletter subscription email to DB and send confirmation email"""
-    if not verify_captcha(request.captchaToken):
+    if not await verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -110,27 +110,27 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request, backgro
     duplicate = False
 
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
                 try:
-                    cur.execute(
+                    await cur.execute(
                         'INSERT INTO "Newsletter" (email) VALUES (%s)',
                         (email,),
                     )
                 except Exception as insert_error:
                     if is_duplicate_error(insert_error):
                         duplicate = True
-                        conn.rollback()
+                        await conn.rollback()
                     else:
                         raise
-            conn.commit()
+            await conn.commit()
 
         unsubscribe_url = build_unsubscribe_url(email)
         if duplicate:
             email_status = "skipped"
         else:
             try:
-                send_newsletter_confirmation(email, unsubscribe_url)
+                await send_newsletter_confirmation(email, unsubscribe_url)
                 background_tasks.add_task(_safe_send_newsletter_notification, email)
                 email_status = "sent"
             except HTTPException as email_error:
@@ -159,13 +159,13 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request, backgro
         raise_internal_error("subscribe_newsletter failed", e)
 
 
-@router.get("/newsletter/unsubscribe", dependencies=[Depends(require_rate_limit("unsubscribe"))])
+@router.get("/newsletter/unsubscribe", dependencies=[Depends(require_rate_limit("unsubscribe"))], response_model=None)
 async def unsubscribe_newsletter(
     email: str,
     background_tasks: BackgroundTasks,
-    token: Optional[str] = None,
-    req: Request = None,
-):
+    req: Request,
+    token: str | None = None,
+) -> dict[str, Any] | HTMLResponse:
     """One-click unsubscribe endpoint that removes user from mailing list."""
     normalized_email = normalize_email(email)
     if token is None or not token.strip():
@@ -176,18 +176,18 @@ async def unsubscribe_newsletter(
         raise HTTPException(status_code=400, detail="Invalid unsubscribe link.")
 
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     'DELETE FROM "Newsletter" WHERE lower(email)=lower(%s)',
                     (normalized_email,),
                 )
                 deleted = cur.rowcount
-            conn.commit()
+            await conn.commit()
 
         if deleted > 0:
             try:
-                send_newsletter_unsubscribe_confirmation(normalized_email)
+                await send_newsletter_unsubscribe_confirmation(normalized_email)
             except HTTPException as email_error:
                 logger.exception(
                     "Unsubscribed from newsletter but confirmation email failed: %s",

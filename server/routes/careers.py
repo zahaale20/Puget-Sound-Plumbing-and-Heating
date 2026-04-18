@@ -1,14 +1,35 @@
+import logging
 import os
 import re
-import logging
-from typing import Optional
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, UploadFile, File, Form
+from typing import Any
+
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Request,
+    UploadFile,
+)
+from fastapi.responses import JSONResponse
+
+from database import get_db_connection
 from dependencies import require_rate_limit
 from services.captcha_service import verify_captcha
-from services.email_service import send_job_application_confirmation, send_job_application_notification
+from services.email_service import (
+    send_job_application_confirmation,
+    send_job_application_notification,
+)
 from services.storage_service import StorageService
-from database import get_db_connection
-from utils import normalize_email, normalize_text, is_duplicate_error, duplicate_response, raise_internal_error
+from utils import (
+    duplicate_response,
+    is_duplicate_error,
+    normalize_email,
+    normalize_text,
+    raise_internal_error,
+)
 
 router = APIRouter(prefix="/api", tags=["careers"])
 logger = logging.getLogger(__name__)
@@ -16,10 +37,10 @@ logger = logging.getLogger(__name__)
 storage_service = StorageService()
 
 
-def _safe_send_job_application_notification(*args, **kwargs) -> None:
+async def _safe_send_job_application_notification(*args: Any, **kwargs: Any) -> None:
     """Best-effort company notification; never propagates errors."""
     try:
-        send_job_application_notification(*args, **kwargs)
+        await send_job_application_notification(*args, **kwargs)
     except Exception:
         logger.exception("Background send_job_application_notification failed")
 
@@ -59,8 +80,10 @@ def validate_resume_upload(resume: UploadFile, resume_bytes: bytes) -> str:
     return safe_filename
 
 
-@router.post("/job-application", dependencies=[Depends(require_rate_limit("job-application"))])
+@router.post("/job-application", dependencies=[Depends(require_rate_limit("job-application"))], response_model=None)
 async def submit_job_application(
+    background_tasks: BackgroundTasks,
+    req: Request,
     firstName: str = Form(...),
     lastName: str = Form(...),
     phone: str = Form(...),
@@ -69,13 +92,11 @@ async def submit_job_application(
     experience: str = Form(""),
     message: str = Form(""),
     additionalInfo: str = Form(""),
-    captchaToken: Optional[str] = Form(None),
-    resume: Optional[UploadFile] = File(None),
-    background_tasks: BackgroundTasks = None,
-    req: Request = None,
-):
+    captchaToken: str | None = Form(None),
+    resume: UploadFile | None = File(None),
+) -> dict[str, Any] | JSONResponse:
     """Insert job application into DB, email resume to company, send confirmation to applicant"""
-    if not verify_captcha(captchaToken):
+    if not await verify_captcha(captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -87,11 +108,19 @@ async def submit_job_application(
     norm_email = normalize_email(email)
     norm_position = normalize_text(position)
 
+    # Validate resume BEFORE touching the DB so a rejected file never leaves
+    # an orphaned (resume-less) row that would permanently block the applicant.
+    resume_bytes = None
+    resume_filename = None
+    if resume:
+        resume_bytes = await resume.read()
+        resume_filename = validate_resume_upload(resume, resume_bytes)
+
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
                 try:
-                    cur.execute(
+                    await cur.execute(
                         """
                         INSERT INTO "Job Applications"
                             (first_name, last_name, email, phone, position)
@@ -101,20 +130,16 @@ async def submit_job_application(
                     )
                 except Exception as insert_error:
                     if is_duplicate_error(insert_error):
-                        conn.rollback()
+                        await conn.rollback()
                         return duplicate_response(
                             "A job application already exists for this email and position. "
                             "Our team will follow up if needed."
                         )
                     raise
-            conn.commit()
+            await conn.commit()
 
-        resume_bytes = None
-        resume_filename = None
-        if resume:
-            resume_bytes = await resume.read()
-            resume_filename = validate_resume_upload(resume, resume_bytes)
-            resume_storage_key = storage_service.upload_resume(resume_bytes, resume_filename)
+        if resume_bytes and resume_filename:
+            resume_storage_key = await storage_service.upload_resume(resume_bytes, resume_filename)
             if not resume_storage_key:
                 logger.warning(
                     "Failed to upload resume %s to storage, will attach to email anyway",
@@ -122,7 +147,7 @@ async def submit_job_application(
                 )
 
         try:
-            send_job_application_confirmation(norm_email, norm_first, norm_position)
+            await send_job_application_confirmation(norm_email, norm_first, norm_position)
             if background_tasks is not None:
                 background_tasks.add_task(
                     _safe_send_job_application_notification,
@@ -130,7 +155,7 @@ async def submit_job_application(
                     resume_bytes, resume_filename,
                 )
             else:
-                _safe_send_job_application_notification(
+                await _safe_send_job_application_notification(
                     norm_email, norm_first, norm_last, norm_position,
                     resume_bytes, resume_filename,
                 )
@@ -145,5 +170,7 @@ async def submit_job_application(
                 "emailStatus": "failed",
                 "message": "Application saved, but email notification could not be sent.",
             }
+    except HTTPException:
+        raise
     except Exception as e:
         raise_internal_error("submit_job_application failed", e)

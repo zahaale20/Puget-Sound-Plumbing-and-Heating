@@ -1,11 +1,14 @@
-import os
+import asyncio
 import base64
-import logging
-import re
 import html as html_module
-from typing import Optional
+import logging
+import os
+import re
+from typing import Any
 
 import resend
+
+from services.resilience import CircuitBreaker, retry_async
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +31,19 @@ COMPANY_NAME = "Puget Sound Plumbing and Heating"
 COMPANY_PHONE = "(206) 938-3219"
 COMPANY_PHONE_HREF = "tel:+12069383219"
 COMPANY_ADDRESS = "11803 Des Moines Memorial Dr S, Burien, WA 98168"
+
+RESEND_TIMEOUT_SEC = float(os.getenv("RESEND_TIMEOUT_SEC", "8"))
+RESEND_MAX_ATTEMPTS = int(os.getenv("RESEND_MAX_ATTEMPTS", "3"))
+RESEND_RETRY_BACKOFF_SEC = float(os.getenv("RESEND_RETRY_BACKOFF_SEC", "0.3"))
+RESEND_MAX_BACKOFF_SEC = float(os.getenv("RESEND_MAX_BACKOFF_SEC", "2"))
+RESEND_CB_FAILURE_THRESHOLD = int(os.getenv("RESEND_CB_FAILURE_THRESHOLD", "3"))
+RESEND_CB_OPEN_SEC = float(os.getenv("RESEND_CB_OPEN_SEC", "20"))
+
+_resend_breaker = CircuitBreaker(
+    name="resend",
+    failure_threshold=RESEND_CB_FAILURE_THRESHOLD,
+    recovery_timeout_sec=RESEND_CB_OPEN_SEC,
+)
 
 
 # ─── Sanitization Helpers ─────────────────────────────────────────────────────
@@ -96,7 +112,7 @@ def _steps(label: str, items: list[str]) -> str:
     )
 
 
-def _contact(text: str = None) -> str:
+def _contact(text: str | None = None) -> str:
     text = text or (
         "Need immediate help? We're available "
         '<strong style="color:#2B2B2B;">24 hours a day, 7 days a week</strong>.<br/>'
@@ -109,7 +125,7 @@ def _contact(text: str = None) -> str:
     )
 
 
-def _cta(text: str = None, href: str = None) -> str:
+def _cta(text: str | None = None, href: str | None = None) -> str:
     text = text or f"CALL {COMPANY_PHONE}"
     href = href or COMPANY_PHONE_HREF
     return (
@@ -243,9 +259,15 @@ def _wrap(content: str, footer: str) -> str:
     )
 
 
-def _send(*, to: str, subject: str, html: str, attachments: list = None):
-    """Send an email via Resend API."""
-    payload = {
+async def _send(*, to: str, subject: str, html: str, attachments: list[Any] | None = None) -> None:
+    """Send an email via Resend API.
+
+    The Resend Python SDK is synchronous and performs blocking network I/O.
+    We offload it to a worker thread so this coroutine — and therefore the
+    request handler that awaits it — never blocks the event loop. See
+    ADR 0002 for the broader async-I/O rationale.
+    """
+    payload: dict[str, Any] = {
         "from": f"{COMPANY_NAME} <{EMAIL_FROM}>",
         "to": to,
         "subject": subject,
@@ -253,12 +275,37 @@ def _send(*, to: str, subject: str, html: str, attachments: list = None):
     }
     if attachments:
         payload["attachments"] = attachments
-    resend.Emails.send(payload)
+
+    if not _resend_breaker.allow_request():
+        raise RuntimeError("Email provider temporarily unavailable (circuit open)")
+
+    async def _attempt_send() -> None:
+        await asyncio.wait_for(
+            asyncio.to_thread(resend.Emails.send, payload),  # type: ignore[arg-type]
+            timeout=RESEND_TIMEOUT_SEC,
+        )
+
+    def _should_retry(exc: Exception) -> bool:
+        return isinstance(exc, (TimeoutError, OSError, ConnectionError))
+
+    try:
+        await retry_async(
+            _attempt_send,
+            attempts=RESEND_MAX_ATTEMPTS,
+            initial_backoff_sec=RESEND_RETRY_BACKOFF_SEC,
+            max_backoff_sec=RESEND_MAX_BACKOFF_SEC,
+            should_retry=_should_retry,
+            operation_name="Resend email send",
+        )
+        _resend_breaker.record_success()
+    except Exception:
+        _resend_breaker.record_failure()
+        raise
 
 
-def _send_notification(
+async def _send_notification(
     *, subject: str, title: str, rows: list[tuple[str, str]], label: str, extra: str = ""
-):
+) -> None:
     """Helper for company notification emails (title + data table)."""
     if not COMPANY_EMAIL:
         raise RuntimeError("COMPANY_EMAIL environment variable is not set")
@@ -270,13 +317,13 @@ def _send_notification(
         "</td></tr>"
         f"{extra}"
     )
-    _send(to=COMPANY_EMAIL, subject=subject, html=_wrap(content, _notif_footer(label)))
+    await _send(to=COMPANY_EMAIL, subject=subject, html=_wrap(content, _notif_footer(label)))
 
 
 # ─── Customer Emails ──────────────────────────────────────────────────────────
 
 
-def send_followup(email: str, first_name: str):
+async def send_followup(email: str, first_name: str) -> None:
     """Send follow-up confirmation email for schedule requests."""
     email = _safe_addr(email)
     fn = _esc(first_name)
@@ -302,10 +349,10 @@ def send_followup(email: str, first_name: str):
         "This automated email was sent because you submitted a service request on our website.<br/>"
         f"Please do not reply &mdash; call us at {COMPANY_PHONE} for immediate help."
     )
-    _send(to=email, subject=f"We Received Your Request — {COMPANY_NAME}", html=_wrap(content, footer))
+    await _send(to=email, subject=f"We Received Your Request — {COMPANY_NAME}", html=_wrap(content, footer))
 
 
-def send_newsletter_confirmation(email: str, unsubscribe_url: str):
+async def send_newsletter_confirmation(email: str, unsubscribe_url: str) -> None:
     """Send newsletter welcome confirmation with unsubscribe link."""
     email = _safe_addr(email)
     unsub_esc = _esc(unsubscribe_url)
@@ -334,10 +381,10 @@ def send_newsletter_confirmation(email: str, unsubscribe_url: str):
         f"Please do not reply &mdash; call us at {COMPANY_PHONE} for immediate help.",
         unsubscribe_url=unsub_esc,
     )
-    _send(to=email, subject=f"You're Subscribed — {COMPANY_NAME}", html=_wrap(content, footer))
+    await _send(to=email, subject=f"You're Subscribed — {COMPANY_NAME}", html=_wrap(content, footer))
 
 
-def send_newsletter_unsubscribe_confirmation(email: str):
+async def send_newsletter_unsubscribe_confirmation(email: str) -> None:
     """Send confirmation after newsletter unsubscribe."""
     email = _safe_addr(email)
 
@@ -355,16 +402,16 @@ def send_newsletter_unsubscribe_confirmation(email: str):
     footer = _customer_footer(
         "This automated email confirms your newsletter unsubscribe request."
     )
-    _send(
+    await _send(
         to=email,
         subject=f"You've Been Unsubscribed — {COMPANY_NAME}",
         html=_wrap(content, footer),
     )
 
 
-def send_coupon_confirmation(
+async def send_coupon_confirmation(
     email: str, first_name: str, coupon_id: str, discount: str, condition: str
-):
+) -> None:
     """Send coupon confirmation email to customer."""
     email = _safe_addr(email)
     fn = _esc(first_name)
@@ -394,14 +441,14 @@ def send_coupon_confirmation(
         "This coupon was sent because you submitted a redemption request on our website.<br/>"
         f"{COMPANY_ADDRESS}"
     )
-    _send(
+    await _send(
         to=email,
         subject=f"Your Coupon: {subject_disc} — {COMPANY_NAME}",
         html=_wrap(content, footer),
     )
 
 
-def send_diy_permit_confirmation(email: str, first_name: str, address: str):
+async def send_diy_permit_confirmation(email: str, first_name: str, address: str) -> None:
     """Send DIY permit request confirmation to customer."""
     email = _safe_addr(email)
     fn = _esc(first_name)
@@ -432,14 +479,14 @@ def send_diy_permit_confirmation(email: str, first_name: str, address: str):
         "This email was sent because you submitted a DIY permit request on our website.<br/>"
         f"Please do not reply &mdash; call us at {COMPANY_PHONE} for immediate help."
     )
-    _send(
+    await _send(
         to=email,
         subject=f"DIY Permit Request Received — {COMPANY_NAME}",
         html=_wrap(content, footer),
     )
 
 
-def send_job_application_confirmation(email: str, first_name: str, position: str):
+async def send_job_application_confirmation(email: str, first_name: str, position: str) -> None:
     """Send job application confirmation to applicant."""
     email = _safe_addr(email)
     fn = _esc(first_name)
@@ -469,7 +516,7 @@ def send_job_application_confirmation(email: str, first_name: str, position: str
         "This email was sent because you submitted a job application on our website.<br/>"
         f"Please do not reply &mdash; call us at {COMPANY_PHONE} with any questions."
     )
-    _send(
+    await _send(
         to=email,
         subject=f"Application Received — {COMPANY_NAME}",
         html=_wrap(content, footer),
@@ -479,9 +526,9 @@ def send_job_application_confirmation(email: str, first_name: str, position: str
 # ─── Company Notification Emails ─────────────────────────────────────────────
 
 
-def send_schedule_notification(
+async def send_schedule_notification(
     email: str, first_name: str, last_name: str, phone: str, message: str
-):
+) -> None:
     """Notify company of new schedule request."""
     rows = [
         ("Name", f"{_esc(first_name)} {_esc(last_name)}"),
@@ -491,7 +538,7 @@ def send_schedule_notification(
     if message:
         rows.append(("Message", _esc(message)))
     try:
-        _send_notification(
+        await _send_notification(
             subject=f"New Service Request — {_safe_hdr(f'{first_name} {last_name}')}",
             title="New Service Request",
             rows=rows,
@@ -501,10 +548,10 @@ def send_schedule_notification(
         logger.exception("Company schedule request notification email failed")
 
 
-def send_newsletter_notification(email: str):
+async def send_newsletter_notification(email: str) -> None:
     """Notify company of new newsletter subscriber."""
     try:
-        _send_notification(
+        await _send_notification(
             subject=f"New Newsletter Subscriber — {_safe_hdr(email)}",
             title="New Newsletter Subscriber",
             rows=[("Email", _safe_addr(email))],
@@ -514,7 +561,7 @@ def send_newsletter_notification(email: str):
         logger.exception("Company newsletter subscription notification email failed")
 
 
-def send_newsletter_unsubscribe_notification(email: str):
+async def send_newsletter_unsubscribe_notification(email: str) -> None:
     """Notify company of newsletter unsubscribe."""
     email_safe = _safe_addr(email)
     content = (
@@ -527,7 +574,7 @@ def send_newsletter_unsubscribe_notification(email: str):
         "</td></tr>"
     )
     try:
-        _send(
+        await _send(
             to=COMPANY_EMAIL,
             subject=f"Newsletter Unsubscribe — {_safe_hdr(email)}",
             html=_wrap(content, _notif_footer("Newsletter Unsubscribe Alert")),
@@ -536,7 +583,7 @@ def send_newsletter_unsubscribe_notification(email: str):
         logger.exception("Company newsletter unsubscribe notification email failed")
 
 
-def send_coupon_notification(
+async def send_coupon_notification(
     email: str,
     first_name: str,
     last_name: str,
@@ -544,7 +591,7 @@ def send_coupon_notification(
     coupon_id: str,
     discount: str,
     condition: str,
-):
+) -> None:
     """Notify company of coupon redemption."""
     fn = _esc(first_name)
     ln = _esc(last_name)
@@ -575,7 +622,7 @@ def send_coupon_notification(
         ("Phone", _esc(phone)),
     ]
     try:
-        _send_notification(
+        await _send_notification(
             subject=(
                 f"New Coupon Redemption: {_safe_hdr(coupon_id)} ({_safe_hdr(discount)})"
                 f" — {_safe_hdr(f'{first_name} {last_name}')}"
@@ -589,7 +636,7 @@ def send_coupon_notification(
         logger.exception("Company coupon redemption notification email failed")
 
 
-def send_diy_permit_notification(
+async def send_diy_permit_notification(
     email: str,
     first_name: str,
     last_name: str,
@@ -600,7 +647,7 @@ def send_diy_permit_notification(
     zip_code: str = "",
     project_description: str = "",
     inspection: str = "unsure",
-):
+) -> None:
     """Notify company of DIY permit request."""
     fn = _esc(first_name)
     ln = _esc(last_name)
@@ -624,7 +671,7 @@ def send_diy_permit_notification(
     rows.append(("Inspection", insp_label))
 
     try:
-        _send_notification(
+        await _send_notification(
             subject=f"New DIY Permit Request — {_safe_hdr(f'{first_name} {last_name}')}",
             title="New DIY Permit Request",
             rows=rows,
@@ -634,14 +681,14 @@ def send_diy_permit_notification(
         logger.exception("Company DIY permit request notification email failed")
 
 
-def send_job_application_notification(
+async def send_job_application_notification(
     email: str,
     first_name: str,
     last_name: str,
     position: str,
     resume_bytes: bytes | None = None,
     resume_filename: str | None = None,
-):
+) -> None:
     """Notify company of job application with optional resume attachment."""
     fn = _esc(first_name)
     ln = _esc(last_name)
@@ -666,7 +713,7 @@ def send_job_application_notification(
         "</td></tr>"
     )
 
-    attachments = []
+    attachments: list[Any] = []
     if resume_bytes and resume_filename:
         attachments.append(
             {
@@ -684,7 +731,7 @@ def send_job_application_notification(
             "</td></tr>"
             f"{extra}"
         )
-        _send(
+        await _send(
             to=COMPANY_EMAIL,
             subject=f"New Job Application: {_safe_hdr(position)} — {_safe_hdr(f'{first_name} {last_name}')}",
             html=_wrap(content, _notif_footer("Job Application Alert")),

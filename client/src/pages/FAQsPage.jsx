@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ImageWithLoader } from "../components/ui/LoadingComponents";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { getImageUrl } from "../services/imageService";
 import { FAQsData } from "../data/data";
 import Seo from "../components/seo/Seo";
@@ -37,7 +37,7 @@ export default function FAQs() {
 					className={`w-full flex justify-between items-center p-4 border-b-4 text-left transition-colors cursor-pointer ${isOpen ? "border-[#B32020] bg-[#F5F5F5]" : "border-transparent hover:bg-[#F5F5F5] hover:border-[#B32020]"}`}
 				>
 					<h6>{faq.question}</h6>
-					{isOpen ? <ChevronUp /> : <ChevronDown />}
+					{isOpen ? <FaChevronUp /> : <FaChevronDown />}
 				</button>
 				<div
 					className={`px-6 transition-all duration-300 overflow-hidden ${isOpen ? "max-h-96 py-8" : "max-h-0"}`}

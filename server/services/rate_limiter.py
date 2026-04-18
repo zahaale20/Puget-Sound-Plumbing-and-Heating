@@ -1,12 +1,12 @@
 """
 Rate limiting utility for form submissions.
 Uses Supabase PostgreSQL for persistent, cross-instance rate limiting.
+
+Async-native: callers must `await check_rate_limit(...)`.
 """
 
 import logging
-import math
 import random
-from typing import Tuple
 
 from database import get_db_connection
 
@@ -47,13 +47,12 @@ RETURNING request_count,
 _CLEANUP_SQL = "DELETE FROM rate_limits WHERE window_start < NOW() - INTERVAL '24 hours'"
 
 
-def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str, int]:
+async def check_rate_limit(ip_address: str, endpoint: str) -> tuple[bool, str, int]:
     """
     Check if request exceeds rate limit for given IP and endpoint.
-    Uses an atomic upsert on the rate_limits table.
+    Atomic upsert on the rate_limits table.
 
-    Returns:
-        Tuple[bool, str, int]: (is_allowed, message, retry_after_seconds)
+    Returns (is_allowed, message, retry_after_seconds).
     """
     if endpoint not in RATE_LIMITS:
         return True, "Endpoint not rate limited", 0
@@ -61,20 +60,20 @@ def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str, int]:
     max_requests, window_seconds = RATE_LIMITS[endpoint]
 
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     _UPSERT_SQL,
                     (ip_address, endpoint, window_seconds, window_seconds, window_seconds),
                 )
-                row = cur.fetchone()
+                row = await cur.fetchone()
                 count = row[0]
                 retry_after = max(0, row[1]) if row[1] is not None else window_seconds
-            conn.commit()
+            await conn.commit()
 
         # Probabilistic cleanup of expired records (1% chance per check)
-        if random.random() < 0.01:
-            _cleanup_expired()
+        if random.random() < 0.01:  # nosec B311 - non-security usage
+            await _cleanup_expired()
 
         if count > max_requests:
             logger.warning(
@@ -89,12 +88,12 @@ def check_rate_limit(ip_address: str, endpoint: str) -> Tuple[bool, str, int]:
         return True, "OK", 0
 
 
-def _cleanup_expired():
+async def _cleanup_expired() -> None:
     """Remove rate limit records older than 24 hours."""
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(_CLEANUP_SQL)
-            conn.commit()
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(_CLEANUP_SQL)
+            await conn.commit()
     except Exception:
         logger.debug("Rate limit cleanup failed (non-critical)")

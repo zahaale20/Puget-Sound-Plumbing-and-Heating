@@ -1,0 +1,41 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["venv", "alembic/versions"]
+
+[tool.ruff.lint]
+# Conservative rule set: pycodestyle errors, pyflakes, isort, modern pyupgrade.
+select = ["E", "F", "I", "UP", "B", "S"]
+ignore = [
+    # Long URLs / comments are unavoidable in this codebase.
+    "E501",
+    # `assert` is fine in tests.
+    "S101",
+    # Containerized service intentionally binds to 0.0.0.0; this isn't a leak.
+    "S104",
+    # We use random.random() for probabilistic cache eviction, not crypto.
+    "S311",
+    # FastAPI uses `param = File(...)` / `Depends(...)` in defaults — idiomatic.
+    "B008",
+    # Long HTML templates are clearer with %-formatting in this codebase.
+    "UP031",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B"]
+"alembic/**" = ["S608"]  # raw SQL is the whole point of migrations.
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+follow_imports = "normal"
+explicit_package_bases = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+exclude = ["venv/", "alembic/versions/"]
+strict_optional = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false

@@ -107,12 +107,17 @@ export default function ScheduleOnline() {
 				</div>
 
 				{/* Contact Form */}
-				<form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 text-left" noValidate>
+				<form
+					onSubmit={handleSubmit}
+					className="grid grid-cols-1 gap-4 text-left"
+					noValidate
+					aria-label="Schedule a service appointment"
+				>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{/* First Name */}
 						<div>
 							<label htmlFor="schedule-firstName" className="text-[#2B2B2B]">
-								First Name <span className="text-[#B32020] font-normal italic">*</span>
+								First Name <span className="text-[#B32020] font-normal italic" aria-hidden="true">*</span>
 							</label>
 							<input
 								id="schedule-firstName"
@@ -122,14 +127,19 @@ export default function ScheduleOnline() {
 								value={formData.firstName}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								required
+								aria-required="true"
+								aria-invalid={Boolean(touched.firstName && fieldErrors.firstName)}
+								aria-describedby="schedule-firstName-error"
+								autoComplete="given-name"
 							/>
-							<FieldError error={fieldErrors.firstName} touched={touched.firstName} />
+							<FieldError id="schedule-firstName-error" error={fieldErrors.firstName} touched={touched.firstName} />
 						</div>
 
 						{/* Last Name */}
 						<div>
 							<label htmlFor="schedule-lastName" className="text-[#2B2B2B]">
-								Last Name <span className="text-[#B32020] font-normal italic">*</span>
+								Last Name <span className="text-[#B32020] font-normal italic" aria-hidden="true">*</span>
 							</label>
 							<input
 								id="schedule-lastName"
@@ -139,8 +149,13 @@ export default function ScheduleOnline() {
 								value={formData.lastName}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								required
+								aria-required="true"
+								aria-invalid={Boolean(touched.lastName && fieldErrors.lastName)}
+								aria-describedby="schedule-lastName-error"
+								autoComplete="family-name"
 							/>
-							<FieldError error={fieldErrors.lastName} touched={touched.lastName} />
+							<FieldError id="schedule-lastName-error" error={fieldErrors.lastName} touched={touched.lastName} />
 						</div>
 					</div>
 
@@ -148,7 +163,7 @@ export default function ScheduleOnline() {
 						{/* Phone */}
 						<div>
 							<label htmlFor="schedule-phone" className="text-[#2B2B2B]">
-								Phone <span className="text-[#B32020] italic">*</span>
+								Phone <span className="text-[#B32020] italic" aria-hidden="true">*</span>
 							</label>
 							<input
 								id="schedule-phone"
@@ -158,14 +173,20 @@ export default function ScheduleOnline() {
 								value={formData.phone}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								required
+								aria-required="true"
+								aria-invalid={Boolean(touched.phone && fieldErrors.phone)}
+								aria-describedby="schedule-phone-error"
+								autoComplete="tel"
+								inputMode="tel"
 							/>
-							<FieldError error={fieldErrors.phone} touched={touched.phone} />
+							<FieldError id="schedule-phone-error" error={fieldErrors.phone} touched={touched.phone} />
 						</div>
 
 						{/* Email */}
 						<div>
 							<label htmlFor="schedule-email" className="text-[#2B2B2B]">
-								Email <span className="text-[#B32020] italic">*</span>
+								Email <span className="text-[#B32020] italic" aria-hidden="true">*</span>
 							</label>
 							<input
 								id="schedule-email"
@@ -175,8 +196,14 @@ export default function ScheduleOnline() {
 								value={formData.email}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								required
+								aria-required="true"
+								aria-invalid={Boolean(touched.email && fieldErrors.email)}
+								aria-describedby="schedule-email-error"
+								autoComplete="email"
+								inputMode="email"
 							/>
-							<FieldError error={fieldErrors.email} touched={touched.email} />
+							<FieldError id="schedule-email-error" error={fieldErrors.email} touched={touched.email} />
 						</div>
 					</div>
 
@@ -191,6 +218,11 @@ export default function ScheduleOnline() {
 							onChange={handleChange}
 							className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0C2D70] bg-white"
 						/>
+					</div>
+
+					{/* Live region — announces submission outcome to assistive tech. */}
+					<div role="status" aria-live="polite" className="sr-only">
+						{loading ? "Submitting your request" : success ? successMessage : error || ""}
 					</div>
 
 					{/* Submit */}
@@ -211,6 +243,7 @@ export default function ScheduleOnline() {
 								<button
 									type="submit"
 									disabled={loading}
+									aria-busy={loading}
 									className="flex items-center justify-center w-full sm:w-auto h-[50px] px-8 gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:bg-gray-400 disabled:cursor-not-allowed"
 								>
 									<LoadingButtonContent

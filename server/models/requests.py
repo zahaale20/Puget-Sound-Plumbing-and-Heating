@@ -1,5 +1,5 @@
+
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional
 
 
 class RequestModel(BaseModel):
@@ -12,12 +12,18 @@ class ScheduleRequest(RequestModel):
     phone: str = Field(min_length=7, max_length=25)
     email: str = Field(min_length=5, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     message: str = Field(default="", max_length=4000)
-    captchaToken: Optional[str] = Field(default=None, min_length=1, max_length=4096)
+    captchaToken: str | None = Field(default=None, min_length=1, max_length=4096)
 
 
 class NewsletterRequest(RequestModel):
     email: str = Field(min_length=5, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-    captchaToken: Optional[str] = Field(default=None, min_length=1, max_length=4096)
+    captchaToken: str | None = Field(default=None, min_length=1, max_length=4096)
+
+
+class CaptchaVerifyRequest(RequestModel):
+    # Optional so the handler can return a 400 (not Pydantic's 422) when the
+    # token is missing — preserving the documented contract with the frontend.
+    token: str | None = Field(default=None, min_length=1, max_length=4096)
 
 
 class RedeemOfferRequest(RequestModel):
@@ -27,7 +33,7 @@ class RedeemOfferRequest(RequestModel):
     email: str = Field(min_length=5, max_length=320, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
     couponDiscount: str = Field(min_length=1, max_length=100)
     couponCondition: str = Field(min_length=1, max_length=500)
-    captchaToken: Optional[str] = Field(default=None, min_length=1, max_length=4096)
+    captchaToken: str | None = Field(default=None, min_length=1, max_length=4096)
 
 
 class DiyPermitRequest(RequestModel):
@@ -41,4 +47,4 @@ class DiyPermitRequest(RequestModel):
     zipCode: str = Field(default="", max_length=20)
     projectDescription: str = Field(default="", max_length=4000)
     inspection: str = Field(default="unsure", pattern=r"^(yes|no|unsure)$")
-    captchaToken: Optional[str] = Field(default=None, min_length=1, max_length=4096)
+    captchaToken: str | None = Field(default=None, min_length=1, max_length=4096)

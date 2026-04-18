@@ -4,26 +4,73 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
-  frontend:
-    name: Frontend Lint/Test/Build
+  server:
+    name: Server (FastAPI) - Lint/Type/Security/Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Mypy (type check)
+        run: mypy .
+
+      - name: Bandit (security lint)
+        run: bandit -r . -x ./tests,./venv,./alembic -ll
+
+      - name: pip-audit (dependency CVEs)
+        run: pip-audit --strict
+
+      - name: Run pytest with coverage gate
+        run: pytest
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-coverage
+          path: server/coverage.xml
+          if-no-files-found: ignore
+
+  client:
+    name: Client (Vite + React)
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: client
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20"
           cache: npm
           cache-dependency-path: client/package-lock.json
 
@@ -33,49 +80,19 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run tests with coverage
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Tests with coverage gate
         run: npm run test:coverage
 
       - name: Build production bundle
         run: npm run build
 
-      - name: Upload frontend coverage
+      - name: Upload coverage artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-coverage
-          path: client/coverage
-          if-no-files-found: ignore
-
-  backend:
-    name: Backend Tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: server/requirements.txt
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run pytest with coverage
-        env:
-          PYTHONPATH: .
-        run: pytest
-
-      - name: Upload backend coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-coverage
-          path: server/coverage.xml
+          name: client-coverage
+          path: client/coverage/lcov.info
           if-no-files-found: ignore

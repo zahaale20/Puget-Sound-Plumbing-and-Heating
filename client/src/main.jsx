@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
 import App from "./App.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { ensureLiveChatWidget } from "./services/liveChat";
 
 const Analytics = lazy(() =>
@@ -36,15 +37,35 @@ function DeferredMetrics() {
 	);
 }
 
-// Boot LiveChat at startup by design; this may reduce bfcache eligibility.
-ensureLiveChatWidget();
+// Defer LiveChat until the browser is idle. Loading the widget eagerly costs
+// LCP and blocks the main thread on first paint; idle-loading keeps it
+// non-critical while still attaching it well before users typically engage.
+function deferLiveChat() {
+	if (typeof window === "undefined") return;
+	const boot = () => {
+		try {
+			ensureLiveChatWidget();
+		} catch (e) {
+			console.warn("LiveChat boot failed:", e);
+		}
+	};
+	if ("requestIdleCallback" in window) {
+		window.requestIdleCallback(boot, { timeout: 4000 });
+	} else {
+		window.setTimeout(boot, 2500);
+	}
+}
+
+deferLiveChat();
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<HelmetProvider>
-			<App />
-		</HelmetProvider>
-		<DeferredMetrics />
+		<ErrorBoundary>
+			<HelmetProvider>
+				<App />
+			</HelmetProvider>
+			<DeferredMetrics />
+		</ErrorBoundary>
 	</StrictMode>
 );
 

@@ -1,28 +1,38 @@
 import logging
+from typing import Any
+
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
+from fastapi.responses import JSONResponse
+
+from database import get_db_connection
 from dependencies import require_rate_limit
+from models.requests import ScheduleRequest
 from services.captcha_service import verify_captcha
 from services.email_service import send_followup, send_schedule_notification
-from database import get_db_connection
-from utils import normalize_email, normalize_text, is_duplicate_error, duplicate_response, raise_internal_error
-from models.requests import ScheduleRequest
+from utils import (
+    duplicate_response,
+    is_duplicate_error,
+    normalize_email,
+    normalize_text,
+    raise_internal_error,
+)
 
 router = APIRouter(prefix="/api", tags=["schedule"])
 logger = logging.getLogger(__name__)
 
 
-def _safe_send_schedule_notification(*args, **kwargs) -> None:
+async def _safe_send_schedule_notification(*args: Any, **kwargs: Any) -> None:
     """Best-effort company notification; never propagates errors."""
     try:
-        send_schedule_notification(*args, **kwargs)
+        await send_schedule_notification(*args, **kwargs)
     except Exception:
         logger.exception("Background send_schedule_notification failed")
 
 
-@router.post("/schedule", dependencies=[Depends(require_rate_limit("schedule"))])
-async def schedule_online(request: ScheduleRequest, req: Request, background_tasks: BackgroundTasks):
+@router.post("/schedule", dependencies=[Depends(require_rate_limit("schedule"))], response_model=None)
+async def schedule_online(request: ScheduleRequest, req: Request, background_tasks: BackgroundTasks) -> dict[str, Any] | JSONResponse:
     """Insert schedule request into DB and send follow-up email"""
-    if not verify_captcha(request.captchaToken):
+    if not await verify_captcha(request.captchaToken):
         raise HTTPException(
             status_code=403,
             detail="Security verification failed. Please try again.",
@@ -35,10 +45,10 @@ async def schedule_online(request: ScheduleRequest, req: Request, background_tas
     message = request.message.strip()
 
     try:
-        with get_db_connection() as conn:
-            with conn.cursor() as cur:
+        async with get_db_connection() as conn:
+            async with conn.cursor() as cur:
                 try:
-                    cur.execute(
+                    await cur.execute(
                         """
                         INSERT INTO "Schedule Online"
                             (first_name, last_name, email, phone, message)
@@ -48,15 +58,15 @@ async def schedule_online(request: ScheduleRequest, req: Request, background_tas
                     )
                 except Exception as insert_error:
                     if is_duplicate_error(insert_error):
-                        conn.rollback()
+                        await conn.rollback()
                         return duplicate_response(
                             "A schedule request already exists for this contact. Our team will reach out soon."
                         )
                     raise
-            conn.commit()
+            await conn.commit()
 
         try:
-            send_followup(email, first_name)
+            await send_followup(email, first_name)
             email_status = "sent"
         except HTTPException as email_error:
             logger.exception(

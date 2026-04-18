@@ -1,28 +1,25 @@
-from unittest.mock import patch, MagicMock
-from contextlib import contextmanager
+from unittest.mock import AsyncMock, patch
+
+from tests.conftest import make_async_cursor, make_async_db
 
 
-def _mock_db_ctx(mock_cursor):
-    mock_conn = MagicMock()
-    mock_conn.cursor.return_value.__enter__ = MagicMock(return_value=mock_cursor)
-    mock_conn.cursor.return_value.__exit__ = MagicMock(return_value=False)
+def _ok_rate_limit():
+    return AsyncMock(return_value=(True, "OK", 0))
 
-    @contextmanager
-    def _ctx():
-        yield mock_conn
 
-    return _ctx
+def _denied_rate_limit():
+    return AsyncMock(return_value=(False, "Too many", 3600))
 
 
 class TestListBlogPosts:
-    def test_returns_posts(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchall.return_value = [
+    def test_returns_posts(self, client) -> None:
+        cur = make_async_cursor(fetchall=[
             (1, "Title", "test-slug", "http://src.com", "2025-01-01", "Author",
              10, {"description": "desc", "sections": [], "categories": ["cat"]},
              "blog/img.webp", ["blog/img2.webp"]),
-        ]
-        with patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)):
+        ])
+        factory, _ = make_async_db(cur)
+        with patch("routes.blog.get_db_connection", factory):
             resp = client.get("/api/blog")
         assert resp.status_code == 200
         data = resp.json()
@@ -33,45 +30,45 @@ class TestListBlogPosts:
         assert data[0]["keywords"] == ["cat"]
         assert "Cache-Control" in resp.headers
 
-    def test_returns_empty_list(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchall.return_value = []
-        with patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)):
+    def test_returns_empty_list(self, client) -> None:
+        cur = make_async_cursor(fetchall=[])
+        factory, _ = make_async_db(cur)
+        with patch("routes.blog.get_db_connection", factory):
             resp = client.get("/api/blog")
         assert resp.status_code == 200
         assert resp.json() == []
 
-    def test_db_error_returns_500(self, client):
+    def test_db_error_returns_500(self, client) -> None:
         with patch("routes.blog.get_db_connection", side_effect=Exception("db down")):
             resp = client.get("/api/blog")
         assert resp.status_code == 500
 
 
 class TestGetBlogPost:
-    def test_returns_post(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = (
+    def test_returns_post(self, client) -> None:
+        cur = make_async_cursor(fetchone=(
             1, "Title", "test-slug", "", "2025-01-01", "Author",
             5, {"description": "d"}, "blog/img.webp", [],
-        )
-        with patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)):
+        ))
+        factory, _ = make_async_db(cur)
+        with patch("routes.blog.get_db_connection", factory):
             resp = client.get("/api/blog/test-slug")
         assert resp.status_code == 200
         assert resp.json()["slug"] == "test-slug"
 
-    def test_not_found(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = None
-        with patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)):
+    def test_not_found(self, client) -> None:
+        cur = make_async_cursor(fetchone=None)
+        factory, _ = make_async_db(cur)
+        with patch("routes.blog.get_db_connection", factory):
             resp = client.get("/api/blog/no-such-slug")
         assert resp.status_code == 404
 
-    def test_handles_null_fields(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = (
+    def test_handles_null_fields(self, client) -> None:
+        cur = make_async_cursor(fetchone=(
             2, None, "s", None, None, None, None, None, None, None,
-        )
-        with patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)):
+        ))
+        factory, _ = make_async_db(cur)
+        with patch("routes.blog.get_db_connection", factory):
             resp = client.get("/api/blog/s")
         assert resp.status_code == 200
         data = resp.json()
@@ -81,28 +78,28 @@ class TestGetBlogPost:
 
 
 class TestIncrementViews:
-    def test_increments(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = (11,)
+    def test_increments(self, client) -> None:
+        cur = make_async_cursor(fetchone=(11,))
+        factory, _ = make_async_db(cur)
         with (
-            patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
+            patch("routes.blog.get_db_connection", factory),
+            patch("services.rate_limiter.check_rate_limit", _ok_rate_limit()),
         ):
             resp = client.post("/api/blog/test-slug/views")
         assert resp.status_code == 200
         assert resp.json()["views"] == 11
 
-    def test_rate_limited(self, client):
-        with patch("services.rate_limiter.check_rate_limit", return_value=(False, "Too many", 3600)):
+    def test_rate_limited(self, client) -> None:
+        with patch("services.rate_limiter.check_rate_limit", _denied_rate_limit()):
             resp = client.post("/api/blog/test-slug/views")
         assert resp.status_code == 429
 
-    def test_post_not_found(self, client):
-        mock_cursor = MagicMock()
-        mock_cursor.fetchone.return_value = None
+    def test_post_not_found(self, client) -> None:
+        cur = make_async_cursor(fetchone=None)
+        factory, _ = make_async_db(cur)
         with (
-            patch("routes.blog.get_db_connection", _mock_db_ctx(mock_cursor)),
-            patch("services.rate_limiter.check_rate_limit", return_value=(True, "OK", 0)),
+            patch("routes.blog.get_db_connection", factory),
+            patch("services.rate_limiter.check_rate_limit", _ok_rate_limit()),
         ):
             resp = client.post("/api/blog/no-slug/views")
         assert resp.status_code == 404
