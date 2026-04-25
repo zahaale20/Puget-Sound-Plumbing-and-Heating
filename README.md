@@ -104,11 +104,12 @@ npm run dev
 
 ---
 
-## 🛡️ Coupon Deduplication & Fallback Logic
+
+## 🛡️ Coupon Deduplication
 
 - The `/api/redeem-offer` endpoint prevents duplicate coupon emails using a unique constraint on `(email, phone, coupon_discount, coupon_condition)`.
-- If the DB migration for this constraint is missing (e.g. Vercel deploys new code before running Alembic), the route falls back to a transactional `SELECT` + `pg_advisory_xact_lock` to ensure only one coupon is sent per unique tuple, even under race conditions.
-- See `server/routes/offers.py` for details and tests.
+- If the database migration for this constraint is missing, the route still ensures only one coupon is sent per unique tuple using a transactional fallback.
+- See `server/routes/offers.py` for implementation details.
 
 ---
 
