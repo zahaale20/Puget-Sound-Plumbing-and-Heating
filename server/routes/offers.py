@@ -14,6 +14,7 @@ from services.email_service import send_coupon_confirmation, send_coupon_notific
 from utils import (
     duplicate_response,
     is_duplicate_error,
+    is_undefined_object_error,
     normalize_email,
     normalize_text,
     raise_internal_error,
@@ -48,6 +49,74 @@ def generate_coupon_id(coupon_discount: str) -> str:
     if match:
         return f"PSPAH-{match.group(1)}{match.group(2)}-{suffix}"
     return f"PSPAH-{abs(hash(coupon_discount)) % 10000:04d}-{suffix}"
+
+
+async def _redeem_offer_legacy_insert(
+    first_name: str,
+    last_name: str,
+    email: str,
+    phone: str,
+    coupon_id: str,
+    coupon_discount: str,
+    coupon_condition: str,
+) -> int | None:
+    """Race-safe SELECT-then-INSERT used when the dedup constraint is missing.
+
+    In environments where migration ``0002_offers_dedup_unique`` has not
+    yet been applied (e.g. a Vercel deploy that ships new route code
+    before any operator runs ``alembic upgrade head``), the primary
+    ``ON CONFLICT ON CONSTRAINT redeemed_offers_dedup_unique`` path
+    raises SQLSTATE 42704. This fallback preserves the "don't email
+    twice" invariant by:
+      1. Acquiring ``pg_advisory_xact_lock`` keyed on the dedup tuple,
+         so concurrent requests for the same (email, phone,
+         coupon_discount, coupon_condition) serialize through Postgres.
+      2. Checking for an existing matching row inside the same
+         transaction.
+      3. Inserting only if none was found.
+    The lock is released automatically at COMMIT/ROLLBACK.
+    Returns the inserted id, or ``None`` if a matching row already
+    existed.
+    """
+    lock_key = f"redeem-offer:{email}|{phone}|{coupon_discount}|{coupon_condition}"
+    async with get_db_connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
+                "SELECT pg_advisory_xact_lock(hashtext(%s))",
+                (lock_key,),
+            )
+            await cur.execute(
+                """
+                SELECT id FROM "Redeemed Offers"
+                WHERE email = %s
+                  AND phone = %s
+                  AND COALESCE(coupon_discount, '') = COALESCE(%s, '')
+                  AND COALESCE(coupon_condition, '') = COALESCE(%s, '')
+                LIMIT 1
+                """,
+                (email, phone, coupon_discount, coupon_condition),
+            )
+            existing = await cur.fetchone()
+            if existing is not None:
+                await conn.commit()
+                return None
+
+            await cur.execute(
+                """
+                INSERT INTO "Redeemed Offers"
+                    (first_name, last_name, email, phone, coupon_id,
+                     coupon_discount, coupon_condition)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                RETURNING id
+                """,
+                (
+                    first_name, last_name, email, phone, coupon_id,
+                    coupon_discount, coupon_condition,
+                ),
+            )
+            inserted = await cur.fetchone()
+        await conn.commit()
+    return inserted[0] if inserted else None
 
 
 @router.post("/redeem-offer", dependencies=[Depends(require_rate_limit("redeem-offer"))], response_model=None)
@@ -103,6 +172,18 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request, background_tas
             # than emailing twice.
             if is_duplicate_error(insert_error):
                 inserted_id = None
+            elif is_undefined_object_error(insert_error):
+                # Production Postgres has not yet had
+                # ``alembic upgrade head`` applied, so the named
+                # constraint referenced by ON CONFLICT does not exist
+                # (SQLSTATE 42704). Fall back to a transactional
+                # SELECT-then-INSERT serialized by an advisory lock
+                # keyed on the dedup tuple, so two concurrent
+                # submissions for the same offer cannot both email.
+                inserted_id = await _redeem_offer_legacy_insert(
+                    first_name, last_name, email, phone, coupon_id,
+                    request.couponDiscount, request.couponCondition,
+                )
             else:
                 raise
 
