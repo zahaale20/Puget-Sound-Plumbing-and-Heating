@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 
 import httpx
 
+from services.http_client import get_http_client
 from services.resilience import CircuitBreaker, retry_async
 
 logger = logging.getLogger(__name__)
@@ -81,11 +82,12 @@ async def verify_captcha_detailed(token: str | None) -> CaptchaResult:
         return False
 
     async def _attempt_verify() -> dict:
-        async with httpx.AsyncClient(timeout=HCAPTCHA_TIMEOUT_SEC) as client:
-            response = await client.post(
-                HCAPTCHA_VERIFY_URL,
-                data={"secret": secret, "response": token},
-            )
+        client = await get_http_client()
+        response = await client.post(
+            HCAPTCHA_VERIFY_URL,
+            data={"secret": secret, "response": token},
+            timeout=HCAPTCHA_TIMEOUT_SEC,
+        )
         response.raise_for_status()
         return response.json()
 

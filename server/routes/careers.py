@@ -148,17 +148,11 @@ async def submit_job_application(
 
         try:
             await send_job_application_confirmation(norm_email, norm_first, norm_position)
-            if background_tasks is not None:
-                background_tasks.add_task(
-                    _safe_send_job_application_notification,
-                    norm_email, norm_first, norm_last, norm_position,
-                    resume_bytes, resume_filename,
-                )
-            else:
-                await _safe_send_job_application_notification(
-                    norm_email, norm_first, norm_last, norm_position,
-                    resume_bytes, resume_filename,
-                )
+            # Awaited inline because BackgroundTasks is not durable on serverless.
+            await _safe_send_job_application_notification(
+                norm_email, norm_first, norm_last, norm_position,
+                resume_bytes, resume_filename,
+            )
             return {"success": True, "emailStatus": "sent"}
         except HTTPException as email_error:
             logger.exception(

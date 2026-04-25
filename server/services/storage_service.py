@@ -7,6 +7,7 @@ from urllib.parse import quote
 import httpx
 from dotenv import load_dotenv
 
+from services.http_client import get_http_client
 from services.resilience import CircuitBreaker, retry_async
 
 load_dotenv()
@@ -113,16 +114,17 @@ class StorageService:
 
             async def _attempt_upload() -> httpx.Response:
                 assert self.supabase_secret_key is not None
-                async with httpx.AsyncClient(timeout=SUPABASE_TIMEOUT_SEC) as client:
-                    response = await client.post(
-                        url,
-                        content=resume_bytes,
-                        headers={
-                            "apikey": self.supabase_secret_key,
-                            "Authorization": f"Bearer {self.supabase_secret_key}",
-                            "Content-Type": content_type,
-                        },
-                    )
+                client = await get_http_client()
+                response = await client.post(
+                    url,
+                    content=resume_bytes,
+                    headers={
+                        "apikey": self.supabase_secret_key,
+                        "Authorization": f"Bearer {self.supabase_secret_key}",
+                        "Content-Type": content_type,
+                    },
+                    timeout=SUPABASE_TIMEOUT_SEC,
+                )
                 if response.status_code in (429,) or response.status_code >= 500:
                     raise httpx.HTTPStatusError(
                         "Supabase transient upload error",

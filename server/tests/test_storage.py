@@ -75,52 +75,40 @@ class TestUploadResume:
         return svc
 
     @patch("services.storage_service.uuid.uuid4")
-    @patch("services.storage_service.httpx.AsyncClient")
-    async def test_upload_resume_success(self, mock_client_cls, mock_uuid) -> None:
+    @patch("services.storage_service.get_http_client", new_callable=AsyncMock)
+    async def test_upload_resume_success(self, mock_get_client, mock_uuid) -> None:
         svc = self._service()
         mock_uuid.return_value.hex = "abc123"
 
         mock_resp = MagicMock(status_code=201, text="ok")
         mock_client = MagicMock()
         mock_client.post = AsyncMock(return_value=mock_resp)
-
-        mock_cm = MagicMock()
-        mock_cm.__aenter__ = AsyncMock(return_value=mock_client)
-        mock_cm.__aexit__ = AsyncMock(return_value=False)
-        mock_client_cls.return_value = mock_cm
+        mock_get_client.return_value = mock_client
 
         key = await svc.upload_resume(b"bytes", "resume.pdf")
         assert key == "resumes/abc123-resume.pdf"
 
-    @patch("services.storage_service.httpx.AsyncClient")
-    async def test_upload_resume_returns_none_on_non_2xx(self, mock_client_cls) -> None:
+    @patch("services.storage_service.get_http_client", new_callable=AsyncMock)
+    async def test_upload_resume_returns_none_on_non_2xx(self, mock_get_client) -> None:
         svc = self._service()
 
         mock_resp = MagicMock(status_code=500, text="boom")
         mock_client = MagicMock()
         mock_client.post = AsyncMock(return_value=mock_resp)
-
-        mock_cm = MagicMock()
-        mock_cm.__aenter__ = AsyncMock(return_value=mock_client)
-        mock_cm.__aexit__ = AsyncMock(return_value=False)
-        mock_client_cls.return_value = mock_cm
+        mock_get_client.return_value = mock_client
 
         key = await svc.upload_resume(b"bytes", "resume.pdf")
         assert key is None
 
-    @patch("services.storage_service.httpx.AsyncClient")
-    async def test_upload_resume_retries_on_transient_500(self, mock_client_cls) -> None:
+    @patch("services.storage_service.get_http_client", new_callable=AsyncMock)
+    async def test_upload_resume_retries_on_transient_500(self, mock_get_client) -> None:
         svc = self._service()
 
         transient = MagicMock(status_code=500, text="transient")
         success = MagicMock(status_code=201, text="ok")
         mock_client = MagicMock()
         mock_client.post = AsyncMock(side_effect=[transient, transient, success])
-
-        mock_cm = MagicMock()
-        mock_cm.__aenter__ = AsyncMock(return_value=mock_client)
-        mock_cm.__aexit__ = AsyncMock(return_value=False)
-        mock_client_cls.return_value = mock_cm
+        mock_get_client.return_value = mock_client
 
         with (
             patch("services.storage_service.SUPABASE_MAX_ATTEMPTS", 3),
@@ -139,7 +127,7 @@ class TestUploadResume:
         key = await svc.upload_resume(b"bytes", "resume.pdf")
         assert key is None
 
-    @patch("services.storage_service.httpx.AsyncClient", side_effect=Exception("network"))
+    @patch("services.storage_service.get_http_client", new_callable=AsyncMock, side_effect=Exception("network"))
     async def test_upload_resume_handles_exception(self, _) -> None:
         svc = self._service()
         key = await svc.upload_resume(b"bytes", "resume.pdf")

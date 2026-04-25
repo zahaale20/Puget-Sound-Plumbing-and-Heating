@@ -1,15 +1,25 @@
+import { fetchWithTimeout } from "./fetchWithTimeout.js";
+
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 const buildApiUrl = (path) => `${API_BASE_URL}${path}`;
 
+// Form submissions can take longer (DB write + 2 emails inline). 25s gives
+// the backend room while still bounding the user-visible spinner.
+const SUBMIT_TIMEOUT_MS = 25_000;
+
 export const submitSchedule = async (formData, captchaToken) => {
-	const response = await fetch(buildApiUrl("/api/schedule"), {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
+	const response = await fetchWithTimeout(
+		buildApiUrl("/api/schedule"),
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ ...formData, captchaToken }),
 		},
-		body: JSON.stringify({ ...formData, captchaToken }),
-	});
+		{ timeoutMs: SUBMIT_TIMEOUT_MS },
+	);
 
 	if (!response.ok) {
 		let errorMessage = "An error occurred. Please try again.";
@@ -26,11 +36,15 @@ export const submitSchedule = async (formData, captchaToken) => {
 };
 
 export const subscribeNewsletter = async (email, captchaToken) => {
-	const response = await fetch(buildApiUrl("/api/newsletter"), {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ email, captchaToken }),
-	});
+	const response = await fetchWithTimeout(
+		buildApiUrl("/api/newsletter"),
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email, captchaToken }),
+		},
+		{ timeoutMs: SUBMIT_TIMEOUT_MS },
+	);
 
 	if (!response.ok) {
 		let errorMessage = "Failed to subscribe. Please try again.";
@@ -47,11 +61,15 @@ export const subscribeNewsletter = async (email, captchaToken) => {
 };
 
 export const submitDiyPermit = async (formData, captchaToken) => {
-	const response = await fetch(buildApiUrl("/api/diy-permit"), {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ ...formData, captchaToken }),
-	});
+	const response = await fetchWithTimeout(
+		buildApiUrl("/api/diy-permit"),
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ ...formData, captchaToken }),
+		},
+		{ timeoutMs: SUBMIT_TIMEOUT_MS },
+	);
 
 	if (!response.ok) {
 		let errorMessage = "Failed to submit request. Please try again.";
@@ -84,10 +102,15 @@ export const submitJobApplication = async (formData, resumeFile, captchaToken) =
 		data.append("captchaToken", captchaToken);
 	}
 
-	const response = await fetch(buildApiUrl("/api/job-application"), {
-		method: "POST",
-		body: data,
-	});
+	const response = await fetchWithTimeout(
+		buildApiUrl("/api/job-application"),
+		{
+			method: "POST",
+			body: data,
+		},
+		// Resume upload can be slower; give it a wider window.
+		{ timeoutMs: 45_000 },
+	);
 
 	if (!response.ok) {
 		let errorMessage = "Failed to submit application. Please try again.";
@@ -104,11 +127,15 @@ export const submitJobApplication = async (formData, resumeFile, captchaToken) =
 };
 
 export const redeemOffer = async (formData, captchaToken) => {
-	const response = await fetch(buildApiUrl("/api/redeem-offer"), {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ ...formData, captchaToken }),
-	});
+	const response = await fetchWithTimeout(
+		buildApiUrl("/api/redeem-offer"),
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ ...formData, captchaToken }),
+		},
+		{ timeoutMs: SUBMIT_TIMEOUT_MS },
+	);
 
 	if (!response.ok) {
 		let errorMessage = "Failed to redeem offer. Please try again.";

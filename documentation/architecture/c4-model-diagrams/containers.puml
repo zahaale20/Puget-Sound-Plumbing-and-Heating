@@ -1,0 +1,39 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title PSPAH Web App - Container Diagram
+
+Person(user, "User", "Person who books services, redeems offers, subscribes, and applies for jobs")
+Person(pspah_team, "Puget Sound Plumbing and Heating", "Provides services, handles user communication, and updates site content")
+
+System_Boundary(pspah, "PSPAH Web App") {
+  Container(web, "Client Web App", "React 19 + Vite", "SEO-friendly public website and form workflows")
+  Container(api, "Backend API", "FastAPI (Python)", "Validates requests, rate limits, processes forms, and orchestrates integrations")
+}
+
+System_Ext(hcaptcha, "hCaptcha", "Bot protection and challenge verification")
+System_Ext(resend, "Resend", "Transactional email delivery provider")
+ContainerDb_Ext(pg, "Supabase Database", "PostgreSQL", "Manages relational data")
+System_Ext(storage, "Supabase Storage", "Manages objects")
+System_Ext(vercel, "Vercel", "Hosting platform for frontend and backend deployments")
+
+Rel(user, web, "Browses website and submits forms", "HTTPS")
+
+Rel(web, api, "Calls JSON/form endpoints", "HTTPS")
+Rel(api, hcaptcha, "Verifies captcha tokens", "HTTPS API")
+Rel(api, resend, "Sends emails", "HTTPS API")
+Rel(api, pg, "Stores and reads business data", "SQL over TLS")
+Rel(api, storage, "Reads public images and stores resumes", "HTTPS")
+
+Rel(pspah_team, pg, "Updates blog posts and views form interactions", "Supabase Console")
+Rel(pspah_team, storage, "Manages website media and files", "Supabase Console")
+
+Rel(resend, user, "Sends emails", "Email")
+Rel(resend, pspah_team, "Sends emails", "Email")
+
+Rel_D(web, vercel, "Deployed on")
+Rel_D(api, vercel, "Deployed on")
+
+@enduml

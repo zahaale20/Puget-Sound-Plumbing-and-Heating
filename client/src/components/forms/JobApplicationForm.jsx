@@ -213,7 +213,7 @@ export default function JobApplicationForm() {
 						<button
 							type="submit"
 							disabled={isSubmitting}
-							className="flex items-center justify-center w-full sm:w-[200px] h-[50px] px-8 gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:opacity-60 disabled:cursor-not-allowed"
+							className="flex items-center justify-center w-full sm:w-auto sm:min-w-[200px] h-[50px] px-8 gap-2 text-base font-semibold text-white cursor-pointer transition-all duration-300 transform whitespace-nowrap bg-[#B32020] hover:bg-[#7a1515] disabled:opacity-60 disabled:cursor-not-allowed"
 						>
 							<LoadingButtonContent
 								isLoading={isSubmitting}

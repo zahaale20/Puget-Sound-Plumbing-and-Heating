@@ -36,7 +36,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         yield
     finally:
         from database import close_pool
+        from services.http_client import close_http_client
         await close_pool()
+        await close_http_client()
 
 
 app = FastAPI(title="PSPAH Backend API", lifespan=lifespan)

@@ -1,0 +1,76 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title PSPAH Web App - Backend API Components Diagram
+
+Person(user, "User", "Books services, redeems offers, subscribes, applies for jobs")
+Container(web, "Client Web App", "React 19 + Vite", "Calls /api/* endpoints")
+
+Container_Boundary(api, "FastAPI Backend Container") {
+  Component(main, "Application Core", "main.py", "Bootstraps FastAPI; CORS, TrustedHost, HTTPS-redirect, request-id and metrics middleware; mounts routers")
+  Component(observ, "Observability", "observability.py", "Structured JSON logging, request-id correlation, optional Prometheus /metrics, Sentry init")
+
+  Component(routes_forms, "Form Routes", "routes/schedule.py, newsletter.py, offers.py, diy_permit.py, careers.py", "Handles form submissions: schedule, newsletter, redeem-offer, DIY permit, job application")
+  Component(routes_content, "Content Routes", "routes/blog.py, routes/images.py", "Lists/fetches blog posts, increments view counts, resolves image URLs")
+  Component(routes_captcha, "Captcha Route", "routes/captcha.py", "Standalone /api/verify-captcha endpoint")
+
+  Component(deps, "Request Dependencies", "dependencies.py", "FastAPI dependency that resolves client IP and enforces per-endpoint rate limiting before body parsing")
+  Component(models, "Request Models", "models/requests.py", "Pydantic schemas / payload validation")
+  Component(utils, "Shared Utils", "utils.py", "Email/text normalization and duplicate-error helpers")
+
+  Component(rate_limiter, "Rate Limiter", "services/rate_limiter.py", "Per-IP, per-endpoint counters persisted in Postgres for cross-instance limits")
+  Component(captcha_svc, "Captcha Service", "services/captcha_service.py", "Async hCaptcha verification (httpx) with retry + circuit breaker")
+  Component(email_svc, "Email Service", "services/email_service.py", "Sends customer + company emails via Resend with retry + circuit breaker")
+  Component(storage_svc, "Storage Service", "services/storage_service.py", "Resolves Supabase Storage public URLs and uploads resumes with retry + circuit breaker")
+  Component(resilience, "Resilience", "services/resilience.py", "Reusable async retry + in-process circuit breaker")
+  Component(db_layer, "Database Layer", "database.py", "Async psycopg connection pool and helpers")
+}
+
+System_Ext(hcaptcha, "hCaptcha", "Bot protection / token verification")
+System_Ext(resend, "Resend", "Transactional email provider")
+SystemDb_Ext(postgres, "Supabase Postgres", "Application data + rate-limit counters")
+System_Ext(supabase_storage, "Supabase Storage", "Public images + resume uploads")
+System_Ext(sentry, "Sentry", "Error / performance monitoring (optional)")
+
+Rel(user, web, "Browses site, submits forms", "HTTPS")
+Rel(web, main, "Calls /api/* endpoints", "JSON / multipart over HTTPS")
+
+Rel(main, routes_forms, "Mounts router")
+Rel(main, routes_content, "Mounts router")
+Rel(main, routes_captcha, "Mounts router")
+Rel(main, observ, "Configures logging, request-id middleware, metrics, Sentry")
+
+Rel(routes_forms, deps, "Depends(require_rate_limit(...))")
+Rel(routes_content, deps, "Depends(require_rate_limit(...))")
+Rel(routes_captcha, deps, "Depends(require_rate_limit(...))")
+Rel(deps, rate_limiter, "check_rate_limit(ip, endpoint)")
+
+Rel(routes_forms, models, "Validates payloads")
+Rel(routes_captcha, models, "Validates payloads")
+
+Rel(routes_forms, utils, "Normalizes input, formats duplicate errors")
+Rel(routes_content, utils, "Normalizes input")
+
+Rel(routes_forms, captcha_svc, "verify_captcha(token)")
+Rel(routes_captcha, captcha_svc, "verify_captcha_detailed(token)")
+Rel(routes_forms, email_svc, "Sends notifications + customer confirmations")
+Rel(routes_forms, storage_svc, "Uploads resumes (careers)")
+Rel(routes_forms, db_layer, "Persists submissions, queries duplicates")
+Rel(routes_content, db_layer, "Reads blog posts, updates view counts")
+Rel(routes_content, storage_svc, "Resolves public image URLs")
+
+Rel(rate_limiter, db_layer, "UPSERTs rate-limit rows")
+
+Rel(captcha_svc, resilience, "Retry + circuit breaker")
+Rel(email_svc, resilience, "Retry + circuit breaker")
+Rel(storage_svc, resilience, "Retry + circuit breaker")
+
+Rel(captcha_svc, hcaptcha, "POST /siteverify", "HTTPS")
+Rel(email_svc, resend, "Sends emails", "HTTPS API")
+Rel(db_layer, postgres, "SQL via async psycopg pool", "TLS")
+Rel(storage_svc, supabase_storage, "GETs public URLs, PUTs resumes", "HTTPS")
+Rel(observ, sentry, "Reports exceptions and traces", "HTTPS")
+
+@enduml

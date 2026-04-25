@@ -77,8 +77,8 @@ async def list_blog_posts(
         raise HTTPException(status_code=500, detail="Failed to load blog posts") from e
 
 
-@router.get("/{slug}")
-async def get_blog_post(slug: str) -> dict[str, Any]:
+@router.get("/{slug}", response_model=None)
+async def get_blog_post(slug: str) -> dict[str, Any] | JSONResponse:
     """Return a single blog post by slug."""
     try:
         async with get_db_connection() as conn:
@@ -95,7 +95,10 @@ async def get_blog_post(slug: str) -> dict[str, Any]:
                 row = await cur.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Blog post not found")
-        return _row_to_post(row)
+        return JSONResponse(
+            content=_row_to_post(row),
+            headers={"Cache-Control": f"public, s-maxage={BLOG_CACHE_MAX_AGE}, stale-while-revalidate=60"},
+        )
     except HTTPException:
         raise
     except Exception as e:

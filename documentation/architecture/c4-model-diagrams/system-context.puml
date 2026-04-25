@@ -1,0 +1,50 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title PSPAH Web App - System Context Diagram
+
+Person(user, "User", "Person who books services, redeems offers, subscribes, and applies for jobs")
+Person(pspah, "Puget Sound Plumbing and Heating", "Provides services, handles user communication, and updates site content")
+Person(king_it, "King IT Consulting", "Drives modernization efforts for PSPAH and provides photography services")
+Person(cavo, "Cavo Studio", "Designs, builds, and deploys the website")
+
+System(pspah_web_app, "PSPAH Web App", "Web application for users to interact with PSPAH's services, content, and forms")
+
+System_Ext(hcaptcha, "hCaptcha", "Bot protection and challenge verification")
+System_Ext(resend, "Resend", "Transactional email delivery provider")
+System_Ext(supabase, "Supabase", "Managed PostgreSQL and object storage")
+System_Ext(vercel, "Vercel", "Hosting platform for frontend and backend deployments")
+
+Rel(user, pspah_web_app, "Browses website and submits forms", "HTTPS")
+
+Rel(pspah, user, "Provides service", "In-Person")
+Rel(user, pspah, "Calls", "Phone")
+
+Rel(king_it, pspah, "Demos website updates and discusses direction", "Google Meet, Email")
+Rel(pspah, supabase, "Updates blog posts, gets newsletter list, and views form interactions", "Supabase Console")
+
+Rel(pspah, pspah_web_app, "Test website features and identify defects", "Alpha Testing")
+Rel(king_it, pspah_web_app, "Test website features and identify defects", "Alpha Testing")
+
+Rel(king_it, cavo, "Sends photos", "Email")
+Rel(cavo, king_it, "Demos website updates and discusses direction", "Google Meet, Email")
+
+Rel(cavo, pspah_web_app, "Designs, builds, and deploys website", "Software Engineering")
+Rel(pspah, king_it, "Provides feedback and direction on website implementation", "Google Meet, Email")
+
+Rel(king_it, cavo, "Provides feedback and direction on website implementation", "Google Meet, Email")
+Rel(king_it, pspah, "Takes photos of PSPAH's work and team for website content", "In-Person")
+
+Rel(pspah_web_app, hcaptcha, "Verifies captcha tokens", "HTTPS API")
+Rel(pspah_web_app, resend, "Sends emails", "HTTPS API")
+Rel(pspah_web_app, supabase, "Stores and reads business data and files", "Supabase API")
+Rel(pspah_web_app, vercel, "Deployed and served on", "Managed hosting")
+
+Rel(resend, user, "Sends emails", "Email")
+Rel(resend, pspah, "Sends emails", "Email")
+
+Rel(user, pspah_web_app, "Unsubscribes from newsletter", "Email link")
+
+@enduml

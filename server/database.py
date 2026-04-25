@@ -34,11 +34,14 @@ logger = logging.getLogger(__name__)
 _pool: AsyncConnectionPool | None = None
 _pool_lock = asyncio.Lock()
 
-# Pool sizing is configurable per-deployment. Defaults are tuned for a small
-# production deployment behind a pgbouncer (Supabase). Bump max for higher
-# concurrency hosts.
-_DB_POOL_MIN_CONN = int(os.getenv("DB_POOL_MIN_CONN", "2"))
-_DB_POOL_MAX_CONN = int(os.getenv("DB_POOL_MAX_CONN", "20"))
+# Pool sizing is configurable per-deployment. Defaults are tuned for a
+# serverless deployment (Vercel) where each cold-started instance opens its
+# own pool — keep `max_size` small so N concurrent instances cannot exhaust
+# Supabase's connection cap. For long-lived hosts (Docker/VM) bump these via
+# env. The DSN should also point at Supabase's transaction-mode pgbouncer
+# (port 6543) for true horizontal scale.
+_DB_POOL_MIN_CONN = int(os.getenv("DB_POOL_MIN_CONN", "1"))
+_DB_POOL_MAX_CONN = int(os.getenv("DB_POOL_MAX_CONN", "5"))
 _DB_STATEMENT_TIMEOUT_MS = int(os.getenv("DB_STATEMENT_TIMEOUT_MS", "10000"))
 
 

@@ -21,7 +21,10 @@ describe("blogService", () => {
 			});
 
 			await expect(fetchBlogPosts()).resolves.toEqual(posts);
-			expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/\/api\/blog$/));
+			expect(fetch).toHaveBeenCalledWith(
+				expect.stringMatching(/\/api\/blog$/),
+				expect.objectContaining({ signal: expect.any(AbortSignal) }),
+			);
 		});
 
 		it("throws with the status code on a non-2xx response", async () => {

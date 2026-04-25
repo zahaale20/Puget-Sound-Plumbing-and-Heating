@@ -196,7 +196,7 @@ export default function Footer() {
 											<button
 												type="submit"
 												disabled={newsletterSubmitting}
-												className="flex-[1] flex items-center justify-center gap-2 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
+												className="flex-[1] flex items-center justify-center gap-2 px-3 py-2.5 bg-[#B32020] hover:bg-[#7a1515] text-white text-sm font-semibold uppercase cursor-pointer transition-all duration-300 disabled:opacity-60"
 											>
 												{newsletterSubmitting ? "..." : "Join Now"}
 											</button>

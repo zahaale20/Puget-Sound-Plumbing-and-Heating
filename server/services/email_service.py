@@ -47,8 +47,6 @@ _resend_breaker = CircuitBreaker(
 
 
 # ─── Sanitization Helpers ─────────────────────────────────────────────────────
-
-
 def _safe_addr(value: str) -> str:
     return value.strip().lower().replace("\r", "").replace("\n", "")
 
@@ -62,8 +60,6 @@ def _esc(value: str) -> str:
 
 
 # ─── Template Building Blocks ─────────────────────────────────────────────────
-
-
 def _logo() -> str:
     return (
         '<tr><td style="padding:40px 40px 32px;text-align:center;">'

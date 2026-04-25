@@ -75,9 +75,11 @@ async def schedule_online(request: ScheduleRequest, req: Request, background_tas
             )
             email_status = "failed"
 
-        # Notify company (non-critical, off the request critical path).
-        background_tasks.add_task(
-            _safe_send_schedule_notification,
+        # Notify company (non-critical, awaited inline because BackgroundTasks
+        # is not durable on serverless: the function may freeze/terminate the
+        # instant the response returns. The wrapper swallows exceptions so
+        # this never fails the request.
+        await _safe_send_schedule_notification(
             email, first_name, last_name, phone, message,
         )
 

@@ -143,9 +143,9 @@ async def redeem_offer(request: RedeemOfferRequest, req: Request, background_tas
                 )
             raise
 
-        # 3) Notify the company (non-critical, off the request critical path)
-        background_tasks.add_task(
-            _safe_send_coupon_notification,
+        # 3) Notify the company (awaited inline; BackgroundTasks is not
+        # durable on serverless).
+        await _safe_send_coupon_notification(
             email, first_name, last_name, phone, coupon_id,
             request.couponDiscount, request.couponCondition,
         )

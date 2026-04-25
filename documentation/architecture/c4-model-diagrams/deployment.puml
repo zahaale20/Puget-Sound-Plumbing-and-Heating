@@ -1,0 +1,50 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_WITH_LEGEND()
+
+title PSPAH Web App - Deployment Diagram
+
+Person(user, "User", "Person who books services, redeems offers, subscribes, and applies for jobs")
+
+System_Boundary(pspah, "PSPAH Web App") {
+  Container(web, "Client Web App", "React 19 + Vite")
+  Container(api, "Backend API", "FastAPI (Python)")
+}
+
+ContainerDb_Ext(pg, "Supabase Database", "PostgreSQL", "Manages relational data")
+System_Ext(storage, "Supabase Storage", "Manages objects")
+System_Ext(hcaptcha, "hCaptcha", "Bot protection and challenge verification")
+System_Ext(resend, "Resend", "Transactional email delivery provider")
+
+Deployment_Node(internet, "Public Internet", "CDN + DNS") {
+  Deployment_Node(vercel_prod, "Vercel Project (Production)", "Managed hosting") {
+    Deployment_Node(vercel_edge, "Edge Network", "Static content delivery") {
+      Container_Instance(web, "Client web instance")
+    }
+    Deployment_Node(vercel_serverless, "Serverless Python Runtime", "API execution") {
+      Container_Instance(api, "Backend API instance")
+    }
+  }
+
+  Deployment_Node(local_dev, "Developer Workstation", "macOS / Linux") {
+    Deployment_Node(compose, "Docker Compose", "Local stack") {
+      Container(local_server, "Local Backend API", "FastAPI container")
+      ContainerDb(local_pg, "Local Postgres", "postgres:16-alpine")
+    }
+  }
+}
+
+Rel(user, web, "Browses website and submits forms", "HTTPS")
+Rel(web, api, "Calls /api endpoints", "HTTPS")
+Rel(api, pg, "Stores and reads business data", "SQL over TLS")
+Rel(api, storage, "Reads public images and stores resumes", "HTTPS")
+Rel(api, hcaptcha, "Verifies captcha tokens", "HTTPS API")
+Rel(api, resend, "Sends emails", "HTTPS API")
+Rel(resend, user, "Sends emails", "Email")
+
+Rel(local_server, local_pg, "Reads/writes local data", "SQL")
+Rel(local_server, hcaptcha, "Optional dev bypass / verification", "HTTPS")
+Rel(local_server, resend, "Sends emails when configured", "HTTPS")
+
+@enduml

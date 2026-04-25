@@ -131,7 +131,7 @@ async def subscribe_newsletter(request: NewsletterRequest, req: Request, backgro
         else:
             try:
                 await send_newsletter_confirmation(email, unsubscribe_url)
-                background_tasks.add_task(_safe_send_newsletter_notification, email)
+                await _safe_send_newsletter_notification(email)
                 email_status = "sent"
             except HTTPException as email_error:
                 logger.exception(
@@ -194,8 +194,8 @@ async def unsubscribe_newsletter(
                     email_error.detail,
                 )
 
-            # Notify company (non-critical, off the request critical path)
-            background_tasks.add_task(_safe_send_newsletter_unsubscribe_notification, normalized_email)
+            # Notify company (awaited inline; BackgroundTasks is not durable on serverless)
+            await _safe_send_newsletter_unsubscribe_notification(normalized_email)
 
         return HTMLResponse(content=_UNSUBSCRIBE_PAGE, status_code=200)
     except Exception as e:

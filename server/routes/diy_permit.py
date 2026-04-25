@@ -74,8 +74,8 @@ async def submit_diy_permit(request: DiyPermitRequest, req: Request, background_
 
         try:
             await send_diy_permit_confirmation(email, first_name, address)
-            background_tasks.add_task(
-                _safe_send_diy_permit_notification,
+            # Awaited inline because BackgroundTasks is not durable on serverless.
+            await _safe_send_diy_permit_notification(
                 email, first_name, last_name, phone, address,
                 request.city.strip(), request.state.strip(),
                 request.zipCode.strip(), request.projectDescription.strip(),
