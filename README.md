@@ -1,87 +1,114 @@
-
 # Puget Sound Plumbing and Heating Website
 
-This monorepo contains the full-stack web application for Puget Sound Plumbing and Heating, including:
+Full-stack monorepo for the Puget Sound Plumbing and Heating website.
 
-- **Frontend:** Vite + React + Tailwind CSS
-- **Backend:** FastAPI (async Python) + PostgreSQL + Alembic
-- **Testing:** Vitest, Playwright (frontend); pytest, pytest-asyncio, pytest-cov (backend)
+- Frontend: Vite, React 19, Tailwind CSS, Vitest, Playwright.
+- Backend: FastAPI, Python 3.12+, PostgreSQL, Alembic, pytest.
+- Deployment: Vercel-oriented frontend and Python backend configuration, with Docker support for backend smoke tests.
 
----
+## Project structure
 
-## 🗂️ Project Structure
+- [client/](client/) — React frontend application.
+- [client/src/](client/src/) — Frontend components, pages, hooks, data, and services.
+- [client/e2e/](client/e2e/) — Playwright end-to-end tests.
+- [server/](server/) — FastAPI backend application.
+- [server/alembic/](server/alembic/) — Database migrations.
+- [server/routes/](server/routes/) — API route handlers.
+- [server/services/](server/services/) — Email, captcha, storage, rate limiting, and resilience services.
+- [server/tests/](server/tests/) — Backend unit and integration tests.
+- [documentation/](documentation/) — Architecture documentation and diagrams.
 
-- `client/` — Frontend app (Vite, React, Tailwind, Playwright, E2E tests)
-	- `src/` — React components, pages, hooks, services, and data
-	- `e2e/` — Playwright end-to-end tests
-	- `public/` — Static assets, robots.txt, sitemap.xml
-	- `scripts/` — SEO, prerender, and bundle analysis scripts
-- `server/` — Backend API (FastAPI, async Postgres, Alembic, pytest)
-	- `alembic/` — Database migrations (see below)
-	- `routes/` — API endpoints (e.g. `/api/redeem-offer`)
-	- `models/` — Pydantic models and DB schemas
-	- `services/` — Email, captcha, rate limiting, storage, etc.
-	- `tests/` — Unit and integration tests
-- `documentation/` — Architecture diagrams, design docs
+## Prerequisites
 
----
+- Node.js 20.19+ or 22.12+.
+- Python 3.12+.
+- Docker Desktop or another Docker Compose-compatible runtime for local PostgreSQL.
 
-## 🚀 Stack & Dependencies
+## Local setup
 
-**Frontend:**
-- React 19, Vite, Tailwind CSS
-- Playwright (E2E), Vitest (unit), ESLint, Prettier
-- SEO: prerender, sitemap, audit scripts
+Run these commands from the repository root unless a step says otherwise.
 
-**Backend:**
-- FastAPI, async/await, Starlette
-- PostgreSQL (async, via psycopg3)
-- Alembic (migrations)
-- Email: Resend API
-- Captcha: hCaptcha
-- Rate limiting: custom, per-form
-- Observability: Prometheus, Sentry (optional)
-- Testing: pytest, pytest-asyncio, pytest-cov
+### 1. Start PostgreSQL
 
----
-
-## 🏗️ Setup & Local Development
-
-### Prerequisites
-- Node.js (18+ recommended)
-- Python 3.11+
-- PostgreSQL (local or cloud)
-
-### 1. Clone the repo
 ```sh
-# Puget Sound Plumbing and Heating Website
+docker compose -f docker-compose.full-stack-smoke.yml up -d db
+```
 
-This monorepo contains the full-stack web application for Puget Sound Plumbing and Heating.
+This starts a local PostgreSQL 16 container on port 5432 with database `pspah`, user `postgres`, and password `postgres`.
 
-## Structure
+### 2. Start the backend
 
-- [`client/`](client/README.md): Frontend (Vite, React, Tailwind, Playwright, SEO, hCaptcha, etc.)
-- [`server/`](server/README.md): Backend (FastAPI, async Postgres, Alembic, email, rate limiting, etc.)
-- `documentation/`: Architecture diagrams and design docs
+```sh
+cd server
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
 
-See the [client README](client/README.md) and [server README](server/README.md) for full details on each part.
+export DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/pspah"
+export ENABLE_HTTPS_REDIRECT="false"
+export ALLOW_CAPTCHA_BYPASS="true"
+export EMAIL_DRY_RUN="true"
+export RESEND_API_KEY="re_local_key"
+export COMPANY_EMAIL="local@example.com"
+export SUPABASE_PROJECT_ID="localproject"
+export NEWSLETTER_UNSUBSCRIBE_SECRET="local-unsubscribe-secret"
 
-## Quick Start
+alembic upgrade head
+uvicorn main:app --reload --host 127.0.0.1 --port 8001
+```
 
-1. Clone the repo and `cd` into `pspah-website`
-2. See `client/README.md` and `server/README.md` for setup, scripts, and environment details
-3. Run both frontend and backend locally for full-stack development
+The API is available at `http://127.0.0.1:8001`. Keep this terminal running.
 
-## Deployment
+### 3. Start the frontend
 
-- **Frontend:** Deploys to Vercel (see `client/vercel.json`)
-- **Backend:** Deploys to Vercel or any Python host (see `server/vercel.json` and `server/Dockerfile`)
-- **Migrations:** Always run `alembic upgrade head` after backend deploys with new migrations
+Open a second terminal, then run:
 
-## Documentation & Support
-
-- Architecture: `documentation/architecture/`
-- For help, open an issue or email info@pugetsoundplumbing.com
-
-**© 2026 Puget Sound Plumbing and Heating**
+```sh
 cd client
+npm ci
+npm run dev
+```
+
+The frontend is available at the Vite URL printed in the terminal, usually `http://localhost:5173`. The Vite dev server proxies `/api` requests to the backend on port 8001.
+
+## Tests and checks
+
+### Frontend
+
+```sh
+cd client
+npm test
+npm run lint
+npm run build
+```
+
+### Backend
+
+```sh
+cd server
+source .venv/bin/activate
+pytest
+ruff check .
+```
+
+### Full-stack smoke test
+
+```sh
+cd client
+npm run test:e2e:full-stack
+```
+
+The smoke test starts the disposable Docker Compose stack in [docker-compose.full-stack-smoke.yml](docker-compose.full-stack-smoke.yml), runs backend migrations, serves the frontend with `VITE_API_BASE_URL=http://127.0.0.1:8000`, and verifies a real backend/database form flow.
+
+## Deployment notes
+
+- Frontend deployment configuration lives in [client/vercel.json](client/vercel.json).
+- Backend deployment configuration lives in [server/vercel.json](server/vercel.json) and [server/Dockerfile](server/Dockerfile).
+- Run `alembic upgrade head` whenever backend deployments include new database migrations.
+- Do not commit populated `.env` files or real API keys.
+
+## More details
+
+- [client/README.md](client/README.md) documents frontend scripts and behavior.
+- [server/README.md](server/README.md) documents backend features, environment variables, and deployment notes.
