@@ -14,9 +14,16 @@ server/.env
 client/node_modules/
 client/dist/
 client/coverage/
+client/.vite/
+client/test-results/
 client/.env
 client/.env.local
 .eslintcache
+
+# --- Generated Build/Test Artifacts ---
+.vite/
+test-results/
+*.last-run.json
 
 # --- Editors & System ---
 .vscode/
