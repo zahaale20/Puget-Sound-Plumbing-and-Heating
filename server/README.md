@@ -36,7 +36,9 @@ This is the backend for the Puget Sound Plumbing and Heating website, built with
 ## Deployment
 - Can be deployed to Vercel (see `vercel.json`) or any Python host
 - Use the provided Dockerfile for containerized deployments
-- Always run `alembic upgrade head` after deploying migrations
+- The CD workflow runs `alembic upgrade head` before deploying application code and blocks deployment unless the production database verifies at Alembic head.
+- Set a direct, migration-capable `PRODUCTION_DATABASE_URL` in GitHub Actions secrets for production migrations; `DATABASE_URL` is supported as a fallback.
+- For manual releases, run migrations before code deployment and verify `alembic current` matches `alembic heads` before continuing.
 
 ## Contributing
 - Use Ruff and Black for code style

@@ -105,8 +105,20 @@ The smoke test starts the disposable Docker Compose stack in [docker-compose.ful
 
 - Frontend deployment configuration lives in [client/vercel.json](client/vercel.json).
 - Backend deployment configuration lives in [server/vercel.json](server/vercel.json) and [server/Dockerfile](server/Dockerfile).
-- Run `alembic upgrade head` whenever backend deployments include new database migrations.
+- Production CD runs `alembic upgrade head` before deploying application code and blocks the Vercel deploy unless the database verifies at Alembic head.
+- Configure the CD workflow with a direct, migration-capable production database secret named `PRODUCTION_DATABASE_URL`; `DATABASE_URL` is accepted as a fallback for existing repositories.
+- If a manual release is ever required, run `alembic upgrade head` against production first, then verify `alembic current` shows the latest head before deploying client or server code.
 - Do not commit populated `.env` files or real API keys.
+
+### Manual release checklist
+
+Use this only when the automated CD workflow is unavailable.
+
+1. Confirm CI is green for the commit being released.
+2. Apply migrations against the production database from [server/](server/) with `alembic upgrade head`.
+3. Block the release until `alembic current` reports the same revision as `alembic heads`.
+4. Deploy the server and client Vercel projects from the same commit.
+5. Smoke test one database-backed form flow, such as coupon redemption, before announcing the release.
 
 ## More details
 
