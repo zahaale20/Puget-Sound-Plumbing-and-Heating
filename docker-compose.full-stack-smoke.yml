@@ -1,0 +1,53 @@
+# Full-stack smoke-test stack used by `npm run test:e2e:full-stack`.
+#
+# This stack is intentionally self-contained and does not read server/.env:
+# the smoke test owns its disposable Docker Postgres database, runs Alembic
+# migrations during server startup, and disables external hCaptcha/Resend I/O.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pspah
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pspah"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/pspah
+      DB_POOL_MIN_CONN: "1"
+      DB_POOL_MAX_CONN: "3"
+      LOG_FORMAT: json
+      LOG_LEVEL: INFO
+      ALLOWED_HOSTS: "localhost,127.0.0.1,server"
+      CORS_ORIGINS: "http://localhost:4173,http://127.0.0.1:4173"
+      TRUST_PROXY_HEADERS: "false"
+      ENABLE_HTTPS_REDIRECT: "false"
+      ALLOW_CAPTCHA_BYPASS: "true"
+      HCAPTCHA_SECRET_KEY: ""
+      EMAIL_DRY_RUN: "true"
+      RESEND_API_KEY: re_smoke_key
+      COMPANY_EMAIL: smoke@example.com
+      SUPABASE_PROJECT_ID: smokeproject
+      NEWSLETTER_UNSUBSCRIBE_SECRET: smoke-unsubscribe-secret
+    command: >
+      sh -c "alembic upgrade head &&
+      uvicorn main:app --host 0.0.0.0 --port $${PORT:-8000}"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health/ready || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20

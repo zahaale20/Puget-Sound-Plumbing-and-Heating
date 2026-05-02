@@ -27,8 +27,15 @@ This is the frontend for the Puget Sound Plumbing and Heating website, built wit
 - `npm run preview` — Preview production build
 - `npm test` — Run unit tests (Vitest)
 - `npm run test:e2e` — Run Playwright E2E tests
+- `npm run test:e2e:full-stack` — Run the Docker Postgres + FastAPI + Playwright smoke test
 - `npm run lint` — Lint code with ESLint
 - `npm run format` — Format code with Prettier
+
+## Full-stack smoke test
+The default Playwright suite keeps API responses mocked for fast frontend acceptance coverage. Use
+`npm run test:e2e:full-stack` when a change needs a true backend/database check. The command starts
+the disposable Docker Compose stack in [../docker-compose.full-stack-smoke.yml](../docker-compose.full-stack-smoke.yml), runs Alembic migrations, serves the Vite app with `VITE_API_BASE_URL=http://127.0.0.1:8000`, and verifies the default DIY permit path persists `inspection = "unsure"` in Docker Postgres.
+The stack uses the real FastAPI app and database while setting `EMAIL_DRY_RUN=true` so no Resend email is sent.
 
 ## Environment
 - Copy `.env.example` to `.env` and fill in required values (API URLs, hCaptcha keys, etc).

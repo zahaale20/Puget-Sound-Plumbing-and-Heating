@@ -272,6 +272,10 @@ async def _send(*, to: str, subject: str, html: str, attachments: list[Any] | No
     if attachments:
         payload["attachments"] = attachments
 
+    if os.getenv("EMAIL_DRY_RUN", "false").lower() == "true":
+        logger.info("EMAIL_DRY_RUN=true; skipping Resend send to %s", to)
+        return
+
     if not _resend_breaker.allow_request():
         raise RuntimeError("Email provider temporarily unavailable (circuit open)")
 

@@ -11,6 +11,7 @@
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
 		"test:e2e": "playwright test",
+		"test:e2e:full-stack": "node scripts/run-full-stack-smoke.mjs",
 		"test:e2e:headed": "playwright test --headed",
 		"test:e2e:ui": "playwright test --ui",
 		"seo:prerender": "node scripts/prerender-static.mjs",

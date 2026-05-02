@@ -235,6 +235,15 @@ class TestNotificationFunctions:
 class TestSendPrimitive:
     @pytest.mark.asyncio
     @patch("services.email_service.asyncio.to_thread", new_callable=AsyncMock)
+    async def test_send_dry_run_skips_resend(self, mock_to_thread, monkeypatch) -> None:
+        monkeypatch.setenv("EMAIL_DRY_RUN", "true")
+
+        await _send(to="u@test.com", subject="sub", html="<p>x</p>")
+
+        mock_to_thread.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    @patch("services.email_service.asyncio.to_thread", new_callable=AsyncMock)
     async def test_send_includes_attachments(self, mock_to_thread) -> None:
         await _send(
             to="u@test.com",
