@@ -83,8 +83,9 @@ def _run_migrations(dsn: str) -> None:
     drives. Migrations are idempotent (`IF NOT EXISTS` everywhere) so this
     is safe to re-run on every test session.
     """
-    from alembic import command
     from alembic.config import Config
+
+    from alembic import command
 
     server_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
     cfg = Config(os.path.join(server_dir, "alembic.ini"))

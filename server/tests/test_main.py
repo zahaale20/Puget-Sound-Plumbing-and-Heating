@@ -1,6 +1,8 @@
 import os
 from unittest.mock import patch
 
+import pytest
+
 
 class TestNormalizeHostname:
     def test_simple_hostname(self) -> None:
@@ -146,14 +148,10 @@ class TestMetricsEndpoint:
     def test_metrics_enabled_no_token(self, client, monkeypatch) -> None:
         monkeypatch.setenv("ENABLE_METRICS", "true")
         monkeypatch.delenv("METRICS_TOKEN", raising=False)
-        # Mock is_metrics_enabled and generate_latest to avoid needing prometheus_client
+        pytest.importorskip("prometheus_client")
         with patch("main.is_metrics_enabled", return_value=True):
-            try:
-                from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-                resp = client.get("/metrics")
-                assert resp.status_code == 200
-            except ImportError:
-                pass  # prometheus_client not installed in this test env
+            resp = client.get("/metrics")
+            assert resp.status_code == 200
 
     def test_metrics_token_enforced(self, client, monkeypatch) -> None:
         monkeypatch.setenv("METRICS_TOKEN", "secret-token")

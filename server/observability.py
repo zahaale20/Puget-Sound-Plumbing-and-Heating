@@ -159,7 +159,6 @@ if _metrics_enabled:
             Counter,
             Gauge,
             Histogram,
-            REGISTRY,
         )
 
         _DURATION_BUCKETS = (

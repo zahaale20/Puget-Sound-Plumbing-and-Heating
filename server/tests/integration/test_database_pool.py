@@ -23,7 +23,6 @@ from psycopg import errors as psycopg_errors
 
 from utils import is_duplicate_error
 
-
 pytestmark = [pytest.mark.asyncio, pytest.mark.integration]
 
 

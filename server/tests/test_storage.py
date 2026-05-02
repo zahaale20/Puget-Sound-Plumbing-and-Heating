@@ -1,5 +1,6 @@
-from services.storage_service import StorageService
 from unittest.mock import AsyncMock, MagicMock, patch
+
+from services.storage_service import StorageService
 
 
 class TestGetImageUrl:

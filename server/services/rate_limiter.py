@@ -5,6 +5,7 @@ Uses Supabase PostgreSQL for persistent, cross-instance rate limiting.
 Async-native: callers must `await check_rate_limit(...)`.
 """
 
+import ipaddress
 import logging
 import random
 
@@ -45,6 +46,16 @@ RETURNING request_count,
 """
 
 _CLEANUP_SQL = "DELETE FROM rate_limits WHERE window_start < NOW() - INTERVAL '24 hours'"
+_FALLBACK_RATE_LIMIT_IP = "0.0.0.0"  # nosec B104 - placeholder bucket for invalid client IPs
+
+
+def _canonical_ip(ip_address: str) -> str:
+    """Canonicalize rate-limit keys so equivalent IP strings share one bucket."""
+    try:
+        return str(ipaddress.ip_address(ip_address.strip()))
+    except ValueError:
+        logger.warning("Invalid client IP for rate limiting; using fallback bucket")
+        return _FALLBACK_RATE_LIMIT_IP
 
 
 async def check_rate_limit(ip_address: str, endpoint: str) -> tuple[bool, str, int]:
@@ -57,6 +68,7 @@ async def check_rate_limit(ip_address: str, endpoint: str) -> tuple[bool, str, i
     if endpoint not in RATE_LIMITS:
         return True, "Endpoint not rate limited", 0
 
+    client_ip = _canonical_ip(ip_address)
     max_requests, window_seconds = RATE_LIMITS[endpoint]
 
     try:
@@ -64,7 +76,7 @@ async def check_rate_limit(ip_address: str, endpoint: str) -> tuple[bool, str, i
             async with conn.cursor() as cur:
                 await cur.execute(
                     _UPSERT_SQL,
-                    (ip_address, endpoint, window_seconds, window_seconds, window_seconds),
+                    (client_ip, endpoint, window_seconds, window_seconds, window_seconds),
                 )
                 row = await cur.fetchone()
                 count = row[0]
@@ -78,7 +90,7 @@ async def check_rate_limit(ip_address: str, endpoint: str) -> tuple[bool, str, i
         if count > max_requests:
             logger.warning(
                 "Rate limit hit: ip=%s endpoint=%s count=%d limit=%d",
-                ip_address, endpoint, count, max_requests,
+                client_ip, endpoint, count, max_requests,
             )
             return False, f"Rate limit exceeded. Maximum {max_requests} requests per hour.", retry_after
         return True, "OK", 0

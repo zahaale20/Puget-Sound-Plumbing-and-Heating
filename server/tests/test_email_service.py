@@ -5,8 +5,6 @@ import pytest
 from services.email_service import (
     _contact,
     _coupon_card,
-    _send,
-    _send_notification,
     _cta,
     _customer_footer,
     _data_table,
@@ -16,6 +14,8 @@ from services.email_service import (
     _notif_footer,
     _safe_addr,
     _safe_hdr,
+    _send,
+    _send_notification,
     _steps,
     _wrap,
     send_coupon_confirmation,

@@ -45,7 +45,7 @@ class CircuitBreaker:
         )
 
 
-async def retry_async(
+async def retry_async[T](
     operation: Callable[[], Awaitable[T]],
     *,
     attempts: int,

@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 import database
-from tests.conftest import make_async_db, make_async_cursor
+from tests.conftest import make_async_cursor, make_async_db
 
 
 class TestBuildDsn:

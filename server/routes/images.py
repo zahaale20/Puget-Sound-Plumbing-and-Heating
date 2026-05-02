@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
 from typing import Any
+
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from dependencies import require_rate_limit
 from services.storage_service import StorageService

@@ -31,6 +31,31 @@ class TestCheckRateLimit:
             allowed, msg, retry_after = await check_rate_limit("1.2.3.4", "schedule")
         assert allowed is True
         assert retry_after == 0
+        assert cur.execute.call_args.args[1][0] == "1.2.3.4"
+
+    @pytest.mark.asyncio
+    async def test_canonicalizes_ip_before_counting(self) -> None:
+        cur = make_async_cursor(fetchone=(1, 3500))
+        factory, _ = make_async_db(cur)
+        with patch("services.rate_limiter.get_db_connection", factory), \
+             patch("services.rate_limiter.random") as mock_random:
+            mock_random.random.return_value = 0.5
+            allowed, _msg, retry_after = await check_rate_limit("2001:0db8::0001", "schedule")
+        assert allowed is True
+        assert retry_after == 0
+        assert cur.execute.call_args.args[1][0] == "2001:db8::1"
+
+    @pytest.mark.asyncio
+    async def test_invalid_ip_uses_shared_fallback_bucket(self) -> None:
+        cur = make_async_cursor(fetchone=(1, 3500))
+        factory, _ = make_async_db(cur)
+        with patch("services.rate_limiter.get_db_connection", factory), \
+             patch("services.rate_limiter.random") as mock_random:
+            mock_random.random.return_value = 0.5
+            allowed, _msg, retry_after = await check_rate_limit("not-an-ip", "schedule")
+        assert allowed is True
+        assert retry_after == 0
+        assert cur.execute.call_args.args[1][0] == "0.0.0.0"
 
     @pytest.mark.asyncio
     async def test_blocked_over_limit(self) -> None:
