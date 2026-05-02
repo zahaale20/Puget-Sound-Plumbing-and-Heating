@@ -216,6 +216,24 @@ async def test_diy_permit_inserts_and_dedupes(integration_app, db) -> None:
     assert await _row_count(db, '"DIY Permit Requests"') == 1
 
 
+async def test_diy_permit_default_unsure_persists(integration_app, db) -> None:
+    payload = _diy_payload(email="unsure@example.com", address="456 Default Ave")
+    payload.pop("inspection")
+
+    res = integration_app.post("/api/diy-permit", json=payload)
+
+    assert res.status_code == 200, res.text
+    assert res.json()["emailStatus"] == "sent"
+    async with db.get_db_connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
+                'SELECT inspection FROM "DIY Permit Requests" WHERE email = %s',
+                ("unsure@example.com",),
+            )
+            row = await cur.fetchone()
+    assert row == ("unsure",)
+
+
 # ---------------------------------------------------------------------------
 # Rate limiter integrated with a real route
 # ---------------------------------------------------------------------------

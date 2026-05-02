@@ -82,8 +82,9 @@ def upgrade() -> None:
             state                 TEXT NOT NULL,
             zip_code              TEXT NOT NULL,
             project_description   TEXT,
-            inspection            BOOLEAN NOT NULL DEFAULT FALSE,
+            inspection            TEXT NOT NULL DEFAULT 'unsure',
             created_at            TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            CONSTRAINT diy_permit_inspection_valid CHECK (inspection IN ('yes', 'no', 'unsure')),
             CONSTRAINT diy_permit_unique UNIQUE (email, address)
         )
         """
