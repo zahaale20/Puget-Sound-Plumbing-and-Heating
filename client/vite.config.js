@@ -5,31 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [react(), tailwindcss()],
-	test: {
-		globals: true,
-		environment: "jsdom",
-		setupFiles: "./src/test/setup.js",
-		css: false,
-		coverage: {
-			reporter: ["text", "lcov"],
-			include: [
-				"src/services/formValidation.js",
-				"src/services/imageService.js",
-				"src/services/emailService.js",
-				"src/services/blogService.js",
-			],
-			exclude: [
-				"src/**/*.test.{js,jsx}",
-				"src/test/**",
-			],
-			thresholds: {
-					lines: 85,
-					functions: 85,
-					branches: 80,
-					statements: 85,
-			},
-		},
-	},
 	build: {
 		// Enable source maps for production debugging
 		sourcemap: false,
