@@ -24,6 +24,18 @@ export default defineConfig([
 		},
 		rules: {
 			"no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]", argsIgnorePattern: "^[A-Z_]" }],
+			"no-restricted-imports": [
+				"error",
+				{
+					patterns: [
+						{
+							regex: "^\\.{1,2}/components/[^/]+(\\.jsx?)?$",
+							message:
+								"Import components through a scoped component directory such as components/layout, components/sections, components/forms, components/ui, or components/seo instead of the component root.",
+						},
+					],
+				},
+			],
 		},
 	},
 	{

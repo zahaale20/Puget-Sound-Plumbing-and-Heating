@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
 import App from "./App.jsx";
-import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import ErrorBoundary from "./components/ui/ErrorBoundary.jsx";
 import { ensureLiveChatWidget } from "./services/liveChat";
 
 const Analytics = lazy(() =>
