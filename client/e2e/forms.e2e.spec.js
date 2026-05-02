@@ -18,6 +18,66 @@ async function stubCaptcha(page, token = "e2e-captcha-token") {
 }
 
 test.describe("Frontend forms E2E", () => {
+
+	test("newsletter subscription submits successfully", async ({ page }) => {
+		await stubCaptcha(page);
+		let requestBody;
+		await page.route("**/api/newsletter", async (route) => {
+			requestBody = route.request().postDataJSON();
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({ success: true }),
+			});
+		});
+
+		await page.goto("/");
+		// Scroll to footer to ensure newsletter form is visible
+		await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+		await page.locator('input[placeholder="Email Address"]').fill("newsletter@example.com");
+		await page.getByRole("button", { name: /join now/i }).click();
+
+		await expect(
+			page.getByText("Thank you! We'll be in touch soon.")
+		).toBeVisible();
+		expect(requestBody.email).toBe("newsletter@example.com");
+		expect(requestBody.captchaToken).toBe("e2e-captcha-token");
+	});
+	test("DIY Plumbing Permit form submits successfully", async ({ page }) => {
+		await stubCaptcha(page);
+		let requestBody;
+		await page.route("**/api/diy-permit", async (route) => {
+			requestBody = route.request().postDataJSON();
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify({ success: true }),
+			});
+		});
+
+		await page.goto("/resources");
+		// The DIY Plumbing Permit form is on the Resources page
+		await page.locator("#diy-firstName").fill("Katherine");
+		await page.locator("#diy-lastName").fill("Johnson");
+		await page.locator("#diy-email").fill("katherine@example.com");
+		await page.locator("#diy-phone").fill("2065557777");
+		await page.locator("#diy-address").fill("123 Main St");
+		await page.locator("#diy-city").fill("Seattle");
+		await page.locator("#diy-state").fill("WA");
+		await page.locator("#diy-zipCode").fill("98101");
+		await page.locator("#diy-projectDescription").fill("Install new sink");
+		await page.locator("#diy-inspection").selectOption("yes");
+		await page.getByRole("button", { name: "Submit Request" }).click();
+
+		await expect(
+			page.getByText("Thank you! We'll be in touch soon.")
+		).toBeVisible();
+		expect(requestBody.firstName).toBe("Katherine");
+		expect(requestBody.email).toBe("katherine@example.com");
+		expect(requestBody.address).toBe("123 Main St");
+		expect(requestBody.captchaToken).toBe("e2e-captcha-token");
+	});
 	test("schedule online submits successfully", async ({ page }) => {
 		await stubCaptcha(page);
 		let requestBody;
