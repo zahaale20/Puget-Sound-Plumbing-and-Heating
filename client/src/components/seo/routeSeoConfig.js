@@ -1,6 +1,6 @@
 export const SITE_NAME = "Puget Sound Plumbing and Heating";
 const _viteEnv = import.meta?.env;
-const _nodeEnv = typeof process !== "undefined" ? process.env : undefined;
+const _nodeEnv = globalThis.process?.env;
 const _storageBase = (
 	_viteEnv?.VITE_SUPABASE_STORAGE_URL || _nodeEnv?.VITE_SUPABASE_STORAGE_URL || ""
 ).replace(/\/$/, "");
