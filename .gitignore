@@ -39,3 +39,5 @@ env/
 tree_script.py
 .vercel
 .env*
+# client/.env.production holds public build-time values only (no secrets)
+!client/.env.production
