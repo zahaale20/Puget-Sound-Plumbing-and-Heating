@@ -5,7 +5,7 @@ const _storageBase = (
 	_viteEnv?.VITE_SUPABASE_STORAGE_URL || _nodeEnv?.VITE_SUPABASE_STORAGE_URL || ""
 ).replace(/\/$/, "");
 export const DEFAULT_IMAGE = _storageBase
-	? `${_storageBase}/storage/v1/object/public/assets/logo/pspah-logo-640.webp`
+	? `${_storageBase}/storage/v1/object/public/assets/logo/pspah-logo.webp`
 	: "https://www.pugetsoundplumbing.com/logomark.png";
 
 const SERVICE_AREA = "Seattle area";
