@@ -148,6 +148,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Set up uv (required by Vercel Python builder)
+        uses: astral-sh/setup-uv@v5
+
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
