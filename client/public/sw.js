@@ -1,10 +1,8 @@
 // Basic service worker for caching static assets only
-const CACHE_NAME = "pspah-v5";
-const SUPABASE_STORAGE_URL = "https://hyxqrhttputdkefadnrf.supabase.co";
-const STATIC_CACHE_URLS = [
-	"/",
-	`${SUPABASE_STORAGE_URL}/storage/v1/object/public/assets/logo/pspah-logo.webp`,
-];
+const CACHE_NAME = "pspah-v6";
+// Cache only the app shell on install — no external URLs that could 404 and
+// break the service worker install when the Supabase project changes.
+const STATIC_CACHE_URLS = ["/"];
 
 // URLs/origins that must never be cached (API calls, dynamic data)
 const BYPASS_CACHE_ORIGINS = [];
@@ -18,8 +16,8 @@ function isStaticAsset(url) {
 	if (url.origin === self.location.origin) {
 		return /\.(js|css|woff2?|ttf|eot|png|jpg|jpeg|webp|gif|svg|ico)(\?.*)?$/.test(url.pathname);
 	}
-	// Supabase Storage images (cache these, they are content-addressed)
-	if (url.hostname === new URL(SUPABASE_STORAGE_URL).hostname) {
+	// Supabase Storage images — match any Supabase project (*.supabase.co)
+	if (url.hostname.endsWith(".supabase.co")) {
 		return true;
 	}
 	return false;

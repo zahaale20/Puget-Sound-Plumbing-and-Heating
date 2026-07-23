@@ -1,5 +1,8 @@
 export const SITE_NAME = "Puget Sound Plumbing and Heating";
-export const DEFAULT_IMAGE = "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo-640.webp";
+const _storageBase = (import.meta.env.VITE_SUPABASE_STORAGE_URL || "").replace(/\/$/, "");
+export const DEFAULT_IMAGE = _storageBase
+	? `${_storageBase}/storage/v1/object/public/assets/logo/pspah-logo-640.webp`
+	: "https://www.pugetsoundplumbing.com/logomark.png";
 
 const SERVICE_AREA = "Seattle area";
 const DEFAULT_TITLE = "Seattle Plumbing, Drain, Sewer, and Water Heater Experts";

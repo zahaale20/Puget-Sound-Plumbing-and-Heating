@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Seo from "./Seo";
 import { CompanyInfo } from "../../data/data";
 import { getRouteSeo } from "./routeSeoConfig";
+import { getImageUrl } from "../../services/imageService";
 
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://www.pugetsoundplumbing.com").replace(/\/$/, "");
 
@@ -17,7 +18,7 @@ export default function RouteSeo() {
 			name: "Puget Sound Plumbing and Heating",
 			url: SITE_URL,
 			telephone: CompanyInfo.phoneTel.replace("tel:", ""),
-			image: "https://hyxqrhttputdkefadnrf.supabase.co/storage/v1/object/public/assets/logo/pspah-logo.webp",
+			image: getImageUrl("logo/pspah-logo.webp") || `${SITE_URL}/logomark.png`,
 			address: {
 				"@type": "PostalAddress",
 				streetAddress: CompanyInfo.address,
