@@ -1,5 +1,17 @@
 import { Component } from "react";
 
+const CHUNK_RELOAD_KEY = "pspah_chunk_reload_attempted";
+
+function isRecoverableChunkError(error) {
+	const message = String(error?.message || "").toLowerCase();
+	return (
+		error?.name === "ChunkLoadError" ||
+		message.includes("failed to fetch dynamically imported module") ||
+		message.includes("loading chunk") ||
+		message.includes("importing a module script failed")
+	);
+}
+
 /**
  * Top-level error boundary.
  *
@@ -22,6 +34,25 @@ export default class ErrorBoundary extends Component {
 	}
 
 	componentDidCatch(error, info) {
+		if (typeof window !== "undefined" && isRecoverableChunkError(error)) {
+			let alreadyRetried = false;
+			try {
+				alreadyRetried = window.sessionStorage.getItem(CHUNK_RELOAD_KEY) === "1";
+			} catch (storageError) {
+				console.warn("Could not read chunk-reload state:", storageError);
+			}
+
+			if (!alreadyRetried) {
+				try {
+					window.sessionStorage.setItem(CHUNK_RELOAD_KEY, "1");
+				} catch (storageError) {
+					console.warn("Could not persist chunk-reload state:", storageError);
+				}
+				window.location.reload();
+				return;
+			}
+		}
+
 		// Best-effort Sentry reporting; never throws if Sentry isn't loaded.
 		if (typeof window !== "undefined" && window.Sentry?.captureException) {
 			try {

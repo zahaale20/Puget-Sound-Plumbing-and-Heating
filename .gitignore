@@ -37,3 +37,5 @@ venv/
 .venv/
 env/
 tree_script.py
+.vercel
+.env*

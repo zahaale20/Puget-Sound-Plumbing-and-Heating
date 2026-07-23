@@ -1,5 +1,9 @@
 export const SITE_NAME = "Puget Sound Plumbing and Heating";
-const _storageBase = (import.meta.env.VITE_SUPABASE_STORAGE_URL || "").replace(/\/$/, "");
+const _viteEnv = import.meta?.env;
+const _nodeEnv = typeof process !== "undefined" ? process.env : undefined;
+const _storageBase = (
+	_viteEnv?.VITE_SUPABASE_STORAGE_URL || _nodeEnv?.VITE_SUPABASE_STORAGE_URL || ""
+).replace(/\/$/, "");
 export const DEFAULT_IMAGE = _storageBase
 	? `${_storageBase}/storage/v1/object/public/assets/logo/pspah-logo-640.webp`
 	: "https://www.pugetsoundplumbing.com/logomark.png";

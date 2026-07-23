@@ -38,10 +38,10 @@ describe("getImageUrl", () => {
 		);
 	});
 
-	it("throws when the storage URL env var is missing", () => {
+	it("returns an empty string and warns when the storage URL env var is missing", () => {
+		const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 		delete import.meta.env.VITE_SUPABASE_STORAGE_URL;
-		expect(() => getImageUrl("blog/post.webp")).toThrow(
-			/VITE_SUPABASE_STORAGE_URL/
-		);
+		expect(getImageUrl("blog/post.webp")).toBe("");
+		expect(warnSpy).toHaveBeenCalledWith(expect.stringMatching(/VITE_SUPABASE_STORAGE_URL/));
 	});
 });
